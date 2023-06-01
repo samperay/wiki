@@ -1,0 +1,18 @@
+site_name: wiki
+site_url: https://example.com/
+nav:
+  - Home: index.md
+  - "User Guide":
+      - "Overview": "user-guide/getting-started.md"
+      - "Basics": "user-guide/styling-your-docs.md"
+  - About: about.md
+theme:
+  name: mkdocs
+  highlightjs: true
+  hljs_languages:
+    - yaml
+    - rust
+    - Bash
+  nav_style: dark
+  locale: en
+  navigation_depth: 5
