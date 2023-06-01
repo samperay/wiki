@@ -1,5 +1,5 @@
 site_name: wiki
-site_url: https://example.com/
+site_url: https://samperay.github.io/wiki/
 nav:
   - Home: index.md
   - "User Guide":
