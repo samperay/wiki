@@ -3,16 +3,37 @@ site_url: https://samperay.github.io/wiki/
 nav:
   - Home: index.md
   - "User Guide":
-      - "Overview": "user-guide/getting-started.md"
-      - "Basics": "user-guide/styling-your-docs.md"
+      - "getting-started": "user-guide/getting-started.md"
+      - "styling-your-docs": "user-guide/styling-your-docs.md"
+      - "how-to-install-guide": "user-guide/installations/how-to-install-guide.md"
+      - "testing-your-installations": "user-guide/installations/testing-your-installations.md"
   - About: about.md
+
 theme:
-  name: mkdocs
-  highlightjs: true
-  hljs_languages:
-    - yaml
-    - rust
-    - Bash
-  nav_style: dark
-  locale: en
-  navigation_depth: 5
+  name: material
+  features:
+    - toc.integrate
+    - navigation.tabs
+    - navigation.sections
+    - navigation.path
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.tabs.link
+    - content.code.annotation
+    - content.code.copy
+    - header.autohide
+  language: en
+  palette:
+    - scheme: default
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+
+    # Palette toggle for dark mode
+    - scheme: slate
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+  font:
+    text: Roboto Mono
