@@ -2,13 +2,21 @@ site_name: wiki
 site_url: https://samperay.github.io/wiki/
 nav:
   - Home: index.md
-  - "User Guide":
-      - "getting-started": "user-guide/getting-started.md"
-      - "styling-your-docs": "user-guide/styling-your-docs.md"
-      - "how-to-install-guide": "user-guide/installations/how-to-install-guide.md"
-      - "testing-your-installations": "user-guide/installations/testing-your-installations.md"
-  - About: about.md
+  - "programming":
+      - "python":
+          - "programming terms": "programming/python/programming_terms.md"
+          - "python-page-2": "programming/python/python-page-2.md"
+          - "design patterns":
+              - "single responsibility principle": "programming/python/design_patterns/srp.md"
+      - "go":
+          - "overview": "programming/go/overview.md"
+          - "basics": "programming/go/basics.md"
+  - "linux":
+      - "bash scripting":
+          - "bash-page-1": "linux/scripting/bash-page-1.md"
+          - "bash-page-2": "linux/scripting/bash-page-2.md"
 
+  - About: about.md
 theme:
   name: material
   features:
