@@ -4,23 +4,34 @@ nav:
   - Home: index.md
   - "programming":
       - "python":
-          - "programming terms": "programming/python/programming_terms.md"
           - "python-page-2": "programming/python/python-page-2.md"
           - "design patterns":
               - "single responsibility principle": "programming/python/design_patterns/srp.md"
       - "go":
           - "overview": "programming/go/overview.md"
           - "basics": "programming/go/basics.md"
+  - "docker":
+      - "Overview": "docker/overview.md"
+  - "kubernetes":
+      - "Overview": "kubernetes/overview.md"
+  - "cicd":
+      - "Overview": "cicd/overview.md"
+  - "git":
+      - "Overview": "git/overview.md"
   - "linux":
+      - "Basics": "linux/basics.md"
+      - "Networking": "linux/networking.md"
+      - "Storage": "linux/storage.md"
+      - "Security": "linux/security.md"
+      - "Troubleshooting": "linux/troubleshooting.md"
       - "bash scripting":
-          - "bash-page-1": "linux/scripting/bash-page-1.md"
-          - "bash-page-2": "linux/scripting/bash-page-2.md"
+          - "Interview FAQ": "linux/scripting/bash.md"
 
   - About: about.md
 theme:
   name: material
   features:
-    - toc.integrate
+    # - toc.integrate
     - navigation.tabs
     - navigation.sections
     - navigation.path
