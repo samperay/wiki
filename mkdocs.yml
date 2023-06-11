@@ -4,12 +4,36 @@ nav:
   - Home: index.md
   - "programming":
       - "python":
-          - "python-page-2": "programming/python/python-page-2.md"
           - "design patterns":
               - "single responsibility principle": "programming/python/design_patterns/srp.md"
+              - "Open Closed Principle": "programming/python/design_patterns/ocp.md"
+              - "Liskov Substitution Principle": "programming/python/design_patterns/lsp.md"
+              - "Interface Segregation Principle": "programming/python/design_patterns/isp.md"
+              - "Dependency Inversion Principle": "programming/python/design_patterns/dip.md"
+              - "Adapter": "programming/python/design_patterns/adapter.md"
+              - "Bridge": "programming/python/design_patterns/bridge.md"
+              - "Builder": "programming/python/design_patterns/builder.md"
+              - "Builder facet": "programming/python/design_patterns/builder-facet.md"
+              - "Composite": "programming/python/design_patterns/composite.md"
+              - "Decorator": "programming/python/design_patterns/decorators.md"
+              - "Factory Methods": "programming/python/design_patterns/factory-method.md"
+              - "Prototype": "programming/python/design_patterns/prototype.md"
+              - "Singleton": "programming/python/design_patterns/singleton.md"
+          - "programming terminolory":
+              - "Object Oriented Programming": programming/python/terminology/oop.md
+              - "Abstract classes": "programming/python/terminology/abstract-classes.md"
+              - "Class & static methods": "programming/python/terminology/class_static_methods.md"
+              - "Closures": "programming/python/terminology/closures.md"
+              - "Decorators": "programming/python/terminology/decorator.md"
+              - "First class functions": "programming/python/terminology/first_class_functions.md"
+              - "Property methods": "programming/python/terminology/property.md"
+              - "Shallow & deep copy": "programming/python/terminology/shallow_deep_copy.md"
+
       - "go":
           - "overview": "programming/go/overview.md"
           - "basics": "programming/go/basics.md"
+  - "database":
+      - "postgresql": "db/postgresql/postgresql.md"
   - "docker":
       - "Overview": "docker/overview.md"
   - "kubernetes":
@@ -18,6 +42,8 @@ nav:
       - "Overview": "cicd/overview.md"
   - "git":
       - "Overview": "git/overview.md"
+  - "elk":
+      - "Elastic Search": "elk/elasticsearch/overview.md"
   - "linux":
       - "Basics": "linux/basics.md"
       - "Networking": "linux/networking.md"
@@ -26,8 +52,7 @@ nav:
       - "Troubleshooting": "linux/troubleshooting.md"
       - "bash scripting":
           - "Interview FAQ": "linux/scripting/bash.md"
-
-  - About: about.md
+  - about: about.md
 theme:
   name: material
   features:
