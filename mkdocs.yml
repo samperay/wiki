@@ -52,6 +52,7 @@ nav:
       - "Troubleshooting": "linux/troubleshooting.md"
       - "bash scripting":
           - "Interview FAQ": "linux/scripting/bash.md"
+  - webrefs: bookmarks/bookmarks.md
   - about: about.md
 theme:
   name: material
