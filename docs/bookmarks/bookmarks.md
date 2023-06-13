@@ -2,6 +2,8 @@
 
 [geeksforgeeks](https://www.geeksforgeeks.org/python-programming-language/?ref=shm)
 
+[programiz](https://www.programiz.com/python-programming/examples)
+
 ### Interview questions
 
 [page1](https://www.bogotobogo.com/python/python_interview_questions.php) 
