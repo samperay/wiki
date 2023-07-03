@@ -4,7 +4,7 @@
 
 [programiz](https://www.programiz.com/python-programming/examples)
 
-### Interview questions
+### Python interview questions
 
 [page1](https://www.bogotobogo.com/python/python_interview_questions.php) 
 [page2](https://www.bogotobogo.com/python/python_interview_questions_2.php)

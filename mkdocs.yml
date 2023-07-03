@@ -19,7 +19,9 @@ nav:
               - "Factory Methods": "programming/python/design_patterns/factory-method.md"
               - "Prototype": "programming/python/design_patterns/prototype.md"
               - "Singleton": "programming/python/design_patterns/singleton.md"
-          - "programming terminolory":
+          - "data structures":
+              - "overview": "programming/python/data_structures/overview.md"
+          - "prg terms":
               - "Object Oriented Programming": programming/python/terminology/oop.md
               - "Abstract classes": "programming/python/terminology/abstract-classes.md"
               - "Class & static methods": "programming/python/terminology/class_static_methods.md"
@@ -28,6 +30,8 @@ nav:
               - "First class functions": "programming/python/terminology/first_class_functions.md"
               - "Property methods": "programming/python/terminology/property.md"
               - "Shallow & deep copy": "programming/python/terminology/shallow_deep_copy.md"
+          - "interviews":
+              - "overview": "programming/python/interview_quests/overview.md"
 
       - "go":
           - "overview": "programming/go/overview.md"

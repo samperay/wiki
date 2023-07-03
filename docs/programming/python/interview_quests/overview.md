@@ -1,0 +1,50 @@
+- Reverse a string.
+- Check if a string is a palindrome.
+- Find the first non-repeated character in a string.
+- Find the maximum element in an array.
+- Find the second largest number in an array.
+- Count the frequency of elements in a list.
+- Find the factorial of a number.
+- Check if a number is prime.
+- Check if two strings are anagrams.
+- Check if a number is a power of two.
+- Find the common elements between two lists.
+- Find the missing number in an array of consecutive numbers.
+- Remove duplicates from a list.
+- Check if a linked list has a cycle.
+- Reverse a linked list.
+- Implement a stack using a list.
+- Implement a queue using two stacks.
+- Implement a binary search algorithm.
+- Find the largest sum of contiguous subarray in an array.
+- Find the median of two sorted arrays.
+- Implement a binary tree and perform a preorder traversal.
+- Find the longest common prefix in a list of strings.
+- Sort a list of strings based on their lengths.
+- Implement a depth-first search algorithm.
+- Implement a breadth-first search algorithm.
+- Find the nth Fibonacci number.
+- Calculate the square root of a number.
+- Check if a string is a valid palindrome by ignoring non-alphanumeric characters.
+- Find the maximum sum of a path in a binary tree.
+- Implement a merge sort algorithm.
+- Check if a binary tree is symmetric.
+- Reverse the order of words in a sentence.
+- Implement a hash table.
+- Find the kth largest element in an unsorted array.
+- Find the longest increasing subsequence in an array.
+- Check if a binary tree is a binary search tree.
+- Implement a depth-first search on a graph.
+- Implement a breadth-first search on a graph.
+- Calculate the factorial of a large number using dynamic programming.
+- Implement the insertion sort algorithm.
+- Find the maximum product of two integers in an array.
+- Find the smallest missing positive number in an unsorted array.
+- Determine if a number is a palindrome without converting it to a string.
+- Find the majority element in an array.
+- Implement a priority queue using a heap.
+- Implement the quicksort algorithm.
+- Find the longest palindromic substring in a string.
+- Implement a binary search tree and perform an inorder traversal.
+- Implement a binary search on a rotated sorted array.
+- Find the number of islands in a grid.
