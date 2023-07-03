@@ -1,4 +1,20 @@
 - Reverse a string.
+
+```
+string1="Sunil"
+print(string1[::-1])
+
+OR
+
+revlist=[]
+n=len(string1)-1
+i=n
+while i>=0 : 
+    revlist.append(string1[i])
+    i-=1
+print("".join(revlist))
+``` 
+
 - Check if a string is a palindrome.
 - Find the first non-repeated character in a string.
 - Find the maximum element in an array.
