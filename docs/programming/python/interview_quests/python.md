@@ -134,12 +134,50 @@ def fact(n):
 	result=n*fact(n-1)
 	return result
 
-print(fact(5))
+print(fact(5)) # 120
+```
+
+## Fibonacci series 
+
+```python
+def fib(n):
+    a,b=0,1 
+    while a<n:
+        print(a, end=" ")
+        a,b=b,a+b
+    print()
+
+fib(90) # 0 1 1 2 3 5 8 13 21 34 55 89 
+```
+
+## remove non-alphanumeric char
+
+```python
+import re
+def strip_non_alphanum(string):
+    return re.sub(r'\W+', '', string)
+
+print(strip_non_alphanum("sunil@skjd878@@#@#!!@##@#@#_-;;';--")) #sunilskjd878_
+```
+
+## Power(2)
+```python
+def is_power_of_two(n):
+    """Check if a number is a power of two."""
+    return (n != 0) and (n & (n - 1) == 0)
+
+print(is_power_of_two(16)) # True
+```
+
+## Reverse words order in a sentence.
+
+```python
+ss="This is sunil"
+print(" ".join(ss.split()[::-1]))
 ```
 
 - Check if a number is prime.
 - Check if two strings are anagrams.
-- Check if a number is a power of two.
 - Find the common elements between two lists.
 - Find the missing number in an array of consecutive numbers.
 - Remove duplicates from a list.
@@ -157,11 +195,10 @@ print(fact(5))
 - Implement a breadth-first search algorithm.
 - Find the nth Fibonacci number.
 - Calculate the square root of a number.
-- Check if a string is a valid palindrome by ignoring non-alphanumeric characters.
 - Find the maximum sum of a path in a binary tree.
 - Implement a merge sort algorithm.
 - Check if a binary tree is symmetric.
-- Reverse the order of words in a sentence.
+
 - Implement a hash table.
 - Find the kth largest element in an unsorted array.
 - Find the longest increasing subsequence in an array.
@@ -173,7 +210,6 @@ print(fact(5))
 - Find the maximum product of two integers in an array.
 - Find the smallest missing positive number in an unsorted array.
 - Determine if a number is a palindrome without converting it to a string.
-- Find the majority element in an array.
 - Implement a priority queue using a heap.
 - Implement the quicksort algorithm.
 - Find the longest palindromic substring in a string.
