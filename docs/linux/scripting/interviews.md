@@ -1,38 +1,5 @@
-**<h1>Questions</h1>**
-
-- [List only files in directory](#list-only-files-in-directory)
-- [Print sum of two integers as agrs from CLI and print error if more provided](#print-sum-of-two-integers-as-agrs-from-cli-and-print-error-if-more-provided)
-- [Print the lenght of array and how to access the elements](#print-the-lenght-of-array-and-how-to-access-the-elements)
-- [How do you differentiate between at and star](#how-do-you-differentiate-between-at-and-star)
-- [How to concatenate the two strings](#how-to-concatenate-the-two-strings)
-- [How to define function and pass arguments to it](#how-to-define-function-and-pass-arguments-to-it)
-- [How to return value to a function](#how-to-return-value-to-a-function)
-- [Identify the type of file](#identify-the-type-of-file)
-- [Print sum of odd/even numbers until number is 50](#print-sum-of-oddeven-numbers-until-number-is-50)
-- [Given the string, can you reverse the string](#given-the-string-can-you-reverse-the-string)
-- [Explain **for** and **while** loop to print numbers from 1 to 10](#explain-for-and-while-loop-to-print-numbers-from-1-to-10)
-- [Print the factorial of the number](#print-the-factorial-of-the-number)
-- [Print list of even/odd numbers for a given integer number by reading from input](#print-list-of-evenodd-numbers-for-a-given-integer-number-by-reading-from-input)
-- [print reverse of the number](#print-reverse-of-the-number)
-- [Print the sum of odd/even digits in a number](#print-the-sum-of-oddeven-digits-in-a-number)
-- [Given the password as input from user, check for its strength](#given-the-password-as-input-from-user-check-for-its-strength)
-- [Count the number of lines by providing a file as input](#count-the-number-of-lines-by-providing-a-file-as-input)
-- [Write a function to count the lines from a file and return as an argument](#write-a-function-to-count-the-lines-from-a-file-and-return-as-an-argument)
-- [Write a shell script that would discard the comments in a config file](#write-a-shell-script-that-would-discard-the-comments-in-a-config-file)
-- [Write a script to retain the last 50 lines in a logfile](#write-a-script-to-retain-the-last-50-lines-in-a-logfile)
-- [Generate random number from 200-500.](#generate-random-number-from-200-500)
-- [Email the disk alert if it exceeds the threshold.](#email-the-disk-alert-if-it-exceeds-the-threshold)
-- [Fibonacci series](#fibonacci-series)
-- [delete last line in multiple files](#delete-last-line-in-multiple-files)
-- [replace string multiple places in multiple files](#replace-string-multiple-places-in-multiple-files)
-- [verify string not null](#verify-string-not-null)
-- [Read contents in a file line by line](#read-contents-in-a-file-line-by-line)
-
-
-
-## List only files in directory
-
-```
+## list files in directory
+```bash
 for item in /etc/*
 do
   if [ -f $item ]; then 
@@ -40,11 +7,9 @@ do
   fi
 done
 ```
----
 
-## Print sum of two integers as agrs from CLI and print error if more provided
-
-```
+## sum of integers
+```bash
 set -x
 a=$1
 b=$2
@@ -70,11 +35,10 @@ else
     echo "Result=$sum"
 fi
 ```
----
 
-## Print the lenght of array and how to access the elements
+## traverse array using len
 
-```
+```bash
 array=("1" "2")
 echo ${#array[*]} // length of an array
 
@@ -106,7 +70,7 @@ for ((i=0;i<$${#array[@]};i++)); do
 done
 ```
 
-## How do you differentiate between at and star
+## diff between $@ and $*
 
 $* and $@ when unquoted are identical and expand into the arguments.
 
@@ -118,7 +82,7 @@ In short, $@ when quoted ("$@") breaking up the arguments if there are spaces in
 
 [special variables script](../scripting/scripts/specialvars.sh)
 
-```
+```bash
 # ./specialvars.sh 1 2 "3 4"
 without quotes $*: 1
 without quotes $*: 2
@@ -137,18 +101,16 @@ with quotes "$@": 2
 with quotes "$@": 3 4
 ```
 
----
+## concat two str
 
-## How to concatenate the two strings
-
-```
+```bash
 a="Sunil"
 b="Kumar"
 
 echo $a $b
 ```
 
-```
+```bash
 array=("Sunil" "kumar")
 
 for i in ${array[@]}; do 
@@ -158,11 +120,9 @@ done
 echo $strnew
 ```
 
----
+## function defn and args
 
-## How to define function and pass arguments to it
-
-```
+```bash
 vim ./script Sunil
 function f1(){
   echo "Hello $1"
@@ -172,11 +132,10 @@ f1 $1
 
 $./script Sunil
 ```
----
 
-##  How to return value to a function
+##  func return value
 
-```
+```bash
 function f1(){
   echo "Hello $1"
 }
@@ -186,9 +145,8 @@ echo $retval
 
 $./script Sunil 
 ```
----
 
-## Identify the type of file
+## file types
 
 | Operator | Description                                                                                  | Example                   |
 | -------- | -------------------------------------------------------------------------------------------- | ------------------------- |
@@ -207,38 +165,37 @@ $./script Sunil
 | -s file  | checks if file has size greater than 0; if yes, then condition becomes true.                 | [ -s $file ] is true.     |
 | -e file  | checks if file exists; is true even if file is a directory but exists.                       | [ -e $file ] is true.     |
 
-```
+```bash
 test -f ${FILE} && echo "File Exists" - Method 1 
 [ -f ${FILE} ] && echo "File Exists" - Method 2 
                   OR 
 [[ -f ${FILE} ]] && echo "File Exists"
 ```
----
 
-## Print sum of odd/even numbers until number is 50
+## print/sum of odd/even
 
+```bash
+code goes here
 ```
-```
 
-## Given the string, can you reverse the string
+## reverse string
 
-```
+```bash
 s="sunil"
 for((i=${#s};i>=0;i--)); do 
     revstr=$revstr${s:$i:1}
 done
 ```
----
 
-## Explain **for** and **while** loop to print numbers from 1 to 10
+## for and while
 
-```
+```bash
 for((i=1;i<=10;i++)); do 
   echo $i
 done
 ```
 
-```
+```bash
 i=0
 while [ $i -le 10 ];  do 
     echo $i 
@@ -246,11 +203,9 @@ while [ $i -le 10 ];  do
 done
 ```
 
----
+## factorial
 
-## Print the factorial of the number
-
-```
+```bash
 counter=5
 factorial=1
 while [ $counter -gt 0 ]; do
@@ -259,11 +214,10 @@ while [ $counter -gt 0 ]; do
 done
 echo "$factorial"
 ```
----
 
-## Print list of even/odd numbers for a given integer number by reading from input
+## odd and even
 
-```
+```bash
 oddsum=0
 for i in {1..5..2}
 do
@@ -273,9 +227,9 @@ done
 echo $oddsum
 ```
 
-## print reverse of the number
+## reverse of num
 
-```
+```bash
 n=123456
 rem=0
 revnum=0
@@ -286,25 +240,16 @@ while [ $n -gt 0 ]; do
 done
 echo $revnum
 ```
----
 
-## Print the sum of odd/even digits in a number
+## password strength
 
-```
-```
-
----
-
-## Given the password as input from user, check for its strength
-
-```
+```bash
+code goes here
 ```
 
----
+## line count in file
 
-## Count the number of lines by providing a file as input
-
-```
+```bash
 file="$1"
 let count=0
 while read line; do 
@@ -313,11 +258,10 @@ done <$file
 
 echo "Count:" $count
 ```
----
 
-## Write a function to count the lines from a file and return as an argument
+## return lines from func
 
-```
+```bash
 function count() {
 local file="$1"
 let count=0
@@ -330,42 +274,34 @@ echo $count
 
 echo "Count:" $(count "$1")
 ```
----
 
-## Write a shell script that would discard the comments in a config file 
+## discard comments in file 
 
-```
+```bash
 while read -r line
 do
   [[ $line = \#* ]] && continue
   printf '%s\n' "$line"
 done < ./passwd
 ```
----
 
-## Write a script to retain the last 50 lines in a logfile 
+## retain the last 50 lines in logfile 
 
 [solution](../scripting/scripts/cleanup_logs.sh)
 
----
-
-## Generate random number from 200-500. 
+## random num generator 200-500. 
 
 [solution](../scripting/scripts/random.sh)
 
----
-
-## Email the disk alert if it exceeds the threshold. 
+## email disk alert. 
 [solution](../scripting/scripts/disk_alert.sh)
 
----
-
-## Fibonacci series
+## fibonacci series
 - [solution-1](../scripting/scripts/fibonacci_1.sh)
 - [solution-2](../scripting/scripts/fibonacci_2.sh)
 
-## delete last line in multiple files
-```
+## del last line in multiple files
+```bash
 for file in sub/*
   do
     if [ -f $file ]
@@ -377,7 +313,7 @@ for file in sub/*
 
 ## replace string multiple places in multiple files
 
-```
+```bash
 for file in ./*
   do
     if [ -f $file ]
@@ -389,7 +325,7 @@ for file in ./*
 
 ## verify string not null
 
-```
+```bash
 str1="Not Null"
 str2=" "
 str3=""
@@ -410,10 +346,9 @@ fi
 
 ## Read contents in a file line by line
 
-```
+```bash
 for h in $(<hosts.txt)
 do
   echo $h
 done
 ```
-
