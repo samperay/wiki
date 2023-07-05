@@ -169,18 +169,123 @@ def is_power_of_two(n):
 print(is_power_of_two(16)) # True
 ```
 
-## Reverse words order in a sentence.
+## Reverse words in a sentence.
 
 ```python
 ss="This is sunil"
 print(" ".join(ss.split()[::-1]))
 ```
 
-- Check if a number is prime.
-- Check if two strings are anagrams.
-- Find the common elements between two lists.
+## Anagrams
+```python
+def is_anagram(str1, str2):
+    """a word, phrase, or name formed by rearranging the letters of another, such as cinema, formed from iceman."""
+    if len(str1) != len(str2):
+        return False
+    else:
+        return sorted(str1) == sorted(str2)
+
+print(is_anagram("sunil","linus")) # True
+```
+
+## Common element list
+
+```python
+a=[1,2,43,45,23,90]
+b=[56,43,23,88]
+
+print(set(a)) # Removes duplicates 
+print(set(a)&set(b)) # prints common elements
+```
+
+## Sort a list(str) based on their lengths.
+```python
+def sort_list_by_length(list):
+    list.sort(key=len)
+    return list
+
+newlist=["sunil","kua","kumar","ku","kumaraswamy","ramaswamy","ramaswamykumaraswamy"]
+
+print(sort_list_by_length(newlist)) #['ku', 'kua', 'sunil', 'kumar', 'ramaswamy', 'kumaraswamy', 'ramaswamykumaraswamy']
+
+# reverse order
+def sort_list_by_length(list):
+    list.sort(key=len, reverse=True)
+    return list
+
+newlist=["sunil","kua","kumar","ku","kumaraswamy","ramaswamy","ramaswamykumaraswamy"]
+
+print(sort_list_by_length(newlist)) # ['ramaswamykumaraswamy', 'kumaraswamy', 'ramaswamy', 'sunil', 'kumar', 'kua', 'ku']
+```
+
+## prime number 
+
+```python
+def is_prime(num):
+    if num > 1:
+        for i in range(2, num):
+            if (num % i) == 0:
+                print(num, "is not a prime number")
+                print(i, "times", num // i, "is", num)
+                break
+        else:
+            print(num, "is a prime number")
+
+```
+
+## find nth fibonacci number 
+
+```python
+# 0,1,1,2,3,5,8,13,21,34,55,89,144,233,377
+def fib(n):
+    if n == 0:
+        return 0
+    elif n == 1:
+        return 1
+    else:
+        return (fib(n-1) + fib(n-2))
+
+print(fib(6)) # 8
+```
+
+## sum of all fibonacci numbers 
+```python
+def fib(n):
+    if n <= 1:
+        return n
+    else:
+        return fib(n-1) + fib(n-2)
+
+print(fib(10))
+```
+
+## max product in an array
+
+```python
+def max_product(arr):
+    max_product = 0
+    for i in range(len(arr)):
+        for j in range(i + 1, len(arr)):
+            if arr[i] * arr[j] > max_product:
+                max_product = arr[i] * arr[j]
+    return max_product
+
+print(max_product([5, 20, 2, 6])) # 120
+
+```
+
+## reverse digit 
+
+```python
+def reverse(x):
+    rev = 0
+    while x > 0:
+        rev = rev * 10 + x % 10
+        x //= 10
+    return rev
+```
+
 - Find the missing number in an array of consecutive numbers.
-- Remove duplicates from a list.
 - Check if a linked list has a cycle.
 - Reverse a linked list.
 - Implement a stack using a list.
@@ -190,7 +295,6 @@ print(" ".join(ss.split()[::-1]))
 - Find the median of two sorted arrays.
 - Implement a binary tree and perform a preorder traversal.
 - Find the longest common prefix in a list of strings.
-- Sort a list of strings based on their lengths.
 - Implement a depth-first search algorithm.
 - Implement a breadth-first search algorithm.
 - Find the nth Fibonacci number.
@@ -198,7 +302,6 @@ print(" ".join(ss.split()[::-1]))
 - Find the maximum sum of a path in a binary tree.
 - Implement a merge sort algorithm.
 - Check if a binary tree is symmetric.
-
 - Implement a hash table.
 - Find the kth largest element in an unsorted array.
 - Find the longest increasing subsequence in an array.
@@ -207,8 +310,6 @@ print(" ".join(ss.split()[::-1]))
 - Implement a breadth-first search on a graph.
 - Calculate the factorial of a large number using dynamic programming.
 - Implement the insertion sort algorithm.
-- Find the maximum product of two integers in an array.
-- Find the smallest missing positive number in an unsorted array.
 - Determine if a number is a palindrome without converting it to a string.
 - Implement a priority queue using a heap.
 - Implement the quicksort algorithm.
