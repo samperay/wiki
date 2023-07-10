@@ -14,11 +14,9 @@ A data structure is a storage that is used to store and organize data. It is a w
 
 **Non-linear data structure**: Data structures where data elements are not placed sequentially or linearly are called non-linear data structures. In a non-linear data structure, we can’t traverse all the elements in a single run only. e.g trees and graphs
 
-## Big-O Notations 
+## Big-O Complexities 
 
 Big-O notation is a way to describe the time and space complexity of a given algorithm. Big-O notation tells you the number of operations an algorithm will make. Big-O establishes a worst-case run time. 
-
-## Big-O Complexity
 
 ### **Time complexity**
 
@@ -30,7 +28,9 @@ The amount of RAM or memory taken to execute. however, this would depend on the 
 
 ![BigO_complexity](BigO_complexity.png)
 
-### O(1) – Constant Time Algorithms
+## Big-O notations
+
+### O(1)
 
 The O(1) is also called constant time, it will always execute at the same time regardless of the input size.
 
@@ -45,7 +45,7 @@ for i in range(10):
     print(i[0])
 ```
 
-### O(n) - simple loop
+### O(n)
 
 This function runs in O(n) time (or "linear time"), where n is the number of items in the array. If the array has 10 items, we have to print 10 times. If it has 1000 items, we have to print 1000 times.
 
@@ -54,7 +54,7 @@ for i in range(10):
     print(i)
 ```
 
-### O(n^2) - nested loop
+### O(n^2)
 
 ```python
 for i in range(10):
@@ -75,7 +75,7 @@ def fib(n):
 An example of an O(2n) function is the recursive calculation of Fibonacci numbers. O(2n) denotes an algorithm whose growth doubles with each addition to the input data set. The growth curve of an O(2n) function is exponential - starting off very shallow, then rising meteorically.
 
 
-### Drop the less significant terms
+### Drop less significant terms
 
 ```python
 for i in range(10):
@@ -102,3 +102,12 @@ for j in range(10):
 We would be looping 'i' n-times and 'j' n-times i.e O(n+n)=O(2n).
 
 Remember, for big O notation we're looking at what happens as n gets arbitrarily large. As n gets really big, adding 100 or dividing by 2 has a decreasingly significant effect, hence we would drop any constants. 
+
+### Common ds alogs
+
+![common_ds_algos](common_ds_algos.png)
+![array_sorting_algos](array_sorting_algos.png)
+
+## References
+
+[bigocheatsheet](https://www.bigocheatsheet.com/)
