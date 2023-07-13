@@ -3,7 +3,7 @@ A data structure is a storage that is used to store and organize data. It is a w
 
 ## Classification of DS
 
-![classification_ds](classification_ds.png)
+![classification_ds](./../../../images/classification_ds.png)
 
 **Linear data structure** data elements are arranged sequentially or linearly, where each element is attached to its previous and next adjacent elements
 
@@ -26,7 +26,7 @@ The amount of time take to execute the operations per second.
 
 The amount of RAM or memory taken to execute. however, this would depend on the performance on the system. the higher the capacity of the machine, space complexity would be differing. 
 
-![BigO_complexity](BigO_complexity.png)
+![BigO_complexity](./../../../images/BigO_complexity.png)
 
 ## Big-O notations
 
@@ -105,8 +105,8 @@ Remember, for big O notation we're looking at what happens as n gets arbitrarily
 
 ### Common ds alogs
 
-![common_ds_algos](common_ds_algos.png)
-![array_sorting_algos](array_sorting_algos.png)
+![common_ds_algos](./../../../images/common_ds_algos.png)
+![array_sorting_algos](./../../../images/array_sorting_algos.png)
 
 ## References
 
