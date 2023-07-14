@@ -1,90 +1,85 @@
 site_name: wiki
 site_url: https://samperay.github.io/wiki/
 nav:
-      - Home: index.md
-      - "programming":
-              - "python":
-                      - "design patterns":
-                              - "single responsibility principle": "programming/python/design_patterns/srp.md"
-                              - "Open Closed Principle": "programming/python/design_patterns/ocp.md"
-                              - "Liskov Substitution Principle": "programming/python/design_patterns/lsp.md"
-                              - "Interface Segregation Principle": "programming/python/design_patterns/isp.md"
-                              - "Dependency Inversion Principle": "programming/python/design_patterns/dip.md"
-                              - "Adapter": "programming/python/design_patterns/adapter.md"
-                              - "Bridge": "programming/python/design_patterns/bridge.md"
-                              - "Builder": "programming/python/design_patterns/builder.md"
-                              - "Builder facet": "programming/python/design_patterns/builder-facet.md"
-                              - "Composite": "programming/python/design_patterns/composite.md"
-                              - "Decorator": "programming/python/design_patterns/decorators.md"
-                              - "Factory Methods": "programming/python/design_patterns/factory-method.md"
-                              - "Prototype": "programming/python/design_patterns/prototype.md"
-                              - "Singleton": "programming/python/design_patterns/singleton.md"
-                      - "data structures":
-                              - "overview": "programming/python/data_structures/overview.md"
-                              - "singly linked list": "programming/python/data_structures/single_linked_list.md"
-                      - "prg terms":
-                              - "Object Oriented Programming": programming/python/terminology/oop.md
-                              - "Abstract classes": "programming/python/terminology/abstract-classes.md"
-                              - "Class & static methods": "programming/python/terminology/class_static_methods.md"
-                              - "Closures": "programming/python/terminology/closures.md"
-                              - "Decorators": "programming/python/terminology/decorator.md"
-                              - "First class functions": "programming/python/terminology/first_class_functions.md"
-                              - "Property methods": "programming/python/terminology/property.md"
-                              - "Shallow & deep copy": "programming/python/terminology/shallow_deep_copy.md"
-                      - "interviews":
-                              - "interview faq": "programming/python/interviews.md"
+        - Home: index.md
+        - "programming":
+                  - "python":
+                            - "design patterns":
+                                      - "single responsibility principle": "programming/python/design_patterns/srp.md"
+                                      - "Open Closed Principle": "programming/python/design_patterns/ocp.md"
+                                      - "Liskov Substitution Principle": "programming/python/design_patterns/lsp.md"
+                                      - "Interface Segregation Principle": "programming/python/design_patterns/isp.md"
+                                      - "Dependency Inversion Principle": "programming/python/design_patterns/dip.md"
+                                      - "Adapter": "programming/python/design_patterns/adapter.md"
+                                      - "Bridge": "programming/python/design_patterns/bridge.md"
+                                      - "Builder": "programming/python/design_patterns/builder.md"
+                                      - "Builder facet": "programming/python/design_patterns/builder-facet.md"
+                                      - "Composite": "programming/python/design_patterns/composite.md"
+                                      - "Decorator": "programming/python/design_patterns/decorators.md"
+                                      - "Factory Methods": "programming/python/design_patterns/factory-method.md"
+                                      - "Prototype": "programming/python/design_patterns/prototype.md"
+                                      - "Singleton": "programming/python/design_patterns/singleton.md"
+                            - "data structures":
+                                      - "overview": "programming/python/data_structures/overview.md"
+                                      - "singly linked list": "programming/python/data_structures/single_linked_list.md"
+                            - "prg terms":
+                                      - "Object Oriented Programming": programming/python/terminology/oops.md
+                                      - "concepts": "programming/python/terminology/primer.md"
+                                      - "datatypes": "programming/python/terminology/datatypes.md"
+                            - "interviews":
+                                      - "interview faq": "programming/python/interviews.md"
 
-              - "go":
-                      - "overview": "programming/go/overview.md"
-                      - "basics": "programming/go/basics.md"
-                      - "interviews faq": programming/go/interviews.md
-      - "database":
-              - "postgresql": "db/postgresql/postgresql.md"
-      - "docker":
-              - "Overview": "docker/overview.md"
-      - "kubernetes":
-              - "Overview": "kubernetes/overview.md"
-      - "cicd":
-              - "Overview": "cicd/overview.md"
-      - "git":
-              - "Overview": "git/overview.md"
-      - "elk":
-              - "Elastic Search": "elk/elasticsearch/overview.md"
-      - "linux":
-              - "Basics": "linux/basics.md"
-              - "Networking": "linux/networking.md"
-              - "Storage": "linux/storage.md"
-              - "Security": "linux/security.md"
-              - "Troubleshooting": "linux/troubleshooting.md"
-              - "bash scripting":
-                      - "Interview FAQ": "linux/scripting/interviews.md"
-      - webrefs: bookmarks/bookmarks.md
-      - about: about.md
+                  - "go":
+                            - "overview": "programming/go/overview.md"
+                            - "basics": "programming/go/basics.md"
+                            - "interviews faq": programming/go/interviews.md
+        - "database":
+                  - "postgresql": "db/postgresql/postgresql.md"
+        - "docker":
+                  - "Overview": "docker/overview.md"
+        - "kubernetes":
+                  - "Overview": "kubernetes/overview.md"
+        - "cicd":
+                  - "Overview": "cicd/overview.md"
+        - "git":
+                  - "Overview": "git/overview.md"
+        - "elk":
+                  - "Elastic Search": "elk/elasticsearch/overview.md"
+        - "linux":
+                  - "Basics": "linux/basics.md"
+                  - "Networking": "linux/networking.md"
+                  - "Storage": "linux/storage.md"
+                  - "Security": "linux/security.md"
+                  - "Troubleshooting": "linux/troubleshooting.md"
+                  - "bash scripting":
+                            - "Interview FAQ": "linux/scripting/interviews.md"
+        - webrefs: bookmarks/bookmarks.md
+        - about: about.md
 theme:
-      name: material
-      features:
-            # - toc.integrate
-            - navigation.tabs
-            - navigation.sections
-            - navigation.path
-            - navigation.top
-            - search.suggest
-            - search.highlight
-            - content.tabs.link
-            - content.code.annotation
-            - content.code.copy
-            - header.autohide
-      language: en
-      palette:
-            - scheme: default
-              toggle:
-                    icon: material/weather-night
-                    name: Switch to dark mode
+        name: material
+        features:
+                # - toc.integrate
+                - navigation.tabs
+                - navigation.sections
+                - navigation.path
+                - navigation.top
+                - search.suggest
+                - search.highlight
+                - content.tabs.link
+                - content.code.annotation
+                - content.code.copy
+                - header.autohide
+        language: en
+        palette:
+                - scheme: default
+                  toggle:
+                          icon: material/weather-night
+                          name: Switch to dark mode
 
-            # Palette toggle for dark mode
-            - scheme: slate
-              toggle:
-                    icon: material/weather-sunny
-                    name: Switch to light mode
-      font:
-            text: Roboto Mono
+                # Palette toggle for dark mode
+                - scheme: slate
+                  toggle:
+                          icon: material/weather-sunny
+                          name: Switch to light mode
+        font:
+                text: Roboto Mono

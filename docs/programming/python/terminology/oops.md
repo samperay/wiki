@@ -1,12 +1,8 @@
----
-title: "Object Oriented Programming"
-date: 2023-05-23T17:16:31+05:30
-draft: False
-tags: ["oop"]
----
-## Objects and Classes
+## Programming terms
 
-## Encapsulation & Abstraction
+## Object Oriented Programming
+
+### Encapsulation & Abstraction
 
 Bundling data and methods within a single unit.
 when you create a class, it means you are `implementing encapsulation`
@@ -20,7 +16,7 @@ encapsulation allows us to restrict accessing variables and methods directly and
 **Protected** : within the class and its sub-classes(inheritance)
 
 
-### Getters and Setters
+#### Getters and Setters
 
 getter method to access data members and the setter methods to modify the data members
 
@@ -29,7 +25,7 @@ private variables are not hidden fields like in other programming languages. The
 When we want to avoid direct access to private variables
 To add validation logic for setting a value
 
-```
+```python
 class Employee:
 
     def __init__(self,name,salary,age):
@@ -82,11 +78,11 @@ sunil=Employee("Sunil",100000,34)
 sunil.set_age(32)
 ```
 
-## Constructors
+### Constructors
 
 Special method used to create and initialize an object of a class. The primary use of a constructor is to declare and initialize data member/instance variables of a class.
 
-### Constructor Types
+#### Constructor Types
 
 - **Default Constructor** - It does not perform any task but initializes the objects
   
@@ -94,7 +90,7 @@ Special method used to create and initialize an object of a class. The primary u
 
 - **parametrized constructor** - A constructor with defined parameters or arguments is called a parameterized constructor.
 
-```
+```python
 class Employee:
     # class variable 
     count=0
@@ -125,11 +121,11 @@ emp2.display() # Output: employee Raghu is around 12 years old
 print(f"Total number of employees: {Employee.count})
 ```
 
-### Constructor Chaining 
+#### Constructor Chaining 
 
 Constructor chaining is the process of calling one constructor from another constructor. Constructor chaining is useful when you want to invoke multiple constructors, one after another, by initializing only one instance. constructor chaining is convenient when we are dealing with inheritance.
 
-```
+```python
 class Vehicle:
     def __init__(self,engine):
         self.engine = engine 
@@ -148,16 +144,16 @@ ev = ElectricCar('1500cc', 240, 750)
 print(f"{ev.engine} is having max speed {ev.max_speed} travelling distance of {ev.km}")
 ```
 
-## Polymorphism
+### Polymorphism
 
 Polymorphism in Python is the ability of an object to take many forms. Polymorphism is mainly used with inheritance. 
 
-### Polymorphism With Inheritance
+#### Polymorphism With Inheritance
 
 Using method overriding `polymorphism` allows us to defines methods in the child class that have the same name as the methods in the parent class. This `process of re-implementing the inherited method in the child class` is known as **Method Overriding**.
 
 
-```
+```python
 class Vehicle:
     def __init__(self,name,color):
         self.name = name
@@ -195,9 +191,9 @@ vehicle.show()
 vehicle.max_speed()
 ```
 
-### Polymorphism class methods
+#### Polymorphism class methods
 
-```
+```python
 class StudentASection:
     def students(self):
         print("A section students")
@@ -227,7 +223,7 @@ for students in (a_section_student,b_section_student):
 You could also pass as a single object to the above `objects into the function`
 
 
-```
+```python
 def get_student_details(obj):
     obj.students()
     obj.class_teacher()
@@ -236,4 +232,151 @@ get_student_details(a_section_student)
 get_student_details(b_section_student)
 ```
 
+### Class & static methods
 
+`class and static methods` are special types of methods that have different behaviours and use cases when compared to `regular instances methods`
+
+
+#### regular/instance method
+
+these are bound to regular object instance. they can access and modify the object's state and can be called on an object instance. 
+
+```python
+class Person:
+    def __init__(self, name, age):
+        # instance variables
+        self.name = name
+        self.age=age 
+
+    # instance methods
+    def get_name(self):
+        return self.name
+
+    # instance methods
+    def get_age(self):
+        return self.age
+
+    # instance methods
+    def set_name(self,newname):
+        self.name = newname
+
+    # instance methods
+    def set_age(self, newage):
+        self.age = newage
+
+
+person1 = Person("Sunil", 30)   
+print(person1.get_name())
+print(person1.get_age())
+person1.set_name("Kumar")
+print(person1.get_name())
+```
+
+#### class methods
+
+class methods are bound to class itself and they can access only class variables. It can only allow to change the class variable state across all the class objects.
+
+Class methods are used when we are dealing with factory methods. factory methods are those which returns the class object for different purposes.
+
+They are always called using `ClassName.method_name()`
+
+![class images](../../../images/class_method.webp)
+
+```python
+from datetime import date 
+
+class Student:
+    collage_name = "ABC Collage"
+    def __init__(self,name,age):
+        self.name = name
+        self.age = age 
+
+    @classmethod
+    def calculate_age(cls,name,birthyear):
+        # calulate age and set it as age, then 
+        # return a new object
+        return cls(name,date.today().year-birthyear)
+
+
+    def show(self):
+        print(f"{self.name} age is: {self.age} studying in colleage: {Student.collage_name}")
+
+
+sunil = Student("Sunil",39)
+sunil.show()
+ 
+shiva=Student.calculate_age("Shiva",1983) # invoke a new clas
+shiva.show()
+```
+
+Explanation of above code. 
+
+- we created two objects, one using the constructor and the second using the `calculate_age()`
+  
+- The constructor takes two arguments name and age. On the other hand, class method takes cls, name, and birth_year and `returns a class instance which nothing but a new object`
+  
+- The `@classmethod` decorator is used for converting `calculate_age() method to a class method.`
+  
+- The `calculate_age()` method takes Student class (cls) as a first parameter and `returns constructor by calling Student(name, date.today().year - birthYear), which is equivalent to Student(name, age).`
+
+#### static method
+
+Any method we create in a class will automatically be created as an instance method. We must explicitly tell Python that it is a static method using the `@staticmethod`
+
+```python
+class Student:
+    @staticmethod
+    def student_greeting(greeting_msg):
+        print(f"Hello {greeting_msg}")
+
+
+Student.student_greeting("Welcome Students !")
+
+sunil=Student()
+sunil.student_greeting('Welcome Sunil !')
+```
+
+```python
+class Employee:
+    def __init__(self,name,project_name):
+        self.name = name 
+        self.project_name=project_name
+
+    # instance method
+    def work(self):
+        requirements = self.gather_requirements(self.project_name)
+        for task in requirements:
+            print(f"Completed: {task}")
+
+
+    @staticmethod
+    def gather_requirements(project_name):
+        if project_name == "ABC":
+            requirements = ["task1", "task2"]
+        else:
+            requirements = ["task1"]
+
+        return requirements
+
+emp = Employee("Sunil","ABC")
+emp.work()
+```
+
+**output:**
+
+```
+Completed: task1
+Completed: task2
+```
+
+#### Access Class Variables in Class Methods
+
+```
+@classmethod
+def change_collage(cls, newcollname):
+    # change class variable
+    cls.collage_name=newcollname
+
+Student.change_collage("New coll")
+sunil.show()
+```
