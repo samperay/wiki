@@ -131,7 +131,6 @@ def insert(self,index,value):
     return True
 ```
 
-
 ### set value using index
 
 ```python
@@ -219,3 +218,6 @@ def reverse(self):
         before = temp
         temp = after
 ```
+
+## Interview Questions
+
