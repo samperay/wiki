@@ -84,30 +84,6 @@ def append(self,value):
     return True
 ```
 
-### remove node list
-
-```python
-def pop(self):
-    # if node is empty
-    if self.length == 0:
-        return None
-    else:
-        # more than two nodes 
-        temp=self.head 
-        pre=self.head
-        while(temp.next):
-            pre=temp
-            temp=temp.next
-        self.tail = pre
-        self.tail.next=None
-        self.length-=1
-        # if node is 0 after decrementing
-        if self.length==0:
-            self.head = None 
-            self.tail = None
-    return temp.value
-```
-
 ### prepend node list
 
 ```python
@@ -125,21 +101,24 @@ def prepend(self,value):
     return True
 ```
 
-### remove first node in list
+### insert node in list
 
 ```python
-def pop_first(self):
-    if self.length == 0:
-        return None 
-    else:
-        temp = self.head 
-        self.head = self.head.next 
-        temp.next = None 
-        self.length-=1
-        if self.length==0:
-            self.tail = None
-    return temp
+def insert(self,index,value):
+    if index< 0 or index>self.length:
+        return False 
+    if index == 0:
+        return self.prepend(value)
+    if index==self.length:
+        return self.append(value)
+    new_node=Node(value)
+    temp = self.get(index-1)
+    new_node.next= temp.next 
+    temp.next = new_node
+    self.length+=1
+    return True
 ```
+
 
 ### get node using node index
 
@@ -164,24 +143,6 @@ def set_value(self,index,value):
     return False
 ```
 
-### insert node in list
-
-```python
-def insert(self,index,value):
-    if index< 0 or index>self.length:
-        return False 
-    if index == 0:
-        return self.prepend(value)
-    if index==self.length:
-        return self.append(value)
-    new_node=Node(value)
-    temp = self.get(index-1)
-    new_node.next= temp.next 
-    temp.next = new_node
-    self.length+=1
-    return True
-```
-
 ### remove node in list
 
 ```python
@@ -198,6 +159,46 @@ def remove(self,index):
     temp.next = None
     self.length-=1
     return temp   
+```
+
+### remove node list
+
+```python
+def pop(self):
+    # if node is empty
+    if self.length == 0:
+        return None
+    else:
+        # more than two nodes 
+        temp=self.head 
+        pre=self.head
+        while(temp.next):
+            pre=temp
+            temp=temp.next
+        self.tail = pre
+        self.tail.next=None
+        self.length-=1
+        # if node is 0 after decrementing
+        if self.length==0:
+            self.head = None 
+            self.tail = None
+    return temp.value
+```
+
+### remove first node in list
+
+```python
+def pop_first(self):
+    if self.length == 0:
+        return None 
+    else:
+        temp = self.head 
+        self.head = self.head.next 
+        temp.next = None 
+        self.length-=1
+        if self.length==0:
+            self.tail = None
+    return temp
 ```
 
 ### reverse node in list
