@@ -101,26 +101,7 @@ def prepend(self,value):
     return True
 ```
 
-### insert node in list
-
-```python
-def insert(self,index,value):
-    if index< 0 or index>self.length:
-        return False 
-    if index == 0:
-        return self.prepend(value)
-    if index==self.length:
-        return self.append(value)
-    new_node=Node(value)
-    temp = self.get(index-1)
-    new_node.next= temp.next 
-    temp.next = new_node
-    self.length+=1
-    return True
-```
-
-
-### get node using node index
+### get node using index
 
 ```python
 def get(self,index):
@@ -132,7 +113,26 @@ def get(self,index):
     return temp
 ```
 
-### set value using node index
+### insert node in list
+
+```python
+def insert(self,index,value):
+    if index< 0 or index>self.length:
+        return False 
+    if index == 0:
+        return self.prepend(value)
+    if index==self.length:
+        return self.append(value)
+    new_node=Node(value)
+    temp = self.get(index-1) # get index from above function
+    new_node.next= temp.next 
+    temp.next = new_node
+    self.length+=1
+    return True
+```
+
+
+### set value using index
 
 ```python
 def set_value(self,index,value):
