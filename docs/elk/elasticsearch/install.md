@@ -114,6 +114,7 @@ A snapshot copies segments from an index’s primary shards. When you start a sn
 
 To back up an index, a snapshot makes a copy of the index’s segments and stores them in the snapshot repository.
 
+
 ## Adding additional nodes to the Elasticsearch
 
 copy the tar file of the `elasticsearch` and place in a new directory and extract. 
@@ -145,3 +146,17 @@ cd elastic-stack/second-node/node2/
 
 Once they are joined, you would need to go to kibana dashboard console and query for the `GET /_cluster/health`
 you would be seeing two nodes. 
+
+## Starting services
+
+Open two terminals side by side and execute below
+
+```
+cd elastic-stack/elasticsearch/bin/
+bin/elasticsearch  [ Enter ]
+
+cd elastic-stack/kibana
+bin/kibana [ Enter ]
+```
+
+Copy paste kibana URL into browser http://localhost:5200/_

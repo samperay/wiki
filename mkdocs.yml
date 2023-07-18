@@ -34,7 +34,9 @@ nav:
                             - "basics": "programming/go/basics.md"
                             - "interviews faq": programming/go/interviews.md
         - "database":
-                  - "postgresql": "db/postgresql/postgresql.md"
+                  - "postgresql":
+                            - "setup and install": "db/postgresql/install.md"
+
         - "docker":
                   - "Overview": "docker/overview.md"
         - "kubernetes":
@@ -44,7 +46,8 @@ nav:
         - "git":
                   - "Overview": "git/overview.md"
         - "elk":
-                  - "Elastic Search": "elk/elasticsearch/overview.md"
+                  - "elastic search":
+                            - "setup and install": "elk/elasticsearch/install.md"
         - "linux":
                   - "Basics": "linux/basics.md"
                   - "Networking": "linux/networking.md"
