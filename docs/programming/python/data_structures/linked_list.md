@@ -1,3 +1,5 @@
+# linked list
+
 ## O(linked list operations)
 
 There are few of the operations that which we do in the linked list, below snapshot describes you about the Big-O cases. 
@@ -14,41 +16,18 @@ Under the hood, its nothing but a dictionary, which can be used as a variable to
 
 ![linked_list_underhood](./../../../images/linked_list_underhood.png)
 
-## linkedlist operations 
+## Singly linked list (sll)
 
 Methods that are used in the linked list class. 
 
-```python
-class LinkedList:
-    def __init__(self,value)
-    def append(self,value)
-    def prepend(self,value)
-    def insert(self,index,value)
-    def pop(self,index,value)
-    def print(self)
-```
-
-We can use a new node as class **Node** that creates a new node. 
+### Constructor
 
 ```python
-class Node:
-    def __init__(self,value):
-        self.value = value 
-        self.next = None
-```
-
-## Code snippets
-
-### base class
-
-```python
-# Create node
 class Node:
     def __init__(self,value):
         self.value = value
         self.next = None
 
-# Create linked list
 class LinkedList:
     def __init__(self,value):
         new_node = Node(value)
@@ -59,7 +38,7 @@ class LinkedList:
 my_linked_list = LinkedList(1)
 ```
 
-### print node list
+### print sll
 
 ```python
 def print_list(self):
@@ -69,7 +48,7 @@ def print_list(self):
         temp = temp.next
 ```
 
-### append node list
+### append sll
 
 ```python 
 def append(self,value):
@@ -217,6 +196,38 @@ def reverse(self):
         temp.next = before 
         before = temp
         temp = after
+```
+
+
+## Doubly linked list(dll)
+
+### Constructor 
+
+```python
+class Node:
+    def __init__(self,value):
+        self.value = value 
+        self.next = None
+        self.prev=None
+
+class LinkedList:
+    def __init__(self,value):
+        new_node = Node(value)
+        self.head = new_node
+        self.tail = new_node
+        self.length = 1
+
+doubly_linked_list = DoublyLinkedList("10")
+```
+
+### print dll
+
+```python
+def print_list(self):
+    temp = self.head 
+    while temp:
+        print(f"{temp.value}")
+        temp = temp.next
 ```
 
 ## Interview Questions
