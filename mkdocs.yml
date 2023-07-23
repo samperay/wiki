@@ -22,7 +22,10 @@ nav:
                             - "data structures":
                                       - "overview": "programming/python/data_structures/overview.md"
                                       - "linked list": "programming/python/data_structures/linked_list.md"
-                            - "prg terms":
+                            - "webapp framework":
+                                      - "fastapi": "programming/python/webapp_framework/fastapi/fastapi.md"
+                                      - "flask": "programming/python/webapp_framework/flask/flask.md"
+                            - "programming terms":
                                       - "Object Oriented Programming": programming/python/terminology/oops.md
                                       - "concepts": "programming/python/terminology/primer.md"
                                       - "datatypes": "programming/python/terminology/datatypes.md"
