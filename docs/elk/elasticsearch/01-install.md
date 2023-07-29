@@ -159,4 +159,18 @@ cd elastic-stack/kibana
 bin/kibana [ Enter ]
 ```
 
-Copy paste kibana URL into browser http://localhost:5200/_
+Copy paste kibana URL into browser http://localhost:5601/app/home#/
+
+## Console login
+
+Login to the url kibana console login for elastic search http://localhost:5601/app/home#/. 
+Click on, Hover button -> Dev tools to open console. 
+
+## Cluster health check
+
+```
+GET /_cluster/health
+GET /_cat/indices?v
+GET /_cat/shards?v
+GET /_cat/nodes?v
+```
