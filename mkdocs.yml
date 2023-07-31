@@ -22,6 +22,8 @@ nav:
                             - "data structures":
                                       - "overview": "programming/python/data_structures/overview.md"
                                       - "linked list": "programming/python/data_structures/linked_list.md"
+                                      - "stacks": "programming/python/data_structures/stacks.md"
+                                      - "queues": "programming/python/data_structures/queues.md"
                             - "webapp framework":
                                       - "fastapi": "programming/python/webapp_framework/fastapi/fastapi.md"
                                       - "flask": "programming/python/webapp_framework/flask/flask.md"
