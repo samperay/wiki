@@ -285,36 +285,3 @@ def reverse(x):
     return rev
 ```
 
-- Find the missing number in an array of consecutive numbers.
-- Check if a linked list has a cycle.
-- Reverse a linked list.
-- Implement a stack using a list.
-- Implement a queue using two stacks.
-- Implement a binary search algorithm.
-- Find the largest sum of contiguous subarray in an array.
-- Find the median of two sorted arrays.
-- Implement a binary tree and perform a preorder traversal.
-- Find the longest common prefix in a list of strings.
-- Implement a depth-first search algorithm.
-- Implement a breadth-first search algorithm.
-- Find the nth Fibonacci number.
-- Calculate the square root of a number.
-- Find the maximum sum of a path in a binary tree.
-- Implement a merge sort algorithm.
-- Check if a binary tree is symmetric.
-- Implement a hash table.
-- Find the kth largest element in an unsorted array.
-- Find the longest increasing subsequence in an array.
-- Check if a binary tree is a binary search tree.
-- Implement a depth-first search on a graph.
-- Implement a breadth-first search on a graph.
-- Calculate the factorial of a large number using dynamic programming.
-- Implement the insertion sort algorithm.
-- Determine if a number is a palindrome without converting it to a string.
-- Implement a priority queue using a heap.
-- Implement the quicksort algorithm.
-- Find the longest palindromic substring in a string.
-- Implement a binary search tree and perform an inorder traversal.
-- Implement a binary search on a rotated sorted array.
-- Find the number of islands in a grid.
-
