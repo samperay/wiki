@@ -306,3 +306,55 @@ print(list2)  # Output: [5, 2, [3, 4, 5]]
 **Avoiding unintended side effects:** Deep copy ensures that any modifications made to the copied object or its nested elements do not impact the original object. This can be important when dealing with complex data structures or when multiple objects need to maintain their own separate state.
 
 **Immutable objects:** Deep copy is suitable for creating copies of immutable objects, such as strings or tuples, where modifying the object is not possible. Deep copy allows you to create a new object with the same value.
+
+### iter and generators
+
+**Iterator:**
+An iterator is an object that allows sequential access to elements in a collection (e.g., lists, tuples, sets) without exposing the underlying structure.
+
+It operates on the principle of "lazy evaluation," meaning it fetches the next element only when requested. This saves memory and improves performance when dealing with large collections.
+
+Iterators use two primary methods:
+__iter__: Returns the iterator object itself.
+__next__: Retrieves the next element from the collection. If there are no more elements, it raises the StopIteration exception.
+
+Iterators are typically used with a for loop or the built-in next() function.
+
+```python
+my_list = [1, 2, 3, 4]
+my_iterator = iter(my_list)
+
+print(next(my_iterator))  # Output: 1
+print(next(my_iterator))  # Output: 2
+print(next(my_iterator))  # Output: 3
+print(next(my_iterator))  # Output: 4
+# print(next(my_iterator)) # Raises StopIteration because no more elements.
+
+```
+
+**Generator:**
+
+A generator is a special type of iterator that is created using a function with one or more yield statements.
+It allows you to define an iterative algorithm by suspending the execution state and yielding values one at a time, instead of returning the entire collection at once.
+
+Generators are memory-efficient because they produce elements on-the-fly and don't store the entire collection in memory.
+
+They are usually implemented using a for loop or by calling the generator function directly.
+
+```python
+def my_generator():
+    yield 1
+    yield 2
+    yield 3
+    yield 4
+
+gen = my_generator()
+
+print(next(gen))  # Output: 1
+print(next(gen))  # Output: 2
+print(next(gen))  # Output: 3
+print(next(gen))  # Output: 4
+# print(next(gen)) # Raises StopIteration because there are no more elements.
+```
+
+**iterators** are objects that provide sequential access to elements in a collection, whereas **generators** are a type of iterator that allows you to define a sequence using a function with yield statements, offering memory-efficient and lazy evaluation behavior.
