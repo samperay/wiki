@@ -48,8 +48,13 @@ nav:
                   - "Overview": "docker/overview.md"
         - "kubernetes":
                   - "Overview": "kubernetes/overview.md"
+
         - "cicd":
                   - "Overview": "cicd/overview.md"
+                  - "github actions":
+                            - "Overview": "cicd/github_actions/overview.md"
+                  - "Jenkins":
+                            - "Overview": "cicd/jenkins/overview.md"
         - "git":
                   - "Overview": "git/overview.md"
         - "elk":
