@@ -25,6 +25,7 @@ nav:
                                       - "stacks": "programming/python/data_structures/stacks.md"
                                       - "queues": "programming/python/data_structures/queues.md"
                                       - "trees": "programming/python/data_structures/trees.md"
+                                      - "hashing": "programming/python/data_structures/hashing.md"
                             - "webapp framework":
                                       - "fastapi": "programming/python/webapp_framework/fastapi/fastapi.md"
                                       - "flask": "programming/python/webapp_framework/flask/flask.md"
