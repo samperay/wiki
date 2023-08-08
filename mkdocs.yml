@@ -53,6 +53,7 @@ nav:
                   - "Overview": "cicd/overview.md"
                   - "github actions":
                             - "Overview": "cicd/github_actions/overview.md"
+                            - "Introduction": "cicd/github_actions/intro.md"
                   - "Jenkins":
                             - "Overview": "cicd/jenkins/overview.md"
         - "git":
