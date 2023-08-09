@@ -22,10 +22,14 @@ nav:
                             - "data structures":
                                       - "overview": "programming/python/data_structures/overview.md"
                                       - "linked list": "programming/python/data_structures/linked_list.md"
+                                      - "sorting": "programming/python/data_structures/sorting.md"
                                       - "stacks": "programming/python/data_structures/stacks.md"
                                       - "queues": "programming/python/data_structures/queues.md"
+                                      - "recursions": "programming/python/data_structures/recursions.md"
                                       - "trees": "programming/python/data_structures/trees.md"
                                       - "hashing": "programming/python/data_structures/hashing.md"
+                                      - "interviews": "programming/python/data_structures/interviews.md"
+
                             - "webapp framework":
                                       - "fastapi": "programming/python/webapp_framework/fastapi/fastapi.md"
                                       - "flask": "programming/python/webapp_framework/flask/flask.md"
