@@ -38,7 +38,8 @@ nav:
                                       - "concepts": "programming/python/terminology/primer.md"
                                       - "datatypes": "programming/python/terminology/datatypes.md"
                             - "interviews":
-                                      - "interview faq": "programming/python/interviews.md"
+                                      - "generic faq": "programming/python/generic_faq.md"
+                                      - "data structures faq": "programming/python/ds_faq.md"
 
                   - "go":
                             - "overview": "programming/go/overview.md"
