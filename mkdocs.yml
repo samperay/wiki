@@ -50,7 +50,7 @@ nav:
 
         - "docker":
                   - "Overview": "docker/overview.md"
-        - "kubernetes":
+        - "k8":
                   - "Overview": "kubernetes/overview.md"
 
         - "cicd":
@@ -63,8 +63,14 @@ nav:
         - "git":
                   - "Overview": "git/overview.md"
         - "elk":
-                  - "elastic search":
-                            - "setup and install": "elk/elasticsearch/install.md"
+                  - "elasticsearch":
+                            - "setup and install": "elk/elasticsearch/01_install.md"
+                            - "managing documents": "elk/elasticsearch/02_managing_docs.md"
+                  - "logstash":
+                            - "overview": elk/logstash/overview.md
+
+                  - "kibana":
+                            - "overview": elk/kibana/overview.md
         - "linux":
                   - "Basics": "linux/basics.md"
                   - "Networking": "linux/networking.md"
@@ -73,7 +79,8 @@ nav:
                   - "Troubleshooting": "linux/troubleshooting.md"
                   - "bash scripting":
                             - "Interview FAQ": "linux/scripting/interviews.md"
-        - webrefs: bookmarks/bookmarks.md
+        - "sysdesign":
+                  - "Architecture process": sysdesign/arch_process.md
         - about: about.md
 theme:
         name: material
