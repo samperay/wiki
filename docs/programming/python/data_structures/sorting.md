@@ -65,7 +65,7 @@ print(insertion_sort([64, 34, 25, 12, 22, 11, 90]))
 two merge list in the sorted order to make a single list
 
 ```python
-def sorted_merge(list1,list2):
+def merge_helper(list1,list2):
     combined=[]
     i=0
     j=0
@@ -87,14 +87,52 @@ def sorted_merge(list1,list2):
 
     return combined
 
+def merge_sort(mylist):
+  if len(mylist) ==1:
+    return mylist
+  mid_index = int(len(mylist)/2) # find the mid of index
+  left = merge_sort(mylist[:mid_index]) # split list to left until 1 item in sorted list
+  right = merge_sort(mylist[mid_index:]) # split list to right until 1 item in sorted list
 
-print(sorted_merge([1,2,7,18],[4,5,6,13]))
+  return merge_helper(left,right) # combine two sorted list to make one
+
+print(merge_sort([3,1,4,2])) # [1, 2, 3, 4]
 ```
 
-### unsorted merge list
+### Big O
 
+Space complexity: O(n)
+Time complexity: O(n log(n))
 
 
 
 ## quick 
+
+Quick Sort is a widely used efficient sorting algorithm that follows the divide-and-conquer approach to sort an array or list of elements. It works by selecting a 'pivot' element from the array and partitioning the other elements into two subarrays: one containing elements less than the pivot and another containing elements greater than the pivot. The subarrays are then recursively sorted.
+
+```python
+def swap(mylist,index1,index2):
+  mylist[index1],mylist[index2]=mylist[index2],mylist[index1]
+
+# return the index of the list
+def pivot(mylist,pivot_index,end_index):
+  swap_index = pivot_index
+  for i in range(pivot_index+1,end_index+1):
+    if mylist[i]<mylist[pivot_index]:
+      swap_index+=1
+      swap(mylist,swap_index,i)
+
+  swap(mylist,pivot_index,swap_index)
+  return swap_index
+
+def quick_sort(mylist,left,right):
+  if left<right:
+    pivot_index = pivot(mylist,left,right)
+    quick_sort(mylist,left,pivot_index-1)
+    quick_sort(mylist,pivot_index+1,right)
+  return mylist
+
+mylist = [4,6,1,7,3,2,5]
+print(pivot(mylist,0,6))
+```
 
