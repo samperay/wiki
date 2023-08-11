@@ -82,6 +82,7 @@ nav:
                             - "Interview FAQ": "linux/scripting/interviews.md"
         - "sysdesign":
                   - "Architecture process": sysdesign/arch_process.md
+                  - "Architect newsletter": sysdesign/newsletter.md
         - about: about.md
 theme:
         name: material
