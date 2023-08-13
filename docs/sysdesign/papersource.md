@@ -161,14 +161,83 @@ Allows end users to query employee's data and perform CURD ops, but it does't di
     - Get document `GET /api/v1/employee/{id}/document/{docid}`
     - Get documents by parameters `GET /api/v1/employees/{id}/documents`
 
-
 - employee service redunancy
-we use **load balancer** to employee service between couple of instances.
+    use **load balancer** for service redunancy
 
+### salary service
 
+- Allow managers to ask for an employee's salary change
+- Allows HR to approve/reject the request
 
+- Applicatio type(what it does)
+  - Webapp & Web API - yes
+  - Mobile app - No
+  - Console - No
+  - Service - No
+  - Desktop App - No
 
+- Technology stack(For)
+  - .NET Core 
 
+- Architecture
+    Salary **API** request
+    - Add salary request ```POST /api/v1/salaryRequest/```
+    - Remove salary request ```DELETE /api/v1/salaryRequest{id}```
+    - Get salary request `GET /api/v1/salaryRequests`
+    - Approve salary request `POST /api/v1/salaryRequest/{id}/approval`
+    - Reject salary request `POST /api/v1/salaryRequest/{id}/rejection`
 
+- salary service redunancy
+    use **load balancer** for service redunancy
 
+### vacation service
+- Allows employees to manage their vacation days
+- Allows HR to set available vacation days for employees
 
+- Applicatio type(what it does)
+  - Webapp & Web API - yes
+  - Mobile app - No
+  - Console - No
+  - Service - No
+  - Desktop App - No
+
+- Technology stack(For)
+  - .NET Core 
+
+- Architecture
+    Vacation **API** request
+    - set available vacation days(HR) `PUT /api/v1/vacation/{empid}`
+    - Get available vacation days(Employee) `GET /api/v1/vacation/{empid}`
+    - Reduce vacation days(Employee) `POST /api/v1/vacation/{empid}/reduction`
+
+- vacation service redunancy
+    use **load balancer** for service redunancy
+
+### payment interface service
+- Queries the db once a month for salary data
+- passes payment data to the external payment system
+
+- Applicatio type(what it does)
+  - Webapp & Web API - No
+  - Mobile app - No
+  - Console - No
+  - Service - Yes
+  - Desktop App - No
+
+- Technology stack(For)
+  - .NET Core 
+
+- Architecture
+    you need to use the **timer** as the application logic for triggering the job. 
+
+- Payment interface redunancy
+    use **is-alive** parameter between instance services of payment interface.. 
+
+### Queue - Tech stack
+Choose as to which Queue service you need to use for your application. 
+
+- **RabbitMQ**: General purpose message-broker engine, which is easy to setup and use
+
+- **Apache Kafka**: Stream processing platform, which is more used in extensive data intrensic scenerios. 
+
+In our this case, since nothing is involved in the streaming platform, we can choose `RabbitMQ`
