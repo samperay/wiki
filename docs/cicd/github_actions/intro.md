@@ -3,7 +3,7 @@ In this intro page, we would look for couple of examples that we learnt from the
 
 ## examples
 
-As part of testing, create a new file in `.github/actions/example.yml` on push to repository. Check from your `actions` of the github repository to see the results overview. 
+As part of testing, create a new file in `.github/workflows/example.yml` on push to repository. Check from your `actions` of the github repository to see the results overview. 
 
 ```yml
 name: example
