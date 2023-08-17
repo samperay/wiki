@@ -39,6 +39,38 @@ jobs:
               run: echo "${{ steps.greet.outputs.time }}"
 ```
 
+## needs
+
+Identify any jobs that must complete successfully before another job will run.
+
+e.g, when you have two or more jobs to run, and you have a scnerio that you must complete the first job and then it should start second job. in that case, you would use the key word `needs`
+
+```yaml
+jobs:
+  run-shell-cmds:
+    runs-on: ubuntu-latest
+    steps:
+      - name: echo string
+        run: echo "hello world"
+
+      - name: multiline script
+        run: |
+          node -v
+          npm -v 
+
+      - name: python command 
+        run: | 
+          import platform
+          print(platform.processor())
+        shell: python
+  run-windows-cmds:
+    runs-on: windows-latest
+    needs: 
+      - run-shell-cmds
+```
+
+References: [needs](https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idneeds)
+
 ## trigger using scheduler
 
 you can use `cron` scheduler to run the action  workflow. 
