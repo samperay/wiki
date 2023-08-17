@@ -59,6 +59,8 @@ nav:
                   - "github actions":
                             - "Overview": "cicd/github_actions/overview.md"
                             - "Introduction": "cicd/github_actions/intro.md"
+                            - "Triggers": "cicd/github_actions/workflow_triggers.md"
+                            - "Variables": "cicd/github_actions/variables.md"
                   - "Jenkins":
                             - "Overview": "cicd/jenkins/overview.md"
         - "git":
