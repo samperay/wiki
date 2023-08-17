@@ -228,4 +228,8 @@ You can use expressions to programmatically set environment variables in workflo
           if: success()
 ```
 
+Note: line # 216, if we add `continue-on-error: true` we don't need line # 219. 
+Both functions work in same manner.
+
+
 References: [expressions](https://docs.github.com/en/actions/learn-github-actions/expressions)
