@@ -61,6 +61,8 @@ nav:
                             - "Introduction": "cicd/github_actions/intro.md"
                             - "Triggers": "cicd/github_actions/workflow_triggers.md"
                             - "Variables": "cicd/github_actions/variables.md"
+                            - "Matrix stratergy": "cicd/github_actions/matrix_stratergy.md"
+                            - "cicd pipeline": "cicd/github_actions/cicd.md"
                   - "Jenkins":
                             - "Overview": "cicd/jenkins/overview.md"
         - "git":
