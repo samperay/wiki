@@ -71,6 +71,7 @@ nav:
                   - "elasticsearch":
                             - "setup and install": "elk/elasticsearch/01_install.md"
                             - "managing documents": "elk/elasticsearch/02_managing_docs.md"
+                            - "mapping and analysis": "elk/elasticsearch/03_mapping_analysis.md"
                   - "logstash":
                             - "overview": elk/logstash/overview.md
 
