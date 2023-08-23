@@ -57,3 +57,34 @@ POST /_analyze
 }
 ```
 
+let’s take a look at what actually happens with the result, being the tokens. Elasticsearch uses more than one data structure, is to ensure efficient data retrieval for different access patterns.
+
+e.g searching for a given term is handled differently than aggregating data.
+
+Actually these data structures are all handled by **Apache Lucene** and not Elasticsearch.
+
+##  Inverted indices
+
+An inverted index is essentially a mapping between **tokens that are emitted by the analyzer**(a.k.a tokens) and which documents contain them.
+
+Anyway, let’s take previous example and see how that would be stored within an inverted index.
+
+Document #1 -> "walk into bar and don't.... DRINK" -> ["and","bar","don't","DRINK","into","walk"] 
+Document #2 -> "I walk into bar" -> ["I","bar","into","walk"]
+
+As you can see, each unique term is placed in the index together with information **about which documents contain the term**, sorted alphbetically. Suppose that we perform a search for the term "bar", we can see that documents #1 and #2 contain the term.
+
+its called as inverted index because, the logical mapping is terms they contain to documents.  The inverted indices that are stored within **Apache Lucene** contain a bit more information, such as data that is used for **relevance scoring**.
+
+As you can imagine, we don’t just want to get the documents back that contain a given term; we also want them to be ranked by how well they match.
+
+## mapping
+
+Mapping defines the structure of documents and how they are indexed and stored.  This includes the fields of a document and their data types. As a simplification, you can think of it as the equivalent of a table schema in a relational database.
+
+In Elasticsearch, there are two basic approaches to mapping; **explicit and dynamic mapping**.  
+
+**explicit mapping**, we define fields and their data types ourselves, typically when creating an index. 
+
+**dymanic mapping**, field mapping will automatically be created when elasticsearch encounters a new field.
+It will inspect the supplied field value to figure out how the field should be mapped, if you supply a string value, for instance, elasticsearch will use the "text" data type for the mapping.
