@@ -88,3 +88,233 @@ In Elasticsearch, there are two basic approaches to mapping; **explicit and dyna
 
 **dymanic mapping**, field mapping will automatically be created when elasticsearch encounters a new field.
 It will inspect the supplied field value to figure out how the field should be mapped, if you supply a string value, for instance, elasticsearch will use the "text" data type for the mapping.
+
+## datatypes
+
+there are many, few are discussed and frequently used. 
+
+**Object**: JSON documents are hierarchical in nature, the document may contain inner objects which, in turn, may contain inner objects themselves, they are mapped using properties parameter. 
+
+```json
+PUT my-index-000001/_doc/1
+{ 
+  "region": "US",
+  "manager": { 
+    "age":     30,
+    "name": { 
+      "first": "John",
+      "last":  "Smith"
+    }
+  }
+}
+```
+
+Internally, this document is indexed as a simple, flat list of key-value pairs
+
+```json
+{
+  "region":             "US",
+  "manager.age":        30,
+  "manager.name.first": "John",
+  "manager.name.last":  "Smith"
+}
+```
+
+In a case where you have documents of same tokens, then it would make a flat array of internal documents and query.
+which would perform "OR" operation and provides wrong results.. hence we use the word **nested** 
+
+```json
+{
+  "region":             "US",
+  "manager.age":        [30,50,60]
+  "manager.name.first": ["John","Mat","Suj"],
+  "manager.name.last":  ["Smith","Hew","Samuel"]
+}
+
+```
+
+**Keyword**: exact matching of values, typically used for filtering, aggregating, sorting 
+e.g search articles only "published"
+
+**text**: use for full text searches. 
+e.g entire body of article
+
+
+References: 
+https://www.elastic.co/guide/en/elasticsearch/reference/current/sql-data-types.html
+
+## coercion
+
+Data types are inspected when indexing docs, invalid values are rejected. so that only text fields are indexed. 
+
+Note: 
+- Enabled by default
+- Always try using correct data types
+
+```json
+PUT /coercion_test/_doc/1 {
+    "price": 7.4
+}
+```
+
+Creates and indexde as **float** as a new document. 
+
+```json
+PUT /coercion_test/_doc/1 {
+    "price": "7.4"
+}
+```
+
+Creates and indexed as **string** as a new document. 
+
+## understand arrays
+
+Array values should be of same data type
+Array may contain nested arrays
+Arrays are flattened during indexing
+
+Note: Remember to use the nested data type for arrays of objects if you need to query the objects independently
+
+```json
+POST /products/_doc {
+    "tags": ["item1","item2"]
+}
+```
+
+## adding explict mapping
+
+all field mapping defined in properties key, including nested objected
+and create index.
+
+```json
+PUT /reviews {
+    "mappings": {
+        "properties" {
+            "rating": { "type": "float"},
+            "content": { "type": "text"},
+            "product_id": { "type": "integer"},
+            "author": {
+                "properties": {
+                    "first_name": {"type": "text"},
+                    "last_name": { "type", "text"},
+                    "email": {"type": "keyword"}
+
+                }
+            }
+        }
+    }
+}
+```
+
+The above one is one method of creating an index, but there is second method of using i.e (**dot-notation**)
+which is easy to create index.
+
+```json
+PUT /reviews {
+    "mappings": {
+        "properties" {
+            "rating": { "type": "float"},
+            "content": { "type": "text"},
+            "product_id": { "type": "integer"},
+            "author.first_name": {"type": "text"},
+            "author.last_name": { "type", "text"},
+            "author.email": {"type": "keyword"}
+
+                
+            
+        }
+    }
+}
+```
+
+create a new document
+
+```json
+PUT /reviews/_doc/1 {
+    "rating": 4.3,
+    "content": "Elastic search is good",
+    "product_id": 123,
+    "author": {
+        "first_name": "Sunil",
+        "last_name": "Kumar",
+        "email": "sun@gmail.com"
+    }
+}
+```
+
+incase you don't provide email and submit, coercion while indexing would throw an error because its enabled by default.
+
+## retrive mapping 
+
+```
+GET /reviews/_mapping
+
+GET /reviews/_mapping/field/content
+
+GET /reviews/_mapping/field/author.email
+```
+
+lets say you need to map a new value to already created index..
+
+```json
+PUT /reviews/_mapping {
+    "properties": {
+        "created_at":  {
+            "type": "date"
+            }
+    }
+}
+
+GET /reviews/_mapping
+```
+
+## how date works in elasticsearch
+
+dates are referred in three ways and elastic search would convert those date and time formts into a long string. 
+
+- specially formatted strings
+- milliseconds since the EPOCH(long)
+- seconds since the EPOCH(integrer)
+
+supported formats 
+
+- date without time
+- date with time
+- milliseconds since the EPOCH(long) defaults to UTC
+
+```json
+PUT /reviews/_doc/1 {
+    "rating": 4.3,
+    "content": "Elastic search is good",
+    "product_id": 123,
+    "author": {
+        "first_name": "Sunil",
+        "last_name": "Kumar",
+        "email": "sun@gmail.com",
+        "birth": "2015-04-15"  # only date
+        "birth": "2015-04-15T15:00:00Z" T seperated by date and time, followed by Z(UTC)
+        "birth": "123223023823772" # UNIX EPOCH timestamp
+    }
+}
+
+GET /reviews/_search {
+    "query" {
+        "match_all": {}
+    }
+}
+
+```
+
+## mapping parameters
+
+- format: customize date format, however recommended `date`
+- properties: used for object and nested 
+- coerce: index validation (enabled by default). you can disable during start but can be overide 
+when creating
+- doc_values: used mainly for apache lucene, opposite for interved index.
+- norms: normalizing factors used for revelance scores, i.e ranking. 
+- index: 
+- null_value:  cannont be index or searched
+- copy_to: used to copy multiple field values into a group field(not tokes/terms), when search this field you won't get results because its not indexed.
+
+
