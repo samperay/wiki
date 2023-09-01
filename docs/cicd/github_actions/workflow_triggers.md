@@ -179,3 +179,47 @@ on:
 ```
 
 References: [Filter Usage](https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#using-filters)
+
+## skip actions
+
+incase you don't want to run your job while commiting, you need to update below message while `git commit`
+
+```
+git commit -m 'your change[actions skip]'
+```
+
+## display runner logs
+
+while you run the workflow, you need to mark the lines as **errors for display purpose** in the runner. We can also mask the **secrets** and **group logs**
+
+```
+steps:
+    - name: Display error
+      run: echo "::error:: your error message"
+    
+    - name: Display warning
+      run: echo "::warning:: your error message"
+
+    - name: Display debug
+      run: echo "::debug:: your error message"
+
+    - name: Display notice
+      run: echo "::notice:: your error message"
+
+    - name: diplay group of logs
+      run: |
+        echo "::group:: group title logs
+        echo "write all the logs - 1"
+        echo "write up logs -2 "
+        echo "::endgroup::"
+
+    - name: mask the secrets
+      run: echo "::add-mask::my-password"
+
+    # it would show as ***
+    - name: display my secret password
+      run: echo "my-password"
+``` 
+
+References: https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions
+
