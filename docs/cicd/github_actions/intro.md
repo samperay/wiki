@@ -53,3 +53,62 @@ jobs:
               run: |
                 pytest   
 ```
+
+We can checkout our repository using the steps, however we can do the same things using `uses` or `checkout`
+
+```yaml
+name: checkout the git repo in the runner machine
+on:
+  - push
+jobs:
+    checkout_repo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: download the current repo
+        run: |
+          git init 
+          git remote add origin "https://$GITHUB_ACTOR:${{ secrets.GITHIB_TOKEN }}@github.com/$GITHIB_REPOSITORY.git"
+          git fetch origin 
+          git checkout main
+      
+      - name: list all the files from download repository
+        run: ls -a          
+```
+
+- using `uses` to download any repo
+
+  ```yaml
+  name: download the repo
+  on:
+    - push
+  jobs:
+      checkout_repo:
+      runs-on: ubuntu-latest
+      steps:
+        - name: download the repository
+          uses: actions/<your repository name>@[<commit_id>|<tag>|<release_version>]
+        - name: list the files from repository
+          run: ls -a
+  ```
+
+- using `checkout` to download the current repo, using `with` you can specify any repository you need to download
+  
+  ```yaml
+    name: download the current repo
+    on:
+      - push
+    jobs:
+      checkout_repo_1:
+      runs-on: ubuntu-latest
+      steps:
+        - name: files before checkout repository
+          run: ls -a
+
+        - name: download the repository
+          uses: actions/checkout@v3
+
+        - name: files after checkout repository
+          run: ls -a
+  ```
+
+  References: https://github.com/actions/checkout 

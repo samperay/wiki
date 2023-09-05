@@ -8,6 +8,9 @@ There are types involved in the `pull_request` which tells as to what activities
 
 here is the link for list of activities for [pull_request](https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#pull_request)
 
+we can also set the runners to run the terminal which we choose by default for entire workflow or for induvidual steps. 
+e.g even runnners from `windows-latest` or `ubuntu-latest` it would choose only which we set as default one's
+
 ```yaml
 name: actions workflow
 run-name: actions workflow
@@ -15,6 +18,11 @@ on:
     push:
     pull_request: 
         types: [opened, closed, assigned, reopened]
+
+# choose the default shell as bash
+default:
+  run:
+    shell: bash    
 
 jobs:
     run-github-actions:
@@ -37,6 +45,18 @@ jobs:
                 who-to-greet: John
             - name: Log greeting time
               run: echo "${{ steps.greet.outputs.time }}"
+
+    windows-actions:          
+      runs-on: windows-latest
+
+      # we are trying to overide the default shell from 'bash' to 'powershell'
+      default:
+        run:
+         shell: pwsh
+         
+      steps: 
+        - name: display dirrectory
+          run: dir
 ```
 
 ## needs
