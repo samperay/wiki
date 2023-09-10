@@ -1,0 +1,1 @@
+- [ ] Create a workflow where you **thanks for your contribution** PR creator once he creates a pull request. Hint: use github-script

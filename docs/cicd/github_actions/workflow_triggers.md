@@ -17,7 +17,7 @@ run-name: actions workflow
 on: 
     push:
     pull_request: 
-        types: [opened, closed, assigned, reopened]
+        types: [opened, closed, assigned, reopened] # you can specify the activity types.
 
 # choose the default shell as bash
 default:
@@ -242,4 +242,9 @@ steps:
 ``` 
 
 References: https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions
+
+
+## multiple workflow events
+
+When one workflow is completed, we would like to trigger a second workflow. 
 
