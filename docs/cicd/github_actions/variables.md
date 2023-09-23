@@ -160,6 +160,7 @@ Contexts are a way to access information about workflow runs, variables, runner 
 
 ```yaml
 name: Context testing
+runs-name: "contexts example"
 on: push
 
 jobs:

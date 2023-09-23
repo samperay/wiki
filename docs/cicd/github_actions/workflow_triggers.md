@@ -100,10 +100,12 @@ Cron scheduler to run for every 5 mins, thats the minimum shortest interval you 
 
 ```yaml
 name: actions workflow
-run-name: actions workflow
+run-name: actions workflow by @{{ github.actor}}, ${{ github.event_name }}
 on: 
     schedule:
+      # you can defined multiple cron schedulers
       - cron: "*/5 * * * *"
+      - cron: "0 14 * * *"
     # push:
     pull_request: 
       types: [opened, closed, assigned, reopened]
@@ -244,7 +246,71 @@ steps:
 References: https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions
 
 
-## multiple workflow events
+## parent child workflow triggers
 
-When one workflow is completed, we would like to trigger a second workflow. 
+When you have two jobs and you need to run the job after one workflow has been completed, you can let the new job know about it.
 
+Example as below
+
+```yaml
+#simple.yml(parent workflow)
+name: simple
+on:
+    push
+jobs:
+    simple:
+        runs-on: ubuntu-latest
+        steps:
+            - name: parent workflow
+              run: echo "hello world"
+
+
+#deps.yml(child.yml)
+name: depsjod
+on:
+    workflow_run:
+        workflows: [simple]
+        types: [completed]
+jobs:
+    simple_deps_jobs:
+        runs-on: ubuntu-latest
+        steps:
+          - name: child workflow
+            run: echo "running child job after parent job."
+```
+
+## trigger workflow manually
+
+You can configure custom-defined input properties, default input values, and required inputs for the event directly in your workflow. you need to go to the UI and run the job manually by providing the inputs
+
+```yaml
+name: manual-runjob
+on:
+    workflow_dispatch:
+      inputs:
+        logLevel:
+          description: 'Log level'
+          required: true
+          default: 'warning'
+          type: choice
+          options:
+          - info
+          - warning
+          - debug
+        tags:
+          description: 'Test scenario tags'
+          required: false
+          type: boolean
+        envs:
+          description: 'environments'
+          type: environment
+          required: true
+jobs:
+    log-the-inputs:
+        runs-on: ubuntu-latest
+        steps:
+        - run: |
+            echo log_level: ${{ inputs.logLevel }}
+            echo tags: ${{ inputs.tags }}
+            echo env: ${{ inputs.envs }}
+```
