@@ -246,6 +246,7 @@ steps:
 References: https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions
 
 
+
 ## parent child workflow triggers
 
 When you have two jobs and you need to run the job after one workflow has been completed, you can let the new job know about it.
@@ -314,3 +315,38 @@ jobs:
             echo tags: ${{ inputs.tags }}
             echo env: ${{ inputs.envs }}
 ```
+
+## environment files and env
+
+During the execution of a workflow, the runner generates temporary files that can be used to perform certain actions. The path to these files are exposed via environment variables.  
+
+You can make an environment variable available to any subsequent steps in a workflow job by defining or updating the environment variable and writing this to the GITHUB_ENV environment file. The step that creates or updates the environment variable does not have access to the new value, but all subsequent steps in a job will have access.
+
+```yaml
+steps:
+  - name: Set the value
+    id: step_one
+    run: |
+      echo "action_state=yellow" >> "$GITHUB_ENV"
+  - name: Use the value
+    id: step_two
+    run: |
+      printf '%s\n' "$action_state" # This will output 'yellow'
+
+## multiline string
+
+steps:
+  - name: Set the value in bash
+    id: step_one
+    run: |
+      {
+        echo 'JSON_RESPONSE<<EOF'
+        curl https://example.com
+        echo EOF
+      } >> "$GITHUB_ENV"
+```
+
+
+
+
+

@@ -115,6 +115,8 @@ jobs:
                 git push 
 ```
 
+you can define access and scopes for the [GITHUB_TOKEN](https://docs.github.com/en/actions/using-jobs/assigning-permissions-to-jobs#defining-access-for-the-github_token-scopes)
+
 ## Encrypting and Decrypting files
 
 we could use the file to store credentials if data >64KB where we store **api_username** or **api_token**. 
@@ -227,6 +229,10 @@ You can use expressions to programmatically set environment variables in workflo
         - name: run success
           run: echo "run when none of previous step failed" 
           if: success()
+
+        - name: runs cancel
+          run: echo "runs on cancel job"
+          if: cancelled()
 ```
 
 Note: line # 216, if we add `continue-on-error: true` we don't need line # 219. 
