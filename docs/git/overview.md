@@ -57,7 +57,8 @@ you would undo the commit using git commit id. there are three modes, **soft**, 
 
 git reset HEAD -- path/to/file -> rm file from staged repo
 git commit --amend -m 'created new files' --no-edit -> modify recent commit
-git reset --hard HEAD~1  -> revert previous commit 
+git reset --hard HEAD~1  -> revert previous commit
+
 
 ## References
 https://www.bogotobogo.com/cplusplus/Git/Git_GitHub_Express.php
