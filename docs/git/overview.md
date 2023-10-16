@@ -13,7 +13,8 @@ you would use the commit id and move your **HEAD** to that particular commit and
 
 ```
 git commit <commit_id>
-git checkout -b <new_branch>```
+git checkout -b <new_branch>
+```
 
 Incase you don't need to branch out, this method is not suitable
 
@@ -40,6 +41,26 @@ git branch -b feature/feature1
 git checkout main
 git merge feature/feature1
 ```
+
+## diff
+
+git diff command is used to display the differences between two sets of changes, such as comparing files between branches.
+
+```
+# differences between the master branch and a feature
+git diff master..feat1 
+
+#differences for file1.txt and file2.js between the master and feat1 branch
+git diff master..feat1 file1.txt file2.js 
+
+#Difference for a Single File
+git diff master:app.js feat1:app.js
+
+#Differences for Staged Changes
+git diff --staged
+```
+
+
 
 ## git reset
 
