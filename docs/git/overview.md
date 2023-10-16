@@ -27,6 +27,20 @@ git log --oneline
 git commit -m 'new commit id'
 ```
 
+## branching 
+
+**fast-forward:** 
+
+Developers create a feature branch, work on it, and when it's ready to be integrated into the main development branch, they perform a fast-forward merge if the conditions are met. This keeps the commit history clean and straightforward.
+
+Default merging startergy would be `ff`
+
+```
+git branch -b feature/feature1
+git checkout main
+git merge feature/feature1
+```
+
 ## git reset
 
 reset cannot be used when working with a remote repository. 
@@ -55,10 +69,13 @@ you would undo the commit using git commit id. there are three modes, **soft**, 
 
 ## Git Oneliners
 
+```
 git reset HEAD -- path/to/file -> rm file from staged repo
-git commit --amend -m 'created new files' --no-edit -> modify recent commit
-git reset --hard HEAD~1  -> revert previous commit
 
+git commit --amend -m 'created new files' --no-edit -> modify recent commit
+
+git reset --hard HEAD~1  -> revert previous commit
+```
 
 ## References
 https://www.bogotobogo.com/cplusplus/Git/Git_GitHub_Express.php
