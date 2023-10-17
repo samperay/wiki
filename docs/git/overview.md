@@ -97,6 +97,49 @@ git stash drop stash@{1}
 git stash clear
 ```
 
+## git time travel
+
+### detached HEAD
+
+When we commit any file in the branch, the HEAD always points to the branch. when we checkout and workon, we still have our HEAD being pointed at the branch we work upon.
+
+When we checkout a particular commit, HEAD points at that commit rather than the branch, then we call it as a `detached HEAD`
+
+```
+git log --oneline
+git commit <commit-id>
+git status 
+```
+
+It would be very essential sometimes that you need to take up a particular commit and then work upon. In that case, you can checkout particular commit, where youe HEAD would point to the branch you took from.
+
+```
+git checkout <commit-id>
+<modify your files>
+git add .
+git commit -m 'your new commits'
+git status
+```
+
+You can select the previous commit using HEAD
+
+```
+git checkout HEAD~1
+git checkout HEAD~2
+git switch - # it would take you back where you were there
+```
+
+### discard changes
+
+you have made changes to the file, but don't want to keep those. You can revert back the file to whatever it looked like when you last committed, `reverting back to HEAD`
+
+```
+1. git checkout HEAD file1.txt
+2. git checkout -- file1.txt file2.txt
+3. git restore file1.txt file2.txt
+```
+
+
 ## git reset
 
 reset cannot be used when working with a remote repository. 
