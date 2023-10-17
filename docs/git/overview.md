@@ -60,7 +60,42 @@ git diff master:app.js feat1:app.js
 git diff --staged
 ```
 
+## stash & unstash
 
+Let's assume you created file and commited in the main branch. Now, lets say you would checout a new branch and modify the files without committing. Once you switch back to main branch **you would get the changes made in another branch to main** which is not recommended. The solution would be to **stash** changes to the branch before switching.
+
+```
+git stash list
+
+git stash 
+or 
+git stash save
+
+```
+
+Once you are back to your branch(or any branch you would want to apply changes on), you can **unstash** and start working from where you left off. 
+
+`pop` it would apply changes to the current branch you are in, and removes from the stash. `apply` applies the changes to the current directory and would not remove from the stash.
+
+
+
+```
+# removes from the stash
+git stash pop
+
+or 
+
+# would not remove, but can be applied later to any branch.
+
+git stash apply
+```
+
+you can clear or drop stashes
+
+```
+git stash drop stash@{1}
+git stash clear
+```
 
 ## git reset
 
