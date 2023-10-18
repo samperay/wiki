@@ -139,25 +139,61 @@ you have made changes to the file, but don't want to keep those. You can revert 
 3. git restore file1.txt file2.txt
 ```
 
+Let's say you have commited the secrets file(i.e staged area), and now you want to restore it.
+
+```
+git status
+git restore --staged secrets.txt
+git status
+```
 
 ## git reset
 
-reset cannot be used when working with a remote repository. 
+**soft**
 
-you would undo the commit using git commit id. there are three modes, **soft**, **mixed** and **hard**. all are the same, but they differ in how they treat changes in the working directory and the staging area. 
+let's say you have made a **couple of bad commits** on the master branch, but you actually made them on a seperate branch instead, then you use `git reset <commitid>`. here, in this case you would actually lose the commit id's but your changes in the file remains the same. Hence you would need to take a new branch and commit those files. Once commited then come back to `master/main` branch. you won't see those commits as well as the changes made to that file.
 
-**soft** - won't effect working directory or staging area. e.g if just a commit needs to be changed. 
-```git reset --soft commitid```
+simple words, won't effect working directory or staging area, only commitid would be changed.
 
-**mixed** - revert changes in staging area. **DEFAULT** 
-```git reset --mixed commitid```
+```
+git log --oneline
+git reset commitid
+git log --oneline - bad commits to the file not seen, head is relaed to your commitid
+git status - it says modified, but your changes still exists
+git checkout -b do_your_commits
+git add . 
+git commit 'removed changed made to files from the branch'
+git checkout master
+git status
+```
+
+**hard**
+
+If you want your changes and your commitid to be reverted from `working directory and stage` then you would be performing the `hard` reset. 
+
+```
+git log --oneline
+git status 
+git reset --hard commitid - all your changes are lost along with commitid
+git status
+```
+
+***Note:*** Make sure always that you need to be careful in hard reset as you would lose changes made in working directory.
+
+## git revert
+
+Creates a new commit which reverses/undo the changes from a commit. 
+
+```
+git add .
+git commit -m 'bad commits'
+git log --oneline
+git revert commitid - this will prompt an editor for changes and on saving you would "revert bad commit", changes to the file are lost
+git status
+git log --oneline - your revert entry will be added so that collaborators would know that you have reverted changes on the code.
+```
 
 
-**hard** - revert changes in the working directory along with the staging area and repository. e.g if commit is complete failure, and you want to undo the changes involved in the commit as well.
-
-```git reset --hard commitid```
-
-- what happens when you do "hard reset" in git
 - whats the difference between fast-forward merge with commit and without commit
 - Explain difference between git fetch and git pull
 - what is rebase and explain
