@@ -193,13 +193,54 @@ git status
 git log --oneline - your revert entry will be added so that collaborators would know that you have reverted changes on the code.
 ```
 
+## git origin/main
 
-- whats the difference between fast-forward merge with commit and without commit
-- Explain difference between git fetch and git pull
+**remote tracking branch**
+
+At the time you last committed with this remote repo. 
+
+let's say you have cloned the repo, when you search for the branches you would see there are `remote/origin`  which is nothing but the pointer for the remote repo of **main branch**. when you add files and commit, then you would get message like your **`origin/main` is ahead by 1 commit.**
+
+**origin/master** - references the state of the master branch on the remote repo named origi
+
+```
+remote branch -r
+git add newfile.txt
+git commit 'your remote branch ahead'
+```
+
+In case, you wanted to know what exactly your changes were in the remote repo, then you would switch to `origin/master`. It would message as your `HEAD` has been detached, no need to panic. incase you want to make some more new changes, then take out a new branch from it and then work on. 
+
+```
+git switch -c origin/master
+<detached head>....
+
+git checkout -b <new_branch> - incase you need a new branch
+
+git switch -c master
+```
+
+## git fetch and pull
+
+**git fetch** 
+
+- Allows changes from the remote repository to the **local repository**.
+- Updates the remote-tracking branches with new changes
+- Does not merge changes onto your current HEAD branch
+- Safe to do anytime. 
+
+
+**git pull** 
+
+- Allows changes from the remote repository to **local repository to working directory**.
+- Updates the current branch with new changes, mergung them
+- Can result in merge conflicts
+- Not recommended if you have un-committed chanegs
+
+git pull = git fetch + git merge
+
 - what is rebase and explain
 - Explain about the branchinig startergy
-- How do you resolve conflicts in branches
-
 
 
 ## Git Oneliners
