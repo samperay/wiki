@@ -239,9 +239,113 @@ git switch -c master
 
 git pull = git fetch + git merge
 
+## merge PR with conflicts
+
+Switch to the branch in question. Merge in **master/main** and resolve conflicts
+
+```
+git fetch 
+git switch my-new-feature
+git merge master
+fix conflicts
+```
+
+Switch to master, marge the feature branch(with no conflicts now), push changes to github. 
+
+```
+git switch master
+get merge my-new-feature
+git push origin master
+```
+
+Now, your PR would be without conflicts
+
 - what is rebase and explain
 - Explain about the branchinig startergy
 
+## clone and fork
+
+**Cloning** is about **creating a local copy** for working on a project, while **forking** is about **creating a separate copy**, often used in the context of **open-source collaboration**, with the potential to contribute changes back to the original project. The choice between cloning and forking depends on **your specific needs** and the collaborative context of the project you're working on.
+
+Let's say you forked, which creates a copy from the original in your account, but when the changes happens to the original repo, your changes would be out of sync. Hence you would need to configure to allow remote repo to get changes incase the original repo changes. 
+
+```
+git remote -v 
+git remote add upstream main # Configure to the original repo for incoming changes.
+git remote -v 
+```
+
+```
+git pull upstream main 
+git status
+```
+
+## rebase 
+
+- It can be used as an **alternative to merge**
+- It can be used as a **clean up tool for your commits**. 
+
+Let's say when you are working on the feature branch, there are few of the bug fixes and they would have commited to master branch. So now you need to merge the chages from main branch to your feature branch, resulting in a merge commit. 
+
+When the above keeps happening for a quite long time, your branch would have all the **merge commits from main** and your **commits description on the feature would not be so much visible**. Hence in this case, we would use **rebase** all the feature branch commits would be available at the tip of master branch, so no merge commits
+
+```
+
+mkdir music
+cd music; git init 
+vim songs.txt
+
+git add songs.txt
+git commit -m 'added songs file' 
+
+vim songs.txt
+git commit -m 'added two film albums'
+
+git switch newalbum 
+vim songs.txt
+git add songs.txt
+
+git commit -am 'two more new albums added' 
+
+```
+
+let's say couple of songs added by someone and merged into master 
+
+```
+git switch master
+vim songs.txt
+git commit -am 'couple more albums added' 
+```
+
+however, you are still working on the feat branch and would like to bring changes from master. Hence you would start merging changes on the master. 
+
+```
+git switch feat - your working branch
+git merge master
+
+< Now you have a merge commit from master branch >
+
+git log --oneline
+```
+
+When above process has been repeated, you would have more merge commits. In order to make the merge commit appear at the last of the feature branch, we would go for **rebase**
+
+```
+git switch feat
+git rebase master
+```
+
+When, you have a conflict in the master branch, you would fix the conflict and add the files to the branch. 
+
+```
+git switch feat
+git merge master
+
+<RESOLVE AUTO CONFLICTS>
+
+git commit -am 'fixed merge conflicts'
+git status
+```
 
 ## Git Oneliners
 
