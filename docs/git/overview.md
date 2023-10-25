@@ -349,6 +349,84 @@ git status
 
 ## git commits
 
+In above section we told that we could use `rebase` as a clean up tool, here we will learn more about this. i.e **rewrite, delete, rename, or even re-order commits**(before sharing to others)
+
+```
+git log --oneline
+git rebase -i HEAD~6
+
+# after modifying file, save and quit, you would be opened by another edit, save a new commit msg.
+git status 
+git log --oneline
+```
+
+Some of them you must try out..
+
+```
+# p, pick <commit> = use commit
+# r, reword <commit> = use commit, but edit the commit message
+# e, edit <commit> = use commit, but stop for amending
+# s, squash <commit> = use commit, but meld into previous commit
+# f, fixup <commit> = like "squash", but discard this commit's log message
+# x, exec <command> = run command (the rest of the line) using shell
+# b, break = stop here (continue rebase later with 'git rebase --continue')
+# d, drop <commit> = remove commit
+# l, label <label> = label current HEAD with a name
+# t, reset <label> = reset HEAD to a label
+# m, merge [-C <commit> | -c <commit>] <label> [# <oneline>]
+# .       create a merge commit using the original merge commit's
+# .       message (or the oneline, if no original merge commit was
+# .       specified). Use -c <commit> to reword the commit message.
+```
+
+
+## tag
+
+Two types of tagging
+
+1. **lightweight tag**: they are just a name/label that points to a prticular commit
+2. **annotated tags**: store extra info including the authors anme, email, date, tag msg.. etc
+
+```
+git tag
+git tag -l "*beta*"
+git tag -l "v17*"
+git diff v17.0.0..v17.0.1
+```
+
+**lightweight**
+
+```
+git commit -am 'added patch version'
+git tag v18.0.1
+
+git commit -am 'added readme.md'
+git tag v10.0.2
+
+git diff v18.0.1..v10.0.2
+```
+
+**annotated**
+
+```
+git tag -a v18.0.3 # it would open an editor to provide msg.
+```
+
+you can also use tag from taking previous commit id
+
+```
+git tag <tagname> <commitid>
+git tag <tagname> <commitid> -f # force tag for commit incase it already exists
+git tag -d <tagname>
+```
+
+Note: when you update the remote repo using tags, it won't push all the tags. instead you need to explicitly tell to push it
+
+```
+git push origin <tagname>
+
+git push origin --tags # push all the tags
+```
 
 ## Git Oneliners
 
