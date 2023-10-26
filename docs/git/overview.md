@@ -428,6 +428,111 @@ git push origin <tagname>
 git push origin --tags # push all the tags
 ```
 
+
+## behind the git
+
+when you do `git init` you would be getting an `.git` directory and it holds all the version files for the repo. we would look few of the main files that helps in understanding the git better. 
+
+```
+ls .git/
+COMMIT_EDITMSG config         hooks          info           objects        refs
+HEAD           description    index          logs           packed-refs
+
+➜  react git:(main) ls .git/refs
+heads   remotes tags
+➜  react git:(main) ls .git/refs/heads
+main
+➜  react git:(main) ls .git/refs/remotes
+origin
+➜  react git:(main) ls .git/refs/remotes/origin
+HEAD
+➜  react git:(main) ls .git/objects
+0e   19   41   52   54   6e   8f   a8   dc   info pack
+```
+
+**refs** -  Contains one file per branch in a repository. Each file is named after a branch and contains the hash of the commit at the tip of the branch(last commit). 
+
+**HEAD** - text file that keeps track of where HEAD points. during the **DETACHED HEAD** it contains a hash instead of branch. 
+
+**objects** - contains all the repo files. This is where git stores the backups of files, commits in a repo etc 
+The files are all compressed and encrypted..
+
+There are 4 types of objects
+
+1. commit 
+2. tree
+3. blob 
+4. annotated tag
+
+When ever we write commits, its SHA-1 that encrypts and stores in a database that has key-value pairs. 
+you need anything to hash out and check, you can use the below.
+
+**Encrypt**
+
+```
+echo 'hello' | git hash-object --stdin 
+echo 'hello' | git hash-object --stdin -w
+ce013625030ba8dba906f756967f9e9ca394464a
+
+ls .git/objects # your hash object stored in this directory, which is encrypted.
+```
+
+**Decrypt**
+
+```
+➜ git:(main) git cat-file -p ce013625030ba8dba906f756967f9e9ca394464a
+hello
+```
+
+**git blobs**
+
+git uses to store the contents of files in a given repository.Blobs don't even include the filenames of each file or any other data. It looks like a commit hash, but its only blob hash.
+
+
+**trees**
+
+Tress are git objects used to store the contents of a directory. each tree contains pointers that can refer to blobs and to other trees. each entry in a tree contains SHA-1 hash of a blob or tree, as well as the mode,type, and filename
+
+```
+git cat-file -p main^{tree}
+040000 tree e4cacd8e23c9de749e53b4d06e5cf76fd10bf22d	.circleci
+040000 tree d0b0e04eb6108e5cd4c4a2c87a7c68f80772bbb1	.codesandbox
+100644 blob 07552cfff88bafaf4d207e6255394bc6d6215302	.editorconfig
+100644 blob 7d79ef692311259a6986aaa9160b1f6e7e795180	.eslintignore
+100644 blob 9d88915811935871123b2b450e972de4251ae109	.eslintrc.js
+100644 blob 176a458f94e0ea5272ce67c36bf30b6be9caf623	.gitattributes
+040000 tree 855f8e70e7e3e1bc69f0f4771e4591dceee09e54	.github
+100644 blob 6ec345e172e5e034cf68ef9c4a9c34fd8043da95	.gitignore
+100644 blob e661c3707d5de330ad0b939af9623f894a0bc0d8	.mailmap
+100644 blob e329619ca22426dece9974cfc626442201c19afa	.nvmrc
+100644 blob 6f69f7f891d672bc7b6696c3c33aaa760956e715	.prettierignore
+100644 blob 4f7ef193130c9019539a08bfb5738ba7af968c83	.prettierrc.js
+100644 blob 0967ef424bce6791893e9a57bb952f80fd536e93	.watchmanconfig
+100644 blob 146796383fbeaa19371045f4559d8d32817bf939	AUTHORS
+100644 blob 6040a0b246cb3402a626d3624f1ae6fe939adbbb	CHANGELOG-canary.md
+100644 blob 8f6df415e32a3706fe120094a22f8253fcd900fa	CHANGELOG.md
+100644 blob 08b500a221857ec3f451338e80b4a9ab1173a1af	CODE_OF_CONDUCT.md
+100644 blob 589af800fdc36dd1658ea6e96ad88a60572ca523	CONTRIBUTING.md
+100644 blob b93be90515ccd0b9daedaa589e42bf5929693f1f	LICENSE
+100644 blob a8d33198d23c47de66eca1caccdeeea7d9e78661	README.md
+100644 blob ef97ee7e3afc3716226dfb5d33a34e951c142690	ReactVersions.js
+100644 blob 655dfeaec0e67a9c448bf08a5f32d1f73aaa9611	SECURITY.md
+100644 blob d4d1e3213c574c85ed774d85c73567c06d534129	babel.config.js
+100644 blob e29426afda7a956b0cebbc24f374cc2b3276044b	dangerfile.js
+040000 tree 16d7de144f85053e52b5df9c2fa2741113e03e0e	fixtures
+100644 blob 76443cdd50285039de8c4e1ff755722c402bc03c	netlify.toml
+100644 blob d45f2f57c4b5bfa9507f134f6eea6adf88782464	package.json
+040000 tree 11c2952c7a7bd2fb611231701ba90a7766e1c09d	packages
+040000 tree a4a83cf4096449c73f4d552f4e8c9bbf15be22ad	scripts
+100644 blob 30b017680e30f3699c43aec49bfcf31e6f1a4dab	yarn.lock
+```
+
+**commits**
+
+Commit objects combine a tree object along with information about the context that led to the current tree. commits store a reference to parent commit, authors, the committer and commit msg.
+
+
+
 ## Git Oneliners
 
 ```
