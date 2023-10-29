@@ -531,7 +531,52 @@ git cat-file -p main^{tree}
 
 Commit objects combine a tree object along with information about the context that led to the current tree. commits store a reference to parent commit, authors, the committer and commit msg.
 
+## reflogs
 
+Git keeps a record of when the tips of branches and other references were updated in the repo. you can view and update these ref logs using the `git reflog`. It would be helpful incase you have messed up commits or while you rebase you need to know what changes in the past you made etc .. you can always use `reflogs` to go that commit and work on.
+
+Note: reflogs keep track only local activity. they are not shared with collaborators. older entries are removed after 90 days.
+
+```
+git reflog show HEAD
+git reflog
+```
+
+differences between `log` and `reflog` is that, log gives the commits history where as reflog provides the switch between the different branches along with all commit ids. 
+
+
+## alias
+
+you can find the config file in `~/.git/.gitconfig`, you can define your alias as below
+
+vim ~/.git/.gitconfig
+
+```
+[alias]
+    l = log
+    st = status
+```
+Now, you can use 
+
+```
+git l 
+git st
+```
+
+you can also use the CLI utility that helps you to achive the same(below)..
+
+```
+git config --global alias.l log 
+git config --global alias.st status
+```
+
+**git alias references**
+
+- [The Ultimate Git Alias Setup](https://gist.github.com/mwhite/6887990)
+
+- [Must Have Git Aliases](https://www.durdn.com/blog/2012/11/22/must-have-git-aliases-advanced-examples/)
+
+- [Configure Git Alias](https://github.com/GitAlias/gitalias/blob/main/gitalias.txt)
 
 ## Git Oneliners
 
