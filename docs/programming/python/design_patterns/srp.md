@@ -15,8 +15,8 @@ class Student:
     def __str__(self):
         return f"name: {self.name} \nid: {self.id_number}\n"
 
-    # Breaking SRP because, its saving to database and not associated with Student class,
-    # so it should not be overloaded.
+    # Breaking SRP because, its saving to database and not associated with 
+    Student class, so it should not be overloaded.
     def register(self, filename):
         with open(filename, "w") as fh:
             fh.write(f"name: {self.name} \nid: {self.id_number}\n")
