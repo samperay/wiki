@@ -90,7 +90,7 @@ nav:
                   - "Architect newsletter": sysdesign/papersource.md
         - "cloud": 
                   - "ibm": 
-                        - "IBM Professional Cloud Developer": cloud/ibm/ibm_professional_cloud_developer.md
+                        - "IBM Professional Cloud Developer": "cloud/ibm/ibm_professional_cloud_developer.md"
         - about: about.md
 theme:
         name: material
