@@ -11,7 +11,7 @@
 - Recall concepts of open innovation design and implement an automated DevOps deployment
 - Identify security concepts, like authentication, authorization, single sign-on, SSL/TLS, certificates, keys, encryption, Kubernetes config maps/secrets, and more.
 
-## Major topics in this curriculum:
+## Major topics:
 
 - IBM Professional Cloud Developer Overview
 - IBM Cloud Features and Benefits
@@ -168,6 +168,12 @@ Identify the use of Cloud Internet Services (CIS) on IBM Cloud
 
 ![features_benefits](features_benefits.png)
 
-```
-That is correct. The DevOps Dashboard: Provides data sets for each application. The dashboard works within IBM Cloud, with multiple integrations and continuous delivery (CI/CD) tools. Toolchain Templates and Integrations: Our DevOps toolchain catalog includes many templates and third-party integrations like Slack to build powerful toolchains. Consistent, efficient, & faster: Developers using IBM Cloud enjoy faster, consistent, and more efficient workflows. Improved ROI: IBM Cloud can help modernize workflow processes across the organization and its environment, lowering costs and increasing value. IBM Cloud Compliance: Multiple compliance programs are available, and all are certified with various regulatory and compliance standards. 
-```
+**The DevOps Dashboard:** Provides data sets for each application. The dashboard works within IBM Cloud, with multiple integrations and continuous delivery (CI/CD) tools. 
+
+**Toolchain Templates and Integrations:** Our DevOps toolchain catalog includes many templates and third-party integrations like Slack to build powerful toolchains. 
+
+**Consistent, efficient, & faster:** Developers using IBM Cloud enjoy faster, consistent, and more efficient workflows. 
+
+**Improved ROI:** IBM Cloud can help modernize workflow processes across the organization and its environment, lowering costs and increasing value. 
+
+**IBM Cloud Compliance:** Multiple compliance programs are available, and all are certified with various regulatory and compliance standards. 

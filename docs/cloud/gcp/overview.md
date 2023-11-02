@@ -1,0 +1,1 @@
+Mandatory **Google Cloud** need-to-know info goes here
