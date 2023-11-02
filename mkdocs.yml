@@ -88,6 +88,9 @@ nav:
         - "sysdesign":
                   - "Architecture process": sysdesign/arch_process.md
                   - "Architect newsletter": sysdesign/papersource.md
+        - "cloud": 
+                  - "ibm": 
+                        - "IBM Professional Cloud Developer": cloud/ibm/ibm_professional_cloud_developer.md
         - about: about.md
 theme:
         name: material
