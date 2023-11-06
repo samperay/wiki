@@ -88,6 +88,7 @@ nav:
         - "sysdesign":
                   - "Architecture process": sysdesign/arch_process.md
                   - "Architect newsletter": sysdesign/papersource.md
+                  - "Architect autonomous cars" : sysdesign/autonomouscars.md
         - "cloud": 
                   - "ibm": 
                         - "IBM Professional Cloud Developer Overview": "cloud/ibm/ibm_professional_cloud_developer.md"

@@ -12,7 +12,6 @@ what should system do ?
 - provide information to the admin team
 - alert to near hospitals or mechanic shops
 - road assistance
-- 
 
 ### Functional
 
@@ -38,15 +37,12 @@ So when we are designing the non-functional, we must first start witj what we al
 Questions to ask customers ?
 
 1. How many expected concurrent users ?
-
 Sol: 10
 
 2. How many telementry msg received per second (load avg)
-
 Sol: 7000/sec
 
 3. What is the avg size of each msg
-
 sol: 1KB ( quite small)
 
 4. Is the msg schema-less ( any predefined data structures, etc )
@@ -58,27 +54,30 @@ sol: sort of..
 6. What is desired SLA ?
 sol: Highest possible..
 
-Data volume: 
+**Data volume:**
 
 1msg =1KB  
-  i.e 7000 msg = 7MB/sec
-  i.e ~25GB/hr
-  i.e ~605GB/day
-  i.e ~221TB/year 
+i.e 7000 msg = 7MB/sec
+i.e ~25GB/hr
+i.e ~605GB/day
+i.e ~221TB/year 
 
-Retention period
+**Retention period**
 
 How long you want your rectods to be kept in the DB ?
 
 What happens to them after the retention period ?
-  - Deleted
-  - Move to archived data store
 
-Motivation: 
-  - keeps db from expoloding
-  - improve query performance
+- Deleted
+- Move to archived data store
 
-Two types of data: 
+Motivation:
+
+- keeps db from expoloding
+- improve query performance
+
+Two types of data:
+
 - Operational, near realtime (location, speed).. etc
 Retention period: 1 week
 
@@ -109,27 +108,27 @@ Since the load is very high, no validation, storing or query etc will be done.
 **Six component**
 **telementry viewer** - Queries the database and displays real time data.(dashboards)
 
-**seventh component**
+**Seventh component**
 **Data warehouse** - store aggregated msg from databases
 
 **Eigth component**
 **BI application:** It is used only to report and analysis.
 
-**Ninth component:
-**Archive DB** - Make sure you have huge database to just store rhe information. we don't need to query anything for operational purpose. incase you need to work, you need to put that data in the operational DB and work upon.
+**Ninth component**:
+**Archive DB** - Make sure you have huge database to just store the information. we don't need to query anything for operational purpose. incase you need to work, you need to put that data in the operational DB and work upon.
 
 ## Telementry Gateway
 
 - Receives data from cars using TCP
 - Pushes the data to pipeline
 
-### Application Type 
+### Application Type
 
-Web App & Web API - No
-Mobile App - No
-Console - Yes
-Service - Yes
-Desktop App - No
+- Web App & Web API - No
+- Mobile App - No
+- Console - Yes
+- Service - Yes
+- Desktop App - No
 
 ### Technology stack 
 
@@ -149,10 +148,10 @@ Hence we go for **nodejs** which is great performance runs on linux and leverage
 
 ### Architecture
 
-User/interface: No 
-Business logic : No
-Data Access: No
-Data store: No
+- User/interface: No 
+- Business logic : No
+- Data Access: No
+- Data store: No
 
 Since telementry data uses none of the above, we don't need anything from above 
 **We need Service interface and qquickly pushes into pipeline**
@@ -173,17 +172,17 @@ place the gateway behind the Load balancer(3 instances) - scale across traffic a
 
 **Apache Kafka** 
 
-Pros:
+**Pros:**
 
 - Very popular
 - Handle massive amount of data
 - HA
 
-Cons:
+**Cons:**
 
 - Complex to setup and configure
 
-### Telementry processor
+## Telementry processor
 
 - Receives from the pipeline
 - Process the msg(mainly validation)
@@ -231,7 +230,7 @@ Data store: No
 **Redunancy for telementry processor**
 place the gateway behind the Load balancer(3 instances) - scale across traffic and regions as the data will be high.
 
-### telementry viewer
+## Telementry viewer
 
 - Allow end uses to query data
 - Displays real time data
@@ -287,7 +286,7 @@ GET /api/v1/telementry/error/{carid}
 **Redunancy for telementry viewer**
 place the gateway behind the Load balancer(3 instances) - scale across traffic and regions as the data will be high.
 
-### BI Application
+## BI Application
 
 - Analyze telementry data
 - Display custom reports about data, trends, forcasts
@@ -308,4 +307,3 @@ ableau
 
 Note: Designing BI is not part of arch job
 Inform the customer saying that we are not part of BI experts, he can bring anyone he wishes to and we would be working with him to assist him as we laid out the high level system specs.
-
