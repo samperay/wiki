@@ -1,0 +1,106 @@
+<mxfile host="65bd71144e">
+    <diagram id="WpBTrdDwgxIbmVsbJg8S" name="Page-1">
+        <mxGraphModel dx="1289" dy="1787" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="7" value="" style="edgeStyle=none;html=1;" edge="1" parent="1" source="2" target="6">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="2" value="&lt;h3&gt;Cars&lt;/h3&gt;" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="190" y="-150" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="3" value="&lt;div style=&quot;color: rgb(171, 178, 191); background-color: rgb(40, 44, 52); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 18px; line-height: 27px;&quot;&gt;&lt;div&gt;- Receive telementry&lt;/div&gt;&lt;div&gt;- Validate telementry&lt;/div&gt;&lt;div&gt;- Store telementry&lt;/div&gt;&lt;div&gt;- Query &amp;amp; analyze telementry&lt;/div&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="-100" y="-180" width="260" height="150" as="geometry"/>
+                </mxCell>
+                <mxCell id="4" value="&lt;h1&gt;&lt;b&gt;&lt;i style=&quot;background-color: rgb(210, 15, 15);&quot;&gt;Components&lt;/i&gt;&lt;/b&gt;&lt;/h1&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="80" y="-400" width="200" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="9" style="edgeStyle=none;html=1;" edge="1" parent="1" source="6">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="470" y="10" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="12" value="" style="edgeStyle=none;html=1;fontColor=none;" edge="1" parent="1" source="6" target="11">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="6" value="&lt;h3&gt;Receive telementry gateway&lt;/h3&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="410" y="-150" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="14" style="edgeStyle=none;html=1;entryX=-0.008;entryY=0.375;entryDx=0;entryDy=0;entryPerimeter=0;fontFamily=Courier New;fontColor=none;" edge="1" parent="1" source="10" target="13">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="19" value="" style="edgeStyle=none;html=1;fontFamily=Courier New;fontColor=none;" edge="1" parent="1" source="10" target="15">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="10" value="&lt;h3&gt;Pipeline&lt;/h3&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="414" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="11" value="&lt;p&gt;Receives telementry from cars&lt;/p&gt;" style="text;html=1;spacing=5;spacingTop=-20;whiteSpace=wrap;overflow=hidden;rounded=0;glass=0;labelBackgroundColor=#e5dcdc;fillStyle=auto;fontFamily=Courier New;align=left;fontStyle=1;opacity=90;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;" vertex="1" parent="1">
+                    <mxGeometry x="610" y="-150" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="13" value="&lt;p&gt;Quees telementry msg for processing&lt;/p&gt;" style="text;html=1;spacing=5;spacingTop=-20;whiteSpace=wrap;overflow=hidden;rounded=0;glass=0;labelBackgroundColor=#e5dcdc;fillStyle=auto;fontFamily=Courier New;align=left;fontStyle=1;opacity=90;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;" vertex="1" parent="1">
+                    <mxGeometry x="620" y="10" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="17" value="" style="edgeStyle=none;html=1;fontFamily=Courier New;fontColor=none;" edge="1" parent="1" source="15" target="16">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="20" value="" style="edgeStyle=none;html=1;fontFamily=Courier New;fontColor=none;" edge="1" parent="1" source="15" target="18">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="15" value="&lt;h3&gt;Processor&lt;/h3&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="414" y="170" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="16" value="&lt;p&gt;Validates msg and stores them&lt;/p&gt;" style="text;html=1;spacing=5;spacingTop=-20;whiteSpace=wrap;overflow=hidden;rounded=0;glass=0;labelBackgroundColor=#e5dcdc;fillStyle=auto;fontFamily=Courier New;align=left;fontStyle=1;opacity=90;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;" vertex="1" parent="1">
+                    <mxGeometry x="620" y="170" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="40" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Courier New;fontColor=none;" edge="1" parent="1" source="18" target="39">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="18" value="&lt;h3&gt;Operational DB&lt;/h3&gt;" style="shape=datastore;whiteSpace=wrap;html=1;rounded=1;glass=0;labelBackgroundColor=#e5dcdc;fillStyle=auto;strokeColor=default;fontFamily=Courier New;fontColor=none;fillColor=none;opacity=90;" vertex="1" parent="1">
+                    <mxGeometry x="394" y="310" width="160" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="21" value="&lt;h3&gt;Datawarehouse&lt;/h3&gt;" style="shape=datastore;whiteSpace=wrap;html=1;rounded=1;glass=0;labelBackgroundColor=#e5dcdc;fillStyle=auto;strokeColor=default;fontFamily=Courier New;fontColor=none;fillColor=none;opacity=90;" vertex="1" parent="1">
+                    <mxGeometry x="130" y="485" width="160" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="26" value="" style="edgeStyle=none;html=1;fontFamily=Courier New;fontColor=none;" edge="1" parent="1" source="22" target="24">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="29" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Courier New;fontColor=none;" edge="1" parent="1" source="22" target="18">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="30" style="edgeStyle=none;html=1;fontFamily=Courier New;fontColor=none;" edge="1" parent="1" source="22" target="21">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="22" value="&lt;h3&gt;Telementry viewer&lt;/h3&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="150" y="330" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="24" value="&lt;p&gt;Queries operational DB and provide real time data&lt;/p&gt;" style="text;html=1;spacing=5;spacingTop=-20;whiteSpace=wrap;overflow=hidden;rounded=0;glass=0;labelBackgroundColor=#e5dcdc;fillStyle=auto;fontFamily=Courier New;align=left;fontStyle=1;opacity=90;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;" vertex="1" parent="1">
+                    <mxGeometry x="-60" y="330" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="34" value="" style="endArrow=classic;startArrow=classic;html=1;fontFamily=Courier New;fontColor=none;entryX=0.5;entryY=1;entryDx=0;entryDy=0;exitX=1;exitY=0.7;exitDx=0;exitDy=0;" edge="1" parent="1" source="21" target="18">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="320" y="450" as="sourcePoint"/>
+                        <mxPoint x="370" y="400" as="targetPoint"/>
+                        <Array as="points"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="36" value="" style="edgeStyle=none;html=1;fontFamily=Courier New;fontColor=none;" edge="1" parent="1" source="35" target="21">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="38" value="" style="edgeStyle=none;html=1;fontFamily=Courier New;fontColor=none;" edge="1" parent="1" source="35" target="37">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="35" value="&lt;h3&gt;BI Application&lt;/h3&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="-100" y="505" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="37" value="&lt;p&gt;Report and analysis&lt;/p&gt;" style="text;html=1;spacing=5;spacingTop=-20;whiteSpace=wrap;overflow=hidden;rounded=0;glass=0;labelBackgroundColor=#e5dcdc;fillStyle=auto;fontFamily=Courier New;align=left;fontStyle=1;opacity=90;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;" vertex="1" parent="1">
+                    <mxGeometry x="-320" y="505" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="39" value="&lt;h3&gt;Archive DB&lt;/h3&gt;" style="shape=datastore;whiteSpace=wrap;html=1;rounded=1;glass=0;labelBackgroundColor=#e5dcdc;fillStyle=auto;strokeColor=default;fontFamily=Courier New;fontColor=none;fillColor=none;opacity=90;" vertex="1" parent="1">
+                    <mxGeometry x="600" y="470" width="160" height="100" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
