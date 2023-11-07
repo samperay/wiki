@@ -98,6 +98,8 @@ nav:
                         - "Azure Overview": "cloud/azure/overview.md"
                   - "gcp":
                         - "GCP Overview": "cloud/gcp/overview.md"
+        - "vault": 
+                - "vault": "vault/overview.md"
                   
         - about: about.md
 theme:
