@@ -86,35 +86,35 @@ Retention period: Forever
 
 ## Mapping components
 
-**First component:**
+**Component:**
 - Receive telementry
 - Validate telementry
 - Store telementry
 - Query & analyze telementry
 
-**Second component:**
+**First component:**
 **Cars** - Source of the data, since no control for us
 
-**Third component:**
+**Second component:**
 **Telementry gateway** - receives telementry data from cars.
 Since the load is very high, no validation, storing or query etc will be done.
 
-**Fourth component:**
+**Third component:**
 **Telementry pipeline** - It will receive the msg from the gateway, and put into the pipeline. hence no load on the system. i.e It will **queue** the telementry msg for processing
 
-**Fifth component**
+**Fourth component**
 **telementry processor** - Validate and process any msg and store in the data base.
 
-**Six component**
+**Fifth component**
 **telementry viewer** - Queries the database and displays real time data.(dashboards)
 
-**Seventh component**
+**Six component**
 **Data warehouse** - store aggregated msg from databases
 
-**Eigth component**
+**Seventh component**
 **BI application:** It is used only to report and analysis.
 
-**Ninth component**:
+**Eighth component**:
 **Archive DB** - Make sure you have huge database to just store the information. we don't need to query anything for operational purpose. incase you need to work, you need to put that data in the operational DB and work upon.
 
 ## Telementry Gateway
