@@ -19,6 +19,7 @@ nav:
                                       - "Factory Methods": "programming/python/design_patterns/factory-method.md"
                                       - "Prototype": "programming/python/design_patterns/prototype.md"
                                       - "Singleton": "programming/python/design_patterns/singleton.md"
+                                      - "Observer" : "programming/python/design_patterns/observer.md"
                             - "data structures":
                                       - "overview": "programming/python/data_structures/overview.md"
                                       - "linked list": "programming/python/data_structures/linked_list.md"
@@ -28,7 +29,6 @@ nav:
                                       - "recursions": "programming/python/data_structures/recursions.md"
                                       - "trees": "programming/python/data_structures/trees.md"
                                       - "hashing": "programming/python/data_structures/hashing.md"
-                                      - "interviews": "programming/python/data_structures/interviews.md"
 
                             - "webapp framework":
                                       - "fastapi": "programming/python/webapp_framework/fastapi/fastapi.md"
@@ -61,7 +61,7 @@ nav:
                             - "Introduction": "cicd/github_actions/intro.md"
                             - "Triggers": "cicd/github_actions/workflow_triggers.md"
                             - "Variables": "cicd/github_actions/variables.md"
-                            - "Matrix stratergy": "cicd/github_actions/matrix_stratergy.md"
+                            - "Matrix stratergy": "cicd/github_actions/matrix_strategy.md"
                             - "CICD pipeline": "cicd/github_actions/cicd.md"
                   - "Jenkins":
                             - "Overview": "cicd/jenkins/overview.md"
@@ -100,7 +100,8 @@ nav:
                   - "gcp":
                         - "GCP Overview": "cloud/gcp/overview.md"
         - "vault": 
-                - "vault": "vault/overview.md"
+                - "Vault Overview": "vault/vault_overview.md"
+                - "Vault Architecture": "vault/vault_architecture.md"
                   
         - about: about.md
 theme:
