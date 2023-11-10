@@ -1,0 +1,1 @@
+We will discuss more about the vault architecture in coming days
