@@ -27,7 +27,7 @@ we would have complete version of the cicd pipeline.
 
 As we discussed earlier, we can't push to `master` or `develop` using the branch. hence we need to create a new `feature` branch and requires a `pull request` to the respective branches. You need to update settings on the `branch protection rules` for both `develop and master`
 
-![master_develop_branch_protection_rule](./../../../images/master_develop_branch_protection_rule.png)
+![master_develop_branch_protection_rule](../images/../../images/master_develop_branch_protection_rule.png)
 
 
 Here is an example of python project, which builds and let you merge the pull request upon successful
