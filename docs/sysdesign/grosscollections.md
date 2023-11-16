@@ -213,4 +213,4 @@ soln: Nil
 
 ## physical diagram
 
-![gross_collections_phy_diagram](gross_collections_phy_diagram.png)
+![gross_collections_phy_diagram](../images/gross_collections_phy_diagram.png)
