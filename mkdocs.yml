@@ -90,6 +90,7 @@ nav:
                   - "Design newsletter": sysdesign/papersource.md
                   - "Design cars" : sysdesign/autonomouscars.md
                   - "Design gross collections": sysdesign/grosscollections.md
+                  - "Payment processing": sysdesign/paymentprocessing.md
                   - "Selecting a database": sysdesign/selectingdb.md
         - "cloud": 
                   - "ibm": 
