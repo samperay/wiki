@@ -44,16 +44,86 @@ vault requires at least one audit device to write the log before completing the 
 
 ![vault_architecture](../images/vault_architecture.png)
 
+[vault architecture document](https://developer.hashicorp.com/vault/docs/internals/architecture)
 
 ## vault path structure
 
+- Everything in vault is path-based
+- path prefix tells vault which component a request should be routed
+- secret engines, auth methods, audit devices are "mounts" at a specified path referred as mount
+- system backend is default backend in vault which is mounted at the /sys endpoint
+- vault components can be enabled at ANY path using --path flag or it does by default path
+- vault has few system paths what are resrved and you cannot use it. 
+    - auth/  - endpoint for auth methods configs
+    - cubbyhole - endpoint for cubbyhole secrets engine
+    - identity/ - endpoint for config vault identity
+    - secret/  - endpoint used by key/vaulut v2 secrets engine if running in dev mode
+    - sys/ - system endpoint for config vault
+
 ## vault data protection
+
+How data is stored in vault...
+
+**master key:** 
+- used to decrypt the encryption key
+- created during vault init or rekey ops
+- never written to storage when using traditional **unseal** mechanism
+- written to core/master(storage backend) when using **auto unseal**
+
+**encryption key:**
+- used to encrypt/decrypt data written to storage backend.
+- encrypted by the master key.
+- stored alongside the data in a keyring on the storage backend.
+- can be easily rotated(manual ops).
 
 ### seal/unseal
 
+- vault starts in a **sealed** state, meaning it knows where to access the data and how **but can't decrypt it**, which means there is no read or write etc.. i.e almost no ops are possible when vault in a sealed state.
+- unsealing vault means that a node can reconstruct the master key in order to decrypt the encryption key and untilmately read the data, after **unsealing the encryption key is stored in the memory**, it can be unsealed using CLI/UI options
+- incase you need to **seal vault** i.e "throw away" the encrytpion key, it requires another **unseal to perform** any further ops. When I need to seal vault ?
+  - key shars are exposed
+  - detecting of compromise or netwrom intrustions
+  - spyware/malware on the vault nodes
+
 ### unseal using key shards
 
+We know, by now that master key is required to encrypt "encryption key" to store the data in the backend.. so how do we protect the "master key". It is done by "key shards". In this key shards, vault expects alteast 3 keys to provide to unseal the master key. These key shards would be available to min of 5 members when we init the vault using diff encryption alogrithms. when you are unsealing you will provide equal number of employees to provide their key which is equal to threshold.
+
+As part of security, no single person should have all the key shards, and it should never be stored online.
+
+```
+vault status
+vault operator init
+<vault status set to initialized>
+<displays 5 keys along with root token>
+
+vault status
+vault operator unseal
+<enter any of 3/5 keys from above until status of thershold is met>
+
+vault status
+
+vault login <root-token> # you would authenticate the cluster
+
+vault secrets list
+```
+
 ### unsealing using auto-unseal
+
+When we have an vault mainteance, or restart of service, vault would seal itself. so we need a place so that it would unseal itself.. 
+
+instead of key shards being with 5 ppl, you would have a key stored in the **cloud services**(KMS) to **encrypt/decrypt the master key**. encrypted master key is stored in the backend in core using KMS, so incase if vault restarts, it would read the encrypted master key using KMS then decrypt the master key which would then decrypt encryption key which will store in the memory to read/write secrets on the vault node.
+
+You can find in the config file `/etc/vault/vault.hcl`
+
+Create a new KMS key and provide an endpoint for `kms_key_id`. That would be sufficient when vault restarts or so, it would use the KMS key to get it unsealed.. 
+
+```
+seal "awskms" {
+    region = REGION
+    kms_key_id = "KMSKEY"
+}
+```
 
 ### unsealing with transit auto-unseal
 
