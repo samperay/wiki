@@ -127,15 +127,188 @@ seal "awskms" {
 
 ### unsealing with transit auto-unseal
 
+We would be having an **vaulut cluster running transit secret engine** from which we would be unsealing the vault. In other words, we would use that one cluster dependent on another cluser for unsealing.
+
+This supports key rotation and also can be configured for HA.
+
+```
+seal "transit" {
+  address: "https://vault.example.com:8200",
+  token ="x.Qft42..", - acl token to use if enabled.
+  disable_renewal = "false" 
+}
+
+key_name = "transit_key_name", - transit key used for encryption/decryption
+mount_path = "transit/", - mount path to transit secret engine
+namespace = "ns1/" - namespace path to transit secret engine.
+```
+
+Configure transite secret engine..
+
+host: 192.168.56.100
+
+```
+vault secrets enable transit
+vault write -f transit/keys/unseal-key
+vault list transit/keys
+
+vim policies.hcl
+
+path "transit/encrypt/unseal-key" {
+  capabilities = ["update"]
+}
+
+path "transit/decrypt/unseal-key" {
+  capabilities = ["update"]
+}
+
+vault policy write unseal policy.hcl
+vault policy list
+vault policy read unseal
+vault token create -policy=unseal - you get token from here
+```
+
+Now, go to your vault cluster which needs to be unsealed
+
+```
+vault status
+sudo vim /etc/vault/vault.hcl 
+
+seal "transit" {
+  address: "https://192.168.56.100:8200",
+  token ="use above token from transit engine",
+  disable_renewal = "true",
+  key_name = "unseal-key",
+  mount_path = "transit"
+}
+
+sudo system restart vault
+
+vault status
+vault operator init
+vault status - vault would have unsealed
+
+vault login <token>
+
+vault secrets list
+
+```
+
 ### pros and cons of unsealing
+
+**pros:**
+
+**key shards:**
+- simplest form of unsealing
+- works on any platform 
+- config options make it flexible
+
+**auto unseal:**
+- automatic unsealing
+- set and forget
+- integration benefits for running on same platform
+
+**transit unseal:**
+- automatic unsealing
+- set and forget
+- platform agnostic
+- useful when runing many vault clusters across clouds/data centres
+
+
+**Cons:**
+
+**key shards:**
+
+- introduces risk of storing keys
+- requires manual intervention
+- require rotation manually
+
+**auto unseal:**
+
+- regional requirements for cloud HSM
+- cloud/vendor lockin
+
+**transit unseal:**
+
+- requires centralized vault cluster
+- since centralized vault cluster need highest level of uptime.
 
 ## vault initialization
 
+- initilization vault prepares the backend storage to receive data
+- only need to initialize one time via single node
+- vault init is when vault creates the master key and key shares
+- options to defined threshold, key shares, receovery keys and encryption
+- vault init is also where the intitial root token is generated and returned to user
+
 ### vault configs
+
+- vault written in HCL or JSOn
+- config file is specified(/etc/vault/vault.hcl) when starting vault using the`--config` flag
+
+```
+vault server -config <localtion>
+```
+
+[vault config documentation](https://developer.hashicorp.com/vault/docs/configuration)
+
+example config file 
+
+```
+storage "consul" {
+  address = "127.0.0.1:8500"
+  path    = "vault/"
+  token   = "1a2b3c4d-1234-abdc-1234-1a2b3c4d5e6a"
+}
+listener "tcp" {
+ address = "0.0.0.0:8200"
+ cluster_address = "0.0.0.0:8201"
+ tls_disable = 0
+ tls_cert_file = "/etc/vault.d/client.pem"
+ tls_key_file = "/etc/vault.d/cert.key"
+ tls_disable_client_certs = "true"
+}
+seal "awskms" {
+  region = "us-east-1"
+  kms_key_id = "12345678-abcd-1234-abcd-123456789101",
+  endpoint = "example.kms.us-east-1.vpce.amazonaws.com"
+}
+reporting { #only for Vault 1.14 and up
+    license {
+        enabled = false
+   }
+}
+api_addr = "https://vault-us-east-1.example.com:8200"
+cluster_addr = " https://node-a-us-east-1.example.com:8201"
+cluster_name = "vault-prod-us-east-1"
+ui = false
+log_level = "INFO"
+license_path = "/opt/vault/vault.hcl"
+disable_mlock=true
+```
 
 ## storage backends
 
+- configures location for storage of vault data
+- enterprice vault cluster use "Hashicorp Consul" or "integrated storage" 
+
+There is only 1 storage backend / cluster
+
 ## audit devices
+
+- keep detailed log of all autenticated req and resp to vault
+- audit log is in JSON
+- sensitive info is hashed 
+- log files shoud be protected as a user permission can still check the values of those secrets via /sts/audit-hash API and compare to the log file
+
+```
+vault audit enable file file_path=/var/log/vault_audit_log.log
+```
+
+- Can and should have more than one audit device enabled
+- if there are any sudit devices enabled, vault requires that it can write to the log before completing the client request
+- if vault cannot write to a persistent log, it will stop responding to client requests - which mean its down !
+
 
 ## vault interfaces
 
