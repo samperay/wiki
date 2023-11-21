@@ -53,8 +53,6 @@ the space for the log file for 1 min procssing time
 
 ![payment_processing_components](../images/payment_processing_components.png)
 
-![Alt text](image.png)
-
 - Passes payloads from logic unit to another.
 - Balances load.
 - Persists messages. (Durability!)
@@ -117,12 +115,100 @@ two of the file handler keeps shaking to check for liveness ..etc
 
 ## File Formatter
 
+- received files from its specific topic
+- validates and formats the file to unified format
+- puts the new file in quwue
+- new formaters will be developed for new file
+
+### Application Type
+
+- Web App & Web API - no
+- Mobile App - no
+- Console - yes
+- Service - yes
+- Desktop App - No
+
+### Technology stack 
+
+Its same as the previous one, java or .net core. no need for any other specifics.
+
+### Architecture
+
+2 layered arch
+
+- Queue receiver: yes
+- Business logic: yes, store file in queue
+
+### Redunancy
+
+consure group itself would be availble to deal with traffic, hence no extra work needed to work.
+
 ## File calculations
+
+- Receives file from queue
+- performs some calculations
+- puts new file in queue
+
+### Technology stack 
+
+Its same as the previous one, java or .net core.
+
+### Architecture
+
+2 layered arch
+
+- Queue receiver: yes
+- Business logic: yes, store file in queue
+
+### Redunancy
+
+consure group itself would be availble to deal with traffic
 
 ## File exporter
 
+- receives file from queue
+- put trhe file in bank's folder
+
+### Technology stack 
+
+Its same as the previous one, java or .net core. no need for any other specifics.
+
+### Architecture
+
+2 layered arch
+
+- Queue receiver: yes
+- Business logic: yes, store file in queue
+
+### Redunancy
+
+consure group itself would be availble to deal with traffic
+
+
 ## logging service
+
+- write log of records
+- allow easy visualizations and analytics
+- Preferrably, based on existing platform. 
+
+you can use elk component for log storage and visualizations. 
+
+![payment_processing_log_component](../images/payment_processing_log_component.png)
+
+You can use serilog to transport file to the elastic db. from queue, you can send the data using logstash.
+beats or .... would be used to send the data to the elastic. 
+
 
 ## arch diagrams
 
+### logic 
 
+![payment_processing_logic_diag](../images/payment_processing_logic_diag.png)
+
+### technical
+
+![payment_processing_technical_diag](../images/payment_processing_technical_diag.png)
+
+### physical
+
+![payment_processing_physical_diag](../images/payment_processing_physical_diag.png)
