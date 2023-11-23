@@ -95,6 +95,7 @@ nav:
         - "cloud": 
                   - "ibm": 
                         - "IBM Professional Cloud Developer Overview": "cloud/ibm/ibm_professional_cloud_developer.md"
+                        - "IBM Automation Tools": "cloud/ibm/automated_dev_tools.md"
                   - "amazon":
                         - "Amazon Overview": "cloud/aws/overview.md"
                   - "Azure":
