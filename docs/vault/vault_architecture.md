@@ -312,7 +312,9 @@ vault audit enable file file_path=/var/log/vault_audit_log.log
 
 ## vault interfaces
 
-
+- 3 interfaces interact with vault: UI, CLI, HTTP
+- CLI is just a wrapper and all CLI or UI underneath uses HTTP
+- Auth is required to access any of the interfaces.
 
 
 

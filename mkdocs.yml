@@ -102,8 +102,9 @@ nav:
                   - "gcp":
                         - "GCP Overview": "cloud/gcp/overview.md"
         - "vault": 
-                - "Vault Overview": "vault/vault_overview.md"
-                - "Vault Architecture": "vault/vault_architecture.md"
+                - "introduction": "vault/vault_overview.md"
+                - "architecture": "vault/vault_architecture.md"
+                - "auth methods": "vault/auth_methods.md"
                   
         - about: about.md
 theme:
