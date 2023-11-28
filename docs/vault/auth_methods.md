@@ -206,6 +206,32 @@ External groups are used to set permissions based on group membership from an ex
 
 ## Choosing auth methods
 
+• Certain auth methods are ideal for different use cases
+• Many auth methods may satisfy the requirements, but often there's one that
+works "the best" for a situation
+• In contrast, just because you are using a certain platform does not mean you need
+to use the related auth method
+• Example: Azure virtual machines can authenticate using the Azure auth method,
+but AppRole, Userpass, TLS, OIDC, etc. would still be a possibility
+• Azure *might* be the best but you're not limited to only Azure.
+• It's usually easy to eliminate auth methods based on the way they operate or
+integrate with applications
+
+Key words when choosing an auth method:
+• Frequently Rotated
+• generally means a dynamic credential
+• Meets the requirements: AWS, LDAP, Azure, GCP, K8s
+• Does not meet the requirements: Userpass, TLS, AppRole
+• Remove Secrets from Process or Build Pipeline
+• generally means a dynamic or integrated credential
+• Meets the requirements: AWS, Azure, GCP, K8s
+• Does not meet the requirements: Userpass, LDAP
+
+
+Use Existing User Credentials
+• Generally means you should integrate with an existing Identity Provider
+• Meets the Requirement: OIDC, LDAP, Okta, GitHub
+• Does Not Meet the Requirements: Userpass, AWS, Azure, GCP
 
 
 
