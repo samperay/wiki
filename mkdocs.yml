@@ -5,11 +5,7 @@ nav:
         - "programming":
                   - "python":
                             - "design patterns":
-                                      - "single responsibility principle": "programming/python/design_patterns/srp.md"
-                                      - "Open Closed Principle": "programming/python/design_patterns/ocp.md"
-                                      - "Liskov Substitution Principle": "programming/python/design_patterns/lsp.md"
-                                      - "Interface Segregation Principle": "programming/python/design_patterns/isp.md"
-                                      - "Dependency Inversion Principle": "programming/python/design_patterns/dip.md"
+                                      - "solid" : "programming/python/design_patterns/solid.md"
                                       - "Adapter": "programming/python/design_patterns/adapter.md"
                                       - "Bridge": "programming/python/design_patterns/bridge.md"
                                       - "Builder": "programming/python/design_patterns/builder.md"
@@ -20,7 +16,7 @@ nav:
                                       - "Prototype": "programming/python/design_patterns/prototype.md"
                                       - "Singleton": "programming/python/design_patterns/singleton.md"
                                       - "Observer" : "programming/python/design_patterns/observer.md"
-                                      - "solid" : "programming/python/design_patterns/solid.md"
+                                      
                             - "data structures":
                                       - "overview": "programming/python/data_structures/overview.md"
                                       - "linked list": "programming/python/data_structures/linked_list.md"
@@ -42,7 +38,8 @@ nav:
                                       - "generic faq": "programming/python/generic_faq.md"
                                       - "data structures faq": "programming/python/ds_faq.md"
                   - "clean code":
-                                - "overview": "programming/clean_code/overview.md"
+                            - "overview": "programming/clean_code/overview.md"
+                            - "naming" : "programming/clean_code/naming.md"
 
                   - "go":
                             - "overview": "programming/go/overview.md"
