@@ -19,13 +19,13 @@ Good class names - just like good variable and property names - are therefore **
 
 ## Name Casing
 
-snake_case - everything is lowercase and vars seperated by underscore, that includes functions and vars
+**snake_case** - everything is lowercase and vars seperated by underscore, that includes functions and vars
 e.g python
 
-cameCase - There is no space and everystart of new char starts with capital letter, that includes functions, methods, and vars
+**cameCase** - There is no space and everystart of new char starts with capital letter, that includes functions, methods, and vars
 e.g Java, JavaScript
 
-PascalCase - Used many prg, used mainly in Classes e.g Python, Java, Javascript
+**PascalCase** - Used many prg, used mainly in Classes e.g Python, Java, Javascript
 
-Kebab-case - mainly used in HTML prog lang
+**Kebab-case** - mainly used in HTML prog lang
 
