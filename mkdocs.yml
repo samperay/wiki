@@ -20,6 +20,7 @@ nav:
                                       - "Prototype": "programming/python/design_patterns/prototype.md"
                                       - "Singleton": "programming/python/design_patterns/singleton.md"
                                       - "Observer" : "programming/python/design_patterns/observer.md"
+                                      - "solid" : "programming/python/design_patterns/solid.md"
                             - "data structures":
                                       - "overview": "programming/python/data_structures/overview.md"
                                       - "linked list": "programming/python/data_structures/linked_list.md"
