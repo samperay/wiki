@@ -40,6 +40,8 @@ nav:
                             - "interviews":
                                       - "generic faq": "programming/python/generic_faq.md"
                                       - "data structures faq": "programming/python/ds_faq.md"
+                  - "clean code":
+                                - "overview": "programming/clean_code/overview.md"
 
                   - "go":
                             - "overview": "programming/go/overview.md"
