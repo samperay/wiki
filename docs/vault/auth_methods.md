@@ -206,32 +206,64 @@ External groups are used to set permissions based on group membership from an ex
 
 ## Choosing auth methods
 
-• Certain auth methods are ideal for different use cases
-• Many auth methods may satisfy the requirements, but often there's one that
-works "the best" for a situation
-• In contrast, just because you are using a certain platform does not mean you need
-to use the related auth method
-• Example: Azure virtual machines can authenticate using the Azure auth method,
-but AppRole, Userpass, TLS, OIDC, etc. would still be a possibility
-• Azure *might* be the best but you're not limited to only Azure.
-• It's usually easy to eliminate auth methods based on the way they operate or
-integrate with applications
+Many auth methods may satisfy the requirements, but often there's one that works "the best" for a situation e.g incase you are using a certain platform does not mean you need to use the related auth method
+e.g: Azure virtual machines can authenticate using the Azure auth method, but AppRole, Userpass, TLS, OIDC, etc. would still be a possibility. It's usually easy to eliminate auth methods based on the way they operate or integrate with applications
 
 Key words when choosing an auth method:
-• Frequently Rotated
-• generally means a dynamic credential
-• Meets the requirements: AWS, LDAP, Azure, GCP, K8s
-• Does not meet the requirements: Userpass, TLS, AppRole
-• Remove Secrets from Process or Build Pipeline
-• generally means a dynamic or integrated credential
-• Meets the requirements: AWS, Azure, GCP, K8s
-• Does not meet the requirements: Userpass, LDAP
 
+**Frequently Rotated**
+- generally means a dynamic credential.
+- Meets the requirements: AWS, LDAP, Azure, GCP, K8s.
+- Does not meet the requirements: Userpass, TLS, AppRole.
+ 
+**Remove Secrets from Process or Build Pipeline**
+- generally means a dynamic or integrated credential.
+- Meets the requirements: AWS, Azure, GCP, K8s.
+- Does not meet the requirements: Userpass, LDAP.
 
-Use Existing User Credentials
-• Generally means you should integrate with an existing Identity Provider
-• Meets the Requirement: OIDC, LDAP, Okta, GitHub
-• Does Not Meet the Requirements: Userpass, AWS, Azure, GCP
+**Use Existing User Credentials**
+- Generally means you should integrate with an existing Identity Provider.
+- Meets the Requirement: OIDC, LDAP, Okta, GitHub.
+- Does not meet the requirements: Userpass, AWS, Azure, GCP.
 
+### Human based Auth
 
+- Integrates with an Existing Identity Provider
+- Requires a Hands-On Approach to Use(Okta, Userpas, GitHub, JWT/OIDC, radius)
+- Logging in via Prompt or Pop-up
+- Often configured with the Platforms Integrated MFA
 
+### System-Based Auth Methods
+
+- Uses non-human friendly methologies (not easy to remember) i.e tokens
+- Usually Integrates with an Existing Platform(AWS, Azure, Oracle Cloud, kerberos, kubernetes, TLS certs)
+- Vault validates credentials with the platform
+
+## lab
+
+### Create auth method of userpass and get the user token from vault
+
+```
+vault auth list
+vault auth enable userpass
+vault write auth/userpass/users/sunil password=sunil policies=sunil
+vault write auth/userpass/users/shiva password=shiva policies=shiva
+vault list auth/userpass/users
+vault read auth/userpass/users/sunil
+vault login -method=userpass username=sunil [Enter]
+Password: sunil
+
+<lists the token>
+```
+
+### Create auth method of approle and to get from vault
+
+```
+vault auth list
+vault auth enable approle
+vault write auth/approle/role/sunil policies=sunil token_ttl=20m
+vault list auth/approle/role/
+vault read auth/approle/role/sunil/role_id 
+vault write -f auth/approle/role/sunil/secret-id 
+vault write auth/approle/login role_id="" secret_id=""
+```
