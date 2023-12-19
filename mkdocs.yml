@@ -106,6 +106,8 @@ nav:
                 - "introduction": "vault/vault_overview.md"
                 - "architecture": "vault/vault_architecture.md"
                 - "auth methods": "vault/auth_methods.md"
+                -  "policies" : "vault/policies.md"
+                
                   
         - about: about.md
 theme:
