@@ -201,3 +201,54 @@ path "secret/apps/+/team-*" {
 capabilities = ["create", "read"]
 }
 ```
+
+### acl 
+
+Use variable replacement in some policy strings with values available to the token, define policy paths containing double curly braces: {{<parameter>}}
+
+Creates a section of the key/value v2 secret engine to a specific user 
+
+```
+path "secret/data/{{identity.entity.id}}/*" {
+capabilities = ["create", "update", "read", "delete"]
+}
+
+path "secret/metadata/{{identity.entity.id}}/*" {
+capabilities = ["list"]
+}
+```
+
+![acl_templating_params](../images/acl_templating_params.png)
+
+Reference: https://developer.hashicorp.com/vault/tutorials/policies/policy-templating?in=vault%2Fpolicies
+
+How to identify the policies that are attached.
+
+```
+$ vault token create -policy="web-app"
+
+# Authenticate with the newly generated token
+$ vault login <token>
+
+# Make sure that the token can read
+$ vault read secret/apikey/Google
+
+# This should fail
+$ vault write secret/apikey/Google key="ABCDE12345"
+
+# Request a new AWS credentials
+$ vault read aws/creds/s3-readonly 
+
+```
+
+### admin policies
+
+- Permissions for Vault backend functions live at the sys/ path
+- Users/admins will need policies that define what they can do within **Vault to administer** Vault itself
+    - Unsealing
+    - Changing policies
+    - Adding secret backends
+    - Configuring database configurations
+
+
+![vault_admin_policies](../images/vault_admin_policies.png)
