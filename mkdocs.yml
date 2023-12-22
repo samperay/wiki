@@ -40,6 +40,7 @@ nav:
                   - "clean code":
                             - "overview": "programming/clean_code/overview.md"
                             - "naming" : "programming/clean_code/naming.md"
+                            - "structure": "programming/clean_code/structure.md"
 
                   - "go":
                             - "overview": "programming/go/overview.md"
