@@ -41,6 +41,8 @@ nav:
                             - "overview": "programming/clean_code/overview.md"
                             - "naming" : "programming/clean_code/naming.md"
                             - "structure": "programming/clean_code/structure.md"
+                            - "func methods": "programming/clean_code/methods.md"
+
 
                   - "go":
                             - "overview": "programming/go/overview.md"
