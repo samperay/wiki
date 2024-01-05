@@ -24,6 +24,27 @@ let's say if you don't want to use any of the paramters, then you would create a
 5. should follow common best practices and patterns. 
 6. should be fun to write and maintain code. 
 
+if you have too many values, then try to add key:value pair in the functions and then use it. 
 
+example
 
+```
+@dataclass
+class Compare
+    x:int
+    y:int
+
+    def small(self):
+        if self.x < self.y: return self.x
+        else: return self.y
+
+    def big(self):
+        if self.x > self.y: return self.x
+        else: return self.y
+
+operators=Compare(x=10,y=12)
+
+print("small", operators.small())
+print("big", operators.big())
+```
 
