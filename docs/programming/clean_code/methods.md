@@ -48,3 +48,28 @@ print("small", operators.small())
 print("big", operators.big())
 ```
 
+Functions should be small and should do exactly one thing. 
+
+## abstractions
+
+There are two levels i.e 
+
+**high level**  - functions which we write and there is no room for interpretation. 
+e.g isEmail(email), userExists(username) etc
+
+**low level** - these are low level API or built-in but the intrepation must be added.. 
+e.g username.split("@") list_of_user.append(username) .. etc
+
+Do not mix levels of abstrations, we must **split the the functions** if they are doing multiple works. 
+
+so when do we need to split the functions ?
+
+- Extract the code that works on the same functionality (do-not-repeat)
+- Extract the code that requires more interpretation than the surrounding code
+
+
+
+
+
+
+
