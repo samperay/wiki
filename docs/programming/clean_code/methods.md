@@ -66,6 +66,33 @@ so when do we need to split the functions ?
 
 - Extract the code that works on the same functionality (do-not-repeat)
 - Extract the code that requires more interpretation than the surrounding code
+- Split functions reasonable
+
+How would you make decision and don't split 
+- you are jusy renaming the function 
+- finding the new function will take longer than reading the extracted code 
+- can't produce a reasonable name for the extracted function. 
+
+**Pure function**
+
+the same input always yeilds same output. it means they are predictable. 
+no side effects.
+
+```python
+def genId(username):
+    return f"id-{username}"
+```
+
+A function that just not only changes input/output but changes the overall system/program state. 
+
+```python
+def create_user(username):
+    newuser = CreateUser(username)
+
+    # inpure function
+    startsession(newuser) # side effect is not bad, but can be avoided
+    return newuser
+```
 
 
 
