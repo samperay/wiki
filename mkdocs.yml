@@ -5,7 +5,7 @@ nav:
         - "programming":
                   - "python":
                             - "design patterns":
-                                      - "solid" : "programming/python/design_patterns/solid.md"
+                                      - "Solid" : "programming/python/design_patterns/solid.md"
                                       - "Adapter": "programming/python/design_patterns/adapter.md"
                                       - "Bridge": "programming/python/design_patterns/bridge.md"
                                       - "Builder": "programming/python/design_patterns/builder.md"
@@ -30,19 +30,23 @@ nav:
                             - "webapp framework":
                                       - "fastapi": "programming/python/webapp_framework/fastapi/fastapi.md"
                                       - "flask": "programming/python/webapp_framework/flask/flask.md"
+
                             - "programming terms":
                                       - "Object Oriented Programming": programming/python/terminology/oops.md
                                       - "concepts": "programming/python/terminology/primer.md"
                                       - "datatypes": "programming/python/terminology/datatypes.md"
+                                      
                             - "interviews":
                                       - "generic faq": "programming/python/generic_faq.md"
                                       - "data structures faq": "programming/python/ds_faq.md"
+
                   - "clean code":
                             - "overview": "programming/clean_code/overview.md"
                             - "naming" : "programming/clean_code/naming.md"
                             - "structure": "programming/clean_code/structure.md"
                             - "func methods": "programming/clean_code/methods.md"
-
+                            - "control structures": "programming/clean_code/control_structure.md"
+                            - "oop principles": "programming/clean_code/oop.md"
 
                   - "go":
                             - "overview": "programming/go/overview.md"
@@ -80,6 +84,7 @@ nav:
 
                   - "kibana":
                             - "overview": elk/kibana/overview.md
+
         - "linux":
                   - "Basics": "linux/basics.md"
                   - "Networking": "linux/networking.md"
@@ -88,6 +93,7 @@ nav:
                   - "Troubleshooting": "linux/troubleshooting.md"
                   - "bash scripting":
                             - "Interview FAQ": "linux/scripting/interviews.md"
+
         - "sysdesign":
                   - "Architecture process": sysdesign/arch_process.md
                   - "Design newsletter": sysdesign/papersource.md
@@ -95,6 +101,7 @@ nav:
                   - "Design gross collections": sysdesign/grosscollections.md
                   - "Payment processing": sysdesign/paymentprocessing.md
                   - "Selecting a database": sysdesign/selectingdb.md
+
         - "cloud": 
                   - "ibm": 
                         - "IBM Professional Cloud Developer Overview": "cloud/ibm/ibm_professional_cloud_developer.md"
@@ -105,14 +112,14 @@ nav:
                         - "Azure Overview": "cloud/azure/overview.md"
                   - "gcp":
                         - "GCP Overview": "cloud/gcp/overview.md"
+
         - "vault": 
                 - "introduction": "vault/vault_overview.md"
                 - "architecture": "vault/vault_architecture.md"
                 - "auth methods": "vault/auth_methods.md"
                 - "policies" : "vault/policies.md"
                 - "access vault token": "vault/access_vault_token.md"
-                
-                  
+                          
         - about: about.md
 theme:
         name: material

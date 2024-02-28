@@ -251,8 +251,6 @@ add_logger(4,5) # Output: 9
 sub_logger(20,10) # Output: 10
 ```
 
-
-
 ### shallow & deep copy
 
 A shallow copy creates a new object but references the same elements as the original object. In other words, it creates a new container object and fills it with references to the same elements as the original. The references point to the same memory addresses as the original elements. If any of the referenced elements are mutable, changes made to them will be reflected in both the original and the shallow copy.
