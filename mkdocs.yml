@@ -46,7 +46,7 @@ nav:
                             - "structure": "programming/clean_code/structure.md"
                             - "func methods": "programming/clean_code/methods.md"
                             - "control structures": "programming/clean_code/control_structure.md"
-                            - "oop principles": "programming/clean_code/oop.md"
+                            - "oop principles": "programming/clean_code/ooo.md"
 
                   - "go":
                             - "overview": "programming/go/overview.md"
@@ -96,16 +96,30 @@ nav:
 
         - "sysdesign":
                   - "Architecture process": sysdesign/arch_process.md
+                  - "Selecting a database": sysdesign/selectingdb.md
                   - "Design newsletter": sysdesign/papersource.md
-                  - "Design cars" : sysdesign/autonomouscars.md
+                  - "Design Autonomous cars" : sysdesign/autonomouscars.md
                   - "Design gross collections": sysdesign/grosscollections.md
                   - "Payment processing": sysdesign/paymentprocessing.md
-                  - "Selecting a database": sysdesign/selectingdb.md
+                  - "Airbnb": sysdesign/airbnb.md
+                  - "Amazon": sysdesign/amazon.md
+                  - "Facebook": sysdesign/facebook.md
+                  - "Google Maps": sysdesign/gmaps.md
+                  - "Notification service": sysdesign/notifications.md
+                  - "Twitter": sysdesign/twitter.md
+                  - "Uber": sysdesign/uber.md
+                  - "Whatsapp": sysdesign/whatsapp.md
+                  - "Youtube": sysdesign/youtube.md
+                  - "URL Shortner": sysdesign/url_shortner.md
+                  - "Zoom": sysdesign/zoom.md
+                  
 
         - "cloud": 
                   - "ibm": 
                         - "IBM Professional Cloud Developer Overview": "cloud/ibm/ibm_professional_cloud_developer.md"
                         - "IBM Automation Tools": "cloud/ibm/automated_dev_tools.md"
+                        - "IBM application Deployment": "cloud/ibm/application_deployment.md"
+                        - "IBM Cloud Schematics": "cloud/ibm/cloud_schematics.md"
                   - "amazon":
                         - "Amazon Overview": "cloud/aws/overview.md"
                   - "Azure":
@@ -119,6 +133,8 @@ nav:
                 - "auth methods": "vault/auth_methods.md"
                 - "policies" : "vault/policies.md"
                 - "access vault token": "vault/access_vault_token.md"
+        - "ds":
+                - "Overview": "ds/overview.md"
                           
         - about: about.md
 theme:
