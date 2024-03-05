@@ -141,11 +141,113 @@ So now, let's look at the **case study** related to applying "Data Collection".
 
 demographic, clinical and coverage information of patients, provider information, claims records, as well as pharmaceutical and other information related to all the diagnoses of the congestive heart failure patients.
 
-For this case study, certain drug information was also needed, but that data source was not yet integrated with the rest of the data sources. This leads to an important point: It is alright to defer decisions about unavailable data,
-and attempt to acquire it at a later stage.
+For this case study, certain drug information was also needed, but that data source was not yet integrated with the rest of the data sources. This leads to an important point: It is alright to defer decisions about unavailable data, and attempt to acquire it at a later stage.
 
 For example, this can even be done after getting some intermediate results from the predictive modeling. If those results suggest that the drug information might be important in obtaining a good model, then the time to try to get it would be invested. As it turned out though, they were able to build a reasonably good model without this drug information.
 
-DBAs and programmers often work together to extract data from various sources, and then merge it. This allows for removing redundant data, making it available for the next stage of the methodology, which is data understanding.
+DBAs and programmers often work together to extract data from various sources, and then merge it. This allows for removing redundant data, making it available for the next stage of the methodology, which is **data understanding**.
 
 At this stage, if necessary, data scientists and analytics team members can discuss various ways to better manage their data, including automating certain processes in the database, so that data collection is easier and faster.
+
+## Data Understanding
+
+Data understanding encompasses all activities related to **constructing the data set**. Essentially, the data understanding section of the data science methodology answers the question: 
+**Is the data that you collected representative of the problem to be solved?**
+
+**Case Study:**
+
+In order to understand the data related to congestive heart failure admissions, descriptive statistics needed to be run against the data columns that would become variables in the model.
+
+- First, these **statistics** included Hearst, univariates, and statistics on each variable, such as mean, median, minimum, maximum, and standard deviation.
+
+- Second, **pairwise correlations** were used, to see how closely certain variables were related, and which ones, if any, were very highly correlated, meaning that they would be essentially redundant, thus making only one relevant for modeling.
+
+- Third, **histograms** of the variables were examined to understand their distributions. Histograms are a good way to understand how values or a variable are distributed, and which sorts of data preparation may be needed to make the variable more useful in a model.
+
+For example, for a categorical variable that has too many distinct values to be informative in a model, the histogram would help them decide how to consolidate those values. **The univariates, statistics, and histograms** are also used to assess data quality.
+
+From the information provided, certain values can be re-coded or perhaps even dropped if necessary, such as when a certain variable has many missing values. The question then becomes, does "missing" mean anything? Sometimes a missing value might mean "no", or "0" (zero), or at other times it simply means "we don't know". Or, if a variable contains invalid or misleading values, such as a numeric variable called "age" that contains 0 to 100 and also 999, where that "triple-9" actually means "missing", but would be treated as a valid value unless we corrected it.
+
+Initially, the meaning of congestive heart failure admission was decided on the basis of a primary diagnosis of congestive heart failure. But working through the data understanding stage revealed that the initial definition was not capturing all of the congestive heart failure admissions that were expected, based on clinical experience. This meant looping back to the data collection stage and adding secondary and tertiary diagnoses, and building a more comprehensive definition of congestive heart failure admission.
+
+This is just one example of the interactive processes in the methodology. The more one works with the problem and the data, the more one learns and therefore the more refinement that can be done within the model, ultimately leading to a better solution
+to the problem.
+
+## Data Preparation
+
+In a sense, data preparation is similar to washing freshly picked vegetables in so far as unwanted elements, such as dirt or imperfections, are removed. Together with data collection and data understanding, data preparation is the most time-consuming phase of a data science project, typically taking seventy percent and even up to even ninety percent of the overall project time. Automating some of the data collection and preparation processes in the database, can reduce this time to as little as 50 percent.
+
+**Case Study:**
+
+Transforming data in the data preparation phase is the process of getting the data into a state where it may be easier to work with. Specifically, the data preparation stage of the methodology answers the question: What are the ways in which data is prepared?
+
+To work effectively with the data, it must be prepared in a way that addresses missing or invalid values and removes duplicates, toward ensuring that everything is properly formatted.
+
+**Feature engineering is also part of data preparation**. It is the process of using domain knowledge of the data to create features that make the machine learning algorithms work. **A feature is a characteristic that might help when solving a problem**. Features within the data are important to **predictive models** and will influence the results you want to achieve.
+
+Feature engineering is critical when machine learning tools are being applied to analyze the data. When working with text, text analysis steps for coding the data are required to be able to manipulate the data. The data scientist needs to know what they're looking for within their dataset to address the question. 
+
+The text analysis is critical to ensure that the proper groupings are set, and that the programming is not overlooking what is hidden within. The data preparation phase sets the stage for the next steps in addressing the question. While this phase may take a while to do, if done right the results will support the project. If this is skipped over, then the outcome will not be up to par and may have you back at the drawing board. It is vital to take your time in this area, and use the tools available to automate common steps to accelerate data preparation. Make sure to pay attention to the detail in this area. After all, it takes just one bad ingredient to ruin a fine meal.
+
+## Modelling
+
+Modelling is the stage in the data science methodology where the data scientist has the chance to sample the sauce and determine if it's bang on or in need of more seasoning!
+
+**two key questions:**
+First, what is the purpose of data modeling, and second, what are some characteristics of this process?
+
+Data Modelling focuses on developing models that are either descriptive or predictive.
+
+An example of a descriptive model might examine things like: if a person did this, then they're likely to prefer that.
+
+A predictive model tries to yield yes/no, or stop/go type outcomes.
+
+These models are based on the analytic approach that was taken, either statistically driven or machine learning driven.
+The data scientist will use a training set for predictive modelling. A training set is a set of historical data in which the outcomes are already known. The training set acts like a gauge to determine if the model needs to be calibrated.
+In this stage, the data scientist will play around with different algorithms to ensure that the variables in play are actually required.
+
+The success of data compilation, preparation and modelling, depends on the understanding of the problem at hand, and the appropriate analytical approach being taken. The data supports the answering of the question, and like the quality of the ingredients in cooking, sets the stage for the outcome. Constant refinement, adjustments and tweaking are necessary within each step to ensure the outcome is one that is solid.
+
+In John Rollins' descriptive Data Science Methodology, the framework is geared to do 3 things: 
+First, understand the question at hand. 
+Second, select an analytic approach or method to solve the problem, and
+third, obtain, understand, prepare, and model the data.
+
+The end goal is to move the data scientist to a point where a data model can be built to answer the question.
+With dinner just about to be served and a hungry guest at the table, the key question is: Have I made enough to eat? Well, let's hope so.
+
+In this stage of the methodology, model evaluation, deployment, and feedback loops ensure that the answer is near and relevant. This relevance is critical to the data science field overall, as it ís a fairly new field of study, and we are interested in the possibilities it has to offer. The more people that benefit from the outcomes of this practice, the further the field will develop.
+
+## Evaluation
+
+A model evaluation goes hand-in-hand with model building as such, the modeling and evaluation stages are done iteratively. Model evaluation is performed during model development and before the model is deployed.
+
+Evaluation allows the quality of the model to be assessed but it's also an opportunity to see if it meets the initial request. Evaluation answers the question: Does the model used really answer the initial question or does it need to be adjusted?
+
+Model evaluation can have two main phases.
+
+The first is the diagnostic measures phase, which is used to ensure the model is working as intended.
+If the model is a predictive model, a decision tree can be used to evaluate if the answer the model can output, is aligned to the initial design. It can be used to see where there are areas that require adjustments.
+If the model is a descriptive model, one in which relationships are being assessed, then a testing set with known outcomes can be applied, and the model can be refined as needed.
+
+The second phase of evaluation that may be used is statistical significance testing. This type of evaluation can be applied to the model to ensure that the data is being properly handled and interpreted within the model.
+This is designed to avoid unnecessary second guessing when the answer is revealed.
+
+**Case Study:**
+
+Let's look at one way to find the optimal model through a diagnostic measure based on
+tuning one of the parameters in model building. Specifically we'll see how to tune the relative cost of misclassifying yes and no outcomes. As shown in this table, four models were built with four different relative misclassification costs.
+As we see, each value of this model-building parameter increases the true-positive rate, or sensitivity, of the accuracy in predicting yes, at the expense of lower accuracy in predicting no, that is, an increasing false-positive rate.
+
+The question then becomes, which model is best based on tuning this parameter?
+For budgetary reasons, the risk-reducing intervention could not be applied to most or all congestive heart failure patients, many of whom would not have been readmitted anyway. On the other hand, the intervention would not be as effective in improving patient care as it should be, with not enough high-risk congestive heart failure patients targeted.
+
+So, how do we determine which model was optimal?
+As you can see on this slide, the optimal model is the one giving the maximum separation between the blue ROC curve relative to the red base line. We can see that model 3, with a relative misclassification cost of 4-to-1, is the best of the 4 models. And just in case you were wondering, ROC stands for receiver operating characteristic curve, which was first developed during World War II to detect enemy aircraft on radar. It has since been used in many other fields as well. Today it is commonly used in machine learning and data mining. The ROC curve is a useful diagnostic tool in determining the optimal classification model.
+
+This curve quantifies how well a binary classification model performs, declassifying the yes and no outcomes when some discrimination criterion is varied. In this case, the criterion is a relative misclassification cost.
+By plotting the true-positive rate against the false-positive rate for different values of the relative misclassification cost, the ROC curve helped in selecting the optimal model.
+
+## Deployment 
+
+## Feedback
