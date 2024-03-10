@@ -5,7 +5,7 @@ nav:
         - "programming":
                   - "python":
                             - "design patterns":
-                                      - "SOLID" : "programming/python/design_patterns/SOLID.md"
+                                      - "Solid principles" : "programming/python/design_patterns/solid_principles.md"
                                       - "Adapter": "programming/python/design_patterns/adapter.md"
                                       - "Bridge": "programming/python/design_patterns/bridge.md"
                                       - "Builder": "programming/python/design_patterns/builder.md"
