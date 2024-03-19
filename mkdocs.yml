@@ -133,6 +133,7 @@ nav:
                 - "auth methods": "vault/auth_methods.md"
                 - "policies" : "vault/policies.md"
                 - "access vault token": "vault/access_vault_token.md"
+                - "secret engine": "vault/secret_engine.md"
         - "ds":
                 - "Overview": "ds/overview.md"
                           
