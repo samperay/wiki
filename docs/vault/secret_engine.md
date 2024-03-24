@@ -225,3 +225,170 @@ vault kv get secret/app/database
 ```
 vault kv destroy –versions=3 secret/app/web
 ```
+
+## cubbyhole 
+
+cubbyhole secret engine is used to store the arbitary secrets enabled by default at cubbyhole/ path. Its lifeline is linked to the token used to write data. 
+
+- no concept of TTL or any refresh tokens
+- even root token cannot be read if its not written by root. 
+
+cubbyhole secrets engine cannot be disabled, moved, or enabled multiple times. 
+
+- each service will have its own cubbyhole. 
+- one token of cubbyhole cannot access another services cubbyhole. 
+- cubbyhole expires when token expires. 
+
+```
+vault secrets list
+vault write cubbyhole/training certification=hcvop
+vault read cubbyhole/training
+
+curl \
+    --header "X-Vault-Token: ..." \
+    --request POST \
+    --data '{"certification":"hcvop"}' \
+    http://127.0.0.1:8200/v1/cubbyhole/training
+
+
+curl \
+    --header "X-Vault-Token: ..." \
+    --request LIST \
+    http://127.0.0.1:8200/v1/cubbyhole/training
+
+```
+
+### wrapping response
+
+If one user has to send slack token to another, it can't be shared across any messager as it would be sent in the plain text, hence we use wrapping resonse where the token creates a cubbyhole and the other user can access using it. 
+
+When requested, Vault can take the response it would have sent to an HTTP client and instead insert it into the cubbyhole of a single-use token, returning that single-use token instead. 
+
+Logically speaking, the response is wrapped by the token, and retrieving it requires an unwrap operation against this token. Functionally speaking, the token provides authorization to use an encryption key from Vault's keyring to decrypt the data.
+
+![wrap_response](../images/wrap_response.png)
+
+### benefits
+
+- privacy
+- malfeasance detection
+- limitation of the lifetime secret exposure
+
+Reference: https://developer.hashicorp.com/vault/docs/concepts/response-wrapping
+
+```
+vault kv get -wrap-ttl=5m secrets/certification/hcvop
+vault token lookup <wrap_token>
+
+
+vault unwrap <wrap-token>
+OR
+vault VAULT_TOKEN=<wrap-token> vault unwrap
+OR
+vault login <wrap-token>
+vault unwrap
+```
+
+## vault transit secret engine 
+
+Transit secrets engine provides functions for encrypting/decrypting data,  Enables organizations to outsource/centralize encryption to Vault.
+
+Applications can send cleartext data to Vault for encryption
+• Vault encrypts using the specified key and returns ciphertext to the app
+• The application NEVER has access to the encryption key (stored in Vault)
+• Decouples storage from encryption and access control
+
+![transit_secret_engine](../images/transit_secret_engine.png)
+
+Note: Transit secrets engine DOES NOT STORE the encrypted data. It would encrypt and returns cipher teext back to application.
+
+Encryption keys are created and stored in Vault to process data
+• Each application can have its own encryption key (or more!)
+• Apps must have permission to use the key for encryption/decryption operations, which is bound by the policy attached to its token.
+
+Keys can be easily rotated as often as needed
+• Keys are stored on keyring
+• Can limit what version(s) of keys can be used for decryption
+• You can create, rotate, delete, and export a key (need permissions)
+• Easily rewrap ciphertext with a newer version of a key
+
+![transit_secret_engine_multiple_key](../images/transit_secret_engine_multiple_key.png)
+
+
+![transit_secret_engine_keytypes](../images/transit_secret_engine_keytypes.png)
+
+
+Vault also supports convergent encryption mode
+• Means that every time you encrypt the same data, you'll get the same
+ciphertext back
+• This enables you to have searchable ciphertext
+
+### working with vault transit secret engine
+
+Before you can use the Transit secrets engine to encrypt data, it must first be enabled
+we can use the default path of transit or enable on another path.
+
+The next step is to create one or many encryption keys used to encrypt/decrypt data
+
+**Encrypt**
+
+```
+vault secrets enable transit
+vault write -f transit/keys/vault_training
+vault write -f transit/keys/training_rsa type="rsa-4096"
+```
+
+Pass the cleartext data to Vault – specifying the action and desired encryption key to use
+
+```
+vault write transit/encrypt/training plaintext=$(base64 <<< "Getting Started with HashiCorp Vault")
+```
+
+![transit_secret_engine_desc](../images/transit_secret_engine_desc.png)
+
+
+**Decrypt**
+
+```
+vault write transit/decrypt/training ciphertext="vault:v1:Fpyph6C7r5MUILiEiFhCoJBxelQbsGeEahal5LhDPSoN6HkTO………"
+```
+
+### Rotating encryption keys
+
+Transit allows for a simplified key rotation process
+• keys can be rotated manually or by an <external> automated process
+
+Vault maintains a versioned keyring
+• All versions of the encryption key are stored
+• Vault admins can limit the minimum key version allowed to be used for decryption operations (older keys won't work)
+• You can rewrap encrypted data (ciphertext) to use a newer version of the encryption key
+
+```
+vault write –f transit/keys/training/rotate
+vault read transit/keys/training
+```
+
+#### key configuration 
+
+We can limit what version of the key can be used to decrypt data
+• Maybe we have old data that we have converted and don't want anybody to be able to decrypt it
+• This is configured using the minimum key version configuration
+• It can be configured for each encryption key (not key version)
+
+```
+vault write transit/keys/training/config min_decryption_version=4
+vault read transit/keys/training
+```
+
+#### Rewrapping Ciphertex 
+
+How can we upgrade our **encrypted data to be encrypted by the latest version of the key**?
+
+The data was never available in plaintext when rewrapping the data with the latest version of the key
+
+```
+ vault write transit/rewrap/training \
+ciphertext="vault:v1:Fpyph6C7r5MUILiEiFhCoJBxelQbsGeEahal5LhDPSoN6
+HkTOhwn79DCwt0mct1ttLokqikAr0PAopzm2jQAKJg=2/QGPTMnzKPlw4cCPGTbkzE
+PlX5OyPkLIgX+erFWdUXKkKUIEbb6D2Gm5ZjTaola314LsVkbLF5G1RkBTACtskk="
+```
