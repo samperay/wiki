@@ -135,6 +135,7 @@ nav:
                 - "access vault token": "vault/access_vault_token.md"
                 - "secret engine": "vault/secret_engine.md"
                 - "vault agent": "vault/vault_agent.md"
+                - "vault replication": "vault/vault_replication.md"
         - "ds":
                 - "Overview": "ds/overview.md"
                           
