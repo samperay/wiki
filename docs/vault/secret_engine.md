@@ -32,10 +32,10 @@ Secrets engines are enabled and isolated at a path
 ### secrets-as-a-service
 
 Use Vault to generate and manage the lifecycle of credentials on-demand
-• No more sharing credentials
-• Credentials get revoked automatically at the end of its lease
-• Audit trail can identify points of compromise
-• Use policies to control the access based on the client's role
+- No more sharing credentials
+- Credentials get revoked automatically at the end of its lease
+- Audit trail can identify points of compromise
+- Use policies to control the access based on the client's role
 
 ![secret_as_service](../images/secret_as_service.png)
 
@@ -171,17 +171,17 @@ It does NOT change the way you interact with the KV store when using the CLI.
 ### working with kv engine
 
 Use the vault kv command
-• put - write data to the KV
-• get - read data from the KV
-• delete - delete data from the KV
-• list - list data within the KV (paths)
+- put - write data to the KV
+- get - read data from the KV
+- delete - delete data from the KV
+- list - list data within the KV (paths)
 
 Only available for KV V2
 
-• undelete - undelete version of secret
-• destroy - permanently destroy data
-• patch - add specific key in the KV
-• rollback - recover old data in the KV
+- undelete - undelete version of secret
+- destroy - permanently destroy data
+- patch - add specific key in the KV
+- rollback - recover old data in the KV
 
 
 ```
@@ -199,9 +199,6 @@ vault kv get -format=json kv/app/db
 
 vault kv get –version=3 kv/app/db
 ```
-
-
-  
 
 ### deleting kv
 
@@ -244,18 +241,9 @@ vault secrets list
 vault write cubbyhole/training certification=hcvop
 vault read cubbyhole/training
 
-curl \
-    --header "X-Vault-Token: ..." \
-    --request POST \
-    --data '{"certification":"hcvop"}' \
-    http://127.0.0.1:8200/v1/cubbyhole/training
+curl  --header "X-Vault-Token: ..." --request POST --data '{"certification":"hcvop"}' http://127.0.0.1:8200/v1/cubbyhole/training
 
-
-curl \
-    --header "X-Vault-Token: ..." \
-    --request LIST \
-    http://127.0.0.1:8200/v1/cubbyhole/training
-
+curl --header "X-Vault-Token: ..." --request LIST http://127.0.0.1:8200/v1/cubbyhole/training
 ```
 
 ### wrapping response
@@ -280,7 +268,6 @@ Reference: https://developer.hashicorp.com/vault/docs/concepts/response-wrapping
 vault kv get -wrap-ttl=5m secrets/certification/hcvop
 vault token lookup <wrap_token>
 
-
 vault unwrap <wrap-token>
 OR
 vault VAULT_TOKEN=<wrap-token> vault unwrap
@@ -293,24 +280,24 @@ vault unwrap
 
 Transit secrets engine provides functions for encrypting/decrypting data,  Enables organizations to outsource/centralize encryption to Vault.
 
-Applications can send cleartext data to Vault for encryption
-• Vault encrypts using the specified key and returns ciphertext to the app
-• The application NEVER has access to the encryption key (stored in Vault)
-• Decouples storage from encryption and access control
+- Applications can send cleartext data to Vault for encryption
+- Vault encrypts using the specified key and returns ciphertext to the app
+- The application NEVER has access to the encryption key (stored in Vault)
+- Decouples storage from encryption and access control
 
 ![transit_secret_engine](../images/transit_secret_engine.png)
 
 Note: Transit secrets engine DOES NOT STORE the encrypted data. It would encrypt and returns cipher teext back to application.
 
-Encryption keys are created and stored in Vault to process data
-• Each application can have its own encryption key (or more!)
-• Apps must have permission to use the key for encryption/decryption operations, which is bound by the policy attached to its token.
+- Encryption keys are created and stored in Vault to process data
+- Each application can have its own encryption key (or more!)
+- Apps must have permission to use the key for encryption/decryption operations, which is bound by the policy attached to its token.
 
-Keys can be easily rotated as often as needed
-• Keys are stored on keyring
-• Can limit what version(s) of keys can be used for decryption
-• You can create, rotate, delete, and export a key (need permissions)
-• Easily rewrap ciphertext with a newer version of a key
+- Keys can be easily rotated as often as needed
+- Keys are stored on keyring
+- Can limit what version(s) of keys can be used for decryption
+- You can create, rotate, delete, and export a key (need permissions)
+- Easily rewrap ciphertext with a newer version of a key
 
 ![transit_secret_engine_multiple_key](../images/transit_secret_engine_multiple_key.png)
 
@@ -318,10 +305,9 @@ Keys can be easily rotated as often as needed
 ![transit_secret_engine_keytypes](../images/transit_secret_engine_keytypes.png)
 
 
-Vault also supports convergent encryption mode
-• Means that every time you encrypt the same data, you'll get the same
-ciphertext back
-• This enables you to have searchable ciphertext
+- Vault also supports convergent encryption mode
+- Means that every time you encrypt the same data, you'll get the same ciphertext back
+- This enables you to have searchable ciphertext
 
 ### working with vault transit secret engine
 
@@ -355,13 +341,13 @@ vault write transit/decrypt/training ciphertext="vault:v1:Fpyph6C7r5MUILiEiFhCoJ
 
 ### Rotating encryption keys
 
-Transit allows for a simplified key rotation process
-• keys can be rotated manually or by an <external> automated process
+- Transit allows for a simplified key rotation process
+- keys can be rotated manually or by an <external> automated process
 
-Vault maintains a versioned keyring
-• All versions of the encryption key are stored
-• Vault admins can limit the minimum key version allowed to be used for decryption operations (older keys won't work)
-• You can rewrap encrypted data (ciphertext) to use a newer version of the encryption key
+- Vault maintains a versioned keyring
+- All versions of the encryption key are stored
+- Vault admins can limit the minimum key version allowed to be used for decryption operations (older keys won't work)
+- You can rewrap encrypted data (ciphertext) to use a newer version of the encryption key
 
 ```
 vault write –f transit/keys/training/rotate
@@ -370,10 +356,10 @@ vault read transit/keys/training
 
 #### key configuration 
 
-We can limit what version of the key can be used to decrypt data
-• Maybe we have old data that we have converted and don't want anybody to be able to decrypt it
-• This is configured using the minimum key version configuration
-• It can be configured for each encryption key (not key version)
+- We can limit what version of the key can be used to decrypt data
+- Maybe we have old data that we have converted and don't want anybody to be able to decrypt it
+- This is configured using the minimum key version configuration
+- It can be configured for each encryption key (not key version)
 
 ```
 vault write transit/keys/training/config min_decryption_version=4
@@ -387,8 +373,5 @@ How can we upgrade our **encrypted data to be encrypted by the latest version of
 The data was never available in plaintext when rewrapping the data with the latest version of the key
 
 ```
- vault write transit/rewrap/training \
-ciphertext="vault:v1:Fpyph6C7r5MUILiEiFhCoJBxelQbsGeEahal5LhDPSoN6
-HkTOhwn79DCwt0mct1ttLokqikAr0PAopzm2jQAKJg=2/QGPTMnzKPlw4cCPGTbkzE
-PlX5OyPkLIgX+erFWdUXKkKUIEbb6D2Gm5ZjTaola314LsVkbLF5G1RkBTACtskk="
+vault write transit/rewrap/training ciphertext="vault:v1:Fpyph6C7r5MUILiEiFhCoJBxelQbsGeEahal5LhDPSoN6 HkTOhwn79DCwt0mct1ttLokqikAr0PAopzm2jQAKJg=2/QGPTMnzKPlw4cCPGTbkzE PlX5OyPkLIgX+erFWdUXKkKUIEbb6D2Gm5ZjTaola314LsVkbLF5G1RkBTACtskk="
 ```
