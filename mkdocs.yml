@@ -132,10 +132,10 @@ nav:
                 - "architecture": "vault/vault_architecture.md"
                 - "auth methods": "vault/auth_methods.md"
                 - "policies" : "vault/policies.md"
-                - "access vault token": "vault/access_vault_token.md"
+                - "access token": "vault/access_vault_token.md"
                 - "secret engine": "vault/secret_engine.md"
-                - "vault agent": "vault/vault_agent.md"
-                - "vault replication": "vault/vault_replication.md"
+                - "agent": "vault/vault_agent.md"
+                - "replication": "vault/vault_replication.md"
         - "ds":
                 - "Overview": "ds/overview.md"
                           
