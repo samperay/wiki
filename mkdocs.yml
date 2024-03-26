@@ -138,6 +138,10 @@ nav:
                 - "replication": "vault/vault_replication.md"
         - "ds":
                 - "Overview": "ds/overview.md"
+
+        - "nginx":
+                - "Overview": "nginx/overview.md"
+
                           
         - about: about.md
 theme:
