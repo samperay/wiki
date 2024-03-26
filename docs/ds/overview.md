@@ -64,15 +64,15 @@ To gain the business understanding that would guide the analytics team in formul
 performing their first project, the IBM Data scientists, proposed and delivered an on-site
 workshop to kick things off.
 The key business sponsors involvement throughout the project was critical, in that the sponsor:
+
 - Set overall direction
 - Remained engaged and provided guidance.
 - Ensured necessary support, where needed.
-- Finally, four business requirements were identified for whatever model would be built.
-Namely:
-Predicting readmission outcomes for those patients with Congestive Heart Failure
-Predicting readmission risk.
-Understanding the combination of events that led to the predicted outcome
-Applying an easy-to-understand process to new patients, regarding their readmission risk.
+- Finally, four business requirements were identified for whatever model would be built, i.e
+    - Predicting readmission outcomes for those patients with Congestive Heart Failure
+    - Predicting readmission risk.
+    - Understanding the combination of events that led to the predicted outcome
+    - Applying an easy-to-understand process to new patients, regarding their readmission risk.
 
 ## Analytic Approach
 
