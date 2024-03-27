@@ -140,7 +140,9 @@ nav:
                 - "Overview": "ds/overview.md"
 
         - "nginx":
-                - "Overview": "nginx/overview.md"
+                - "web server": "nginx/webserver_overview.md"
+                - "http protocol": "nginx/http_protocol.md"
+                - "nginx overview": "nginx/nginx_overview.md"
 
                           
         - about: about.md
