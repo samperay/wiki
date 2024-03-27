@@ -3,6 +3,8 @@
 **Configuration file:** /etc/nginx/nginx.conf
 **User:** nginx
 **Log:** /var/log/nginx
+**rpm:** nginx-1.20.1-1.el7.ngx.x86_64.rpm
+**OS:** CentOS7
 
 ```
 [root@centos ~]# ps -ef | grep nginx | grep -v grep
@@ -55,33 +57,84 @@ contails all of the directives and other contexts necessary to define how to han
 
 ```
 http {
+    include       /etc/nginx/mime.types;
+    default_type  application/octet-stream;
+
     log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
                       '$status $body_bytes_sent "$http_referer" '
                       '"$http_user_agent" "$http_x_forwarded_for"';
 
-    access_log  /var/log/nginx/access.log  main; 
+    access_log  /var/log/nginx/access.log  main;
 
-    sendfile            on;
-    tcp_nopush          on;
-    tcp_nodelay         on;
-    keepalive_timeout   65;
-    types_hash_max_size 4096;
+    sendfile        on;
+    #tcp_nopush     on;
 
-    include             /etc/nginx/mime.types;
-    default_type        application/octet-stream;
+    keepalive_timeout  65;
+
+    #gzip  on;
 
     include /etc/nginx/conf.d/*.conf;
 }
 ```
 
-### test config file
+### custom config
+
+You can create your custom config file using below file. you can change the `location` to your desired one for youe pplciation. 
 
 ```
-nginx -v
+[root@centos conf.d]# pwd
+/etc/nginx/conf.d
+[root@centos conf.d]# cat default.conf  | grep -v '#'
+server {
+    listen       80;
+    server_name  localhost;
+    location / {
+        root   /usr/share/nginx/html;
+        index  index.html index.htm; 
+    }
+    error_page   500 502 503 504  /50x.html;
+    location = /50x.html {
+        root   /usr/share/nginx/html;
+    }
+}
+```
+
+### Configure multiple websites or domains
+
+```
+[root@centos conf.d]# cat /etc/nginx/conf.d/dexter.conf
+server {
+    listen       8080;
+    server_name  localhost;
+
+    access_log  /var/log/nginx/dexter.access.log  main;
+
+    location / {
+        root   /usr/share/nginx/html/dexter;
+        index  index.html;
+    }
+}
+[root@centos conf.d]# systemctl restart nginx
+[root@centos conf.d]# curl http://192.168.56.10:8080/index.html
+this is an multiple site configured at nginx for domain dexter
+[root@centos conf.d]#
+
+
+[root@centos conf.d]# ls /var/log/nginx/dexter.access.log
+/var/log/nginx/dexter.access.log
+[root@centos conf.d]# cat /var/log/nginx/dexter.access.log
+192.168.56.1 - - [27/Mar/2024:10:45:26 +0000] "GET /index.html HTTP/1.1" 200 63 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36" "-"
+192.168.56.10 - - [27/Mar/2024:10:45:40 +0000] "GET /index.html HTTP/1.1" 200 63 "-" "curl/7.29.0" "-"
+192.168.56.10 - - [27/Mar/2024:10:46:27 +0000] "GET /index.html HTTP/1.1" 200 63 "-" "curl/7.29.0" "-"
+[root@centos conf.d]#
+```
+
+## nginx cli
+
+```
+nginx -v # version
 nginx -V # more detail
 nginx -t # check syntax
 nginx -c new_nginx.conf # testing purpose
-nginx -h
+nginx -h # help menu
 ```
-
-
