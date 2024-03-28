@@ -75,15 +75,75 @@ When the client sends a request to the web server through the reverse proxy, its
 **Configuration**
 
 **Reverse Proxy Side**
+```
 vim /etc/nginx/conf.d/proxy.conf
 proxy_set_header X-Real-IP $remote_addr;
+```
 
 **Backend Server Side**
+```
 vim /etc/nginx/nginx.conf
-"$http_x_real_ip"
+
+# append $http_x_real_ip at the end of the line.
+log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                    '$status $body_bytes_sent "$http_referer" '
+                    '"$http_user_agent" "$http_x_forwarded_for" **"$http_x_real_ip"**';
+
+nginx -t
+systemctl restart nginx                    
+```
 
 so now, it would log the remote(original) ip address to the application server along with the proxy.
 
 ## proxy host header
 
 **problem statement**
+
+Host header that is received at the reverse proxy level is not forwarded to backend server. 
+
+if there are multiple websites hosted on the application server and your client sends the GET request along with the headers, the nginx proxy won't send the headers to the multiple hosted web application and hence you won't be able to get the response. 
+
+**Reverse Proxy Level**
+
+```
+[root@centos ~]# cat /etc/nginx/conf.d/proxy.conf
+server {
+    listen       80;
+    server_name  localhost;
+
+    location / {
+        proxy_pass http://192.168.56.11;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header Host-Header $host;
+    }
+
+    location /admin {
+        proxy_pass http://192.168.56.12;
+        proxy_set_header X-Real-IP $remote_addr;
+      }
+}
+[root@centos ~]#systemctl restart nginx
+
+[root@centos ~]# curl localhost
+This is application server backend
+[root@centos ~]#
+```
+
+**Backend Server Level**
+
+```
+yum -y install tcpdump
+tcpdump -A -vvvv -s 9999 -i eth1 port 80 > /tmp/headers
+
+cat /tmp/headers
+
+GET / HTTP/1.0
+X-Real-IP: 127.0.0.1  
+Host-Header: localhost -> headers are passed from reverse proxy to backend
+Host: 192.168.56.11
+Connection: close
+User-Agent: curl/7.29.0
+Accept: */*
+```
+
+
