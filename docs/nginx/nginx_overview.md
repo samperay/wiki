@@ -1,9 +1,13 @@
 ## Nginx architecture
 
 **Configuration file:** /etc/nginx/nginx.conf
+
 **User:** nginx
+
 **Log:** /var/log/nginx
+
 **rpm:** nginx-1.20.1-1.el7.ngx.x86_64.rpm
+
 **OS:** CentOS7
 
 ```
