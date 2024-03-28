@@ -143,6 +143,7 @@ nav:
                 - "web server": "nginx/webserver_overview.md"
                 - "http protocol": "nginx/http_protocol.md"
                 - "nginx overview": "nginx/nginx_overview.md"
+                - "load balancer": "nginx/load_balancer.md"
 
                           
         - about: about.md
