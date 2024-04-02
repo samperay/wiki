@@ -145,6 +145,7 @@ nav:
                 - "nginx overview": "nginx/nginx_overview.md"
                 - "load balancer": "nginx/load_balancer.md"
                 - "caching": "nginx/caching.md"
+                - "static assets": "nginx/static_assets.md"
 
                           
         - about: about.md
