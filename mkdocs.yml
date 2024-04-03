@@ -147,6 +147,7 @@ nav:
                 - "caching": "nginx/caching.md"
                 - "static assets": "nginx/static_assets.md"
                 - "logging": "nginx/logging.md"
+                - "http compression": "nginx/http_compression.md"
 
                           
         - about: about.md
