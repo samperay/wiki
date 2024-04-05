@@ -142,3 +142,113 @@ nginx -t # check syntax
 nginx -c new_nginx.conf # testing purpose
 nginx -h # help menu
 ```
+
+
+## modular architecture
+
+referes to any system composed of seperate componets that can be connected together i.e its a collection of modules, we can also extend the functionality by adding 3rd party modules.
+
+### static modules
+
+- Modules that are compiled into nginx server binary at compile time
+- Single package, portable and works out of box
+- Creates issue when one of the module has bug, hence difficult to troubleshoot
+
+### dynamic modules
+
+- Create/download dynamic module files.
+- Reference the path of the module with the `load_module` directive.
+
+### install using source module
+
+```
+http://nginx.org/en/download.html
+
+wget http://nginx.org/download/nginx-1.16.0.tar.gz
+tar -xzvf nginx-1.16.0.tar.gz
+yum -y install gcc make zlib-devel pcre-devel openssl-devel wget nano
+
+./configure --prefix=/usr/share/nginx --sbin-path=/usr/sbin/nginx --modules-path=/usr/lib64/nginx/modules --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --http-client-body-temp-path=/var/lib/nginx/tmp/client_body --pid-path=/var/run/nginx.pid --lock-path=/var/lock/subsys/nginx --user=nginx --group=nginx --with-http_mp4_module --add-module=../nginx-hello-world-module
+
+useradd Nginx
+mkdir -p /var/lib/nginx/tmp/
+chown -R nginx.nginx /var/lib/nginx/tmp/
+
+SystemD file
+
+https://www.nginx.com/resources/wiki/start/topics/examples/systemd/
+```
+
+### build dynamic module
+
+```
+yum -y install git
+git clone https://github.com/perusio/nginx-hello-world-module
+./configure --add-dynamic-module=../nginx-hello-world-module
+
+vim /etc/nginx/conf.d/nginx.conf
+load_module /etc/nginx/modules/something.so # it should be in global section
+
+server {
+    listen 8080;
+
+    location = /test {
+        hello_world;
+    }
+}
+
+curl -i http://example.com/test #this will be loaded from the dynamic module
+```
+
+Reference: https://github.com/perusio/nginx-hello-world-module
+
+
+### build static module
+
+You don't have to use `load_module` directive, its same as the src compilation but you would add the static compile method `--add-module` as referenced here https://github.com/perusio/nginx-hello-world-module
+
+```
+./configure --prefix=/usr/share/nginx --sbin-path=/usr/sbin/nginx --modules-path=/usr/lib64/nginx/modules --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --http-client-body-temp-path=/var/lib/nginx/tmp/client_body --pid-path=/var/run/nginx.pid --lock-path=/var/lock/subsys/nginx --user=nginx --group=nginx --with-http_mp4_module --add-module=../nginx-hello-world-module
+
+make
+make install
+
+
+server {
+listen 8080;
+ 
+location / {
+     hello_world;
+  }
+}
+
+
+systemctl restart nginx
+curl localhost:8080
+```
+
+### web application firewall(waf)
+
+A Web Application Firewall (WAF) is a security solution designed to protect web applications by monitoring, filtering, and potentially blocking HTTP traffic between a web application and the Internet. WAFs are deployed to provide an additional layer of defense, thereby protecting against data breaches, unauthorized access, and service disruption
+
+- SQL Injection (SQLi)
+- Cross-Site Scripting (XSS)
+- Cross-Site Request Forgery (CSRF)
+- File Inclusion
+- Directory Traversal
+- Brute Force Attacks
+- Denial-of-Service (DoS) 
+- Distributed Denial-of-Service(DDoS)
+
+**Signature-based Detection:** WAFs use predefined signatures or patterns to identify known attacks and malicious traffic.
+
+**Behavioral Analysis:** Some advanced WAFs employ machine learning or heuristic algorithms to analyze traffic patterns and detect anomalies indicative of attack attempts.
+
+**Request Inspection:** WAFs inspect HTTP requests and responses, analyzing parameters, headers, payloads, and other attributes to identify suspicious activity.
+
+**Traffic Filtering:** WAFs can filter and block traffic based on predefined rules, such as IP addresses, user agents, request methods, or payloads.
+
+**Protocol Validation:** WAFs validate incoming requests against known HTTP standards and application-specific protocols to detect and block malformed or malicious requests.
+
+**Logging and Reporting:** WAFs provide logs and reports detailing detected threats, blocked requests, and other security events for analysis and investigation.
+
