@@ -149,6 +149,7 @@ nav:
                 - "logging": "nginx/logging.md"
                 - "http compression": "nginx/http_compression.md"
                 - "access control": "nginx/access_control.md"
+                - "cryptography": "nginx/cryptography.md"
 
                           
         - about: about.md
