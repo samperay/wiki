@@ -138,6 +138,9 @@ nav:
                 - "replication": "vault/vault_replication.md"
         - "ds":
                 - "Overview": "ds/overview.md"
+        
+        - "AI":
+                - "Overview": "ai/overview.md"
 
         - "nginx":
                 - "web server": "nginx/webserver_overview.md"
@@ -150,6 +153,46 @@ nav:
                 - "http compression": "nginx/http_compression.md"
                 - "access control": "nginx/access_control.md"
                 - "cryptography": "nginx/cryptography.md"
+                - "reverse proxy": "nginx/reverse_proxy.md"
+
+        - "softskills":
+                - "Overview": "softskills/overview.md"
+               # - "communication": "softskills/communication.md"
+                - "leadership": "softskills/leadership.md"
+               # - "teamwork": "softskills/teamwork.md"
+               # - "problem solving": "softskills/problem_solving.md"
+               # - "time management": "softskills/time_management.md"
+               # - "emotional intelligence": "softskills/emotional_intelligence.md"
+               # - "stress management": "softskills/stress_management.md"
+               # - "creativity": "softskills/creativity.md"
+               # - "critical thinking": "softskills/critical_thinking.md"
+               # - "decision making": "softskills/decision_making.md"
+               # - "negotiation": "softskills/negotiation.md"
+               # - "conflict resolution": "softskills/conflict_resolution.md"
+               # - "adaptability": "softskills/adaptability.md"
+               # - "work ethic": "softskills/work_ethic.md"
+               # - "work life balance": "softskills/work_life_balance.md"
+               # - "professionalism": "softskills/professionalism.md"
+               # - "networking": "softskills/networking.md"
+               # - "public speaking": "soft_skills/public_speaking.md"
+               # - "presentation skills": "soft_skills/presentation_skills.md"
+               # - "writing skills": "softskills/writing_skills.md"
+               # - "listening skills": "softskills/listening_skills.md"
+               # - "feedback": "softskills/feedback.md"
+               # - "mentoring": "softskills/mentoring.md"
+               # - "coaching": "softskills/coaching.md"
+               # - "training": "softskills/training.md"
+               # - "delegation": "softskills/delegation.md"
+               # - "motivation": "softskills/motivation.md"
+               # - "recognition": "softskills/recognition.md"
+               # - "reward": "softskills/reward.md"
+               # - "engagement": "softskills/engagement.md"
+               # - "retention": "softskills/retention.md"
+               # - "recruitment": "softskills/recruitment.md"
+               # - "onboarding": "softskills/onboarding.md"
+               # - "offboarding": "softskills/offboarding.md"
+               # - "succession planning": "softskills/succession_planning.md"
+
 
                           
         - about: about.md
