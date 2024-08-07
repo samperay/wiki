@@ -6,10 +6,10 @@ Functional requirements outline the specific functions, features, and capabiliti
 
 Examples of functional requirements:
 
-- "Users must be able to create an account and log in."
-- "The system shall allow users to add items to their shopping cart."
-- "The software must generate monthly sales reports."
-- "The website should display a list of recommended articles based on user preferences."
+- Users must be able to create an account and log in.
+- The system shall allow users to add items to their shopping cart.
+- The software must generate monthly sales reports.
+- The website should display a list of recommended articles based on user preferences.
 
 ## Non-Functional system requirememts
 
