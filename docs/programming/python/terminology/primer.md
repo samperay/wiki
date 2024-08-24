@@ -147,6 +147,21 @@ def my_function(x, y):
 print(my_function(1, 2))
 ```
 
+```python
+def my_decorator(func):
+    def wrapper():
+        print("Something is happening before the function is called.")
+        func()
+        print("Something is happening after the function is called.")
+    return wrapper
+
+@my_decorator
+def say_hello():
+    print("Hello!")
+
+say_hello()
+```
+
 A generator is a function that produces a sequence of values, one at a time. Generators are created using the yield keyword. Generators are useful for a variety of tasks, such as filtering a sequence of values, transforming a sequence of values, or iterating over a large sequence of values without storing the entire sequence in memory.
 
 ```python
@@ -356,3 +371,49 @@ print(next(gen))  # Output: 4
 ```
 
 **iterators** are objects that provide sequential access to elements in a collection, whereas **generators** are a type of iterator that allows you to define a sequence using a function with yield statements, offering memory-efficient and lazy evaluation behavior.
+
+## *args and **kwargs
+
+*args allows you to pass a variable number of non-keyword arguments to a function. It is used to handle scenarios where the exact number of arguments is not known in advance.
+
+**kwargs allows you to pass a variable number of keyword arguments. It is used when you want to handle named arguments in a function.
+
+```python
+def my_function(*args, **kwargs):
+    print("Arguments:", args)
+    print("Keyword arguments:", kwargs)
+
+my_function(1, 2, 3, name="John", age=30)
+```
+
+## Python manage memory?
+
+Answer: Python uses a private heap that stores all objects and data structures. The memory management is handled by Python's memory manager, which ensures that memory is allocated efficiently and that the interpreter doesn't run out of memory. Python also has an in-built garbage collector, which reclaims memory by deallocating objects that are no longer in use. The primary mechanism for garbage collection is reference counting, but Python also uses a cycle detector to deal with reference cycles.
+
+## @staticmethod and @classmethod
+
+@staticmethod: Defines a method that doesn’t require access to the instance (self) or class (cls). It behaves like a plain function but belongs to the class’s namespace.
+
+@classmethod: Defines a method that receives the class (cls) as its first argument instead of the instance (self). It can modify the class state that applies across all instances of the class.
+
+```python
+class MyClass:
+    @staticmethod
+    def static_method():
+        print("This is a static method.")
+
+    @classmethod
+    def class_method(cls):
+        print(f"This is a class method of {cls.__name__}")
+
+MyClass.static_method()
+MyClass.class_method()
+```
+
+## is and ==
+
+`is`: Checks whether two **references** point to the same object (identity)
+`==`: Checks whether the **values** of two objects are equal (equality).
+
+
+
