@@ -15,13 +15,19 @@ Examples of functional requirements:
 
 Non-functional requirements define the qualities, characteristics, and constraints that govern how the system performs rather than what it does. These requirements focus on aspects such as performance, security, reliability, usability, and other attributes that contribute to the overall quality and user experience of the system.
 
-**Performance**: "The system must be able to handle a minimum of 1000 concurrent users without significant degradation in response time."
-**Security**: "User passwords must be securely hashed and stored in the database."
-**Reliability**: "The system should have an uptime of at least 99.9%."
-**Usability**: "The user interface must be intuitive and accessible to users with disabilities."
-**Scalability**: "The system architecture should support easy scaling to accommodate increased user load."
-**Maintainability**: "Code must be well-documented and adhere to coding standards."
-**Compatibility**: "The software must be compatible with major web browsers, including Chrome, Firefox, and Safari."
+**Performance**: The system must be able to handle a minimum of 1000 concurrent users without significant degradation in response time.
+
+**Security**: User passwords must be securely hashed and stored in the database.
+
+**Reliability**: The system should have an uptime of at least 99.9%.
+
+**Usability**: The user interface must be intuitive and accessible to users with disabilities.
+
+**Scalability**: The system architecture should support easy scaling to accommodate increased user load.
+
+**Maintainability**: Code must be well-documented and adhere to coding standards.
+
+**Compatibility**: The software must be compatible with major web browsers, including Chrome, Firefox, and Safari.
 
 ## Component mapping
 
@@ -33,18 +39,22 @@ Effective communication with **stakeholders, including users, clients, developer
 
 ## Design architecture
 
-The architectural design process aims to define how different software modules or components will interact, how data will flow, and how the system will achieve its intended functionality while adhering to quality attributes. Here's an overview of the steps involved in designing software architecture:
+The architectural design process aims to **define how different software modules or components will interact**, how data will flow, and how the system will achieve its intended functionality while adhering to quality attributes. Here's an overview of the steps involved in designing software architecture:
 
 1. **Requirements Analysis and Understanding:**
+   
    - Gather and analyze the functional and non-functional requirements of the software system.
-   - Understand the user needs, business goals, and technical constraints that the architecture must address.
+   - Understand the **user needs, business goals, and technical constraints **that the architecture must address.
 
 2. **System Decomposition and Module Identification:**
+
    - Break down the software system into smaller, manageable modules or components.
+  
    - Identify the major functional areas and define the responsibilities of each module.
 
 3. **Architectural Styles and Patterns Selection:**
    - Choose appropriate architectural styles (e.g., client-server, microservices, layered, event-driven) that best suit the system's requirements.
+  
    - Apply well-established architectural patterns (e.g., MVC, MVVM, RESTful API) to address common design challenges.
 
 4. **Component Interaction and Communication:**
@@ -66,7 +76,7 @@ The architectural design process aims to define how different software modules o
    - Address scalability requirements by designing for horizontal or vertical scalability, load balancing, and caching strategies.
    - Optimize the system's performance through efficient algorithms and proper resource management.
 
-9. **Error Handling and Resilience:**
+9.  **Error Handling and Resilience:**
    - Design error handling mechanisms to gracefully handle exceptions and failures.
    - Implement strategies for fault tolerance, redundancy, and system recovery.
 
