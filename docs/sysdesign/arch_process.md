@@ -13,7 +13,7 @@ Examples of functional requirements:
 
 ## Non-Functional system requirememts
 
-Non-functional requirements define the qualities, characteristics, and constraints that govern how the system performs rather than what it does. These requirements focus on aspects such as performance, security, reliability, usability, and other attributes that contribute to the overall quality and user experience of the system.
+Non-functional requirements define the qualities, characteristics, and constraints that govern how the **system performs rather than what it does**. These requirements focus on aspects such as performance, security, reliability, usability, and other attributes that contribute to the overall quality and user experience of the system.
 
 **Performance**: The system must be able to handle a minimum of 1000 concurrent users without significant degradation in response time.
 
@@ -43,65 +43,75 @@ The architectural design process aims to **define how different software modules
 
 1. **Requirements Analysis and Understanding:**
    
-   - Gather and analyze the functional and non-functional requirements of the software system.
-   - Understand the **user needs, business goals, and technical constraints **that the architecture must address.
+      - Gather and analyze the functional and non-functional requirements of the software system.
+      - Understand the **user needs, business goals, and technical constraints **that the architecture must address.
 
 2. **System Decomposition and Module Identification:**
 
-   - Break down the software system into smaller, manageable modules or components.
-  
-   - Identify the major functional areas and define the responsibilities of each module.
+      - Break down the software system into smaller, manageable modules or components.
+      - Identify the major functional areas and define the responsibilities of each module.
 
 3. **Architectural Styles and Patterns Selection:**
-   - Choose appropriate architectural styles (e.g., client-server, microservices, layered, event-driven) that best suit the system's requirements.
-  
-   - Apply well-established architectural patterns (e.g., MVC, MVVM, RESTful API) to address common design challenges.
+   
+      - Choose appropriate architectural styles (e.g., client-server, microservices, layered, event-driven) that best suit the system's requirements.
+      - Apply well-established architectural patterns (e.g., MVC, MVVM, RESTful API) to address common design challenges.
 
 4. **Component Interaction and Communication:**
-   - Define how different modules will communicate and interact with each other.
-   - Determine communication protocols, data formats, and interfaces between components.
+   
+      - Define how different modules will communicate and interact with each other.
+      - Determine communication protocols, data formats, and interfaces between components.
 
 5. **Data Management and Storage:**
-   - Design the data storage and management mechanisms, including databases, data models, and data access layers.
-   - Address data consistency, integrity, and security requirements.
+   
+      - Design the data storage and management mechanisms, including databases, data models, and data access layers.
+      - Address data consistency, integrity, and security requirements.
 
 6. **User Interface Design:**
-   - Create a user interface design that aligns with user needs and provides an intuitive user experience.
-   - Determine the layout, navigation, and presentation of information.
+   
+      - Create a user interface design that aligns with user needs and provides an intuitive user experience.
+      - Determine the layout, navigation, and presentation of information.
 
 7. **Security and Authentication:**
-   - Plan for security measures, including user authentication, authorization, data encryption, and protection against common vulnerabilities.
+      
+      - Plan for security measures, including user authentication, authorization, data encryption, and protection against common vulnerabilities.
 
 8. **Scalability and Performance Considerations:**
-   - Address scalability requirements by designing for horizontal or vertical scalability, load balancing, and caching strategies.
-   - Optimize the system's performance through efficient algorithms and proper resource management.
+   
+      - Address scalability requirements by designing for horizontal or vertical scalability, load balancing, and caching strategies.
+      - Optimize the system's performance through efficient algorithms and proper resource management.
 
 9.  **Error Handling and Resilience:**
-   - Design error handling mechanisms to gracefully handle exceptions and failures.
-   - Implement strategies for fault tolerance, redundancy, and system recovery.
+   
+       - Design error handling mechanisms to gracefully handle exceptions and failures.
+       - Implement strategies for fault tolerance, redundancy, and system recovery.
 
 10. **Integration with External Services:**
+
     - Define how the software system will integrate with external APIs, third-party services, and other systems.
 
 11. **Documentation and Communication:**
-    - Document the architectural decisions, design rationale, and key design patterns used.
-    - Communicate the architecture to the development team, stakeholders, and collaborators.
+      
+      - Document the architectural decisions, design rationale, and key design patterns used.
+      - Communicate the architecture to the development team, stakeholders, and collaborators.
 
 12. **Review and Validation:**
-    - Conduct architecture reviews and design discussions to validate the proposed architecture against requirements.
-    - Address any feedback and make necessary adjustments.
+   
+      - Conduct architecture reviews and design discussions to validate the proposed architecture against requirements.
+      - Address any feedback and make necessary adjustments.
 
 13. **Implementation and Development:**
+   
     - Translate the architectural design into code by developing individual modules and components.
     - Ensure that the implementation adheres to the defined architecture and design principles.
 
 14. **Continuous Improvement:**
+    
     - Regularly review and refine the architecture as the project progresses and new insights are gained.
     - Consider feedback from users, performance metrics, and evolving requirements.
 
 ## Write architecture document. 
 
-- Use visial or document representation so that all the users including CTO, CFO, developers, testers would be able to check the document to understand the system. 
+- Use visial or document representation so that all the users including CTO, CFO, developers, testers would be able to check the document to understand the system.
 - Any changes in the architectute or the document has to be updated with changes.
 
 ## Support team 

@@ -9,8 +9,8 @@ What system should do ?
 - Web based
 - CURD operations
 - Manage salaries
-  - Allow manager to ask for emplyess salary chage
-  - Allow HR manager to approve/reject request
+    - Allow manager to ask for emplyess salary chage
+    - Allow HR manager to approve/reject request
 - Manage vacation days
 - Use external payment systems
 
@@ -23,14 +23,16 @@ what the system should deal with ?
 3. Not a lot of data
 4. Interface to external system (i.e)
 
-Questions
-- how many concurrent users ? 
-  10
+**Questions**
 
-- How many employees ?
-  250
+You must be getting these details from the customer/users
+
+- how many concurrent users - 10
+  
+- How many employees ? - 250
 
 - What we know abt external payment system ?
+  
     legacy hosted system in company farm received input files monthy once for processing payment informations.
 
     **Data volume calculations**
@@ -41,9 +43,10 @@ Questions
     As company expected to grow, 500 in 5 yrs, 51MB*500 = 25.5GB
 
 - What about criticality of the system ?
+  
     HR based system, not very critical
 
-Finally, 
+so finally, we have these below as non-functional requirments
 
 ```
 10 Concurrent users
@@ -55,7 +58,7 @@ file-based interface
 
 ### Component mapping
 
-Based on function requirements, it would be good practice to map single component to single service for managing and maintaining. 
+Based on function requirements, it would be good practice to **map single component to single service** for managing and maintaining. 
 
 ```
 Entities: Employee, Vacation, Salary
@@ -67,6 +70,7 @@ Interface to payment system
 ### logging services
 
 Questions to be asked for logging service.
+
   - Are there any logging service used in the company at present ? Client: No
   - Any 3rd party ? we can choose, ELK, but its quite complex and resources are needed to operate and maintain.
     since, our application is not being used so much, we can develop our own logging mechanism
@@ -74,29 +78,31 @@ Questions to be asked for logging service.
 
 How would you decide for developing own logging mechanism ?
 
-- Applicatio type(what it does)
+- Application type(what it does)
     - read log records from queue
     - validate the records
     - store in the data store
-  - Alternatives
+  
+- Alternatives
     - Webapp app or webAPI - No
     - Mobile app - No
     - Console - yes
     - Service - yes
     - Desktop App - No
   
-- Technology stack(For)
-  - what should code do here ?
+### Technology stack
+
+- what should code do here ?
     - Access Queue API
     - validate the data
     - store the data
 
-- Architecture
-3 layer architecture
+**- Architecture**
 
-UI/Service interface: Not required for logging
-Business logic: validate the records (polling)
-Data access: saves validated records into data store
+- 3 layer architecture
+- UI/Service interface: Not required for logging
+- Business logic: validate the records (polling)
+- Data access: saves validated records into data store
 
 - logging redunancy 
 if there are any crash for logging, you need to have another service that would detect. 
