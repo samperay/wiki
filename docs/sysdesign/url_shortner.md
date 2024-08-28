@@ -22,7 +22,7 @@ A-z, a-z, 0-9 which are 62 characters..
 
 i.e 62^5 or 62^6 would provide around 3.5billion combinations..
 
-![url_shortner_1](url_shortner_1.png)
+![url_shortner_1](./diagrams/url_shortner_1.png)
 
 since you have LB, the request can be moved to any of the services.. which ideally means our short url can be duplicated with the same alpha numbers.. i.e ideally you could have 2 same short urls for the long ones which is incorrect..
 
