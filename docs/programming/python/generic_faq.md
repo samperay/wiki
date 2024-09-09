@@ -62,6 +62,15 @@ b = [1, 5, 7, 12, 13, 19, 21]
 a.extend(b)
 ```
 
+## remove dups merge two listed in sort
+
+```
+a = [3, 4, 6, 10, 11, 18,5,7,13]
+b = [33,1, 5, 7, 12, 13, 19, 21]
+
+sorted(list(set(a+b)))
+```
+
 ## word frequency
 
 ```python
