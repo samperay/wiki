@@ -150,11 +150,14 @@ print(fact(5)) # 120
 
 ```python
 def fib(n):
+    sum=0
     a,b=0,1 
     while a<n:
+        sum+=a
         print(a, end=" ")
         a,b=b,a+b
     print()
+    print("sum of fibonacci numbers:", sum)
 
 fib(90) # 0 1 1 2 3 5 8 13 21 34 55 89 
 ```
