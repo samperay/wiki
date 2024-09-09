@@ -380,3 +380,70 @@ def change_collage(cls, newcollname):
 Student.change_collage("New coll")
 sunil.show()
 ```
+
+## another example of static and class methods
+
+### classmethod
+A class method is a method that takes the class itself as the first argument, rather than an instance of the class. It is useful when you want to perform operations that involve the class itself (for example, modifying class variables or calling other class methods). Class methods are defined using the @classmethod decorator, and the first argument is conventionally named cls.
+
+**When to use @classmethod:**
+When you need to work with the class as a whole (like creating factory methods, manipulating class-level data, or altering class attributes).
+When you want to create alternative constructors.
+When the logic is related to the class, not specific instances.
+
+
+```
+class Server:
+    server_count = 0  # Class variable to track how many servers exist
+    
+    def __init__(self, name, ip):
+        self.name = name
+        self.ip = ip
+        Server.server_count += 1
+    
+    @classmethod
+    def create_default_server(cls):
+        return cls("DefaultServer", "192.168.0.1")
+
+# Example usage
+server1 = Server("MainServer", "192.168.1.1")
+server2 = Server.create_default_server()  # Using class method to create an instance
+
+print(server1.name)  # Output: MainServer
+print(server2.name)  # Output: DefaultServer
+print(Server.server_count)  # Output: 2
+
+```
+
+### staticmethod
+
+A static method does not receive any special first argument (neither self nor cls). It behaves like a regular function but belongs to the class's namespace. You use a static method when the method's logic neither depends on the instance nor the class, but you want to group it inside the class for logical reasons.
+
+**When to use @staticmethod:**
+
+When you need utility functions that are logically related to the class but don't need access to instance (self) or class (cls) data.
+When the method doesn't modify class or instance state.
+
+```
+class Server:
+    
+    def __init__(self, name, ip):
+        self.name = name
+        self.ip = ip
+
+    @staticmethod
+    def is_valid_ip(ip):
+        parts = ip.split(".")
+        return len(parts) == 4 and all(0 <= int(part) < 256 for part in parts)
+    
+# Example usage
+print(Server.is_valid_ip("192.168.1.1"))  # Output: True
+print(Server.is_valid_ip("999.999.999.999"))  # Output: False
+
+```
+
+**Summary:**
+
+Class Method (@classmethod): Use when you need to operate on the class itself. The method has access to the class via cls.
+
+Static Method (@staticmethod): Use when the logic doesn't need to access the instance (self) or class (cls). It is more like a utility function within the class.
