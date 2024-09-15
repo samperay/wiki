@@ -34,11 +34,11 @@ nav:
                             - "programming terms":
                                       - "Object Oriented Programming": programming/python/terminology/oops.md
                                       - "concepts": "programming/python/terminology/primer.md"
-                                      - "datatypes": "programming/python/terminology/datatypes.md"
                                       
                             - "interviews":
                                       - "generic faq": "programming/python/generic_faq.md"
                                       - "data structures faq": "programming/python/ds_faq.md"
+                                      - "TODO": "programming/python/TODO.md"
 
                   - "clean code":
                             - "overview": "programming/clean_code/overview.md"
