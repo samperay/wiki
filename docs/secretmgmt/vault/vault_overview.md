@@ -181,7 +181,7 @@ Note: Consul cluster for vault should not be used for other consul functions lik
 
 ### Consul deployment
 
-![deploy_consul_storage_backend](../images/deploy_consul_storage_backend.png)
+![deploy_consul_storage_backend](../../images/deploy_consul_storage_backend.png)
 
 Now, its always recommended that you have **3 vault nodes** you would atleast have **5 consul nodes**. Within the vault we would have **consul agents** listening on vault locally which **join to consul clusters** and it will communicate with consul backend clusters. 
 
@@ -264,7 +264,7 @@ log_level = "INFO"
 - All data is replicated among all nodes in the cluster.
 - Eliminates the need to also run a Consul cluster and manage it.
 
-![integrated_vault_storage_backend](../images/integrated_vault_storage_backend.png)
+![integrated_vault_storage_backend](../../images/integrated_vault_storage_backend.png)
 
 You would have 1 leader and rest other followers, but make sure to proivde the **node_id** uniquely so that you won't mess up the data. you would see the **raft** as storage
 

@@ -93,9 +93,9 @@ Different mount types available:
 - Stopped phase
 - Killed phase
 
-![high level docker container life cycle](../images/highlevel-docker-container-lifecycle.png)
+![high level docker container life cycle](../../images/highlevel-docker-container-lifecycle.png)
 
-![Docker container lifecycle](../images/docker-container-lifecycle.png)
+![Docker container lifecycle](../../images/docker-container-lifecycle.png)
 
 
 ## stateful or stateless 

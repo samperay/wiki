@@ -42,7 +42,7 @@ vault requires at least one audit device to write the log before completing the 
 
 ## vault architecture
 
-![vault_architecture](../images/vault_architecture.png)
+![vault_architecture](../../images/vault_architecture.png)
 
 [vault architecture document](https://developer.hashicorp.com/vault/docs/internals/architecture)
 
@@ -315,9 +315,3 @@ vault audit enable file file_path=/var/log/vault_audit_log.log
 - 3 interfaces interact with vault: UI, CLI, HTTP
 - CLI is just a wrapper and all CLI or UI underneath uses HTTP
 - Auth is required to access any of the interfaces.
-
-
-
-
-
-

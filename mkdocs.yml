@@ -56,10 +56,11 @@ nav:
                   - "postgresql":
                             - "setup and install": "db/postgresql/install.md"
 
-        - "docker":
-                  - "Overview": "docker/overview.md"
-        - "k8":
-                  - "Overview": "kubernetes/overview.md"
+        - "docker_k8": 
+                  - "docker":
+                        - "Overview": "docker_k8/docker/overview.md"
+                  - "k8":
+                        - "Overview": "docker_k8/k8/overview.md"
 
         - "cicd":
                   - "Overview": "cicd/overview.md"
@@ -72,18 +73,22 @@ nav:
                             - "CICD pipeline": "cicd/github_actions/cicd.md"
                   - "Jenkins":
                             - "Overview": "cicd/jenkins/overview.md"
-        - "git":
-                  - "Overview": "git/overview.md"
-        - "elk":
-                  - "elasticsearch":
-                            - "setup and install": "elk/elasticsearch/01_install.md"
-                            - "managing documents": "elk/elasticsearch/02_managing_docs.md"
-                            - "mapping and analysis": "elk/elasticsearch/03_mapping_analysis.md"
-                  - "logstash":
-                            - "overview": elk/logstash/overview.md
 
-                  - "kibana":
-                            - "overview": elk/kibana/overview.md
+        - "vcontroller":
+                  - "Overview": "vcontroller/git/overview.md"
+                  - "faq": "vcontroller/git/faq.md"
+
+        - "monitoring":
+                - "elk":
+                        - "elasticsearch":
+                                - "setup and install": "monitoring/elk/elasticsearch/01_install.md"
+                                - "managing documents": "monitoring/elk/elasticsearch/02_managing_docs.md"
+                                - "mapping and analysis": "monitoring/elk/elasticsearch/03_mapping_analysis.md"
+                        - "logstash":
+                                - "overview": monitoring/elk/logstash/overview.md
+
+                        - "kibana":
+                                - "overview": monitoring/elk/kibana/overview.md
 
         - "linux":
                   - "Basics": "linux/basics.md"
@@ -91,8 +96,8 @@ nav:
                   - "Storage": "linux/storage.md"
                   - "Security": "linux/security.md"
                   - "Troubleshooting": "linux/troubleshooting.md"
-                  - "bash scripting":
-                            - "Interview FAQ": "linux/scripting/interviews.md"
+                  - "scripting":
+                            - "faq": "linux/scripting/faq.md"
 
         - "sysdesign":
                   - "Architecture process": sysdesign/arch_process.md
@@ -122,25 +127,37 @@ nav:
                         - "IBM Cloud Schematics": "cloud/ibm/cloud_schematics.md"
                   - "amazon":
                         - "Amazon Overview": "cloud/aws/overview.md"
-                  - "Azure":
-                        - "Azure Overview": "cloud/azure/overview.md"
-                  - "gcp":
-                        - "GCP Overview": "cloud/gcp/overview.md"
+                        - "faq": "cloud/aws/faq.md"
 
-        - "vault": 
-                - "introduction": "vault/vault_overview.md"
-                - "architecture": "vault/vault_architecture.md"
-                - "auth methods": "vault/auth_methods.md"
-                - "policies" : "vault/policies.md"
-                - "access token": "vault/access_vault_token.md"
-                - "secret engine": "vault/secret_engine.md"
-                - "agent": "vault/vault_agent.md"
-                - "replication": "vault/vault_replication.md"
-        - "ds":
-                - "Overview": "ds/overview.md"
-        
-        - "AI":
-                - "Overview": "ai/overview.md"
+                  - "terraform":
+                        - "overview": "cloud/terraform/overview.md"
+                        - "faq": "cloud/terraform/faq.md"
+
+                #   - "Azure":
+                #         - "Azure Overview": "cloud/azure/overview.md"
+                #   - "gcp":
+                #         - "GCP Overview": "cloud/gcp/overview.md"
+
+
+
+        - "secretmgmt":
+                - "vault": 
+                        - "introduction": "secretmgmt/vault/vault_overview.md"
+                        - "architecture": "secretmgmt/vault/vault_architecture.md"
+                        - "auth methods": "secretmgmt/vault/auth_methods.md"
+                        - "policies" : "secretmgmt/vault/policies.md"
+                        - "access token": "secretmgmt/vault/access_vault_token.md"
+                        - "secret engine": "secretmgmt/vault/secret_engine.md"
+                        - "agent": "secretmgmt/vault/vault_agent.md"
+                        - "replication": "secretmgmt/vault/vault_replication.md"
+
+
+        - "ds_ai_ml":
+                - "data science":
+                        - "Overview": "ds_ai_ml/ds/overview.md"
+                
+                - "aritficial intelligence":
+                        - "Overview": "ds_ai_ml/ai/overview.md"
 
         - "nginx":
                 - "web server": "nginx/webserver_overview.md"

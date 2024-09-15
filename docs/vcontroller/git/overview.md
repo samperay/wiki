@@ -2,7 +2,7 @@
 
 ## Git Arch
 
-![git architecture](../images/git_three_tier_arch.png)
+![git architecture](../../images/git_three_tier_arch.png)
 
 **Working directory** - current files that are stored, it's also called as **untracked files**
 **Staging area - files that you wish to commit(to create snapshot of the files).

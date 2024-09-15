@@ -14,7 +14,7 @@ the Vault token
 - The application can read this token and invoke the Vault API directly
 - This strategy allows the Vault Agent to manage the token and guarantee a valid token is always available to the application
 
-![vault_local_auth_legacy_app](../images/vault_local_auth_legacy_app.png)
+![vault_local_auth_legacy_app](../../images/vault_local_auth_legacy_app.png)
 
 Vault Agent supports many types of auth methods to authenticate and obtain a token. 
 
@@ -69,17 +69,17 @@ To help secure tokens when using Auth-Auth, you can have Vault response wrap the
 
 The placement of the wrap_ttl in the Vault Agent configuration file determines where the response wrapping happens.
 
-![wrap_at_auth_method](../images/wrap_at_auth_method.png)
+![wrap_at_auth_method](../../images/wrap_at_auth_method.png)
 
-![wrap_at_sync_method](../images/wrap_at_sync_method.png)
+![wrap_at_sync_method](../../images/wrap_at_sync_method.png)
 
-![wrapping_token_compare](../images/wrapping_token_compare.png)
+![wrapping_token_compare](../../images/wrapping_token_compare.png)
 
-![wrapping_token_compare_1](../images/wrapping_token_compare_1.png)
+![wrapping_token_compare_1](../../images/wrapping_token_compare_1.png)
 
 ## vault templating
 
-![legacy_app_auto_auth](../images/legacy_app_auto_auth.png)
+![legacy_app_auto_auth](../../images/legacy_app_auto_auth.png)
 
 ### Consul Template
 
@@ -93,7 +93,7 @@ Consul Template retrieves secrets from Vault
 
 **Consule template workflow**
 
-![consul_template_workflow](../images/consul_template_workflow.png)
+![consul_template_workflow](../../images/consul_template_workflow.png)
 
 ### vault agent templating
 
@@ -101,6 +101,6 @@ To further extend the functionality of the Vault Agent, a subset of the Consul-T
 
 Vault secrets can be rendered to destination file(s) using the ConsulTemplate markup language, Uses the client token acquired by the auto-auth configuration.
 
-![vault_agent_templating](../images/vault_agent_templating.png)
+![vault_agent_templating](../../images/vault_agent_templating.png)
 
-![vault_agent_template_config](../images/vault_agent_template_config.png)
+![vault_agent_template_config](../../images/vault_agent_template_config.png)

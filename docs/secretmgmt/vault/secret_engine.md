@@ -4,18 +4,18 @@
 
 what issues you get while using static secrets
 
-![static_secrets_issue](../images/static_secrets_issue.png)
+![static_secrets_issue](../../images/static_secrets_issue.png)
 
 ### dynamic secrets
 
-![dynamic_secrets](../images/dynamic_secrets.png)
+![dynamic_secrets](../../images/dynamic_secrets.png)
 
 ### example for application using vault 
 
-![dynamic_secrets_example](../images/dynamic_secrets_example.png)
+![dynamic_secrets_example](../../images/dynamic_secrets_example.png)
 
 
-![dynamic_secrets_example_1](../images/dynamic_secrets_example_1.png)
+![dynamic_secrets_example_1](../../images/dynamic_secrets_example_1.png)
 
 
 ## secret engine 
@@ -37,7 +37,7 @@ Use Vault to generate and manage the lifecycle of credentials on-demand
 - Audit trail can identify points of compromise
 - Use policies to control the access based on the client's role
 
-![secret_as_service](../images/secret_as_service.png)
+![secret_as_service](../../images/secret_as_service.png)
 
 ### enable secret engine
 
@@ -111,13 +111,13 @@ For other services, you need to refer to the documentation.
 
 Vault does not know what permissions, groups, and policies you want to attach to generated credentials. Each role maps to a set of permissions on the targeted platform.
 
-![aws_generate_credentials](../images/aws_generate_credentials.png)
+![aws_generate_credentials](../../images/aws_generate_credentials.png)
 
 ```
 vault read aws/creds/data-consultant
 ```
 
-![db_generate_credentials](../images/db_generate_credentials.png)
+![db_generate_credentials](../../images/db_generate_credentials.png)
 
 ```
 vault read database/creds/oracle-reporting
@@ -144,9 +144,9 @@ When you run Vault in **–dev server mode**, Vault enables a KV v2 secrets engi
 
 Organize Data However It Makes Sense to Your Organization
 
-![organize_kv_engine](../images/organize_kv_engine.png)
+![organize_kv_engine](../../images/organize_kv_engine.png)
 
-![organize_kv_engine_1](../images/organize_kv_engine_1.png)
+![organize_kv_engine_1](../../images/organize_kv_engine_1.png)
 
 ```
 vault secrets enable kv
@@ -254,7 +254,7 @@ When requested, Vault can take the response it would have sent to an HTTP client
 
 Logically speaking, the response is wrapped by the token, and retrieving it requires an unwrap operation against this token. Functionally speaking, the token provides authorization to use an encryption key from Vault's keyring to decrypt the data.
 
-![wrap_response](../images/wrap_response.png)
+![wrap_response](../../images/wrap_response.png)
 
 ### benefits
 
@@ -285,7 +285,7 @@ Transit secrets engine provides functions for encrypting/decrypting data,  Enabl
 - The application NEVER has access to the encryption key (stored in Vault)
 - Decouples storage from encryption and access control
 
-![transit_secret_engine](../images/transit_secret_engine.png)
+![transit_secret_engine](../../images/transit_secret_engine.png)
 
 Note: Transit secrets engine DOES NOT STORE the encrypted data. It would encrypt and returns cipher teext back to application.
 
@@ -299,10 +299,10 @@ Note: Transit secrets engine DOES NOT STORE the encrypted data. It would encrypt
 - You can create, rotate, delete, and export a key (need permissions)
 - Easily rewrap ciphertext with a newer version of a key
 
-![transit_secret_engine_multiple_key](../images/transit_secret_engine_multiple_key.png)
+![transit_secret_engine_multiple_key](../../images/transit_secret_engine_multiple_key.png)
 
 
-![transit_secret_engine_keytypes](../images/transit_secret_engine_keytypes.png)
+![transit_secret_engine_keytypes](../../images/transit_secret_engine_keytypes.png)
 
 
 - Vault also supports convergent encryption mode
@@ -330,8 +330,7 @@ Pass the cleartext data to Vault – specifying the action and desired encryptio
 vault write transit/encrypt/training plaintext=$(base64 <<< "Getting Started with HashiCorp Vault")
 ```
 
-![transit_secret_engine_desc](../images/transit_secret_engine_desc.png)
-
+![transit_secret_engine_desc](../../images/transit_secret_engine_desc.png)
 
 **Decrypt**
 

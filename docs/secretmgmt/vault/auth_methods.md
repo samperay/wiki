@@ -15,7 +15,7 @@ fundamental goal of **auth method is to get token**, which are core method for a
 **token method** is responsible for creating and storing token, which can't be disabled.
 Authenticating with external identity (LDAP, OIDC) will generate a token. if you are not supplying token for auth, you would get 403 error. 
 
-![vault_auth_methods_workflow](../images/vault_auth_methods_workflow.png)
+![vault_auth_methods_workflow](../../images/vault_auth_methods_workflow.png)
 
 ## Working with auth methods
 
@@ -83,7 +83,7 @@ vault login -method=userpass username=sunil # Once your username/password is cor
 **Token Helper:** Caches the token after authentication. Stores the token in a local file(.vault-token)so it can be
 referenced for subsequent requests.
 
-![vault_token_helper_workflow](../images/vault_token_helper_workflow.png)
+![vault_token_helper_workflow](../../images/vault_token_helper_workflow.png)
 
 HTTP API Response: 
 
@@ -175,7 +175,7 @@ login to vault UI and to the right top corner, open an terminal and type "API". 
 e.g let's say I am Sunil, I have to login to vault using to validate my creds to get the token.
 so I would be associated with different policies to get the different tokens, so I would always need to logout when requited to get secrets from different roles, which is cumbersome process... what if we have all policies grouped with single entity and provide entiry_id etc, so when I get creds it would use the entityy id to get the tokens for all the roles(Token inherits capabilities granted by both policies), so that I don't have to logout each and every time.
 
-![vault_auth_methods](../images/vault_auth_methods.png)
+![vault_auth_methods](../../images/vault_auth_methods.png)
 
 ## vault identity groups
 

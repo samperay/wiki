@@ -24,7 +24,7 @@ tokens are the core method of authetication, most of the operations in vault req
 - Ideal for high-volume operations, such as encryption
 - Can be used for DR Replication cluster promotion as well
 
-![compare_token_types](../images/compare_token_types.png)
+![compare_token_types](../../images/compare_token_types.png)
 
 Tokens carry information and metadata that determines how the token can be used, what type of token, when it expires, etc.
 
@@ -53,7 +53,7 @@ Tokens are revoked once reached its TTL unless renewed
 
 ## controlling token life cycle
 
-![control_token_life_cycle](../images/control_token_life_cycle.png)
+![control_token_life_cycle](../../images/control_token_life_cycle.png)
 
 ### Periodic token life cycle 
 
@@ -114,7 +114,7 @@ vault write auth/approle/role/jenkins policies="jenkins" period="72h"
 
 ### CLI
 
-![manage_vault_token_cli](../images/manage_vault_token_cli.png)
+![manage_vault_token_cli](../../images/manage_vault_token_cli.png)
 
 ```
 vault token create –display_name=jenkins –policy=training,certs –ttl=24h –explicit-max-ttl = 72h
@@ -133,8 +133,6 @@ vault token capabilities s.dhtIk8VsE3Mj61PuGP3ZfFrg kv/data/apps/webapp
 vault token lookup s.dhtIk8VsE3Mj61PuGP3ZfFrg   # know ttl for this token
 vault token renew s.dhtIk8VsE3Mj61PuGP3ZfFrg
 ```
-
-
 
 ### UI
 
@@ -270,9 +268,9 @@ When a token's TTL expires, the token is revoked and is no longer valid and cann
 
 **ttl examples**
 
-![ttl_example_1](../images/ttl_example_1.png)
+![ttl_example_1](../../images/ttl_example_1.png)
 
-![ttl_example_2](../images/ttl_example_2.png)
+![ttl_example_2](../../images/ttl_example_2.png)
 
 Vault has a default TTL of 768 hours (which is 32 days), This can be changed in the Vault configuration file
 **default_lease_ttl = 24h**
@@ -282,4 +280,3 @@ vault token create –policy=training –ttl=60m
 vault write auth/approle/role/training-role token_ttl=1h token_max_ttl=24h
 vault token create –policy=training
 ```
-

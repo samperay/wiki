@@ -13,7 +13,7 @@ Organizations usually have infrastructure that spans multiple datacenters
 
 ### Performance Replication
 
-![performance_replication_cluster](../images/performance_replication_cluster.png)
+![performance_replication_cluster](../../images/performance_replication_cluster.png)
 
 ### DR replication 
 
@@ -21,35 +21,35 @@ Organizations usually have infrastructure that spans multiple datacenters
 - DR clusters DO NOT respond to clients unless they are promoted to a primary cluster
 - Even as an admin or using a root token, most paths on a secondary cluster are disabled, meaning you can't do much of anything on a DR cluster
 
-![disaster_replication_cluster](../images/disaster_replication_cluster.png)
+![disaster_replication_cluster](../../images/disaster_replication_cluster.png)
 
 ### replication comparisions
 
-![replication_compare](../images/replication_compare.png)
+![replication_compare](../../images/replication_compare.png)
 
 ### replication architecture
 
-![replication_arch](../images/replication_arch.png)
+![replication_arch](../../images/replication_arch.png)
 
 **Real world examples**
 
-![replication_example_1](../images/replication_example_1.png)
+![replication_example_1](../../images/replication_example_1.png)
 
-![replication_example_2](../images/replication_example_2.png)
+![replication_example_2](../../images/replication_example_2.png)
 
 ### replication networking
 
 - Communication between clusters must be permitted to allow replication, RPC forwarding, and cluster bootstrapping to work as expected.
 - If using DNS, each cluster must be able to resolve the name of the other cluster
 
-![replication_networking_requirements](../images/replication_networking_requirements.png)
+![replication_networking_requirements](../../images/replication_networking_requirements.png)
 
 
-![replication_networking_ports](../images/replication_networking_ports.png)
+![replication_networking_ports](../../images/replication_networking_ports.png)
 
 ## setup
 
-![replication_setup](../images/replication_setup.png)
+![replication_setup](../../images/replication_setup.png)
 
 ### Activating DR Replication
 
@@ -68,7 +68,7 @@ Organizations usually have infrastructure that spans multiple datacenters
   - The redirect address of the primary cluster
   - The client certificate and CA certificate
 
-![secondary_token_working](../images/secondary_token_working.png)
+![secondary_token_working](../../images/secondary_token_working.png)
 
 ## Configure replication 
 

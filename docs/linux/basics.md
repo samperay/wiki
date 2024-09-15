@@ -1,57 +1,23 @@
-**<h1>Basics</h1>**
 
-- [Explain about the linux booting procedure](#explain-about-the-linux-booting-procedure)
-- [Explain about the linux login process](#explain-about-the-linux-login-process)
-- [How would you schedule the jobs in linux?](#how-would-you-schedule-the-jobs-in-linux)
-  - [Cron](#cron)
-  - [at](#at)
-- [Explain about the login and non-login shells?](#explain-about-the-login-and-non-login-shells)
-  - [loginshell](#loginshell)
-  - [nonloginshell](#nonloginshell)
-- [what are the differences between softlinks and hardlinks?](#what-are-the-differences-between-softlinks-and-hardlinks)
-- [Please explain about the user addition process in linux?](#please-explain-about-the-user-addition-process-in-linux)
-- [Please explain about the umask in linux ?](#please-explain-about-the-umask-in-linux-)
-- [What are the special permissions on file ?](#what-are-the-special-permissions-on-file-)
-  - [suid](#suid)
-  - [sgid](#sgid)
-  - [sticky](#sticky)
-- [Please explain about the linux swap?](#please-explain-about-the-linux-swap)
-  - [How would you increase swap size in linux file system ?](#how-would-you-increase-swap-size-in-linux-file-system-)
-- [Please explain the fields in /etc/fstab file in linux?](#please-explain-the-fields-in-etcfstab-file-in-linux)
-    - [How would you define the password policy in linux ?](#how-would-you-define-the-password-policy-in-linux-)
-- [Please explain how CPU System Utilization is calculated ?](#please-explain-how-cpu-system-utilization-is-calculated-)
-- [whats the use of nohup ?](#whats-the-use-of-nohup-)
-- [How would you search the largest or empty file ?](#how-would-you-search-the-largest-or-empty-file-)
-- [Please explain how you find the open files in linux?](#please-explain-how-you-find-the-open-files-in-linux)
-- [what is the difference between YUM and RPM ?](#what-is-the-difference-between-yum-and-rpm-)
-- [How would you congigure local yum repository?](#how-would-you-congigure-local-yum-repository)
-- [How would you recover the corrupted RPM DB in linux?](#how-would-you-recover-the-corrupted-rpm-db-in-linux)
-    - [webserver](#webserver)
-
-## Explain about the linux booting procedure
+## linux boot process
 
 ![linux_boot_process](../images/linux_boot_process.png)
 
 **BIOS**
 
-upon booting the system, it would perform system integrity checks and searches, loads and executes the
-body loader program (e.g CDROM, Floppy, Network..etc). Once the boot loader is detached and loaded into the
-memory, BIOS gives control to it, BIOS would then load the MBR boot loader
+upon booting the system, it would perform system integrity checks and searches, loads and executes the body loader program (e.g CDROM, Floppy, Network..etc). Once the boot loader is detached and loaded into the memory, BIOS gives control to it, BIOS would then load the MBR boot loader.
 
 **MBR**
 
-located in the first sector of the bootlabel disk(/dev/hda or /dev/sda) which is 512MB, i.e 446Bytes of primary boot loader info, partition table of 64 bytes and last 2 bytes of validation checks, which contains info about the GRUB or LILO. MBR loads and executes GRUB boot loader
+located in the first sector of the bootlabel disk(/dev/hda or /dev/sda) which is 512MB, i.e 446Bytes of primary boot loader info, partition table of 64 bytes and last 2 bytes of validation checks, which contains info about the GRUB or LILO. MBR loads and executes GRUB boot loader.
 
 **GRUB**
 
-it has the complete knowledge of the system information and would load the file in **/etc/grub/grub.conf**
-which loads the kernel images and initrd images.
+It has the complete knowledge of the system information and would load the file in **/etc/grub/grub.conf** which loads the kernel images and initrd images.
 
 **kernel**
 
-Mounts the root file system specified in the grub and executes /sbin/init program which is the first process in the
-linux system and loads all the necessary drivers compilied inside which helps to access the hard drive and
-other hardware devices.
+Mounts the root file system specified in the grub and executes /sbin/init program which is the first process in the linux system and loads all the necessary drivers compilied inside which helps to access the hard drive and other hardware devices.
 
 **init**
 
@@ -62,31 +28,23 @@ looks **/etc/inittab** file to decide the runlevel and loads all the appropriate
 depending on your runlevel from the **/etc/inittab** all the services from the **/etc/rc3.d/<runlevel>**
 which start from 'S' will be executed which has all the services coming up.
 
-## Explain about the linux login process
+## login process
 
 ![linux_login_process](../images/linux_login_process.png)
 
-once the init process completes the run-level and finally it would be executing **/etc/rc.local** it will start process called *getty*(get terminal) which initiates the login command and opens termial device, initializes it and prints **login:** and
-waits for user to to enter username.
+once the init process completes the run-level and finally it would be executing **/etc/rc.local**. it will start process called *getty*(get terminal) which initiates the login command and opens termial device, initializes it and prints **login:** and waits for user to to enter username.
 
-once user enters his name it starts **/etc/login** and prompts for the password which is hidden. it would next checks the
-credentials by verifying with **/etc/passwd** and **/etc/shadow** password matches then it initiates user properties gathering
-and starts users shell. If password doesn’t match then getty terminates login process and re-initiates again with new prompt
+once user enters his name it starts **/etc/login** and prompts for the password which is hidden. it would next checks the credentials by verifying with **/etc/passwd** and **/etc/shadow** password matches then it initiates user properties gathering and starts users shell. If password doesn’t match then getty terminates login process and re-initiates again with new prompt.
 
-In next stage the getty process reads the user properties (username, UID, GID, home directory, user shell etc.)
-from /etc/passwd file. After that it reads /etc/motd file for displaying content banner message.
+In next stage the getty process reads the user properties (username, UID, GID, home directory, user shell etc.) from /etc/passwd file. After that it reads `/etc/motd` file for displaying content banner message.
 
-shell related properties, user aliases and variables getty process reads appropriate system wide default files /etc/profile
-or /etc/bashrc . After the system wide default files are read the shell reads user specific login files .profile or .login
+shell related properties, user aliases and variables getty process reads appropriate system wide default files /etc/profile or /etc/bashrc . After the system wide default files are read the shell reads user specific login files `.profile` or `.login`
 
-At last stage it reads shell specific configuration files (.bashrc, .bash_profile etc. for bash shell) of that user which
-it gets on the users home directory.
+At last stage it reads shell specific configuration files (.bashrc, .bash_profile etc. for bash shell) of that user which it gets on the users home directory.
 
----
+## job scheduler
 
-## How would you schedule the jobs in linux?
-
-### Cron
+**Cron**
 
 Field    Description    Allowed Value
 MIN      Minute field    0 to 59
@@ -128,7 +86,7 @@ CMD      Command         Any command to be executed.
 @yearly/@monthly/@weekly/@daily/@hourly /bin/script.sh
 ```
 
-### at
+**at**
 
 Jobs created with at command are executed only once.
 
@@ -147,22 +105,21 @@ Schedule a job to shutdown the system at 4:30 today
 Schedule a job to run five hour from now
 `at now +5 hours`
 
----
+## login & non-login shells
 
-## Explain about the login and non-login shells?
-
-### loginshell
+**login**
 
 When a user successfully logs in to a Linux system via terminal/SSH/switches to a user with the **su -** command, a login shell is created.
+
 *echo $0* prints **hypen** then its a non-login shell
 
-- Login shell invokes /etc/profile
-- /etc/profile invokes scripts in /etc/profile.d/*.sh
-- Then executes users ~/.bash_profile
-- ~/.bash_profile invokes users ~/.bashrc
-- ~/.bashrc invokes /etc/bashrc
+- login shell invokes `/etc/profile`
+- `/etc/profile` invokes scripts in `/etc/profile.d/*.sh`, then executes users `~/.bash_profile`
+- `~/.bash_profile` invokes users `~/.bashrc`
+- `~/.bashrc` invokes `/etc/bashrc`
 
-### nonloginshell
+**non-login shell**
+
 A non-login shell is started by a login shell. shell that you start from another shell or from a program is a non-login shell.
 
 *echo $0* prints **no-hypen** then its a non-login shell
@@ -171,21 +128,14 @@ A non-login shell is started by a login shell. shell that you start from another
 - Then ~/.bashrc executes /etc/bashrc
 - /etc/bashrc calls the scripts in /etc/profile.d
 
-[toc](#toc)
+## softlinks and hardlinks
 
----
+- `hard link`can only be created for a file but cannot be created for directories, where as `soft link` can link to a directory.
 
-## what are the differences between softlinks and hardlinks?
+- Removing the original file that hard link points to does not remove the hardlink itself, the hardlink still provides the content of the underlying file.
 
-- Hard link can only be created for a file but cannot be created for directories.
-- On the other hand, symbolic links or symlinks can link to a directory.
-- Removing the original file that hard link points to does not remove the hardlink itself, the hardlink still provides
-  the content of the underlying file.
 - If we remove the hard link or the symlink itself, the original file will stay intact.
 
-[toc](#toc)
-
----
 ## Please explain about the user addition process in linux?
 
 When invoked, useradd creates a new user account according to the options specified on the command line and the

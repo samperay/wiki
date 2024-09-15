@@ -62,7 +62,7 @@ vim payload.json
 http://127.0.0.1:8200/v1/sys/policy/webapp
 ```
 
-![policies_mind_map](../images/policies_mind_map.png)
+![policies_mind_map](../../images/policies_mind_map.png)
 
 ### permission
 
@@ -137,7 +137,7 @@ Capabilities are specified as a list of strings (yes, even if there's just one)
 
 example of deny polict in vault
 
-![vault_deny_policy](../images/vault_deny_policy.png)
+![vault_deny_policy](../../images/vault_deny_policy.png)
 
 ### customization
 
@@ -218,7 +218,7 @@ capabilities = ["list"]
 }
 ```
 
-![acl_templating_params](../images/acl_templating_params.png)
+![acl_templating_params](../../images/acl_templating_params.png)
 
 Reference: https://developer.hashicorp.com/vault/tutorials/policies/policy-templating?in=vault%2Fpolicies
 
@@ -251,4 +251,4 @@ $ vault read aws/creds/s3-readonly
     - Configuring database configurations
 
 
-![vault_admin_policies](../images/vault_admin_policies.png)
+![vault_admin_policies](../../images/vault_admin_policies.png)
