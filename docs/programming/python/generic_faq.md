@@ -325,7 +325,7 @@ print(strnum)
 ## fetch consecutive element in list
 
 ```python
-print("update the code here)
+print("update the code here")
 ```
 
 ## TODO
