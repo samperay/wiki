@@ -297,20 +297,45 @@ def reverse(x):
     return rev
 ```
 
+## merge and sort the 2 lists to 1 list
+
+## calculate sum of odd/even numbers
+
+## sum digits
+
+```python
+num=123
+sum=0
+
+for i in str(num):
+    sum+=int(i)
+print(sum)
+```
+
+## string of numbers
+
+```python
+strnum=[]
+for i in range(1,100):
+    strnum.append(str(i))
+
+print(strnum)
+```
+
+## fetch consecutive element in list
+
+```python
+print("update the code here)
+```
+
 ## TODO
 
 ## Practical Questions
-- Given the two lists, how would you merge and sort the two lists to a single list ?
-- Given a string, how would you count each occurrence of the character ?
-- Given the list of numbers, count the total number of digits and their frequency ?
-- Calculate the sum of odd/even numbers in a list ?
 - what is the use of yield and why should we use them ?
-- Can you build a string of numbers from 1 to 100 ?
-- How do you find the unique elements of numbers in a list ?
 - Can you explain about the **args** and **args**
 - What is the use of map, filter and reduce ? can you provide some examples ?
 - Why do we need to use lambda and how can we use them ?
-- Can you fetch every consecutive element in a list ?
+
 - what is list comprehension and provide me an example ?
 - what is dictionary comprehension, provide me with an example ?
 - Find the sum of all the numbers from 1 to 50 ?
