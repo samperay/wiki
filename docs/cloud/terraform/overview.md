@@ -271,18 +271,19 @@ Explicitly specifying a dependency is only necessary when a resource relies on s
 e.g, creation of s3 bucket before aws_instance is provisioned.
 
 **Data sources**
-Data sources allow data to be fetched or computed for use elsewhere in Terraform configuration.
+Data sources allow data to be **fetched or computed** for use elsewhere in Terraform configuration.
 
 **References to Named Values**
-- <RESOURCE TYPE>.<NAME> is an object representing a managed resource of the given type and name.
-- var.<NAME> is the value of the input variable of the given name.
-- local.<NAME> is the value of the local value of the given name.
-- module.<MODULE NAME>.<OUTPUT NAME> is the value of the specified output value from a child module called by the current module.
-- data.<DATA TYPE>.<NAME> is an object representing a data resource of the given data source type and name. If the resource has the count argument set, the value is a list of objects representing its instances. If the resource has the for_each argument set, the value is a map of objects representing its instances.
-- path.module is the filesystem path of the module where the expression is placed.
-- path.root is the filesystem path of the root module of the configuration.
-- path.cwd is the filesystem path of the current working directory. In normal use of Terraform this is the same as path.root, but some advanced uses of Terraform run it from a directory other than the root module directory, causing these paths to be different.
-- terraform.workspace is the name of the currently selected workspace.
+
+- `<RESOURCE TYPE>.<NAME>` is an object representing a managed resource of the given type and name.
+- `var.<NAME>` is the value of the input variable of the given name.
+- `local.<NAME>` is the value of the local value of the given name.
+- `module.<MODULE NAME>.<OUTPUT NAME>` is the value of the specified output value from a child module called by the current module.
+- `data.<DATA TYPE>.<NAME>` is an object representing a data resource of the given data source type and name. If the resource has the **count** argument set, the value is a **list** of objects representing its instances. If the resource has the **for_each** argument set, the value is a **map** of objects representing its instances.
+- `path.module` is the filesystem path of the module where the expression is placed.
+- `path.root` is the filesystem path of the root module of the configuration.
+- `path.cwd` is the filesystem path of the current working directory. In normal use of Terraform this is the same as path.root, but some advanced uses of Terraform run it from a directory other than the root module directory, causing these paths to be different.
+- `terraform.workspace` is the name of the currently selected workspace.
 
 **Local Named Values**
 ```
@@ -326,56 +327,61 @@ resource "aws_elastic_beanstalk_environment" "tfenvtest" {
 ```
 
 **Type Constraints**
-https://www.terraform.io/docs/configuration/types.html
- primitive type is a simple type that isn't made from any other types.
+https://www.terraform.io/docs/configuration/types.html primitive type is a simple type that isn't made from any other types.
+
  - string
  - number
  - bool
 
 **Complex types**
+
   **Collection Types**
   A collection type allows multiple values of one other type to be grouped together as a single value. The type of value within a collection is called its element type.
+
   - list
   - map
   - set
+  
   **Structural types**
   A structural type allows multiple values of several distinct types to be grouped together as a single value.
+
   - object
   - tuple
 
 **Built-in-functions**
 https://www.terraform.io/docs/configuration/functions.html
 
-**string**
-chomp
-format
-formatlist
-indent
-join
-lower
-regex
-regexall
-replace
-split
-strrev
-substr
-title
-trim
-trimprefix
-trimsuffix
-trimspace
-upper
+- string
+- chomp
+- format
+- formatlist
+- indent
+- join
+- lower
+- regex
+- regexall
+- replace
+- split
+- strrev
+- substr
+- title
+- trim
+- trimprefix
+- trimsuffix
+- trimspace
+- upper
 
 **Numberic**
-abs
-ceil
-floor
-log
-max
-min
-parseint
-pow
-signum
+
+- abs
+- ceil
+- floor
+- log
+- max
+- min
+- parseint
+- pow
+- signum
 
 ### Manage state
 
