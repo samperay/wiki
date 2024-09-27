@@ -2,6 +2,9 @@
 
 https://cloudchamp.notion.site/Terraform-Scenario-based-Interview-Questions-bce29cb359b243b4a1ab3191418bfaab
 
+You can create 3-tier architecture using the below code base
+https://github.com/ajitinamdar-tech/three-tier-arch-aws-terraform
+
 - How do you define tags which are common to all the resources which you create ?
 - How do you reference the list using terraform variable defined ?
 - How to create 3 instances of the ec2 instance at once ?
