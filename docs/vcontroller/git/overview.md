@@ -1,11 +1,11 @@
-## Overview
-
-## Git Arch
+# Git Arch
 
 ![git architecture](../../images/git_three_tier_arch.png)
 
 **Working directory** - current files that are stored, it's also called as **untracked files**
-**Staging area - files that you wish to commit(to create snapshot of the files).
+
+**Staging area** - files that you wish to commit(to create snapshot of the files).
+
 **Git directory** - after commit is fired, files which are in staging area will move to git repository.
     
 ## Checkout
@@ -30,7 +30,7 @@ git commit -m 'new commit id'
 
 ## branching 
 
-**fast-forward:** 
+**fast-forward** 
 
 Developers create a feature branch, work on it, and when it's ready to be integrated into the main development branch, they perform a fast-forward merge if the conditions are met. This keeps the commit history clean and straightforward.
 
@@ -66,18 +66,12 @@ Let's assume you created file and commited in the main branch. Now, lets say you
 
 ```
 git stash list
-
-git stash 
-or 
-git stash save
-
+git stash / git stash save
 ```
 
 Once you are back to your branch(or any branch you would want to apply changes on), you can **unstash** and start working from where you left off. 
 
 `pop` it would apply changes to the current branch you are in, and removes from the stash. `apply` applies the changes to the current directory and would not remove from the stash.
-
-
 
 ```
 # removes from the stash
@@ -97,9 +91,7 @@ git stash drop stash@{1}
 git stash clear
 ```
 
-## git time travel
-
-### detached HEAD
+## detached HEAD
 
 When we commit any file in the branch, the HEAD always points to the branch. when we checkout and workon, we still have our HEAD being pointed at the branch we work upon.
 
@@ -229,7 +221,6 @@ git switch -c master
 - Does not merge changes onto your current HEAD branch
 - Safe to do anytime. 
 
-
 **git pull** 
 
 - Allows changes from the remote repository to **local repository to working directory**.
@@ -290,7 +281,6 @@ Let's say when you are working on the feature branch, there are few of the bug f
 When the above keeps happening for a quite long time, your branch would have all the **merge commits from main** and your **commits description on the feature would not be so much visible**. Hence in this case, we would use **rebase** all the feature branch commits would be available at the tip of master branch, so no merge commits
 
 ```
-
 mkdir music
 cd music; git init 
 vim songs.txt
@@ -306,7 +296,6 @@ vim songs.txt
 git add songs.txt
 
 git commit -am 'two more new albums added' 
-
 ```
 
 let's say couple of songs added by someone and merged into master 
