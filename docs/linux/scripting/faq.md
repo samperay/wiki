@@ -289,18 +289,130 @@ done < ./passwd
 
 ## retain the last 50 lines in logfile 
 
-[solution](../scripting/scripts/cleanup_logs.sh)
+```bash
+LOG_DIR=/var/log
+ROOT_UID=0
+LINES=30
+E_WRONGARGS=85
+E_XCD=86
+E_NONROOT=87
+
+if [ "$UID" != "$ROOT_UID" ]
+then
+  echo "Must be root to run this script !"
+  exit $E_NONROOT
+fi
+
+
+case "$1" in 
+  "") lines=50;;
+  *[0-9]*) echo "Usage: `basename $0` #lines_to_cleanup";
+           exit $E_WRONGARGS;;
+  *)      lines=$1;;
+esac
+
+cd /var/log || {
+  echo "Cannot change to directory" >&2
+  exit $E_XCD;
+  }
+
+tail -n $lines messages > mesg.temp
+mv mesg.temp messages
+
+echo "Log files cleaned up"
+exit 0
+```
 
 ## random num generator 200-500. 
 
-[solution](../scripting/scripts/random.sh)
+```bash
+#!/bin/bash
+MIN=200
+MAX=500
+let "scope = $MAX - $MIN" #300
+if [ "$scope" -le "0" ]; then
+  echo "Error- MAX less than MIN"
+fi
+
+for i in {1..10}; do
+  let result="$RANDOM % $scope + $MIN"
+  echo "Random Number between Min/Max: $result"
+done
+```
 
 ## email disk alert. 
-[solution](../scripting/scripts/disk_alert.sh)
+
+```bash
+#!/bin/bash 
+
+WARNING=90
+CRITICAL=95
+
+df -H | egrep -v '^/dev/loop|tmpfs|udev|Filesystem' | awk '{ print $5 " " $1}'| while read line;
+do
+  echo $output
+  usep=$(echo $output | awk '{ print $1}' | cut -d'%' -f1  )
+  partition=$(echo $output | awk '{ print $2 }' )
+
+  if [ $usep -ge $WARNING ]; then 
+    echo "WARNING: Running out of space \"$partition - $usep\""
+  elif [ $usep -ge $CRITICAL ]; then 
+    echo "CRITICAL: Require Immediate attention on \"$partition - $usep\""
+    mail -s "Alert:Critical: Disk running out of space" <youremailid>
+  fi
+done
+```
 
 ## fibonacci series
-- [solution-1](../scripting/scripts/fibonacci_1.sh)
-- [solution-2](../scripting/scripts/fibonacci_2.sh)
+
+```bash
+fib() {
+  return $(( $1 + $2 ))
+}
+
+F0=0
+F1=1
+echo "0: $F0"
+echo "1: $F1"
+for count in `seq 2 20`; do
+ fib $F0 $F1
+ F2=$?
+ if [ "$F2" -lt "$F1" ]; then
+  echo "$count: $F2 (WRONG!)"
+ else
+  echo "${count}: $F2"
+ fi
+ F0=$F1
+ F1=$F2
+ sleep 0.1
+done
+
+fib $F0 $F1
+echo "${count}: $?"
+```
+
+```bash
+#!/bin/bash
+function fibonacci
+{
+  echo $1 + $2 | bc | tr -d '\\\n'
+}
+F0=0
+F1=1
+echo "0: $F0, "
+echo "1: $F1, "
+count=2
+while :
+do
+  F2=`fibonacci $F0 $F1`
+  echo "${count}: $F2,"
+  ((count++))
+  F0=$F1
+  F1=$F2
+  sleep 0.1
+done
+fibonacci $F0 $F1
+```
 
 ## del last line in multiple files
 ```bash
@@ -353,4 +465,259 @@ for h in $(<hosts.txt)
 do
   echo $h
 done
+```
+
+## bash substitutions 
+
+**${v} - Substitue the value of v.**
+v1=1
+echo "substitute value of v1 '\${v1}'"
+echo "sub value for v1:"${v1}
+echo "--"
+
+**${v:-val} - if v is null or unset, val is substituuted**
+echo ${v2:-2}
+echo "Value not set for v2:" $v2
+echo "--"
+
+**${v:=val} - if v is null or unset, vs is set to val**
+echo ${v3:=3}
+echo "val is substituted:" $v3
+echo "---"
+
+**${v:+val} - if v is set, val is substituted. v is unchanged**
+v4=1234
+echo "val is substituted" ${v4:+44}
+echo "val is unchanged" ${v4}
+echo "---"
+
+**${v:?val} - if v is null or unset, val is printed to std err**
+v5=5
+echo "no err printed as v5 is set" ${v5:?5555}
+echo "value unchanged" ${v5}
+
+echo "not setting value, yest printing results"
+echo "print value undefined" ${v6:? "Value unable to find"}
+echo "---"
+
+## $* & $# example script
+
+```bash
+#!/bin/bash
+
+for i in $*; do 
+    echo "without quotes \$*: $i"
+done
+
+echo
+
+for i in $@; do 
+    echo "without quotes \$@: $i"
+done
+
+echo
+
+for i in "$*"; do
+    echo "with quotes "'"$*"'": $i"
+done
+
+echo
+
+for i in "$@"; do
+    echo "with quotes "'"$@"'": $i"
+done
+
+# ./specialvars.sh 1 2 "3 4"
+# without quotes $*: 1
+# without quotes $*: 2
+# without quotes $*: 3
+# without quotes $*: 4
+
+# without quotes $@: 1
+# without quotes $@: 2
+# without quotes $@: 3
+# without quotes $@: 4
+
+# with quotes "$*": 1 2 3 4
+
+# with quotes "$@": 1
+# with quotes "$@": 2
+# with quotes "$@": 3 4
+```
+
+## design help menu
+
+```bash
+function help() {
+   echo "Syntax: ./script <arg> [-h|-v]"
+   echo 
+   echo "options:"
+   echo "-h  Print this Help."
+   echo "-v  Print software version and exit."
+   echo
+}
+
+while getopts ":hv" option
+do
+  case ${option} in 
+    "h") help ;;
+    "v") echo 12.10.10 ;;
+    "*") echo "Error: Invalid Option" || exit 
+  esac
+done
+```
+
+```bash
+[[ -z "$1" ]] && grep "^#:" $0 | sed -e 's/#://' && exit
+[[ "$1" == '-h' ]] && grep "^#:" $0 | sed -e 's/#://' && exit
+[[ "$1" == '-v' ]] && echo "12.10.10" || echo "Error: Invalid Option" && exit
+```
+
+## log
+
+```bash
+#!/bin/bash
+
+exec 3>&1 4>&2
+trap 'exec 2>&4 1>&3' 0 1 2 3
+exec 1>log.out 2>&1
+
+log() {
+# write the log
+  local msg="$1"
+  DATE=`date '+%b %e %H:%M:%S'`
+  echo INFO: $DATE $msg
+}
+
+
+log "Hello World"
+log "Alice && Bob wants to talk to each other in secure communication "
+```
+
+## design calculator
+
+```bash
+#!/bin/bash 
+
+# Simple Basic Calculator 
+
+# check for arguments 
+if [ $# -ne 2 ]; then 
+   echo "Usage: ./calculator.sh <arg1> <arg2>"
+   exit 1
+fi
+
+# Sum 
+# Function for summing two numbers
+
+function summing() {
+  result=`expr $1 + $2`
+  echo "Sum:($1+$2)="$result
+}
+
+# Difference 
+function difference(){
+  result=`expr $1 - $2`
+  echo "Difference:($1-$2)="$result
+}
+
+# Multiplication 
+function multiplication(){
+  result=`expr $1 \* $2`
+  echo "Multiplication:($1*$2)="$result
+}
+
+# Division 
+function division(){
+  result=`expr $1 / $2`
+  echo "Division:($1/$2)="$result
+}
+
+summing $1 $2 
+difference $1 $2
+multiplication $1 $2 
+division $1 $2
+```
+
+## bash unit testing
+
+```bash
+#!/bin/bash 
+
+# tried to combine most of the regularly used concepts in the scripts, 
+# can be improvised more as we practice regularly !!
+
+help(){
+  scriptname=`basename $0`
+  echo "Syntax: ${scriptname} <filename>"
+  exit 1
+}
+
+validateOnlyOneArgument(){
+  if [ "$#" -ne 2 ]; then 
+    echo "PASSED: Atleast one argument passed"
+  fi
+  
+  return 0
+}
+
+validateFileOnly() {
+  [ -f ${filename} ] && echo "PASSED: fileonly"
+  [ -d ${filename} ] && echo "Failed: directory" && exit 1
+
+  return 0
+}
+
+readUnCommentLinesInFile() {
+  filename="$1"
+  while read -r line; do 
+    [[ "$line" = \#* ]] && continue 
+    printf "%s\n" "$line"
+  done<${filename}
+}
+
+cleanLogFiles() {
+  local logfile="$1"
+  local default_lines=50
+  tail -n ${default_lines} ${logfile} > ${logfile}.tmp
+  mv ${logfile}.tmp ${logfile}
+  echo "Info: housekeeping on ${logfile} completed"
+  
+  return 0
+}
+
+whoExecutesThisScript() {
+  [ "${UID}" -ge 500 ] && echo "Info: non-root users can execute this script"
+}
+
+countNumberOfLinesInFile() {
+  local count=0
+  local filename="$1"
+  while read -r line; do 
+    ((count++))
+    echo $line <$filename
+  done
+
+  return $count
+}
+
+# main function
+main() {
+  filename="$1"
+  logfilename="./app.log"
+  whoExecutesThisScript
+  linecountinfile=countNumberOfLinesInFile "$filename"
+  echo "lines in file: $?"
+
+  # Unit tests for the script, only when successful, then continue
+
+  if validateOnlyOneArgument; then 
+     validateFileOnly
+     cleanLogFiles $logfilename
+     readUnCommentLinesInFile $filename
+  fi
+}
+
+[ "$#" -ne "1" ] && help 
+main "$1" | tee -a app.log
 ```
