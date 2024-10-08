@@ -721,3 +721,32 @@ main() {
 [ "$#" -ne "1" ] && help 
 main "$1" | tee -a app.log
 ```
+
+## seq numbers 
+
+**first method**
+
+```bash
+i=1
+while [[ $i -le 3 ]]; do 
+  echo $i
+  i=$((i+1))
+done
+```
+
+**second method**
+
+```bash
+seq 1 3 | while read i ; do 
+  echo $i
+done
+```
+
+
+**third method**
+
+```bash
+for i in $(seq 1 3); do 
+    echo $i
+done
+bash
