@@ -1,7 +1,3 @@
-**<h1>Security</h1>**
-
-- [Linux security checklist](#linux-security-checklist)
-
 ## Linux security checklist
 
 - Keep the system Updated with Latest Security Patches

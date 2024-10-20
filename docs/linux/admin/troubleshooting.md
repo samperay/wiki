@@ -1,13 +1,3 @@
-**<h1>Troubleshooting</h1>**
-
-- [kernel panic: not syncing attempting to kill init](#kernel-panic-not-syncing-attempting-to-kill-init)
-- [linux booting drops into grub\>](#linux-booting-drops-into-grub)
-- [system keeps on rebooting](#system-keeps-on-rebooting)
-- [checking filesystems fsck.ext3: unable to resolve **LABEL=/5**  \[ FAILED \]](#checking-filesystems-fsckext3-unable-to-resolve-label5---failed-)
-- [Verifying DMI pool data](#verifying-dmi-pool-data)
-- [You lost your GRUB password, how would you recover ?](#you-lost-your-grub-password-how-would-you-recover-)
-- [root unable to login](#root-unable-to-login)
-
 ## kernel panic: not syncing attempting to kill init
 
 The issue is due to kernel image or the grub related, system wasn't able to locate the kernel or the label associated with it. 
@@ -97,15 +87,15 @@ exit
 
 ## root unable to login
 
-  1) **password wrong**
+1) **password wrong**
 
-  2) **bash not presented for root a/c**
-    Symptom: when you type root login password, it will give you non-login shell. i.e password file corrupted. 
+2) **bash not presented for root a/c**
+  Symptom: when you type root login password, it will give you non-login shell. i.e password file corrupted. 
 
-    Solution: Go to single user mode, edit /etc/password(remove the passsord entry), save & quit
+  Solution: Go to single user mode, edit /etc/password(remove the passsord entry), save & quit
 
-  3) **/etc/securetty file corrupted**
-    try logging into the nonroot user and see if it works. only if root not abel to login, then the issue is with /etc/securetty. 
+3) **/etc/securetty file corrupted**
+  try logging into the nonroot user and see if it works. only if root not abel to login, then the issue is with /etc/securetty. 
 
-    Solution: single usermode, verify settings in /etc/securetty
+  Solution: single usermode, verify settings in /etc/securetty
 

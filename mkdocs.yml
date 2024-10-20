@@ -91,20 +91,17 @@ nav:
                                 - "overview": monitoring/elk/kibana/overview.md
 
         - "linux":
-
-                - "Basics": "linux/basics.md"
-                - "Networking": "linux/networking.md"
-                - "Storage": "linux/storage.md"
-                - "Security": "linux/security.md"
-                - "Troubleshooting": "linux/troubleshooting.md"
+                - "administration":
+                        - "basic": "linux/admin/basics.md"
+                        - "network": "linux/admin/networking.md"
+                        - "storage": "linux/admin/storage.md"
+                        - "security": "linux/admin/security.md"
+                        - "booting issue": "linux/admin/troubleshooting.md"
 
                 - "scripting":
                         - "faq": "linux/scripting/faq.md"
                         - "hackerrank": linux/scripting/hackerrank/overview.md
                   
-
-                       
-
         - "sysdesign":
                   - "Architecture process": sysdesign/arch_process.md
                   - "Selecting a database": sysdesign/selectingdb.md

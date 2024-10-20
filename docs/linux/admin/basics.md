@@ -1,7 +1,6 @@
-
 ## linux boot process
 
-![linux_boot_process](../images/linux_boot_process.png)
+![linux_boot_process](../../images/linux_boot_process.png)
 
 **BIOS**
 
@@ -30,7 +29,7 @@ which start from 'S' will be executed which has all the services coming up.
 
 ## login process
 
-![linux_login_process](../images/linux_login_process.png)
+![linux_login_process](../../images/linux_login_process.png)
 
 once the init process completes the run-level and finally it would be executing **/etc/rc.local**. it will start process called *getty*(get terminal) which initiates the login command and opens termial device, initializes it and prints **login:** and waits for user to to enter username.
 
@@ -128,7 +127,7 @@ A non-login shell is started by a login shell. shell that you start from another
 - Then ~/.bashrc executes /etc/bashrc
 - /etc/bashrc calls the scripts in /etc/profile.d
 
-## softlinks and hardlinks
+## softlinks Vs hardlinks
 
 - `hard link`can only be created for a file but cannot be created for directories, where as `soft link` can link to a directory.
 
@@ -136,7 +135,7 @@ A non-login shell is started by a login shell. shell that you start from another
 
 - If we remove the hard link or the symlink itself, the original file will stay intact.
 
-## Please explain about the user addition process in linux?
+## user addition process
 
 When invoked, useradd creates a new user account according to the options specified on the command line and the
 default values set in the **/etc/default/useradd**
@@ -152,11 +151,7 @@ password fields:
   - Password expiry warining
   - Empty. 
 
-[toc](#toc)
-
----
-
-## Please explain about the umask in linux ?
+## umask
 
 umask lets you create the default permission for the files and folders, user can choose to restrict
 permissions by using a permission masks.
@@ -177,9 +172,7 @@ system default permission values are 777 (rwxrwxrwx) for folders and 666 (rw-rw-
 - The default mask for a non-root user is 002, changing the folder permissions to 775 (rwxrwxr-x), and file permissions to 664 (rw-rw-r--).
 - The default mask for a root user us 022, changing the folder permissions to 755 (rwxr-xr-x), and file permissions to 644 (rw-r--r--).
 
----
-
-## What are the special permissions on file ?
+## file special permissions
 
 special permission bit are set on file or folder, thereby permitting only the owner or root user of the file or folder to modify, rename or delete the concerned directory or file. No other user would be permitted to have these privileges on a file which has a sticky bit.
 
@@ -209,11 +202,7 @@ Octal String: 1
 
 chmod: 't'
 
----
-
-## Please explain about the linux swap?
-
-### How would you increase swap size in linux file system ?
+## swap size
 
 ```
 sudo swapoff -a
@@ -222,9 +211,7 @@ sudo mkswap /swapfile
 sudo swapon
 ```
 
----
-
-## Please explain the fields in /etc/fstab file in linux?
+## /etc/fstab fields
 
 The block device
 The mountpoint
@@ -244,9 +231,7 @@ Fsck order:
     root = 1
     non-root = 2
 
----
-
-#### How would you define the password policy in linux ?
+## password policy
 
 **/etc/login.defs**  - all the password related informations can be found here.
 
@@ -257,9 +242,7 @@ PASS_MIN_LEN    5
 PASS_WARN_AGE    7
 ```
 
----
-
-## Please explain how CPU System Utilization is calculated ?
+## cpu utilization calculation
 
 Linux load averages are "system load averages" that show the running thread (task) demand on the system as an average number of running plus waiting threads. This measures demand, which can be greater than what the system is currently processing. Most tools show three averages, for 1, 5, and 15 minutes
 
@@ -270,7 +253,7 @@ When load averages first appeared in Linux, they reflected CPU demand, as with o
 Adding the uninterruptible state means that Linux load averages can increase due to a disk (or NFS) I/O workload, not just CPU demand
 
 
-## whats the use of nohup ?
+## use of nohup
 
 Nohup (stands for no hangup) is a command that ignores the HUP signal. You might be wondering what the HUP signal is. It is basically a signal that is delivered to a process when its associated shell is terminated. Usually, when we log out, then all the running programs and processes are hangup or stopped. If we want to continue running the process even after logout or disconnection from the current shell, we can use the nohup command
 
@@ -286,7 +269,7 @@ Nohup (stands for no hangup) is a command that ignores the HUP signal. You might
 - How will you trace all the system calls ?
 
 
-## How would you search the largest or empty file ?
+## search the largest or empty file
 
 ```
 -exec CMD: The file being searched which meets the above criteria and returns 0 for as its exit status for successful command execution.
@@ -312,9 +295,8 @@ examples:
 - Search for file with entered permissions `find ./GFG -perm 664`
 - Search text within multiple files `find ./ -type f -name "*.txt" -exec grep 'Geek'  {} \;`
 
----
 
-## Please explain how you find the open files in linux?
+## open files in linux
 
 Graceful shutdown of relevant process would have not done for an On Linux or Unix systems, deleting a file via rm or through a file manager application will unlink the file from the file system's directory structure; however, if the file is still open (in use by a running process) it will still be accessible to this process and will continue to occupy space on disk. Therefore such processes may need to be restarted before that file's space will be cleared up on the filesystem.
 
@@ -324,9 +306,7 @@ After a file has been identified, free the file used space by shutting down the 
 
 [link](https://access.redhat.com/solutions/2316)
 
----
-
-## what is the difference between YUM and RPM ?
+## diff yum Vs rpm
 
 Difference between RPM and YUM.
 
@@ -340,7 +320,7 @@ Difference between RPM and YUM.
 | Ease of use                   | RPM package management and handling gets complicated at times.                                        | It is the easiest way to manage RPM packages.                                                                                               |
 | Rollback                      | RPM doesn't support change rollback.                                                                  | YUM allows any changes to be rolled back.                                                                                                   |
 
-## How would you congigure local yum repository?
+## configure local yum repo
 
 /etc/yum.conf - Main config file for yum.
 
@@ -376,29 +356,28 @@ sslcacert = /etc/rhsm/ca/redhat-uep.pem
 sslclientkey = /etc/pki/entitlement/key.pem
 sslclientcert = /etc/pki/entitlement/11300387955690106.pem
 ```
----
 
-## How would you recover the corrupted RPM DB in linux?
+## Recover corrupted rpmdb
 
-  ```
-  tar -zcvf /backups/rpmdb-$(date +"%d%m%Y").tar.gz  /var/lib/rpm
-  rm -f /var/lib/rpm/__db*
-  /usr/lib/rpm/rpmdb_verify /var/lib/rpm/Packages
-  ```
+```
+tar -zcvf /backups/rpmdb-$(date +"%d%m%Y").tar.gz  /var/lib/rpm
+rm -f /var/lib/rpm/__db*
+/usr/lib/rpm/rpmdb_verify /var/lib/rpm/Packages
+```
 
-  In case the above operation fails, meaning you still encounter errors, then you should dump and load a new database
+In case the above operation fails, meaning you still encounter errors, then you should dump and load a new database
 
-  ```
-  # cd /var/lib/rpm/
-  # mv Packages Packages.back
-  # /usr/lib/rpm/rpmdb_dump Packages.back | /usr/lib/rpm/rpmdb_load Packages
-  # rpm -qa
-  # rpm -vv --rebuilddb
-  # /usr/lib/rpm/rpmdb_verify Packages
-  ```
----
+```
+# cd /var/lib/rpm/
+# mv Packages Packages.back
+# /usr/lib/rpm/rpmdb_dump Packages.back | /usr/lib/rpm/rpmdb_load Packages
+# rpm -qa
+# rpm -vv --rebuilddb
+# /usr/lib/rpm/rpmdb_verify Packages
+```
 
-#### webserver
+## Webserver issues
+
 - Application is suffering from the performance problem issues, how would you troubleshoot ?
 - Need to create an FTP server to my localteam to help them setup yum server by creating a new ext3 volume ?
 - user is unable to login to the system, what all could be the issues ?

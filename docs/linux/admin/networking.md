@@ -1,23 +1,8 @@
-**<h1>Networking</h1>**
-
-- [Linux Networking Troubleshooting(OSI/TCP IP)](#linux-networking-troubleshootingositcp-ip)
-  - [Layer 1: The physical layer](#layer-1-the-physical-layer)
-  - [Layer 2: The data link layer](#layer-2-the-data-link-layer)
-  - [Layer 3: The network/internet layer](#layer-3-the-networkinternet-layer)
-  - [Layer 4: The transport layer](#layer-4-the-transport-layer)
-- [what happens when I type www.example.com in the address bar of the browser?](#what-happens-when-i-type-wwwexamplecom-in-the-address-bar-of-the-browser)
-- [Linux DNS Client Troubleshooting](#linux-dns-client-troubleshooting)
-- [Website DOWN](#website-down)
-  - [Server is running?](#server-is-running)
-  - [remote port opened ?](#remote-port-opened-)
-  - [Test for Listening Ports](#test-for-listening-ports)
-  - [Command line response test](#command-line-response-test)
-
-## Linux Networking Troubleshooting(OSI/TCP IP)
+## OSI/TCP IP
 
 TCP/IP model more accurately represents the suite of protocols that are deployed in modern networks.
 
-![TCP/IP Network Suite](../images/osi_tcpip.png)
+![TCP/IP Network Suite](../../images/osi_tcpip.png)
 
 The layers in the TCP/IP network model, in order, include:
 
@@ -59,7 +44,7 @@ If your localhost can’t successfully resolve its gateway’s Layer 2 MAC addre
 
 Linux caches the ARP entry for a period of time, so you may not be able to send traffic to your default gateway until the ARP entry for your gateway times out.
 
- ```
+```
  # ip neighbor show
 192.168.122.170 dev eth0 lladdr 52:54:00:04:2c:5d REACHABLE
 192.168.122.1 dev eth0 lladdr 52:54:00:11:23:84 REACHABLE
@@ -116,7 +101,7 @@ similarly, **nmap** which is capable of doing ..
 - Determining if remote ports are closed or simply filtered.
 
 
-## what happens when I type www.example.com in the address bar of the browser?
+## How example.com works
 
 - The client types www.example.com in his browser
 - The operating system looks at /etc/host file,first for the ip address of www.example.com(this can be changed from /etc/nsswitch), then looks /etc/resolv.conf for the DNS server IP for that machine
