@@ -101,6 +101,12 @@ nav:
                 - "scripting":
                         - "faq": "linux/scripting/faq.md"
                         - "hackerrank": linux/scripting/hackerrank/overview.md
+
+                - "ansible":
+                        - "install": "linux/ansible/install.md"
+                        - "overview": "linux/ansible/overview.md"
+                        
+
                   
         - "sysdesign":
                   - "Architecture process": sysdesign/arch_process.md
