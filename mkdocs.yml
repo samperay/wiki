@@ -142,13 +142,6 @@ nav:
                         - "overview": "cloud/terraform/overview.md"
                         - "faq": "cloud/terraform/faq.md"
 
-                #   - "Azure":
-                #         - "Azure Overview": "cloud/azure/overview.md"
-                #   - "gcp":
-                #         - "GCP Overview": "cloud/gcp/overview.md"
-
-
-
         - "secretmgmt":
                 - "vault": 
                         - "introduction": "secretmgmt/vault/vault_overview.md"
@@ -219,6 +212,10 @@ nav:
                # - "offboarding": "softskills/offboarding.md"
                # - "succession planning": "softskills/succession_planning.md"
 
+        - "jobdesc":
+                - "sre": "jobdesc/sre.md"
+                - "devops": "jobdesc/devops.md"
+                - "srdevops": "jobdesc/srdevops.md"
 
                           
         - about: about.md
@@ -226,8 +223,8 @@ theme:
         name: material
         features:
                 # - toc.integrate
-                - navigation.tabs
-                - navigation.sections
+                # - navigation.tabs
+                - navigation.section
                 - navigation.path
                 - navigation.top
                 - search.suggest
