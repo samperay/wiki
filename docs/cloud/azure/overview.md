@@ -1,1 +1,0 @@
-Mandatory **Azure** need-to-know info goes here

@@ -82,8 +82,6 @@ $* and $@ when unquoted are identical and expand into the arguments.
 
 In short, $@ when quoted ("$@") breaking up the arguments if there are spaces in them. But "$*" does not breaking the arguments. 
 
-[special variables script](../scripting/scripts/specialvars.sh)
-
 ```bash
 # ./specialvars.sh 1 2 "3 4"
 without quotes $*: 1
