@@ -207,3 +207,170 @@ Reference: https://www.jenkins.io/doc/pipeline/steps/credentials-binding/#withcr
 
 ## Nested and parallel stages
 
+**Nested**
+
+```
+pipeline {
+	agent any
+	stages{
+		stage('Linting and Testing'){
+			stages {
+				stage('lint'){
+					steps {
+						echo "linting stage"
+					}
+				}
+				stage('testing'){
+					steps{
+						echo "testing stage"
+					}
+				}
+			}
+		}
+		stage('deploy') {
+			steps{
+				echo "Deploy stage"
+			}
+		}
+	}
+}
+```
+
+**Parallel**
+
+when you write `parallel` in the stages, it would be executed at same time.
+
+```
+pipeline {
+	agent any
+	stages{
+		stage('Linting and Testing'){
+			parallel {
+				stage('lint'){
+					steps {
+						sh "sleep 30"
+					}
+				}
+				stage('testing'){
+					steps{
+						sh "sleep 30"
+					}
+				}
+			}
+		}
+		stage('deploy') {
+			steps{
+				echo "Deploy stage"
+			}
+		}
+	}
+}
+```
+
+## Pipeline Options
+
+timeout - how long does the job needs to be run before timing out.
+
+```
+pipeline {
+	agent any
+
+    options {
+        timeout(time:1 ,unit: 'MINUTES')
+    }
+
+	stages{
+		stage('Linting and Testing'){
+			parallel {
+				stage('lint'){
+					steps {
+						sh "sleep 70"
+					}
+				}
+				stage('testing'){
+					steps{
+						sh "sleep 70"
+					}
+				}
+			}
+		}
+		stage('deploy') {
+			steps{
+				echo "Deploy stage"
+			}
+		}
+	}
+}
+```
+
+## parameters
+
+You can customize the behaviour of the pipeline by passing in some data when we trigger a build.
+like env=dev/stage/prod..
+
+```
+pipeline {
+    agent any
+
+    parameters { 
+        choice(name: 'ENVIRONMENT', choices: ['dev', 'stage', 'prod'], description: 'Deployment environment')
+        booleanParam(name: 'RUN_TESTS', defaultValue: true, description: 'Run tests in pipeline')
+        
+    }
+
+    stages{
+        stage('Test'){
+            when {
+                expression {
+                    params.RUN_TESTS == true
+                }
+            }
+
+            steps {
+                echo "RUN_TESTS is true, we will execute these steps"
+            }
+        }
+
+        stage('Development Deploy Stage'){
+            when {
+                expression {
+                    params.ENVIRONMENT == "dev"
+                }
+            }
+
+            steps {
+                echo "Deploy stage to development environment"
+            }
+        }
+    }
+}
+```
+
+Reference: https://www.jenkins.io/doc/book/pipeline/syntax/#parameters
+
+## input
+
+```
+pipeline {
+    agent any
+
+    stages {
+        stage('Build'){
+            steps {
+                echo "Build stage"
+            }
+        }
+
+        stage('Deploy'){
+            steps {
+                echo "Deploy stage for production"
+            }
+            input {
+                message "Please approve the deployment for production?"
+                ok "Approved"
+            }
+
+        }
+    }
+}
+```
