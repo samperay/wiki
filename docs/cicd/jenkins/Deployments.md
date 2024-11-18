@@ -39,13 +39,16 @@ EC2 machine has been spinned `t2.medium` without which the jenkins server won't 
 sudo yum update –y
 sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
 sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
-sudo dnf install java-17-amazon-corretto -y
+sudo dnf install java-17-amazon-corretto docker -y
 sudo yum install jenkins -y
 sudo systemctl enable jenkins
 sudo systemctl start jenkins
 sudo systemctl status jenkins
+sudo systemctl start docker.service
+sudo systemctl enable docker.service
 sudo cat /var/lib/jenkins/secrets/initialAdminPassword
-sudo usermod -a -G docker ec2-user,jenkins
+sudo usermod -a -G docker ec2-user
+sudo usermod -a -G docker jenkins
 sudo chown jenkins /var/run/docker.sock
 ```
 
