@@ -73,6 +73,7 @@ nav:
                             - "CICD pipeline": "cicd/github_actions/cicd.md"
                   - "Jenkins":
                             - "Overview": "cicd/jenkins/overview.md"
+                            - "Deployments": "cicd/jenkins/deployments.md"
 
         - "vcontroller":
                   - "Overview": "vcontroller/git/overview.md"
