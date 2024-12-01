@@ -38,7 +38,7 @@ nav:
                             - "interviews":
                                       - "generic faq": "programming/python/generic_faq.md"
                                       - "data structures faq": "programming/python/ds_faq.md"
-                                      - "TODO": "programming/python/TODO.md"
+                                      - "web links": "programming/python/url_links.md"
 
                   - "clean code":
                             - "overview": "programming/clean_code/overview.md"

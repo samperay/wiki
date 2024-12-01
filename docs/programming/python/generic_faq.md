@@ -328,6 +328,13 @@ print(strnum)
 print("update the code here")
 ```
 
+## python ebook
+
+[think python PDF](https://greenteapress.com/thinkpython2/thinkpython2.pdf)
+
+[think python solutions](https://en.wikibooks.org/wiki/Think_Python/Answers#Exercise_9.1)
+
+
 ## TODO
 
 ## Practical Questions
