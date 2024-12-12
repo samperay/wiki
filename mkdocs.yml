@@ -71,7 +71,7 @@ nav:
                             - "Variables": "cicd/github_actions/variables.md"
                             - "Matrix stratergy": "cicd/github_actions/matrix_strategy.md"
                             - "CICD pipeline": "cicd/github_actions/cicd.md"
-                  - "Jenkins":
+                  - "jenkins":
                             - "Overview": "cicd/jenkins/overview.md"
                             - "Deployments": "cicd/jenkins/deployments.md"
 
