@@ -230,7 +230,16 @@ test -f ${FILE} && echo "File Exists" - Method 1
 ## print/sum of odd/even
 
 ```bash
-code goes here
+
+# even
+for i in {0..10..2}; do 
+    echo "${i}"
+done
+
+# odd
+for i in {1..10..2}; do 
+    echo "${i}"
+done
 ```
 
 ## reverse string
@@ -240,6 +249,10 @@ s="sunil"
 for((i=${#s};i>=0;i--)); do 
     revstr=$revstr${s:$i:1}
 done
+
+# oneliners
+echo ${s}| rev 
+rev <<< ${s}
 ```
 
 ## for and while
