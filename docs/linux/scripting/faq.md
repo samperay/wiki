@@ -1,5 +1,7 @@
 # Interview Questions
 
+[Bash cheat sheet](https://devhints.io/bash)
+
 ## list files in directory
 ```bash
 for item in /etc/*
