@@ -74,6 +74,59 @@ for ((i=0;i<$${#array[@]};i++)); do
 done
 ```
 
+```
+Fruits=('Apple' 'Banana' 'Orange')
+echo "${Fruits[0]}"           # Element #0
+echo "${Fruits[-1]}"          # Last element
+echo "${Fruits[@]}"           # All elements, space-separated
+echo "${#Fruits[@]}"          # Number of elements
+echo "${#Fruits}"             # String length of the 1st element
+echo "${#Fruits[3]}"          # String length of the Nth element
+echo "${Fruits[@]:3:2}"       # Range (from position 3, length 2)
+echo "${!Fruits[@]}"          # Keys of all elements, space-separated
+
+Fruits=("${Fruits[@]}" "Watermelon")    # Push
+Fruits+=('Watermelon')                  # Also Push
+Fruits=( "${Fruits[@]/Ap*/}" )          # Remove by regex match
+unset Fruits[2]                         # Remove one item
+Fruits=("${Fruits[@]}")                 # Duplicate
+Fruits=("${Fruits[@]}" "${Veggies[@]}") # Concatenate
+lines=(`cat "logfile"`)                 # Read from file
+
+for i in "${Fruits[@]}"; do
+  echo "$i"
+done
+```
+
+## traversing dicts
+
+```
+declare -A sounds
+sounds[dog]="bark"
+sounds[cow]="moo"
+sounds[bird]="tweet"
+sounds[wolf]="howl"
+
+echo "${sounds[dog]}" # Dog's sound
+echo "${sounds[@]}"   # All values
+echo "${!sounds[@]}"  # All keys
+echo "${#sounds[@]}"  # Number of elements
+unset sounds[dog]     # Delete dog
+
+# iterate over values
+
+for val in "${sounds[@]}"; do
+  echo "$val"
+done
+
+# iterate over keys
+
+for key in "${!sounds[@]}"; do
+  echo "$key"
+done
+```
+
+
 ## diff between $@ and $*
 
 $* and $@ when unquoted are identical and expand into the arguments.
