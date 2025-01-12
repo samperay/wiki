@@ -318,7 +318,51 @@ func main() {
 
 ### Maps
 
+Maps are used to store data values in key:value pairs.
 
+A map is an unordered and changeable collection that does not allow duplicates.
+
+Maps hold references to an underlying hash table.
+
+```go
+func main() {
+	var a = map[string]string {"name":"John", "age":"25", "job":"Engineer", "salary":"50000"}
+
+	
+
+	b:=make(map[string]string) // empty map
+
+	b["name"]="John"
+	b["age"]="25"
+	b["job"]="Engineer"
+	b["salary"]="50000"
+
+
+	b["name"]="Doe" // update value
+	b["color"]="Red" // add new key value pair
+
+	delete(b, "color") // delete key value pair
+
+	key, value := a["name"] // check if key exists
+	fmt.Println(key, value)
+
+	_, value = a["name1"] // check if value exists
+	fmt.Println(value)	
+	fmt.Println("a: ",a)
+	fmt.Println("b: ",b)
+
+	for k, v := range a {
+		fmt.Printf("%v : %v, ", k, v) //loop with no order
+	  }
+
+	fmt.Println()
+	fmt.Println()
+	for _, element := range a {
+		fmt.Printf("%v : %v, \n", element, a[element]) // loop with the defined order
+	}
+
+}
+```
 
 ## Functions 
 
@@ -399,3 +443,63 @@ func main() {
 
 ## Struct, Methods and Interfaces
 
+A struct (short for structure) is used to create a collection of members of different data types, into a single variable.
+
+```go
+
+type Person struct {
+	name string
+	age int
+	job string
+	salary int
+  }
+
+func main() {
+	var pers1 Person
+
+
+  pers1.name = "Hege"
+  pers1.age = 45
+  pers1.job = "Teacher"
+  pers1.salary = 6000
+
+  // Access and print Pers1 info
+  fmt.Println("Name: ", pers1.name)
+  fmt.Println("Age: ", pers1.age)
+  fmt.Println("Job: ", pers1.job)
+  fmt.Println("Salary: ", pers1.salary)
+}
+```
+
+Pass struct as function
+
+```go
+type Person struct {
+	name string
+	age int
+	job string
+	salary int
+  }
+
+func printPerson(pers1 Person) {
+	  // Access and print Pers1 info
+	  fmt.Println("Name: ", pers1.name)
+	  fmt.Println("Age: ", pers1.age)
+	  fmt.Println("Job: ", pers1.job)
+	  fmt.Println("Salary: ", pers1.salary)
+}
+
+
+func main() {
+	var pers1 Person
+
+
+  pers1.name = "Hege"
+  pers1.age = 45
+  pers1.job = "Teacher"
+  pers1.salary = 6000
+
+  printPerson(pers1)
+
+}
+```
