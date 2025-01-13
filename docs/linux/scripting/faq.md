@@ -963,11 +963,47 @@ MacBook-Pro:wiki sunilamperayani$
 ## arrays
 
 ```bash
+# bash shell > 5.3-release
+
 declare -a servers
 servers=("server1" "coding" "structure tets")
 
 new_servers=("${servers[@]:0:1}" "server1.5" ${servers[@]:1}]})
-echo "${new_servers[@]}"
+echo "${new_servers[@]}" # server1 server1.5 coding structure tets]}
+
+unset servers[1]
+echo "${servers[@]}" # server1 structure tets
+
+
+declare -a array=("One" "Two" "Three")
+array+=("Four" "Five" "Six")
+echo "${array[@]}" # One Two Three Four Five Six
+
+declare -a numbers=(5 1 3 2 4)
+printf "%s\n" "${numbers[@]}" | sort # 1 2 3 4 5
+
+# write an example of associative array key-value pair
+# instead of using index, we can use string as index
+declare -A fruits
+fruits=([apple]='red' [banana]='yellow' [cherry]='red')
+echo "${fruits[apple]}" # red
+
+# add new key-value pair
+fruits["green"]="pear"
+echo "${fruits[green]}" # pear
+
+# modify value
+fruits["red"]="new apple" 
+echo "${fruits[@]}"
+
+# delete key-value pair
+unset fruits[banana]
+echo "${fruits[@]}" # red new apple pear
+
+# loop through key-value pair
+for key in "${!fruits[@]}"; do
+    echo "$key: ${fruits[$key]}"
+done
 ```
 
 ## variable expansion
