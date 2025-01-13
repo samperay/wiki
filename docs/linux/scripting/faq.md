@@ -960,3 +960,57 @@ eval $cmd
 MacBook-Pro:wiki sunilamperayani$ 
 ```
 
+## arrays
+
+```bash
+declare -a servers
+servers=("server1" "coding" "structure tets")
+
+new_servers=("${servers[@]:0:1}" "server1.5" ${servers[@]:1}]})
+echo "${new_servers[@]}"
+```
+
+## variable expansion
+
+```bash
+echo "Hello ${name1:-unkown}" # name is not defined so it will print unkown which is default value
+
+name="John Doe"
+echo "Hello ${name:=unkown}" # assign default values
+
+
+echo "Hello, ${name:0:4}" # extract substring from 0 to 4
+
+# string replacement
+echo "${path/Downloads/Documents}" # replace Downloads with Documents
+
+# string length
+echo "Length: ${#path}" # print length of the string
+```
+
+## parameter expansion
+
+'#' matching `prefix`
+'%' matching `suffix`
+
+```bash
+# extract last part of the path
+path="/home/user/Downloads"
+echo "Path: ${path##*/}" # extract last part of the path
+
+greeting="Hello World"
+echo "${greeting#H}" # matches from left to right
+#ello World
+
+echo "${greeting%d}" # matches from right to left
+#Hello Worl
+
+my_text_file="/home/my_username/text_file.txt"
+my_python_file="/usr/bin/app.py"
+
+echo "${my_text_file##*/}" # remove the last part of the path
+
+echo "${my_python_file##*/}" # remove the last part of the path
+
+echo "${my_python_file%.*}" # remove the last part of the path
+```
