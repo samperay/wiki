@@ -34,6 +34,7 @@ nav:
                             - "programming terms":
                                       - "Object Oriented Programming": programming/python/terminology/oops.md
                                       - "concepts": "programming/python/terminology/primer.md"
+                                      - "datatypes": "programming/python/terminology/datatypes.md"
                                       
                             - "interviews":
                                       - "generic faq": "programming/python/generic_faq.md"
@@ -101,7 +102,7 @@ nav:
 
                 - "scripting":
                         - "faq": "linux/scripting/faq.md"
-                        - "hackerrank": linux/scripting/hackerrank/overview.md
+                        - "hackerrank": linux/scripting/hackerrank.md
 
                 - "ansible":
                         - "install": "linux/ansible/install.md"
