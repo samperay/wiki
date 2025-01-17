@@ -491,3 +491,152 @@ log() {
 
 log "hello world"
 ```
+## awk 
+
+- domain specific language for streamling text operations.
+- expect input as standard behaviour
+- input can be passwd by keyboard, pipes or files
+- ' '(quotes) used in awk is to prevent the shell/terminal expansion. 
+
+
+```bash
+# awk expects input as the standard behaviour.
+awk -F":" '{print $1}' /etc/passwd 
+awk -F":" '{print $1}' < /etc/passwd 
+cat /etc/passwd | awk '{print $1}'
+```
+
+### built-in variables
+
+- NR: total number of records (lines) processed so far across all input files
+- NF: represents the number of fields (columns) in the current record (line)
+- FILENAME: represents the name of the current file being processed.
+
+Program block = `BEGIN`
+Action block = `{print $1}`
+
+```bash
+
+file1.txt
+
+apple
+banana
+cherry
+
+awk '{ print NR, $0 }' file1.txt
+
+# output 
+
+1 apple
+2 banana
+3 cherry
+
+NR=1 for first line
+NR=2 for second line
+```
+
+```bash
+file2.txt
+
+apple banana cherry
+grape mango
+
+awk '{ print NF, $0 }' file2.txt
+
+# output
+3 apple banana cherry
+2 grape mango
+
+The first line has 3 fields, so NF=3.
+The second line has 2 fields, so NF=2.
+```
+
+```bash
+# file1.txt
+apple
+banana
+
+#file2.txt
+grape
+mango
+
+
+awk '{ print FILENAME, NR, $0 }' file1.txt file2.txt
+
+file1.txt 1 apple
+file1.txt 2 banana
+file2.txt 3 grape
+file2.txt 4 mango
+
+FILENAME shows the file name being processed.
+NR continues counting records across both files.
+```
+
+```bash
+awk '{ print "File:", FILENAME, "Record:", NR, "Fields:", NF, "Line:", $0 }' file1.txt file2.txt
+
+File: file1.txt Record: 1 Fields: 1 Line: apple
+File: file1.txt Record: 2 Fields: 1 Line: banana
+File: file2.txt Record: 3 Fields: 1 Line: grape
+File: file2.txt Record: 4 Fields: 1 Line: mango
+```
+
+**Field seperator**
+
+```bash
+cat  /etc/passwd | awk -F ":" '{print $1 $7}'
+```
+
+-v declare a vraible before executing the action block or a program.
+
+```bash
+awk -v var="Hello world" 'BEGIN { print var }' 
+Hello world
+
+awk -F ":" -v user="Users homedirectory: " '{print user, $1}' /etc/passwd 
+
+# output
+
+Users homedirectory:  _notification_proxy
+Users homedirectory:  _avphidbridge
+Users homedirectory:  _biome
+Users homedirectory:  _backgroundassets
+Users homedirectory:  _mobilegestalthelper
+Users homedirectory:  _audiomxd
+Users homedirectory:  _terminusd
+```
+
+```bash
+# uid>100
+awk -F":" -v user="username:" -v uid="100" '$3>=uid {print user,$1, $3}' /etc/passwd
+
+# 100>uid<300
+awk -F":" -v user="username:" -v uid="100" -v uidlow="300" '$3>=uid && $3<=uidlow {print user,$1, $3}' /etc/passwd
+```
+
+### using awk-file
+
+you can use an awk program, but shell expansions like globbing, command substituitions, and 
+command like utilities are not available. 
+
+```bash
+# hello.awk
+
+#!/usr/bin/env awk -f 
+BEGIN {
+  print "hello"
+}
+bash-3.2$ 
+
+./hello.awk
+hello
+```
+
+```bash
+#!/usr/bin/env bash
+
+awk -v hello="Hello" 'BEGIN { 
+    print hello
+  }'
+
+```
