@@ -314,3 +314,180 @@ main() {
 [ "$#" -ne "1" ] && help 
 main "$1" | tee -a app.log
 ```
+
+## Good practices
+
+**Bash reserved exit codes**
+
+```
+0  success
+1  general error
+2  misuse of shell builtins
+126 cannot execute
+128  cannot execute
+130  script terminated by ctrl-c
+127  command not found
+```
+
+`set -e`  exits on error
+`set -u` exits when a unset variable is used
+`set -o pipefail` catches errors in piped commands
+
+### set -e
+
+**Incorrect bash script**
+
+```bash
+# safe.sh
+#!/usr/bin/env bash
+
+ehco "hello"
+exit 0
+
+./safe.sh
+echo $? #0 returns success code which is wrong
+```
+
+**Correct Bash script**
+
+```bash
+# safe.sh
+#!/usr/bin/env bash
+
+set -e
+
+ehco "hello"
+exit 0
+
+./safe.sh
+echo $? #126
+```
+
+### set -u
+
+**Incorrect bash script**
+
+```bash
+# safe1.sh
+
+name="Sunil"
+# last_name="Kumar"
+
+echo "My Full name is ${name} ${last_name}..!!"
+exit 0 
+
+./safe1.sh
+echo $? # 0 Incorrect as last_name is not executed
+```
+
+**Corrected bash version**
+
+```bash
+set -u
+echo "My Full name is ${name} ${last_name}..!!"
+exit 0 
+
+./safe1.sh
+echo $? # 1 
+```
+
+### set -o pipefail
+
+```bash
+# pipefail.sh
+
+cat non-existent-file.txt | sort | uniq 
+exit 0
+
+./pipefail.sh
+cat non-existent-file.txt | sort | uniq 
+cat: non-existent-file.txt: no such file or directory
+echo $? 
+0
+```
+
+In below script, if the `cat` has been failed, it should not execute the `echo` command.. but it does.
+so to fix it use `set -o pipefail`
+
+```bash
+# pipefail.sh
+
+cat non-existent-file.txt | sort | uniq && echo "this line should not be executed";
+exit 0
+
+./pipefail.sh
+cat non-existent-file.txt | sort | uniq 
+cat: non-existent-file.txt: no such file or directory
+"this line should not be executed";
+echo $? 
+0
+```
+
+you won't get an `echo` statement if it fails when we set `set -o pipefail` but we still have an issue with the exit code.
+
+```bash
+# pipefail.sh
+set -o pipefail
+
+cat non-existent-file.txt | sort | uniq && echo "this line should not be executed";
+exit 0
+
+./pipefail.sh
+cat non-existent-file.txt | sort | uniq 
+cat: non-existent-file.txt: no such file or directory
+echo $? 
+0
+```
+
+```bash
+# pipefail.sh
+set -e
+set -u
+set -o pipefail
+
+readonly PIPE_ERROR=156
+
+# terminate function technique
+terminate()
+{
+  local -r msg="${1}"
+  local -r code="${2:-160}"
+  echo "${msg}" >&2
+  exit "${code}"
+}
+
+cat non-existent-file.txt | sort || { terminate "error in piped command" "${PIPE_ERROR}" }
+
+exit 0
+
+./pipefail.sh
+cat non-existent-file.txt | sort | uniq 
+cat: non-existent-file.txt: no such file or directory
+echo $? 
+156
+```
+
+## no-op command
+
+dry run command in bash. its a shell-built in command which has no behaviour programmed.
+
+```bash
+#!/use/bin/env bash
+
+if [[ "$1" = "start" ]]; then
+  : #no-op command
+else
+  echo "invalid string"
+fi
+```
+
+## logging
+
+```bash
+#!/usr/bin/env bash
+log() {
+  echo $(date -u +"%Y-%m-%d%T%H:%M:%SZ") "${@}"
+}
+
+log "hello world"
+```
