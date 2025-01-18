@@ -640,3 +640,53 @@ awk -v hello="Hello" 'BEGIN {
   }'
 
 ```
+
+## sed
+
+`sed` takes the input parameter and would process the unprocessed text and the processed text to the stdout.
+it will take input from the keyboard, file, or the pipes. i.e similar to awk
+
+```bash
+sed 'p' # waits for the input from the keyboard
+t
+t # unprocessed text
+t # processed text i.e output
+```
+
+
+
+In order to supress automatic printing use `-n`
+
+```bash
+sed -n '2p' filename.txt # print the second line supressing the automatic printing
+```
+
+delete(-d)
+
+```bash
+sed -n '2d' filename.txt # delete the 2nd line and print to standard output
+sed -n '2,5d' filename.txt # delete from 2nd line to 5th line and print to standard output
+```
+
+in-place (-i) 
+
+```bash
+sed -i '2,5d' filename.txt # write to the filename.txt instead of the stdout
+```
+
+search
+
+search always ends with '/<text>/' follwed by 'p' print. 
+
+```bash
+sed -n '/broot/p' /etc/passwd
+
+#\b word boundary followed by string pattern.
+sed -n '/\broot\b/p' /etc/passwd # good practice to use '\b'
+
+# -e indicated its an sed script for multiple options MANDATORY
+sed -n -e '/\broot\b/p' -e '/\bsunil\b/p' /etc/passwd 
+
+# delete the root and write into the file
+sed -n -i -e '/\broot\b/d' -e '/\bsunil\b/p' /tmp/passwd
+```
