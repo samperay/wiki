@@ -76,7 +76,7 @@ nav:
                             - "Overview": "cicd/jenkins/overview.md"
                             - "deploy": "cicd/jenkins/deploy.md"
                   - "tekton":
-                            - "installation": "cicd/tekton/installation.md"
+                            - "Installation": "cicd/tekton/installation.md"
                             - "concepts": "cicd/tekton/concepts.md"
                             - "pipelines": "cicd/tekton/tasks_pipelines.md"
 
