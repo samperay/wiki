@@ -1,10 +1,8 @@
-Tekton is an open-source cloud native CICD (Continuous Integration and Continuous Delivery/Deployment) solution
+**Tekton is an open-source** cloud native CICD solution
 
-## installations
+Make sure you have any of the tool being installed for the kubernetes cluser. i.e Rancher/Podman/Docker Desktop etc..
 
-Make sure you have any of the tool being installed for the kubernetes cluser. i.e Rancher/Podman/Docker Desktop etc. 
-
-`kind` is a tool for installation local kubernetes cluster. Please install . 
+**kind** is a tool for installation local kubernetes cluster, make sure to install
 
 [installing-from-release-binaries](https://kind.sigs.k8s.io/docs/user/quick-start/#installing-from-release-binaries)
 
@@ -33,7 +31,7 @@ kind-tekton-cluster
 deployment.apps/nginx created
 ```
 
-[install tekton pipelines](https://tekton.dev/docs/installation/pipelines/)
+[install tekton pipelines](https://tekton.dev/docs/installation/pipelines/) - install necessary binaries/packages
 
 ```
 ➜  ~ kubectl apply --filename https://storage.googleapis.com/tekton-releases/pipeline/previous/v0.52.0/release.yaml
@@ -111,3 +109,8 @@ service/tekton-pipelines-webhook created
 ➜  ~
 ```
 
+Deletion:
+
+```
+kind delete cluster --name tekton-cluster
+```
