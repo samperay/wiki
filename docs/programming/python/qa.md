@@ -1,5 +1,5 @@
 
-# Strings
+## Strings
 
 my_string = "In 2010, someone paid 10k Bitcoin for two pizzas."
 
@@ -21,17 +21,11 @@ print(my_string[10::]) # return the string except the first 10 characters
 print(my_string[:-4]) # return the string except the last 4 characters
 print(my_string[-9::]) # return the last 9 characters of the string
 print(my_string[:12]) # return the first 12 characters in the string
-```
-
-**string concatenation**
-
-```python
-my_string = "In 2010, someone paid 10k Bitcoin for two pizzas."
 my_other_string = "Poor guy!"
-print(my_string+my_other_string)
+print(my_string+my_other_string) # concatenate strings
 ```
 
-## numbers & booleans
+## nums_bool
 
 ## lists
 
