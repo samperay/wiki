@@ -131,6 +131,17 @@ my_range = range(-10,-9) # return [-10]
 
 ## dictionaries
 
+```python
+crypto = {1: "Bitcoin", 2: "Ethereum", 3: "Litecoin", 4: "Stellar", 5: "XRP"}
+
+crypto.pop(3) #  delete the key-value pair associated with key 3
+del crypto[3] #  delete the key-value pair associated with key 3
+add = sum(crypto) # sum of all the keys in the dictionary.
+val = crypto.values() # get a list of all the values in the dictionary.
+key = min(crypto) #smallest key in the dictionary.
+crypto.popitem() # arbitrary key-value pair from the dictionary.
+```
+
 ## data types
 
 ## conditions
