@@ -100,9 +100,41 @@ if you are deleting pipelineRuns, assicoated taskRuns also deleted.
 
 ## input parameterizing
 
+- instead of static, we would write re-usable code using input parameteriation.
+- flow control is key benefit
+- allows to make decision during the execution of your tasks/pipelines based on input values.
+  
 ## Results 
 
+- tekton tasks and taskruns can accept input parameters
+- flexibility using results of steps in and beyond tasks. 
+The tasks is able to emit results in simple case as string, objects, arrays etc
+
 ## workspaces
+
+- storage area that allows tasks and pipeines to share data and files
+- configmap, secrets, pvc, pvc-templates etc
+- why ?
+  - data sharing
+  - data persistance
+  - isolation
+- task level 
+  - definition where workspace reside on its step containers
+  - specifies how data should be stored and accessed during the execution of that specific task. 
+- pipeline level
+  - mamages data flow between thaks via worksapce collaboration
+  - task A downloads code, while task B needs artifact for compiling
+
+Who creates wokspace and who manages ?
+
+- its reposibility of taskrun and taskrunpipeline. 
+  - providing and managing the workspace
+- when creating a taskrun or pipelinerun
+  - specficatin necessary which workspace to use under which volume
+  - tekton take care about creating and mounting volumes on pod level
+
+write task in one workspace and read from another workspace. 
+more info on examples: 4.0.7-*.yaml
 
 ## auth
 

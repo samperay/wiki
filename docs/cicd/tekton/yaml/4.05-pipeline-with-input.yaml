@@ -1,0 +1,18 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: 4-05-example-pipeline-with-input
+spec:
+  tasks:
+    - name: task-run-1
+      taskRef:
+        name: 4-05-echo-task-with-input
+      params:
+        - name: input-message
+          value: "First task with a custom message."
+    - name: task-run-2
+      taskRef:
+        name: 4-05-echo-task-with-input
+      params:
+        - name: input-message
+          value: "Second task with a different message."

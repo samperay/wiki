@@ -1,0 +1,17 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: 4-05-echo-task-with-input
+spec:
+  description: Tekton Task that prints a default message which can be override
+  params:
+    - name: input-message
+      description: Message to be printed
+      default: "Hello, Tekton!"
+      type: string
+  steps:
+    - name: echo-step
+      image: alpine:3.14
+      script: |
+        #!/bin/sh
+        echo "Message: $(params.input-message)"
