@@ -37,9 +37,7 @@ nav:
                                       - "datatypes": "programming/python/terminology/datatypes.md"
                                       
                             - "interviews":
-                                      - "generic faq": "programming/python/generic_faq.md"
-                                      - "data structures faq": "programming/python/ds_faq.md"
-                                      - "web links": "programming/python/url_links.md"
+                                      - "FAQ": "programming/python/faq.md"
                                       - "Q&A": "programming/python/qa.md"
 
                   - "clean code":

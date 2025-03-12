@@ -1,4 +1,7 @@
-## string inverse
+
+## FAQ
+
+### string inverse
 
 ```
 string1="Sunil"
@@ -15,7 +18,7 @@ while i>=0 :
 print("".join(revlist))
 ``` 
 
-## verify palindrome
+### verify palindrome
 
 ```
 def palindrome(string: str):
@@ -28,7 +31,7 @@ else:
 	print("No, its not palindrome")
 ```
 
-## first non-repeated char in str
+### first non-repeated char in str
 
 ```python
 string = "geekforgeeks"
@@ -44,7 +47,7 @@ for k,v in d.items():
 		break
 ```
 
-## largest and second largest
+### largest and second largest
 
 ```python
 a = [100,2,3,4,5,99]
@@ -54,7 +57,7 @@ print(f"Second largest element in an array: {sorted(a)[-2]}")
 print(f"smallest element in an array: {sorted(a)[0]}")
 ```
 
-## merge two lists 
+### merge two lists 
 
 ```python
 a = [3, 4, 6, 10, 11, 18]
@@ -62,7 +65,7 @@ b = [1, 5, 7, 12, 13, 19, 21]
 a.extend(b)
 ```
 
-## remove dups merge two listed in sort
+### remove dups merge two listed in sort
 
 ```
 a = [3, 4, 6, 10, 11, 18,5,7,13]
@@ -71,7 +74,7 @@ b = [33,1, 5, 7, 12, 13, 19, 21]
 sorted(list(set(a+b)))
 ```
 
-## word frequency
+### word frequency
 
 ```python
 ss = """Nory was a Catholic because her mother was a Catholic, 
@@ -90,7 +93,7 @@ for eachword in ss.split():
 print(d)
 ```
 
-## dict of list
+### dict of list
 
 ```python
 ss={'Belaguam': 'karnataka', "hubbali": "karnataka", "hyderbad": "telengana", "nizam": "telengana", "tirupathi": "andhra", "chittor": "andhra"}
@@ -106,7 +109,7 @@ for k,v in ss.items():
 print(dict(d1))
 ```
 
-## frequency of digits
+### frequency of digits
 
 ```python
 L = [1,2,4,8,16,32,64,128,256,512,1024,32768,65536,4294967296]
@@ -121,7 +124,7 @@ for i in L:
 print(dict(d1))
 ```
 
-## frequency of elements in a list.
+### frequency of elements in a list.
 
 ```python 
 l = [ 10, 20, 30, 40, 50, 50, 60,20,40, 40, 20,20]
@@ -134,7 +137,7 @@ for eachitem in l:
 print(d) # {10: 1, 20: 4, 30: 1, 40: 3, 50: 2, 60: 1}
 ```
 
-## factorial 
+### factorial 
 
 ```python
 def fact(n):
@@ -146,7 +149,7 @@ def fact(n):
 print(fact(5)) # 120
 ```
 
-## Fibonacci series 
+### Fibonacci series 
 
 ```python
 def fib(n):
@@ -162,7 +165,7 @@ def fib(n):
 fib(90) # 0 1 1 2 3 5 8 13 21 34 55 89 
 ```
 
-## remove non-alphanumeric char
+### remove non-alphanumeric char
 
 ```python
 import re
@@ -172,7 +175,7 @@ def strip_non_alphanum(string):
 print(strip_non_alphanum("sunil@skjd878@@#@#!!@##@#@#_-;;';--")) #sunilskjd878_
 ```
 
-## Power(2)
+### Power(2)
 ```python
 def is_power_of_two(n):
     """Check if a number is a power of two."""
@@ -181,14 +184,14 @@ def is_power_of_two(n):
 print(is_power_of_two(16)) # True
 ```
 
-## Reverse words in a sentence.
+### Reverse words in a sentence.
 
 ```python
 ss="This is sunil"
 print(" ".join(ss.split()[::-1]))
 ```
 
-## Anagrams
+### Anagrams
 ```python
 def is_anagram(str1, str2):
     """a word, phrase, or name formed by rearranging the letters of another, such as cinema, formed from iceman."""
@@ -200,7 +203,7 @@ def is_anagram(str1, str2):
 print(is_anagram("sunil","linus")) # True
 ```
 
-## Common element list
+### Common element list
 
 ```python
 a=[1,2,43,45,23,90]
@@ -210,7 +213,7 @@ print(set(a)) # Removes duplicates
 print(set(a)&set(b)) # prints common elements
 ```
 
-## Sort a list(str) based on their lengths.
+### Sort a list(str) based on their lengths.
 ```python
 def sort_list_by_length(list):
     list.sort(key=len)
@@ -230,7 +233,7 @@ newlist=["sunil","kua","kumar","ku","kumaraswamy","ramaswamy","ramaswamykumarasw
 print(sort_list_by_length(newlist)) # ['ramaswamykumaraswamy', 'kumaraswamy', 'ramaswamy', 'sunil', 'kumar', 'kua', 'ku']
 ```
 
-## prime number 
+### prime number 
 
 ```python
 def is_prime(num):
@@ -245,7 +248,7 @@ def is_prime(num):
 
 ```
 
-## find nth fibonacci number 
+### find nth fibonacci number 
 
 ```python
 # 0,1,1,2,3,5,8,13,21,34,55,89,144,233,377
@@ -260,7 +263,7 @@ def fib(n):
 print(fib(6)) # 8
 ```
 
-## sum of all fibonacci numbers 
+### sum of all fibonacci numbers 
 ```python
 def fib(n):
     if n <= 1:
@@ -271,7 +274,7 @@ def fib(n):
 print(fib(10))
 ```
 
-## max product in an array
+### max product in an array
 
 ```python
 def max_product(arr):
@@ -286,7 +289,7 @@ print(max_product([5, 20, 2, 6])) # 120
 
 ```
 
-## reverse digit 
+### reverse digit 
 
 ```python
 def reverse(x):
@@ -297,11 +300,11 @@ def reverse(x):
     return rev
 ```
 
-## merge and sort the 2 lists to 1 list
+### merge and sort the 2 lists to 1 list
 
-## calculate sum of odd/even numbers
+### calculate sum of odd/even numbers
 
-## sum digits
+### sum digits
 
 ```python
 num=123
@@ -312,7 +315,7 @@ for i in str(num):
 print(sum)
 ```
 
-## string of numbers
+### string of numbers
 
 ```python
 strnum=[]
@@ -322,13 +325,13 @@ for i in range(1,100):
 print(strnum)
 ```
 
-## fetch consecutive element in list
+### fetch consecutive element in list
 
 ```python
 print("update the code here")
 ```
 
-## python ebook
+### python ebook
 
 [think python PDF](https://greenteapress.com/thinkpython2/thinkpython2.pdf)
 
@@ -337,7 +340,7 @@ print("update the code here")
 
 ## TODO
 
-## Practical Questions
+### Practical Questions
 - what is the use of yield and why should we use them ?
 - Can you explain about the **args** and **args**
 - What is the use of map, filter and reduce ? can you provide some examples ?
@@ -364,7 +367,7 @@ print("update the code here")
 - Given the string, convert to Upper/Lower case ?
 - Write a function which searches a particular work from the file ?
 
-## More questions 
+### More questions 
 - calculate the factorial of a number.
 - check if a given number is prime or not.
 - find the largest element in a list.
@@ -412,15 +415,8 @@ print("update the code here")
 - implement a binary search algorithm.
 - implement a bubble sort algorithm.
 - implement a selection sort algorithm.
-
-## more questions
-
 - find the sum of digits of a number.
-- check whether a given number is prime or not.
-- find the largest number among three numbers.
-- find the factorial of a number.
-- reverse a string.
-- check whether a given string is a palindrome or not.
+- - check whether a given string is a palindrome or not.
 - remove duplicate elements from a list.
 - find the second largest number in a list.
 - sort a list of numbers in ascending order.
@@ -438,30 +434,25 @@ print("update the code here")
 - find the frequency of each word in a given string.
 - count the number of occurrences of a given substring in a string.
 - find the first non-repeating character in a given string.
-- implement binary search on a sorted list.
-- implement bubble sort.
-- implement selection sort.
-- implement insertion sort.
-- implement merge sort.
-- implement quick sort.
-- find the sum of all elements in a two-dimensional array.
-- implement matrix multiplication.
-- find the transpose of a matrix.
-- find the determinant of a matrix.
-- check whether a given matrix is symmetric or not.
-- find the maximum element in a two-dimensional array.
-- find the minimum element in a two-dimensional array.
-- implement linear search.
-- find the sum of digits of a given number using recursion.
-- find the factorial of a given number using recursion.
-- find the nth Fibonacci number using recursion.
-- find the GCD of two numbers using recursion.
-- find the LCM of two numbers using recursion.
-- reverse a linked list.
-- implement a stack using an array.
-- implement a queue using an array.
-- implement a binary search tree.
-- implement depth-first search (DFS) on a graph.
-- implement breadth-first search (BFS) on a graph.
-- find the shortest path between two nodes in a graph using Dijkstra's algorithm.
-- find the minimum spanning tree of a graph using K- 
+
+## Data Structures Q&A
+
+### Single linked list
+
+### Double linked list
+
+### Stacks & Queues
+
+### Trees
+
+### Hash tables
+
+### Graphs
+
+### Heaps
+
+### Recursions
+
+### Sorting
+
+### Other coding exercises
