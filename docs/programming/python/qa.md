@@ -41,6 +41,7 @@ print(sorted(my_list), reverse=True) # descending sort
 print(sorted(my_list)[-1]) # largest element
 print(sorted(my_list)[0]) # smallest element
 print(sum(my_list)) # sum of elements 
+print(set(my_list)) # remove duplicates
 print(my_list.clear()) # delete all elemenents in list
 ```
 
@@ -77,7 +78,37 @@ my_slice=my_list[:-4] # [10, 10.5, 20]
 my_slice = my_list[0:5] # [10, 10.5, 20, 30, 'Python']
 my_slice = my_list[0::3] # every 3rd element [10, 30, 'Ruby']
 my_slice = my_list[-1::-4] # every 4th element from last element #['Ruby', 20]
+my_slice = my_list[2:5] # consecutive element [20, 30, 'Python']
 ```
+
+- merge two lists
+
+```python
+a = [3, 4, 6, 10, 11, 18]
+b = [1, 5, 7, 12, 13, 19, 21]
+a.extend(b)
+
+# remove duplicate and merge two lists
+sorted(list(set(a+b)))
+
+# print common elemenents
+print(set(a)&set(b))
+```
+
+- sort list by lengths
+```python
+newlist=["sunil","kua","kumar","ku","kumaraswamy","ramaswamy","ramaswamykumaraswamy"]
+
+def sort_list_by_length(list):
+    list.sort(key=len)
+    return list
+
+# revese sort by length
+def sort_list_by_length(list):
+    list.sort(key=len, reverse=True)
+    return list
+```
+
 ## sets
 my_set = {1, 4, 6, 5, 9, 0, 8, 3, 2, 7, 11}
 
@@ -85,8 +116,6 @@ my_set = {1, 4, 6, 5, 9, 0, 8, 3, 2, 7, 11}
 my_set.add(19) # add element
 my_set.remove(19) # delete element
 ```
-
-
 
 ```python
 my_set1 = {1, 4, 6, 5, 9, 0, 8, 3, 2, 7, 11}
@@ -1253,3 +1282,314 @@ result = list(itertools.filterfalse(lam, range(10)))
 print(result)
 ```
 
+## interview essentials
+
+**factorial**
+
+```python
+def fact(n):
+	if n==1: return 1 
+	
+	result=n*fact(n-1)
+	return result
+
+print(fact(5)) # 120
+```
+
+**fibonacci series**
+
+```python
+def fib(n):
+    sum=0
+    a,b=0,1 
+    while a<n:
+        sum+=a
+        print(a, end=" ")
+        a,b=b,a+b
+    print()
+    print("sum of fibonacci numbers:", sum)
+
+fib(90) # 0 1 1 2 3 5 8 13 21 34 55 89 
+
+# Print fibonacci numbers using recurrsion
+
+def fib(n):
+    if n == 0:
+        return 0
+    elif n == 1:
+        return 1
+    else:
+        return (fib(n-1) + fib(n-2))
+
+print(fib(6)) # 8
+```
+
+**sum of fibonacci numbers**
+
+```python
+def fib(n):
+    if n <= 1:
+        return n
+    else:
+        return fib(n-1) + fib(n-2)
+
+print(fib(10))
+```
+
+**string reverse**
+
+```python
+string1="Sunil"
+print(string1[::-1])
+
+# traditional method
+
+revlist=[]
+n=len(string1)-1
+i=n
+while i>=0 : 
+    revlist.append(string1[i])
+    i-=1
+print("".join(revlist))
+```
+
+**reverse sentence**
+```python
+ss="This is sunil"
+print(" ".join(ss.split()[::-1]))
+```
+
+**Palindrome**
+```python
+string="mom"
+print("True") if string == string[::-1] else print("False")
+```
+**word frequency**
+```python
+ss = """Nory was a Catholic because her mother was a Catholic, 
+and Nory's mother was a Catholic because her father was a Catholic, 
+and her father was a Catholic because his mother was a Catholic, 
+or had been."""
+
+d={}
+
+for eachword in ss.split():
+    d[eachword]=d.get(eachword,0)+1 
+
+print(d)
+```
+
+**digit frequency**
+```python
+L = [1,2,4,8,16,32,64,128,256,512,1024,32768,65536,4294967296]
+
+# {1: [1, 2, 4, 8], 2: [16, 32, 64], 3: [128, 256, 512], 4: [1024], 5: [32768, 65536], 10: [4294967296]}
+
+from collections import defaultdict 
+d1=defaultdict(list)
+
+for i in L:
+	d1[len(str(i))].append(i)
+print(dict(d1))
+```
+
+**list element frequency**
+```python 
+l = [ 10, 20, 30, 40, 50, 50, 60,20,40, 40, 20,20]
+
+d={}
+
+for eachitem in l:
+	d[eachitem]=d.get(eachitem,0)+1
+
+print(d) # {10: 1, 20: 4, 30: 1, 40: 3, 50: 2, 60: 1}
+```
+
+**anagams**
+```python
+def is_anagram(str1, str2):
+    """a word, phrase, or name formed by rearranging the letters of another, such as cinema, formed from iceman."""
+    if len(str1) != len(str2):
+        return False
+    else:
+        return sorted(str1) == sorted(str2)
+
+print(is_anagram("sunil","linus")) # True
+```
+
+**prime numbers**
+
+```python
+def is_prime(num):
+    if num > 1:
+        for i in range(2, num):
+            if (num % i) == 0:
+                print(num, "is not a prime number")
+                print(i, "times", num // i, "is", num)
+                break
+        else:
+            print(num, "is a prime number")
+
+```
+
+**max product in array**
+
+```python
+def max_product(arr):
+    max_product = 0
+    for i in range(len(arr)):
+        for j in range(i + 1, len(arr)):
+            if arr[i] * arr[j] > max_product:
+                max_product = arr[i] * arr[j]
+    return max_product
+
+print(max_product([5, 20, 2, 6])) # 120
+```
+
+**revese digit**
+```python
+def reverse(x):
+    rev = 0
+    while x > 0:
+        rev = rev * 10 + x % 10
+        x //= 10
+    return rev
+print(reverse(1234))
+```
+
+**sum digit**
+
+```python
+num=123
+sum=0
+
+for i in str(num):
+    sum+=int(i)
+print(sum)
+```
+
+**Calculate sum of odd/even digits**
+
+```python
+print("write the code")
+```
+
+
+## TODO
+
+### Practical Questions
+- what is the use of yield and why should we use them ?
+- Can you explain about the **args** and **args**
+- What is the use of map, filter and reduce ? can you provide some examples ?
+- Why do we need to use lambda and how can we use them ?
+
+- what is list comprehension and provide me an example ?
+- what is dictionary comprehension, provide me with an example ?
+- Find the sum of all the numbers from 1 to 50 ?
+- Can you print the string in reverse order using **iterative** && **recursive** method ?
+- Find the factorial of the number using both **iterative** && **recursive** method ?
+- Find the Fibonacci numbers using **iterative** && **recursive** method ?
+- Can you provide me an example of **terenary** operator ?
+- Given a number, how would you reverse a number ?
+- Find out the sum of even/odd numbers using **filter**, **map** ?
+- Remove the duplicate elements in a list ?
+- Given a string, how would you remove the list of whitespaces from it and create a new string ?
+- Print the index from the given list ?
+- How do you create tuples from list/dictionary ?
+- what's the difference between append, extend and concatenate ?
+- Find the max/min element in a list ?
+- How do you join elements of two lists ?
+- Find the common elements of the two lists ?
+- Given the list can you find the reverse of it ?
+- Given the string, convert to Upper/Lower case ?
+- Write a function which searches a particular work from the file ?
+
+### More questions 
+- calculate the factorial of a number.
+- check if a given number is prime or not.
+- find the largest element in a list.
+- check if two strings are anagrams.
+- reverse a string.
+- find the sum of all the elements in a list.
+- find the second largest element in a list.
+- remove duplicates from a list.
+- check if a given string is a palindrome.
+- sort a list in descending order.
+- find the sum of digits in a number.
+- find the smallest element in a list.
+- merge two sorted lists into a single sorted list.
+- remove all occurrences of an element from a list.
+- find the length of a string.
+- find the first non-repeated character in a string.
+- find the greatest common divisor (GCD) of two numbers.
+- find the least common multiple (LCM) of two numbers.
+- count the number of vowels in a string.
+- count the number of words in a string.
+- find the maximum subarray sum in a given list of integers.
+- check if a given string contains only digits.
+- check if a given string is a valid email address.
+- generate all possible permutations of a given string.
+- find the median of a list of numbers.
+- convert a decimal number to binary.
+- convert a binary number to decimal.
+- check if a given number is a perfect square.
+- check if a given number is an Armstrong number.
+- find the largest palindrome made from the product of two n-digit numbers.
+- find the longest common prefix among a list of strings.
+- find the longest common suffix among a list of strings.
+- find the first non-repeating character in a list.
+- find the first repeating character in a list.
+- remove all whitespace characters from a string.
+- implement a Caesar cipher.
+- find the number of occurrences of a substring in a given string.
+- find the index of the first occurrence of a substring in a given string.
+- count the number of lines in a file.
+- count the number of words in a file.
+- count the number of characters in a file.
+- check if a given string is a valid IP address.
+- check if a given string is a valid URL.
+- find the most common element in a list.
+- implement a binary search algorithm.
+- implement a bubble sort algorithm.
+- implement a selection sort algorithm.
+- find the sum of digits of a number.
+- - check whether a given string is a palindrome or not.
+- remove duplicate elements from a list.
+- find the second largest number in a list.
+- sort a list of numbers in ascending order.
+- find the sum of all even numbers in a list.
+- find the greatest common divisor (GCD) of two numbers.
+- find the least common multiple (LCM) of two numbers.
+- count the number of vowels in a string.
+- count the frequency of each element in a list.
+- find the square root of a number.
+- generate all prime numbers between two given numbers.
+- find the sum of all odd numbers in a list.
+- find the length of the longest increasing subsequence in a list of integers.
+- check whether a given string is a valid palindrome permutation.
+- find the maximum sum subarray of a given array of integers.
+- find the frequency of each word in a given string.
+- count the number of occurrences of a given substring in a string.
+- find the first non-repeating character in a given string.
+
+## Data Structures Q&A
+
+### Single linked list
+
+### Double linked list
+
+### Stacks & Queues
+
+### Trees
+
+### Hash tables
+
+### Graphs
+
+### Heaps
+
+### Recursions
+
+### Sorting
+
+### Other coding exercises
