@@ -911,6 +911,77 @@ print("%.4f" % pi)
 
 ## regular expressions
 
+s = "Bitcoin was born on Jan 3rd 2009 as an alternative to the failure of the current financial system. In 2017, the price of 1 BTC reached $20000, with a market cap of over $300B."
+
+```python
+import re
+ 
+result = re.match("Bitcoin", s) # match 'Bitcoin' at start
+result = re.match(r"B.{6} .{3}", s) # match 'Bitcoin' using dot syntax
+result = re.match("Bitcoin", s, re.I) # match 'Bitcoin' at start of str ignore case
+result = re.search(r"(\d{4})\s", s) # match the year `2009`
+result = re.search(r"(\d{4}),", s) # search 2017 
+result = re.search(r"(.{3}\s\d\w\w\s\d{4})\s", s) # match the date Jan 3rd 2009
+result = re.search(r"([A-Z]{3})", s) # match BTC in the string
+result = re.search(r"([0-9]\s[A-Z]{3})", s) # match 1 BTC in the string
+result = re.search(r"(\$\d{5}),", s) # match $20000
+result = re.search(r"(\$\d{3}[A-Z])\.", s) # match $300B
+result = re.search(r"\s(.{6} .{3} .{2})\s", s) # match market cap
+print(result.group())
+```
+
+s = "Bitcoin, Market Cap: $184,073,529,068, Price: $10,259.02, Volume 24h: $15,670,986,269, Circulating Supply: 17,942,600 BTC, Change 24h: 0.10%"
+
+```python
+import re
+
+result = re.search(r"\$(\d{3},[0-9]{3},\d{3},[0-9]{3}),", s) #  match 184,073,529,068
+result = re.search(r"\$(\d{1,3},\d{1,3}\.\d{1,3}),", s) # match 10,259.02
+result = re.search(r"\s([0-9]{2},[0-9]{3},[0-9]{3}\s.{3}),", s) # match 17,942,600 BTC
+result = re.search(r"\s(.{4}\s\d\.\d\d%)", s) # match 24h: 0.10%
+
+# match Volume 24h: $15,670,986,269
+result = re.search(r"\.\d\d, (.{1,}:\s\$\d{2,},\d{2,},\d{2,},\d{2,}), ", s)
+
+# match Circulating Supply: 17,942,600 BTC 
+result = re.search(r"(\w+ \w+: \d{2}.+? [A-Z]{3}), ", s) 
+
+result = re.search(r",([0-9]{3}\.[0-9]{2},\s.)", s) # match 259.02, V 
+result = re.findall(r"\s(\d{4})", s) # match all the years
+result = re.findall(r"\d{1,}", s) # match all the numbers (3, 2009
+result = re.findall(r"\s(\w{3})\s", s) # match all the three-letter words
+result = re.findall(r"([A-Z]{1}.+?)\s", s) # match all the words starting with an uppercase letter
+result = re.findall(r"\s(o.{1})\s", s) # match all the two-letter words starting with the letter o
+result = re.findall(r"\w{8,}", s) # match all the words that have at least 8 characters
+
+# match all the words starting with a or c and that have at least 3 letters
+result = re.findall(r"\s([ac]\w{2,})\s", s) 
+
+result = re.sub(r"\s\d{4}", " XXXX", s) # replace all the years in the string with XXXX
+print(result.group(1))
+```
+
+
+s = "Bitcoin was born on Jan 3rd 2009 as an alternative to the failure of the current financial system. In 2017, the price of 1 BTC reached $20000, with a market cap of over $300B. Bitcoin, Market Cap: $184,073,529,068, Price: $10,259.02, Volume 24h: $15,670,986,269, Circulating Supply: 17,942,600 BTC, Change 24h: 0.10%"
+
+```python
+import re
+ 
+# replace each floating-point number in the string (10,259.02 and 0.10) with a dot (.) 
+result = re.sub(r"\d{1,},*\d*\.\d{1,}", ".", s)
+
+# replace all occurrences of BTC in the string with Bitcoin
+result = re.sub(r"[A-Z]{3}", "Bitcoin", s)
+
+# replace all the digits less than or equal to 5 in the string with 8
+result = re.sub(r"[0-5]", "8", s)
+
+# replace all the words starting with an uppercase letter or digits greater than or equal to 6 in the string with W
+result = re.sub(r"[A-Z]\w{1,}|[6-9]", "W", s)
+ 
+print(result)
+```
+
 ## classes
 
 ## other concepts
