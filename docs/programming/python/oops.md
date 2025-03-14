@@ -1,6 +1,4 @@
-## Programming terms
-
-## Object Oriented Programming
+## OOPS
 
 ### Encapsulation & Abstraction
 
@@ -280,7 +278,7 @@ Class methods are used when we are dealing with factory methods. factory methods
 
 They are always called using `ClassName.method_name()`
 
-![class images](../../../images/class_method.webp)
+![class images](../../images/class_method.webp)
 
 ```python
 from datetime import date 

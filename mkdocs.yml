@@ -31,13 +31,11 @@ nav:
                                       - "fastapi": "programming/python/webapp_framework/fastapi/fastapi.md"
                                       - "flask": "programming/python/webapp_framework/flask/flask.md"
 
-                            - "programming terms":
-                                      - "Object Oriented Programming": programming/python/terminology/oops.md
-                                      - "concepts": "programming/python/terminology/primer.md"
-                                      - "datatypes": "programming/python/terminology/datatypes.md"
+                            - "advance concepts":
+                                      - "oops": programming/python/oops.md
+                                      - "concepts": "programming/python/concepts.md"
                                       
                             - "interviews":
-                                      - "FAQ": "programming/python/faq.md"
                                       - "Q&A": "programming/python/qa.md"
 
                   - "clean code":

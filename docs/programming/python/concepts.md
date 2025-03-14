@@ -1,5 +1,3 @@
-## Basic programming terms
-
 ### property decorator
 
 The @property decorator in Python is used to define methods that are accessed like attributes, providing a way to implement computed properties or control access to class attributes. It allows you to define a method that can be accessed as if it were an attribute, without the need to explicitly call it as a method.
@@ -174,7 +172,7 @@ for line in read_file('my_file.txt'):
   print(line)
 ```
 
-![Differences](../../../images/diff_decorators_generators.png)
+![Differences](../../images/diff_decorators_generators.png)
 
 
 ```python
@@ -388,7 +386,7 @@ my_function(1, 2, 3, name="John", age=30)
 
 ## Python manage memory?
 
-Answer: Python uses a private heap that stores all objects and data structures. The memory management is handled by Python's memory manager, which ensures that memory is allocated efficiently and that the interpreter doesn't run out of memory. Python also has an in-built garbage collector, which reclaims memory by deallocating objects that are no longer in use. The primary mechanism for garbage collection is reference counting, but Python also uses a cycle detector to deal with reference cycles.
+Python uses a private heap that stores all objects and data structures. The memory management is handled by Python's memory manager, which ensures that memory is allocated efficiently and that the interpreter doesn't run out of memory. Python also has an in-built garbage collector, which reclaims memory by deallocating objects that are no longer in use. The primary mechanism for garbage collection is reference counting, but Python also uses a cycle detector to deal with reference cycles.
 
 ## @staticmethod and @classmethod
 
