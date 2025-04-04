@@ -59,6 +59,9 @@ nav:
                         - "Overview": "docker_k8/docker/overview.md"
                         - "FAQ": "docker_k8/docker/faq.md"
                   - "k8":
+                        - "app_issues": 
+                                - "kube refresher": "docker_k8/k8/app_issues/kube_refresher.md"
+                                - "kube issues": "docker_k8/k8/app_issues/kube_issues.md"
                         - "Overview": "docker_k8/k8/overview.md"
 
         - "cicd":
