@@ -174,10 +174,10 @@ pipeline
 
 ## multipipeline repo setup
 
-[image_1](../../images/jenkins_multi_ci_cd_image_1.png)
+![image_1](../../images/jenkins_multi_ci_cd_image_1.png)
 
-[image_2](../../images/jenkins_multi_ci_cd_image_2.png)
+![image_2](../../images/jenkins_multi_ci_cd_image_2.png)
 
-[image_3](../../images/jenkins_multi_ci_cd_image_3.png)
+![image_3](../../images/jenkins_multi_ci_cd_image_3.png)
 
-[image_4](../../images/jenkins_multi_ci_cd_image_4.png)
+![image_4](../../images/jenkins_multi_ci_cd_image_4.png)
