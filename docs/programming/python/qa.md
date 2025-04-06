@@ -1509,13 +1509,298 @@ print(even_nums)
 from collections import Counter
 
 def count_each_vowel():
-    s= "I am goinf outside for lunch. will be back by another thirty minutes"
+    s= "I am going outside for lunch. will be back by another thirty minutes"
     vowels = "aeiouAEIOU"
     vowel_counts = Counter(char for char in s if char in vowels)
     print(vowel_counts)
 
-
 count_each_vowel()
+```
+
+**Reverse a String Without Using Slicing**
+
+```python
+def reverse_string(s):
+    result = ''
+    for char in s:
+        result = char + result
+    return result
+
+print(reverse_string("DevOpsEngineer"))  # reenignEsPOveD
+```
+
+**Sort a Dictionary by Value**
+
+```python
+def sort_dict_by_value(d):
+    return dict(sorted(d.items(), key=lambda item: item[1]))
+
+print(sort_dict_by_value({'a': 3, 'b': 1, 'c': 2}))  # {'b': 1, 'c': 2, 'a': 3}
+```
+
+**Check for Anagrams**
+
+```python
+def are_anagrams(s1, s2):
+    return sorted(s1) == sorted(s2)
+
+print(are_anagrams("listen", "silent"))  # True
+```
+
+**Find the Frequency of Each Element in a List**
+
+```python
+from collections import Counter
+
+lst = [1, 2, 2, 3, 4, 4, 4]
+print(dict(Counter(lst)))  # {1:1, 2:2, 3:1, 4:3}
+```
+
+**Read a File and Count Word Frequency**
+
+```python
+def count_words(filepath):
+    with open(filepath) as f:
+        words = f.read().split()
+    return dict(Counter(words))
+
+# count_words("test.txt")
+```
+
+**Find All Pairs in List That Sum to Target**
+
+```python
+def find_pairs(lst, target):
+    seen = set()
+    result = set()
+    for num in lst:
+        diff = target - num
+        if diff in seen:
+            result.add((min(num, diff), max(num, diff)))
+        seen.add(num)
+    return result
+
+print(find_pairs([2, 4, 3, 5, 7], 7))  # {(3, 4), (2, 5)}
+```
+
+**Rotate a List by k Elements**
+
+```python
+def rotate_list(lst, k):
+    k = k % len(lst)
+    return lst[-k:] + lst[:-k]
+
+print(rotate_list([1,2,3,4,5], 2))  # [4,5,1,2,3]
+```
+
+**Flatten a Nested List**
+
+```python
+def flatten(lst):
+    result = []
+    for item in lst:
+        if isinstance(item, list):
+            result.extend(flatten(item))
+        else:
+            result.append(item)
+    return result
+
+print(flatten([1, [2, [3, 4], 5], 6]))  # [1,2,3,4,5,6]
+```
+
+ **Find Duplicate Characters in a String**
+
+ ```python
+ def find_duplicates(s):
+    return [char for char, count in Counter(s).items() if count > 1]
+
+print(find_duplicates("programming"))  # ['r', 'g', 'm']
+ ```
+
+**Check Armstrong Number**
+
+```python
+def is_armstrong(n):
+    power = len(str(n))
+    return sum(int(d) ** power for d in str(n)) == n
+
+print(is_armstrong(153))  # True
+```
+
+**List All Prime Numbers in a Range**
+
+```python
+def primes_in_range(start, end):
+    return [n for n in range(start, end+1) if is_prime(n)]
+
+print(primes_in_range(10, 30))
+```
+
+**Capitalize First Letter of Each Word in a String**
+
+```python
+def capitalize_words(s):
+    return ' '.join(word.capitalize() for word in s.split())
+
+print(capitalize_words("hello devops team"))  # Hello Devops Team
+```
+
+**Validate IPv4 Address**
+
+```python
+import re
+
+def is_valid_ip(ip):
+    pattern = re.compile(r"^(25[0-5]|2[0-4]\d|1?\d{1,2})(\.(25[0-5]|2[0-4]\d|1?\d{1,2})){3}$")
+    return bool(pattern.match(ip))
+
+print(is_valid_ip("192.168.1.1"))  # True
+```
+
+**Merge Two Dictionaries**
+
+```python
+def merge_dicts(d1, d2):
+    return {**d1, **d2}
+
+print(merge_dicts({'a': 1}, {'b': 2}))  # {'a':1, 'b':2}
+```
+
+**Implement a Decorator to Measure Function Execution Time**
+
+```python
+import time
+
+def timer(func):
+    def wrapper(*args, **kwargs):
+        start = time.time()
+        result = func(*args, **kwargs)
+        print(f"Executed in {time.time() - start:.4f} seconds")
+        return result
+    return wrapper
+
+@timer
+def slow_function():
+    time.sleep(1)
+    return "done"
+
+print(slow_function())
+```
+
+**JSON Parsing and Writing**
+
+```python
+import json
+
+data = {"name": "DevOps", "role": "SRE"}
+
+# Convert to JSON string
+json_string = json.dumps(data)
+
+# Convert back to dict
+parsed_data = json.loads(json_string)
+
+print(json_string)     # {"name": "DevOps", "role": "SRE"}
+print(parsed_data)     # {'name': 'DevOps', 'role': 'SRE'}
+```
+
+ **Check if a List is Sorted**
+ ```python
+ def is_sorted(lst):
+    return lst == sorted(lst)
+
+print(is_sorted([1, 2, 3, 4]))  # True
+print(is_sorted([1, 3, 2]))    # False
+```
+
+**Find the First Non-Repeating Character**
+
+```python
+from collections import Counter
+
+def first_non_repeating(s):
+    counts = Counter(s)
+    for char in s:
+        if counts[char] == 1:
+            return char
+    return None
+
+print(first_non_repeating("aabbccdef"))  # d
+```
+
+**Move All Zeros to the End of the List**
+```python
+def move_zeros(lst):
+    non_zeros = [x for x in lst if x != 0]
+    return non_zeros + [0] * (len(lst) - len(non_zeros))
+
+print(move_zeros([0, 1, 0, 3, 12]))  # [1, 3, 12, 0, 0]
+```
+
+**Count Occurrences of Each Word in a String**
+
+```python
+def word_frequency(s):
+    words = s.lower().split()
+    return dict(Counter(words))
+
+print(word_frequency("This is a test. This test is simple."))
+```
+
+**Check if Two Strings are Rotations of Each Other**
+
+```python
+def is_rotation(s1, s2):
+    return len(s1) == len(s2) and s2 in (s1 + s1)
+
+print(is_rotation("abcd", "cdab"))  # True
+```
+
+**Find Second Largest Number in List**
+
+```python
+def second_largest(lst):
+    unique = list(set(lst))
+    unique.sort()
+    return unique[-2] if len(unique) >= 2 else None
+
+print(second_largest([4, 1, 3, 2, 5]))  # 4
+```
+
+**Check Leap Year**
+
+```python
+def is_leap(year):
+    return (year % 4 == 0 and year % 100 != 0) or (year % 400 == 0)
+
+print(is_leap(2024))  # True
+```
+
+**Extract Digits from a String**
+
+```python
+def extract_digits(s):
+    return [int(char) for char in s if char.isdigit()]
+
+print(extract_digits("abc123xyz456"))  # [1, 2, 3, 4, 5, 6]
+```
+
+**Find Common Elements in Two Lists**
+
+```python
+def common_elements(a, b):
+    return list(set(a) & set(b))
+
+print(common_elements([1, 2, 3], [2, 3, 4]))  # [2, 3]
+```
+
+**Sum of All Digits in a String**
+
+```python
+def sum_of_digits(s):
+    return sum(int(char) for char in s if char.isdigit())
+
+print(sum_of_digits("abc123xyz"))  # 6
 ```
 
 ## Builtins
