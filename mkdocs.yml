@@ -80,6 +80,9 @@ nav:
                             - "overview": "cicd/tekton/overview.md"
                             - "concepts": "cicd/tekton/concepts.md"
                             - "pipelines": "cicd/tekton/tasks_pipelines.md"
+                  - "argocd":
+                            - "overview": "cicd/argocd/overview.md"
+                            - "install": "cicd/argocd/install.md"
 
         - "vcontroller":
                   - "Overview": "vcontroller/git/overview.md"
