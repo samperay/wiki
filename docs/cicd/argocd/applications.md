@@ -243,5 +243,67 @@ TODO:
 - [ ] create token
 - [ ] using the token, try deleting...
 
+## repository
+
+You can add your private repo as well to the Argocd, just make sure you pass your `git-creds` and `application id`. 
+
+https://argo-cd.readthedocs.io/en/stable/user-guide/private-repositories/#github-app-credential
 
 
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: private-repo-https
+  namespace: argocd
+  labels:
+    argocd.argoproj.io/secret-type: repository
+stringData:
+  type: git
+  url: https://github.com/mabusaa/argocd-example-apps-private.git
+  password: # password goes here, NOTE: dont push secrets into git, use sealed secrets as a solution for secrets in gitops.
+  username: my-token
+```
+
+```yaml
+#private-repo-creds-https.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: private-repo-creds-https
+  namespace: argocd
+  labels:
+    argocd.argoproj.io/secret-type: repo-creds
+stringData:
+  type: git
+  url: https://github.com/mabusaa
+  password: # password goes here, NOTE: dont push secrets into git, use sealed secrets as a solution for secrets in gitops.
+  username: my-token
+```
+
+```yaml
+# private-repo-ssh.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: private-repo-ssh
+  namespace: argocd
+  labels:
+    argocd.argoproj.io/secret-type: repository
+stringData:
+  type: git
+  url: git@github.com:mabusaa/argocd-example-apps-private.git
+  sshPrivateKey: |
+    -----BEGIN OPENSSH PRIVATE KEY-----
+     # key goes here  NOTE: dont push secrets into git, use sealed secrets as a solution for secrets in gitops.
+    -----END OPENSSH PRIVATE KEY-----
+```
+
+TODO
+
+- [ ] Clone the repo and make it private. i.e create empty repo, copy files and then push src code.
+- [ ] Create a secret uing username password or API token in argocd namespace 
+- [ ] Go to UI and check for repository, you would see the repo getting connected..
+- [ ] Create a new application providing the priavte repo url as source of manifest
+- [ ] Try for adding HTTPS/SSH connection as well.  
+- [ ] Validate if application created and OutOfsync from "Web UI"
