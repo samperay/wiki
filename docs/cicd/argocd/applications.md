@@ -174,3 +174,74 @@ TODO:
 - [ ] create application in that namespace to chekc if deployment is successful
 - [ ] Describe the logs for the application incase there's issue
 - [ ] Modify the logs according to the namespace and you would not be able to run the app
+
+## Roles
+
+Enable you to create a role with set of policies "permission" to grant access to a project applications. fine-grained access control within a project using RBAC (Role-Based Access Control).
+
+You can:
+
+- Create custom roles for a project
+- Assign JWT tokens (like service accounts) for automation or scripts
+- Define what actions are allowed on what applications
+
+Example: 
+
+```yaml
+# ci-role.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: project-with-role
+  namespace: argocd
+spec:
+  description: project-with-role description
+  sourceRepos:
+  - '*'
+
+  destinations:
+  - namespace: '*'
+    server: '*'
+
+  clusterResourceWhitelist:
+  - group: '*'
+    kind: '*'
+
+  namespaceResourceWhitelist:
+  - group: '*'
+    kind: '*'
+
+  roles:
+  - name: ci-role
+    description: Sync privileges for project-with-role
+    policies:
+    - p, proj:project-with-role:ci-role, applications, sync, project-with-role/*, allow
+```
+
+- all sources
+- all destinations
+- all clusters and namespace scoped resources
+- define role
+- defined role with sync to all applications in the same project. 
+- create token related to this role
+- try to delete application using the token which will be `denied` by cluster.
+
+```
+argocd proj role create-token ci-role
+```
+
+using cli, try to delete some other application using the above token, you will get "action denied" because this token don't have an access to delete.
+
+```
+argocd app list 
+argocd app delete <project> --auth-token etrasdSaaweSxcese.....
+```
+
+TODO:
+
+- [ ] run "ci-role.yaml" 
+- [ ] create token
+- [ ] using the token, try deleting...
+
+
+

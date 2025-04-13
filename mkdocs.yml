@@ -84,6 +84,7 @@ nav:
                             - "overview": "cicd/argocd/overview.md"
                             - "install": "cicd/argocd/install.md"
                             - "applications": "cicd/argocd/applications.md"
+                            - "faq": "cicd/argocd/faq.md"
         - "vcontroller":
                   - "Overview": "vcontroller/git/overview.md"
                   - "faq": "vcontroller/git/faq.md"
