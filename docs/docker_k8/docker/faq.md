@@ -177,3 +177,18 @@ pipeline {
 - Inspect container networking: ```docker inspect my_container | grep "IPAddress"```
 - Exec into the container: ```docker exec -it my_container /bin/sh```
 - check port binding: ```docker run -p 8080:80 my_app```
+
+
+**"/bin/bash" Exited few seconds ago** 
+
+A container lives as long as a process within it is running. If an application in a container crashes, container exits.
+
+unlike in other application programs like httpd, nginx, mysqld bash is not a process which is running. infact its a shell process which is listening for the input, when it don't get, it would exit the container.
+
+If we want to make the shell listen to some command for execution, you can find the below one. 
+
+so we can make the container to sleep 30 seconds. 
+
+```
+docker run ubuntu:18.04 sleep 30s
+```

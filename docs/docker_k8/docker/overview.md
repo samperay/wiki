@@ -126,19 +126,87 @@ curl http://localhost:<port>
 docker inspect nginx-server2
 ```
 
-
 ## CMD Vs ENTRYPOINT
 
-An ENTRYPOINT allows us to configure a container that will run as an executable.
+*CMD* provides a default arguments for the container also can be overridden when its running. 
 
-Any command line arguments passed to docker run  will be appended to the entrypoint command, and will override all elements specified using CMD. For example, docker run  bash will add the command argument bash to the end of the entrypoint.
+```Dockerfile
+FROM Ubuntu:20.04 
+CMD ["echo", "Hello from CMD"]
+
+# docker build -t cmd-example . 
+# docker run cmd-example # Output: Hello from CMD
+# docker run cmd-example "hi there" # Output: hi there
+```
+
+An ENTRYPOINT provides a fixed comamnd to run when container starts. its harder to override. Arguments passed during `docker run` are appended to ENTRYPOINT
+
+```Dockerfile
+FROM ubuntu:20.04
+ENTRYPOINT ["echo", "hello from ENTRYPOINT"]
+
+# docker build -t entrypoint-example . 
+# docker run entrypoint-example # output hello from ENTRYPOINT
+# docker run entrypoint-example "hi there" # output: hello from ENTRYPOINT hi there
+```
 
 Containers are meant to run a task or a process. A container lives as long as a process within it is running. If an application in a container crashes, container exits.
 
-who defines which process should be running inside a container? CMD tells the Docker which program shoud be run when the container starts.
-
 Difference between the CMD and ENTRYPOINT with related to the supplied to the "docker run" command. While the CMD will be completely over-written by the supplied command (or args), for the ENTRYPOINT, the supplied command will be appended to it.
 
+```
+# Dockerfile
+FROM ubuntu:20.04
+
+ENTRYPOINT ["echo"]
+CMD ["Hello from CMD"]
+
+docker build -t combined-example .
+docker run combined-example                    # Output: Hello from CMD
+docker run combined-example "Custom Message"   # Output: Custom Message
+```
+
+### Example
+
+Let's understand it with an ubuntu-sleeper example. 
+
+When you want to make a container run, it would check for the CMD to run the process, but when we have a bash which is just a listening terminal to get the input and if we don't provide it, it would just exit the conatiner. 
+
+
+
+```
+docker run ubutu:20.04 sleep 30 # provide an input to bash terminal for 30 sec.
+```
+
+Let's make a docker equivalent file for above command
+
+```Dockerfile
+FROM ubuntu:20.04
+CMD ["sleep", "30"]
+
+docker build -t ubuntu-sleep .
+docker run ubuntu-sleep
+```
+
+Container always sleep 30 sec once it started ! 
+So what if we need to change the time ? i.e sleep 10 ? 
+Since its hardcoded, we would now want to make it parametrized.. 
+
+```Dockerfile
+FROM ubuntu:20.04
+CMD ["30"]
+ENTRYPOINT ["sleep"]
+
+docker build -t ubuntu-sleep .
+docker run ubuntu-sleep # sleep for 30s when no args are passed
+docker run ubuntu-sleep 10 # sleep for 10 sec # observe that CMD has been overwritten for ENTRYPOINT
+```
+
+incase you want to override the command itself in the ENTRYPOINT, then..
+
+```
+docker run --entrypoint new-sleep-command ubuntu-sleep 60
+```
 
 ## Dockerfile 
 
@@ -163,3 +231,87 @@ Difference between the CMD and ENTRYPOINT with related to the supplied to the "d
 
 - **ENTRYPOINT** allows us to configure a container that will run as an executable.
 
+### Example 
+
+lets create Dockerfile and check above actions 
+
+```Dockerfile
+FROM ubuntu:20.04
+MAINTAINER samperay
+
+RUN apt-get update && apt-get install htop
+WORKDIR /root
+ENV TAG Dev
+
+# build image
+
+docker build -t demo . 
+docker images
+docker run -it --rm demo -- /bin/bash
+
+# insise docker image
+$ pwd
+/root 
+$ echo $TAG
+Dev
+$ 
+```
+
+Now, lets create a script and make it to run from the container
+
+```bash
+# run.sh
+
+#!/bin/sh
+echo "The current directory : $(pwd)"
+echo "The Tag variable : $TAG"
+echo "There are $# arguments: $@"
+```
+
+```Dockerfile
+FROM ubnutu:20.04
+WORKDIR /root
+ENV TAG Dev
+ADD run.sh /root/run.sh
+RUN chmod +x ./root/run.sh
+CMD ["./run.sh"]
+
+
+docker build -t demo1 . 
+docker run -it --rm demo1
+docker container run -it --rm demo1 ./run.sh Hello Sunil
+
+# outputs 
+echo "The current directory : $(pwd)"
+echo "The Tag variable : $TAG"
+echo "There are $# arguments: $@"
+```
+
+Let's discuss about the `CMD` and `ENTRYPOINT` in above code. since we pass arguments, we can use that using CMD options to provide as an input to ENTRYPOINT.
+
+
+```Dockerfile
+FROM ubnutu:20.04
+WORKDIR /root
+ENV TAG Dev
+ADD run.sh /root/run.sh
+RUN chmod +x ./root/run.sh
+ENTRYPOINT ["./run.sh"]
+CMD ["arg1"]
+
+
+docker build -t demo2 . 
+docker run -it --rm demo2  
+
+# Output: 
+echo "The current directory : /root"
+echo "The TAG variable : Dev"
+echo "There are 1 arguments: arg1"
+
+
+docker container run -it --rm demo1 /bin/bash
+
+echo "The current directory : /root"
+echo "The TAG variable : Dev"
+echo "There are 1 arguments: /bin/bash"
+```
