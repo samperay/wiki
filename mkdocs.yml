@@ -59,10 +59,17 @@ nav:
                         - "Overview": "docker_k8/docker/overview.md"
                         - "FAQ": "docker_k8/docker/faq.md"
                   - "k8":
-                        - "app_issues": 
-                                - "kube refresher": "docker_k8/k8/app_issues/kube_refresher.md"
-                                - "kube issues": "docker_k8/k8/app_issues/kube_issues.md"
-                        - "Overview": "docker_k8/k8/overview.md"
+                        - "architecture": "docker_k8/k8/architecture.md"
+                        - "deployment": "docker_k8/k8/deployment.md"
+                        - "scheduling": "docker_k8/k8/scheduling.md"
+                        - "networking": "docker_k8/k8/networking.md"
+                        - "storage": "docker_k8/k8/storage.md"
+                        - "applifecyclemgmt": "docker_k8/k8/applifecyclemgmt.md"
+                        - "clustermaintenance": "docker_k8/k8/clustermaintenance.md"
+                        - "security": "docker_k8/k8/security.md"
+                        - "troubleshooting": 
+                                - "issues": "docker_k8/k8/troubleshooting/issues.md"
+                                - "overview": "docker_k8/k8/troubleshooting/overview.md"
 
         - "cicd":
                   - "Overview": "cicd/overview.md"
