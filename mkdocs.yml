@@ -182,6 +182,15 @@ nav:
                 - "aritficial intelligence":
                         - "Overview": "ds_ai_ml/ai/overview.md"
 
+                - "mlops": 
+                        - Overview: "ds_ai_ml/mlops/overview.md"
+                        - "Introduction": "ds_ai_ml/mlops/introduction.md"
+                        - "Data":  "ds_ai_ml/mlops/data.md"
+                        - "Models": "ds_ai_ml/mlops/models.md"
+                        - "Insurance Claim": "ds_ai_ml/mlops/project.md"
+                        - "Security": "ds_ai_ml/mlops/security_gov.md"
+                        - "AWS sagemaker": "ds_ai_ml/mlops/aws_sage_maker.md"
+
         - "nginx":
                 - "web server": "nginx/webserver_overview.md"
                 - "http protocol": "nginx/http_protocol.md"
