@@ -1,4 +1,4 @@
-# Pandas Olympics Cheat Sheet (.md)
+# Pandas Oneliners
 _A complete, example-driven quick reference using your [attached dataset](./olympics-data.xlsx) (`bios`, `results`). All examples are one-liners unless noted._
 
 ---
