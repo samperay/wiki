@@ -254,3 +254,5 @@ summary.to_markdown("summary.md", index=False)                                  
 ```
 
 ---
+
+[complete-pandas-tutorial](https://github.com/KeithGalli/complete-pandas-tutorial)
