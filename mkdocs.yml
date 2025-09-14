@@ -45,6 +45,8 @@ nav:
                             - "func methods": "programming/clean_code/methods.md"
                             - "control structures": "programming/clean_code/control_structure.md"
                             - "oop principles": "programming/clean_code/ooo.md"
+                  - "pandas": 
+                            - "overview": "programming/pandas/overview.md"
 
                   - "go":
                             - "overview": "programming/go/overview.md"
