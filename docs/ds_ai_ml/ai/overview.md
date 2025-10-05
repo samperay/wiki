@@ -1,94 +1,44 @@
-## AI Overview's
 
-- **AI:** Intelligent machines capable of performing tasks that are human intelligence capable of
-- **Machine Learning(ML):** subset of AI, that teaches to learn using data and improve overtime.
-- **Deep Learning(DL):** subset of ML, that uses complex algorithms, **neural networks** to handle complicated problems.
-- **GenAI**: subset of deep learning, understand training data, learn from it, and generate new content.
 
-![introduction](introduction.png)
+## Gen AU context
 
-There are two types of AI's: 
+![gen_ai_context](gen_ai_context.png)
 
-1. **Conventional systems**(i.e existing AI's): You gave them training data, the model learned from it, and then it either made predictions or classified the data into categories, or did language processing like translations, or did computer vision like what an image is.
+## AI Overvierw 
 
-2. **Generative AI**: We give the AI model lots of training data... much, much more than what we have typically given to the conventional AI system and based on this training data, based on the neural network that operates behind the scene, it is able to generate new content, whether it is text or image or video or anything.
+- making intelligient machines especially computer programs that simulate human intelligience and decision making
 
-One, for machines to be intelligent, to be accurate, you need to train them on large volume of data.
+e.g: self drivinf cars, recomendation engines from netwfils or ammazon
 
-![chatgpt](chatgpt.png)
+## ML Overvierw
 
-## key terminologies
+algorithm is trained using historival data to make predictions on the new data.
 
-### llm
+![ml_overview](ml_overview.png)
 
-large lang models, powerful AI model designed for understanding and generating human like text
-i.e LLM means only text...
+### supervisor learning
 
-the brain behing LM is specific type of nural network a.k.a **trnasformers**
-i.e the way they are arch such that they can understand language, meaning, context..etc
+algorithms(classic/regression) are trained to use labelled data. i.e raw data you annotate which will be provided to algorithm.
 
-key factors:
-- pre-trained - trained with huge amt of data.
-- size and scale.. you need to proivde more parameters and arguments for it so that they are very well trained.
-- fine tuning - more "targeted" traiining for more specific tasks..
+![supervised_learning](supervised_learning.png)
 
-examples, where to be used ?
+### unsupervisoed 
 
-- Content generation
-- chatbots and virtual assistants
-- lang transulations
-- text summarization 
-- Q&A 
+algorithms(Clustering/Association) are trained to use unlabelled data. i.e raw data you annotate which will be provided to algorithm.
 
-### prompt engineering
-process of crafting well-defined and structured input queries to interact with AI systems in order to get accurate and relevant responses. 
+![unsupervised_learning](unsupervised_learning.png)
 
-![prompt_engg](prompt_engg.png)
+### reinforcements
 
-Best practices
+train algorith on trail and error approach. 
 
-- clearly convey the desired response.
-- provide context or background info.
-- balance simplicity and complexity.
-- iterative testing and refinement.
+![reinforced_learning](reinforced_learning.png)
 
-### embedding
+## Deep learning and Artifical neural networks
 
-it's a numerical representation of text and they are essential for AI models to understand and work with human lang effectively.
+Artifical neural networks - mimic the structure of human brain
+Deep leanring - subset of ML, that focus on building artifical neural networks that can learn from data. 
 
-### fine tuning
+![artificial_neural_network](artificial_neural_network.png)
 
-process of adapting a pre-trained model to perform specific tasks or to cater to a particular domain more effectively.
-
-3 types:
-
-- self-supervised 
-- supervised (labelled training data)
-- reinforcement (based on the scores)
-
-what is not fine-tuning
-- Create intelligence from scratch
-- eliminating data requirement
-- no universal solution, based on the use-cases 
-- no magical one-time process
-
-![summary_ai](summary_ai.png)
-
-## GenAI usecases
-
-### software development
-
-![software_dev](software_dev.png)
-
-### retail
-
-![retail](retail.png)
-
-### marketing
-
-![marketing](marketing.png)
-
-## chatbot archtecture
-
-![chatbot_arch](chatbot_arch.png)
-
+![artificial_neural_network_1](artificial_neural_network_1.png)
