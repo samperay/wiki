@@ -181,7 +181,7 @@ nav:
                 - "data science":
                         - "Overview": "ds_ai_ml/ds/overview.md"
                 
-                - "aritficial intelligence":
+                - "AI":
                         - "Overview": "ds_ai_ml/ai/overview.md"
 
                 - "mlops": 

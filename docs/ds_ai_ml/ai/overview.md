@@ -80,7 +80,7 @@ What are tokens, parameters and temperature ?
 
 ### EC2 Compute AI service
 
-AWS Tranium and Inferentia - Train and deploy models using EC2 machines. compute infra
+AWS Tranium and Inferentia - Train and deploy models using EC2 machines.
 
 ![aws_ai_compute_infra](aws_ai_compute_infra.png)
 
