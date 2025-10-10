@@ -102,3 +102,23 @@ you are now using Amazon bedrock service instead of this traditional mode, but t
 ### Q developer
 
 ![aws_ai_q_developer](aws_ai_q_developer.png)
+
+## AWS Bedrock Arch
+
+![aws_bedrock_arch](aws_bedrock_arch.png)
+
+![impact_inference_params](impact_inference_params.png)
+
+### Randomness and diversity
+
+![impact_inference_params_1](impact_inference_params_1.png)
+
+### Length
+
+![impact_inference_params_2](impact_inference_params_2.png)
+
+### repetations 
+
+Available only in few models
+
+![impact_inference_params_3](impact_inference_params_3.png)
