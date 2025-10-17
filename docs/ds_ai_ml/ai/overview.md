@@ -122,3 +122,16 @@ you are now using Amazon bedrock service instead of this traditional mode, but t
 Available only in few models
 
 ![impact_inference_params_3](impact_inference_params_3.png)
+
+## AWS Lambda
+
+- Synchronous invocation
+- Async invocation
+- Stream based(polling)
+
+![aws_lambda_invocations](aws_lambda_invocations.png)
+
+
+## AWS API Gateway
+
+![aws_api_gw](aws_api_gw.png)
