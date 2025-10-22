@@ -135,3 +135,36 @@ Available only in few models
 ## AWS API Gateway
 
 ![aws_api_gw](aws_api_gw.png)
+
+## vectors
+
+![vectors_1](vectors_1.png)
+
+## embeddings model
+
+![embedding_model](embedding_model.png)
+
+![embedding_output](embedding_output.png)
+
+## Data Chunking
+
+![data_chunking](data_chunking.png)
+
+## Vector store
+
+![vector_store](vector_store.png)
+
+## Vector search 
+
+![vector_search](vector_search.png)
+
+## Cosing similarity
+
+alogorith: cosine
+
+![cosine_similarity](cosine_similarity.png)
+
+
+## k-nearest neighbor search
+
+![knn_algorithm](knn_algorithm.png)
