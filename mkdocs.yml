@@ -163,7 +163,9 @@ nav:
 
                   - "terraform":
                         - "overview": "cloud/terraform/overview.md"
+                        - "study guide" : "cloud/terraform/study_guide.md"
                         - "faq": "cloud/terraform/faq.md"
+                        
 
         - "secretmgmt":
                 - "vault": 
