@@ -449,9 +449,12 @@ A "backend" in Terraform determines how state is loaded and how an operation suc
 
 With a partial configuration, the remaining configuration arguments must be provided as part of the initialization process
 
-*Interactively*: Terraform will interactively ask you for the required values, unless interactive input is disabled.
-*File*: A configuration file may be specified via the init command line. To specify a file, use the *-backend-config=PATH* option when running terraform init.
-*Command-line key/value pairs*: Key/value pairs can be specified via the init command line. Note that many shells retain command-line flags in a history file, so this isn't recommended for secrets. To specify a single key/value pair, use the *-backend-config="KEY=VALUE"* option when running terraform init.
+**Interactively**: Terraform will interactively ask you for the required values, unless interactive input is disabled.
+
+**File**: A configuration file may be specified via the init command line. To specify a file, use the *-backend-config=PATH* option when running terraform init.
+
+**Command-line key/value pairs**: Key/value pairs can be specified via the init command line. Note that many shells retain command-line flags in a history file, so this isn't recommended for 
+secrets. To specify a single key/value pair, use the *-backend-config="KEY=VALUE"* option when running terraform init.
 
 **changing configuration**
 
