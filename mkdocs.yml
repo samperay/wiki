@@ -211,6 +211,9 @@ nav:
         - "softskills":
                 - "Overview": "softskills/overview.md"
                 - "leadership": "softskills/leadership.md"
+
+        - "kafka": 
+                - "Overview": "kafka/overview.md"
     
         - "jobdesc":
                 - "sre": "jobdesc/sre.md"
