@@ -1,16 +1,27 @@
-## Introduction
-
-
-![objectives](objectives.png)
-
+# Istio
 
 ## Monolithic 
 
-Includes all the infos of security/auth/code and so on in a big giant of code. 
+Includes all the infos of security/auth/code and so on in a big giant of code. Each service depends on a specific version of another, requiring the whole package to be deployed simultaneously and often involving database scripts. 
 
-![mono_bookinfo](mono_bookinfo.png) 
+Since all modules use the same programming language (Java) and share a single database, any issue—such as the Ratings module struggling with heavy data load—affects the entire system. Even minor updates require a full redeployment, making scalability and independent upgrades challenging.
 
-![micro_book_info](micro_book_info.png)
+![mono_bookinfo](./images/mono_bookinfo.png) 
+
+![mono_ball_of_mud](./images/mono_ball_of_mud.png)
+
+![micro_book_info](./images/micro_book_info.png)
+
+benefits of micro services over monolithic
+
+| **Benefit**                | **Description**                                                                                          |
+|-----------------------------|----------------------------------------------------------------------------------------------------------|
+| Independent Scaling         | The Ratings module can scale based on customer load.                                                    |
+| Faster Releases             | Independent deployments lead to smaller, less risky releases.                                           |
+| Technological Flexibility   | Teams can choose different programming languages for each service.                                      |
+| Enhanced Resilience         | Loose coupling increases the overall system resilience, simplifying monitoring, updates, and rollbacks. |
+| Manageability               | Maintaining smaller, autonomous applications reduces the risk of developing a "big ball of mud."        |
+
 
 pro of microservices:
 
@@ -20,7 +31,7 @@ pro of microservices:
 - system resilience and isolcation
 - indndependent  and easy to underdtand services.
 
-![micro_book_info_1](micro_book_info_1.png)
+![micro_book_info_1](./images/micro_book_info_1.png)
 
 The above one id problem as all the security modules are to be tied in 1 place proviing a very fat code. 
 
@@ -34,11 +45,18 @@ Cons of mictoservices
 
 ## service mesh
 
-Dedicated and configurable infra layer that handles the commuication beytween services without having to chanhe the code in the microservices architrecture.
+A service mesh is a dedicated, configurable infrastructure layer designed to manage service-to-service communications in microservices architectures without requiring modifications to your business code. With a service mesh, these tasks are offloaded to **sidecar proxies deployed alongside every microservice**. The network communication between services is managed by these proxies, which also form the data plane. The network communication between services is managed by these proxies, which also form the **data plane**. The proxies communicate with a central server-side component known as the **Control Plane**. The Control Plane oversees and directs all traffic entering and leaving the services, ensuring a larger, cohesive system.
 
-Proxy service is responsible for commucation betwereen the micro services to control plane forming a data plane. we would need to move out from our business logic i.e istio
+![service_mesh](./images/service_mesh.png)
 
-![service_mesh](service_mesh.png)
+
+| **Capability**     | **Description**                                                                                   | **Benefit**                                              |
+|--------------------|---------------------------------------------------------------------------------------------------|----------------------------------------------------------|
+| Service Discovery  | Automatically identifies the IP addresses and ports where services are exposed.                   | Simplifies inter-service communication without manual setup. |
+| Health Checks      | Continuously monitors the status of services and maintains a pool of healthy instances.           | Improves resilience and fault tolerance.                 |
+| Load Balancing     | Routes traffic intelligently toward healthy instances, isolating or bypassing failing ones.       | Optimizes resource usage and minimizes downtime.         |
+
+
 
 Responsible for ..
 
@@ -53,24 +71,32 @@ Responsible for ..
 
 ## istio
 
-It can be run only on the kubernetes cluster
+Istio's architecture is divided into two main parts: the **data plane** and the **control plane** and can be run only in kubernetes cluster.
 
-istio implements the proxy using high performance proxy called "envoy". thse talk to control plane using envoy. each of the envoy proxy containes an agent called "istio agent" which is responsible ofr passing configuration secrets for envoy proxy.  
+**Data plane:** 
 
-control plane consists of 3 components.
+consists of Envoy proxies that are deployed alongside each service instance (or pod). These proxies handle crucial functions such as load balancing, security, and observability
 
-- Citadel - Certificate generation
-- Pilot - service discovery 
-- Galley - validating config files
+**control plane**
+
+control plane manages and configures the proxies to **route traffic, enforce policies, and collect telemetry data**
+
+It has three main components
+
+- Citadel - Responsible for generating and managing certificates for secure communications.
+- Pilot - Handles service discovery and maintains routing configurations.
+- Galley - Validates configuration files to ensure correct settings.
 
 Above 3 combined in single service called `istiod`
 
-istio converts proxy of the mictoservices to an envoy 
+![istio_arch](./images/istio_arch.png)
+
+Within each pod, an **Istio agent** works in tandem with the **Envoy proxy**. The agent is responsible for **delivering configuration secrets** and other necessary data to ensure that the proxy operates correctly.
 
 ### install istion 
 
 - istioctl 
-- istion operator install 
+- istio operator install 
 - helm chats
 
 It will install istiod along with 2 other components 
@@ -258,3 +284,39 @@ deployment.apps/prometheus created
 root@controlplane ~ ➜ 
 
 ```
+
+## k8 network
+
+### kubernetes services
+
+For internal cluster communication, it’s crucial that pods can reliably locate and interact with each other. Although each pod is assigned its own IP, these addresses are temporary. The challenge then becomes how to enable a front-end, for instance, to consistently reach a back-end service even as individual pod IPs change. This is where Kubernetes Services become essential. 
+
+A backend service can be configured to target a set of backend pods. Because the service itself receives a stable IP address, there is no longer any need to monitor the dynamic IPs of the individual pods.
+
+**ClusterIP:**
+The default and most common service type, ClusterIP, exposes the service on an internal IP address within the cluster. This type is ideal for enabling communication between applications within the same cluster.
+
+**NodePort:**
+NodePort exposes the service on a specific port across all nodes in the cluster. This makes it possible to access the service externally, directly via the node IP addresses.
+
+**LoadBalancer:**
+This service type provisions an external load balancer (supported by select cloud providers) which routes traffic to the service. It extends the functionality of NodePort by providing enhanced traffic distribution and integration with cloud load-balancing solutions.
+
+### sidecar
+
+Understanding sidecars is essential when constructing multi-container Pods, as they enable **auxiliary functionalities that support the main application container**.
+
+the primary container runs the **core business logic of your application**, the sidecar container is dedicated to handling tasks such as:
+
+Log shipping
+Monitoring
+File loading
+Proxying
+
+Understanding and effectively utilizing sidecars in your Kubernetes deployments can lead to more resilient and maintainable applications by offloading supportive tasks from the main application container
+
+### envoy
+
+A proxy acts as an intermediary between a user and an application. Instead of embedding additional functionalities—such as TLS encryption, authentication, and request retries—directly into your application, these tasks can be offloaded to a proxy. This approach enables developers to concentrate on the core business logic while the proxy handles supplementary operations.
+
+Envoy operates both as a proxy and as a communication bus with advanced routing capabilities. Typically, Envoy is deployed as a sidecar container alongside your primary application containers. This design ensures that all inbound and outbound pod traffic is managed by Envoy, which enhances communication handling and offloads additional features from your application.
