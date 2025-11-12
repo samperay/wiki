@@ -1,10 +1,45 @@
 # Bash Overview
 
+Simple script to git checkout 
+
+```bash
+
+#!/bin/bash
+project="$1"
+branch="$2"
+
+project_dir="$(basename ${project} .git)"
+
+clone_project() {
+  if [ ! -d "/home/bob/git/${project_dir}" ]; then
+    cd /home/bob/git/
+    git clone ${project}
+    cd "${project_dir}"
+    git checkout "${branch}"
+  fi
+}
+
+git_checkout() {
+  cd "${project_dir}"
+  git checkout "${branch}"
+
+find_files() {
+  find . -type f | wc -l
+}
+clone_project
+git_checkout
+find_files
+
+```
+
 ## redirecting streams
 
-file descriptor - A unique identifier that the operating system assigns to a file when it is opened. 
+file descriptor - A unique identifier that the operating system assigns to a file when it is opened.
+
 0 - stdin 
+
 1 - stdout 
+
 2 - stderr
 
 we have two conditions that are there to redirect streams
@@ -29,8 +64,8 @@ echo "Suni lkumar@gmail.com" > email_file.txt
 cat email_file.txt 
 Suni lkumar@gmail.com -> observer there is missing 4th letter.
 exec 3<> email_file.txt # open the file with fd as 3
-read -n 4 <&3 # read 4 words by inputing fd 3 i.e email_file/txt
-echo -n "." >&3 # output 4th letter to the fd 3 i.e email_file/txt
+read -n 4 <&3 # read 4 words by inputing fd 3 i.e email_file.txt
+echo -n "." >&3 # output 4th letter to the fd 3 i.e email_file.txt
 exec 3>&- # close the fd 3
 
 cat email_file.txt 
