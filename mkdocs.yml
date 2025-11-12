@@ -73,7 +73,7 @@ nav:
                                 - "issues": "docker_k8/k8/troubleshooting/issues.md"
                                 - "overview": "docker_k8/k8/troubleshooting/overview.md"
                   - "istio": 
-                        - "Overview": "docker_k8/istio/overview.md"
+                        #- "Overview": "docker_k8/istio/overview.md"
                         - "Traffic Mgmt": "docker_k8/istio/traffic_mgmt.md"
 
         - "cicd":
