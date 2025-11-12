@@ -59,7 +59,8 @@ the above can also be changed to below syntax which is very common. `ls -z > fil
 **custom redirections**
 
 ###  single line modifications
-```
+
+```bash
 echo "Suni lkumar@gmail.com" > email_file.txt
 cat email_file.txt 
 Suni lkumar@gmail.com -> observer there is missing 4th letter.
