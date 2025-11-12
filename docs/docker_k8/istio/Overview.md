@@ -320,3 +320,90 @@ Understanding and effectively utilizing sidecars in your Kubernetes deployments 
 A proxy acts as an intermediary between a user and an application. Instead of embedding additional functionalities—such as TLS encryption, authentication, and request retries—directly into your application, these tasks can be offloaded to a proxy. This approach enables developers to concentrate on the core business logic while the proxy handles supplementary operations.
 
 Envoy operates both as a proxy and as a communication bus with advanced routing capabilities. Typically, Envoy is deployed as a sidecar container alongside your primary application containers. This design ensures that all inbound and outbound pod traffic is managed by Envoy, which enhances communication handling and offloads additional features from your application.
+
+
+## Minikube installation
+
+```bash
+# minik8.sh
+
+#!/usr/bin/env bash
+
+set -Eeuo pipefail
+
+# Description: start/stop local k8 cluster
+# Usage: ./script.sh {start/stop}
+# Author: Sunil Amperayani
+# Version: v0.0.1
+
+#action_id="$1"
+script_name="${0##*/}"
+
+log() {
+  local level="$1"
+  shift
+  echo "$(date '+%Y-%m-%d %H:%M:%S') - ${level} - ${1}"
+}
+
+usage() {
+cat <<EOF
+Usage: $script_name <start|stop|status|restart>
+
+Commands:
+start:   start minikube
+stop:    stop minikube
+status:  show cluster status
+restart: stop then start
+
+e.g:
+$script_name start
+$script_name stop
+EOF
+}
+
+start_cluster() {
+  log INFO "starting minikube.."
+  minikube start --driver=vfkit --network=nat
+  log INFO "start complete..!"
+}
+
+stop_cluster() {
+  log INFO "stopping minikube.."
+  minikube stop
+  log INFO "stopped"
+
+}
+
+main() {
+  if [[ $# -lt 1 ]]; then
+    usage
+    exit 1
+  fi
+
+  local action_id="$1"
+
+  case "${action_id}" in
+    start)          start_cluster;;
+    stop)           stop_cluster;;
+    -h|--help|help) usage;;
+     *)
+       log Error "unknown command: ${action_id}"
+       usage
+       exit 2
+   esac
+}
+
+main "$@"
+
+```
+
+
+➜  ~ minikube addons enable ingress
+💡  ingress is an addon maintained by Kubernetes. For any concerns contact minikube on GitHub.
+You can view the list of minikube maintainers at: https://github.com/kubernetes/minikube/blob/master/OWNERS
+    ▪ Using image registry.k8s.io/ingress-nginx/controller:v1.13.2
+    ▪ Using image registry.k8s.io/ingress-nginx/kube-webhook-certgen:v1.6.2
+    ▪ Using image registry.k8s.io/ingress-nginx/kube-webhook-certgen:v1.6.2
+🔎  Verifying ingress addon...
+🌟  The 'ingress' addon is enabled
+➜  ~
