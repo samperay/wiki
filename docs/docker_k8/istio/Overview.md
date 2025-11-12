@@ -1,5 +1,5 @@
 # Istio
-
+ 
 ## Monolithic 
 
 Includes all the infos of security/auth/code and so on in a big giant of code. Each service depends on a specific version of another, requiring the whole package to be deployed simultaneously and often involving database scripts. 
