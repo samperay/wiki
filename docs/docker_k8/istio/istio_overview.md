@@ -407,3 +407,119 @@ You can view the list of minikube maintainers at: https://github.com/kubernetes/
 🔎  Verifying ingress addon...
 🌟  The 'ingress' addon is enabled
 ➜  ~
+
+
+### Install demo setup
+
+```
+kubectl label namespace default istio-injection=enabled
+kubectl apply -f samples/bookinfo/platform/kube/bookinfo.yaml
+kubectl get pods
+```
+
+### Kiali dashboard
+
+```
+istio-1.20.8
+kubectl apply -f istio-1.20.8/samples/addons
+kubectl get pods -n istio-system
+
+kubectl get svc kiali -n istio-system
+NAME    TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)              AGE
+kiali   ClusterIP   10.107.21.94   <none>        20001/TCP,9090/TCP   119s
+
+
+➜  istio-1.28.0 istioctl dashboard kiali
+http://localhost:20001/kiali <- it will default to kiali dashboard
+```
+
+
+### Traffic generation kiali
+Configure gateway to accept traffic to service mesh from outside the cluster 
+
+```
+kubectl apply -f samples/bookinfo/networking/bookinfo-gateway.yaml
+gateway.networking.istio.io/bookinfo-gateway created
+virtualservice.networking.istio.io/bookinfo created
+
+
+➜  istio-1.28.0 istioctl analyze
+2025-11-14T04:45:08.984270Z	error	kube	translation function for core/v1alpha1/MeshConfig not found	controller=analysis-controller
+2025-11-14T04:45:08.984648Z	error	kube	translation function for core/v1alpha1/MeshNetworks not found	controller=analysis-controller
+
+✔ No validation issues found when analyzing namespace: default.
+➜  istio-1.28.0
+
+
+➜  istio-1.28.0 export INGRESS_HOST=$(minikube ip)
+➜  istio-1.28.0 echo $INGRESS_HOST
+192.168.106.3
+➜  istio-1.28.0
+
+➜  istio-1.28.0 export INGRESS_PORT=$(kubectl get svc istio-ingressgateway -n istio-system -o jsonpath='{.spec.ports[?(@.name=="http2")].nodePort}')
+➜  istio-1.28.0 echo $INGRESS_PORT
+32541
+➜  istio-1.28.0
+
+➜  istio-1.28.0 curl "http://$INGRESS_HOST:$INGRESS_PORT/productpage"
+
+
+Keep generating traffic to view services in kiali dashboard.
+
+while sleep 1; do curl -sS curl 'http://'"${INGRESS_HOST}"':'"${INGRESS_PORT}"'/productpage' &>/dev/null; done
+
+```
+
+
+
+![kiali_bookapp_info](./images/kiali_bookapp_info.png)
+
+
+we deleted the application to check how it would show in the kiali dashboard 
+
+```
+➜  istio-1.28.0 kubectl get deployments
+NAME             READY   UP-TO-DATE   AVAILABLE   AGE
+details-v1       1/1     1            1           58m
+productpage-v1   1/1     1            1           83s
+ratings-v1       1/1     1            1           58m
+reviews-v1       1/1     1            1           58m
+reviews-v2       1/1     1            1           58m
+reviews-v3       1/1     1            1           58m
+➜  istio-1.28.0 kubectl delete deployment productpage-v1
+deployment.apps "productpage-v1" deleted from default namespace
+➜  istio-1.28.0 kubectl get deployments
+NAME         READY   UP-TO-DATE   AVAILABLE   AGE
+details-v1   1/1     1            1           58m
+ratings-v1   1/1     1            1           58m
+reviews-v1   1/1     1            1           58m
+reviews-v2   1/1     1            1           58m
+reviews-v3   1/1     1            1           58m
+➜  istio-1.28.0
+```
+
+![app_stopped_working_kiali_graph](./images/app_stopped_working_kiali_graph.png)
+
+![traffic_5xx_errors](./images/traffic_5xx_errors.png)
+
+
+Get application back online...
+
+```
+istio-1.28.0 kubectl apply -f samples/bookinfo/platform/kube/bookinfo.yaml
+service/details unchanged
+serviceaccount/bookinfo-details unchanged
+deployment.apps/details-v1 unchanged
+service/ratings unchanged
+serviceaccount/bookinfo-ratings unchanged
+deployment.apps/ratings-v1 unchanged
+service/reviews unchanged
+serviceaccount/bookinfo-reviews unchanged
+deployment.apps/reviews-v1 unchanged
+deployment.apps/reviews-v2 unchanged
+deployment.apps/reviews-v3 unchanged
+service/productpage unchanged
+serviceaccount/bookinfo-productpage unchanged
+deployment.apps/productpage-v1 created
+➜  istio-1.28.0
+```
