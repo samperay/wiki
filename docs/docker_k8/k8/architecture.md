@@ -19,6 +19,17 @@ orchestrating all operations within the cluster. it exposes kubernetes API which
 
 Kube-apiserver is responsible for authenticating, validating requests, retrieving and Updating data in ETCD key-value store. In fact kube-apiserver is the only component that interacts directly to the etcd datastore. The other components such as kube-scheduler, kube-controller-manager and kubelet uses the API-Server to update in the cluster in thier respective areas.
 
+# Kubernetes Components Overview
+
+| **Component**      | **Role**                                                                 | **Command/Action Example**                        |
+|--------------------|--------------------------------------------------------------------------|---------------------------------------------------|
+| **kubectl**        | CLI tool to send API requests                                            | `kubectl get nodes`                               |
+| **Kube API Server**| Central component for processing, authenticating, and validating requests| Processes API requests and interacts with etcd    |
+| **Scheduler**      | Monitors API Server for unassigned pods and assigns them to worker nodes | Automatically assigns node to newly created pods  |
+| **Kubelet**        | Runs on worker nodes to manage pod lifecycle and report status           | Interacts with container runtime to deploy images |
+| **etcd**           | Distributed key-value store used for saving cluster configuration        | Stores all cluster state data                     |
+
+
 ### Control Managers
 Kube Controller Manager manages various controllers in kubernetes.
 

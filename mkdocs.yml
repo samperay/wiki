@@ -62,7 +62,8 @@ nav:
                         - "FAQ": "docker_k8/docker/faq.md"
                   - "k8":
                         - "architecture": "docker_k8/k8/architecture.md"
-                        - "deployment": "docker_k8/k8/deployment.md"
+                        - "kube reference": "docker_k8/k8/cmdref.md"
+                        - "core concepts": "docker_k8/k8/core.md"
                         - "scheduling": "docker_k8/k8/scheduling.md"
                         - "networking": "docker_k8/k8/networking.md"
                         - "storage": "docker_k8/k8/storage.md"
