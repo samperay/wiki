@@ -64,6 +64,7 @@ kubectl create deployment --image=nginx nginxdeployment --replicas=2 --dry-run=c
 kubectl create svc nodeport nginxdeps --tcp=80:80 -o yaml >>nginxdeps.yaml
 
 ```yaml
+# nginxdeps.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -82,7 +83,7 @@ spec:
         app: nginxdeps
     spec:
       containers:
-      - image: nginx
+      - image: sunlnx/mac4linux:v1
         name: nginx
 ---
 apiVersion: v1
@@ -98,7 +99,7 @@ spec:
     port: 80 # virtual port on the service within the cluster
     protocol: TCP
     targetPort: 80 # port on the Pod where the application listens 
-    # nodePort: 30008 # 
+    nodePort: 30008 # defined the static nodeport
   selector:
     app: nginxdeps
   type: NodePort # maps the external request to the specific port on the node

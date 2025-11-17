@@ -1,7 +1,9 @@
 # Application Life Cycle Management
 
 ## Rollout and Versioning in a Deployment
-when you first create deployment, it will create a rollout which trigger deployment ( e.g v1), future when the application is upgraded meaning when the container version is updated to a new one a new rollout is triggered and a new deployment revision is created named revision (v2).
+when you first create deployment, it will create a rollout which trigger deployment ( e.g v1), future when the application is upgraded meaning when the container version is updated to a new one a new rollout is triggered and a new deployment revision is created named revision (v2). These revisions help you track changes and enable rollbacks to previous versions if issues arise.
+
+Events indicate that the **old ReplicaSet is scaled down to zero before scaling up the new ReplicaSet**.
 
 ## Deployment Strategies
 
@@ -11,7 +13,7 @@ There are 2 types of deployment strategies
 - RollingUpdate (Default Strategy)
 
 ### Recreate
-One way to upgrade these to a newer version is to destroy all of these and then create newer versions of application instances meaning first destroy the running instances and then deploy the new instances of the new application version.
+One way to upgrade these to a newer version is to destroy all of these and then create newer versions of application instances meaning **first destroy the running instances and then deploy the new instances of the new application version**.
 
 The problem with this as you can imagine is that during the period after the older versions are down and before any newer version is up the application is down and inaccessible to users this strategy is known as the Recreate strategy.
 
@@ -25,20 +27,11 @@ It could be different things such as updating your application version by updati
 
 we run the kubectl apply command to apply the changes. A new rollout is triggered and a new revision after deployment is created.
 
-```
-$ kubectl create -f mywebapp.yaml
-$ kubectl get deployments
-$ kubectl apply -f mywebapp.yaml
-$ kubectl describe deployment mywebapp
-$ kubectl rollout status deployment/mywebapp
-$ kubectl rollout history deployment/mywebapp
-$ kubectl rollout undo deployment/mywebapp
-```
-This is imperative way of editing using kubectl. This will not be edited using the yaml definition.
-Suggested would be to use the declarative way to use this.
-
-```
-$ kubectl set image deployment/myapp-deployment nginx=nginx:1.9.1
+```yaml
+$ kubectl describe deployment nginxdeps
+$ kubectl rollout status deployment/nginxdeps
+$ kubectl rollout history deployment/nginxdeps
+$ kubectl rollout undo deployment/nginxdeps
 ```
 
 ## Configuring Applications
@@ -48,7 +41,7 @@ $ kubectl set image deployment/myapp-deployment nginx=nginx:1.9.1
 - Configuring Secrets
 
 ### Configuring Command and Arguments on applications
-Anything that is appended to the *docker run* command will go into the *args* property of the pod defination file in the form of an array. The *command* field corresponds to the *entrypoint* instruction in the Dockerfile
+specifying the command in a pod definition replaces the Dockerfile's ENTRYPOINT entirely, while the args field only overrides the default parameters defined by CMD.
 
 ```
 containers:
