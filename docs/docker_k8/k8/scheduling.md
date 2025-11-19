@@ -1,100 +1,42 @@
 # Scheduling
 
-If your kubernetes don't have a scheduler, then every POD has a field called NodeName that by default is not set. Once identified it schedules the POD on the node by setting the *nodeName* property to the name of the node by creating a binding object.
-
 ##  NodeName
 
-you can manually set to assign pods to that nodes by setting the property *nodeName* in your pod definition file while you create pod.
+You can make the pod run in a specific node using `nodeName`. 
 
-```
-kubectl create -f nodeName.yml
-kubectl delete -f nodeName.yml
-```
-
-```
-kubectl run nginx --image=nginx --dry-run=client --labels=app=nginx,tier=frontend -o yaml > nginx.yml
-
-vim nginx.yaml
-..
-   nodeName: node01
-...
-
-kubectl create -f nginx.yml
-kubectl get pods -l app-nginx
-```
+[pod scheduler](./cmdref.md#pod-scheduler)
 
 ## Labels & Selectors
-Labels and Selectors are standard methods to group things together. Labels are properties attach to each item. Selectors help you to filter these items
+Labels and Selectors are standard methods to group things together. Labels are properties attach to each item. 
+Selectors help you to filter these items
 
-you can select the pod using labels
-```
-kubectl get pods -l app=nginx
-kubectl get pods --selector app=nginx,type=front-end
-```
-```
-kubectl create deployment --image=sunlnx/kubenginx nginx-v5 --dry-run=client -o yaml > nginx-v5.yaml
-kubectl create deployment --image=sunlnx/kubenginx nginx-v4 --dry-run=client -o yaml > nginx-v4.yaml
-kubectl create deployment --image=sunlnx/kubenginx nginx-v3 --dry-run=client -o yaml > nginx-v3.yaml
-kubectl create deployment --image=sunlnx/kubenginx nginx-v2 --dry-run=client -o yaml > nginx-v2.yaml
-kubectl create deployment --image=sunlnx/kubenginx nginx-v1 --dry-run=client -o yaml > nginx-v1.yaml
-
-kubectl create -f nginx-v5.yaml
-kubectl create -f nginx-v4.yaml
-kubectl create -f nginx-v3.yaml
-kubectl create -f nginx-v2.yaml
-kubectl create -f nginx-v1.yaml
-
-kubectl expose deployment nginx-v1 --port 80 --type=NodePort
-kubectl expose deployment nginx-v2 --port 80 --type=NodePort
-kubectl expose deployment nginx-v3 --port 80 --type=NodePort
-kubectl expose deployment nginx-v4 --port 80 --type=NodePort
-kubectl expose deployment nginx-v5 --port 80 --type=NodePort
-
-kubectl get all -l version=v1
-kubectl get all -l version=v1,tier=frontend
-```
-## Annotations
-While labels and selectors are used to group objects, annotations are used to record other details for informative purpose
+[selctors](./cmdref.md#labels-and-selectors)
 
 # Taints and Tolerations
 
-Pod to node relationship and how you can restrict what pods are placed on what nodes.
-Taints and Tolerations are used to set restrictions on what pods can be scheduled on a node.
+Taints are applied on nodes.
 
-pods which are tolerant to particular taint will be scheduled on that node.
+Tolerations are applied on pods.
+
+✔ Taints repel pods # Only people with a matching pass can enter
+✔ Tolerations allow pods to schedule on tainted nodes .
+
+Pods must have the correct toleration to “pass through” the taint.
+
 there are 3 policies of taints:
 
-The taint effect defines what would happen to the pods if they do not tolerate the taint.
+The taint effect defines what would happen to the pods if they **do not tolerate the taint.**
 
-- NoSchedule
-- PreferNoSchedule
-- NoExecute
+- NoSchedule - Pod will NOT schedule unless it tolerates this taint
+- PreferNoSchedule - Avoid scheduling but not strictly enforced
+- NoExecute - New pods cannot schedule, existing pods are evicted
 
 The default policy of the any node is no taints so that any pod can be placed in any of the nodes.
 
 Default, master nodes have a **NoSchedule** so that there won't be any pods running on the master nodes.
 We would for the testing purpose *untaint* the node and then *revert* back
 
-```
-kubectl taint nodes master node-role.kubernetes.io/master- [ No taints and new pods will be created on this node ]
-kubectl taint nodes master node-role.kubernetes.io/master:NoSchedule [ tainted ]
-```
-Few more,
-```
-kubectl taint nodes kubenode01 env=qa:NoSchedule
-kubectl describe nodes kubenode01 | grep -i taint
-kubectl taint nodes kubenode01 env-
-kubectl describe nodes kubenode01 | grep -i taint
-kubectl taint nodes master node-role.kubernetes.io/master:NoSchedule-
-```
-
-```
-kubectl taint node minikube version=v1:NoSchedule
-kubectl create -f nginx-v1.yaml ==> pods are in pending as these didnt tolerate the taint
-kubectl create -f nginx-v2.yaml ==> pods in running state
-```
-
-Taints and Tolerations does not tell the pod to go to a particular node. Instead, it tells the node to only accept pods with certain tolerations.
+[taints and tolerations](./cmdref.md#taint-and-tolerations)
 
 # NodeSelector
 

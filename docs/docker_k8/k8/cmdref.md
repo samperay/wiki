@@ -58,6 +58,42 @@ spec:
   type: NodePort
 ```
 
+
+### pod scheduler 
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: nginx
+  name: nginx
+spec:
+  containers:
+  - image: nginx
+    name: nginx
+  nodeName: node01
+```
+
+### taint and tolerations
+
+```yaml
+
+kubectl taint node node01 node-role.kubernetes.io/control-plane:NoSchedule
+kubectl taint node node01 node-role.kubernetes.io/control-plane:NoSchedule-
+
+
+kubectl taint node node02 spray=mortein:NoSchedule # imperative method
+
+# pod definition using declarative method.
+tolerations:
+  - key: spray
+    value: mortein
+    effect: NoSchedule
+    operator: Equal
+```
+
+
 ## Deployment
 
 kubectl create deployment --image=nginx nginxdeployment --replicas=2 --dry-run=client -o yaml > nginxdeps.yaml
@@ -147,3 +183,12 @@ spec:
                           |
                           v
                    nginx serves response
+
+
+## labels and selectors
+
+```yaml
+kubectl get pods -l app=nginx
+kubectl get pods -l app=nginx tier=frontend
+kubectl get all -l app=nginx tier=frontend
+```
