@@ -41,17 +41,16 @@ $ kubectl rollout undo deployment/nginxdeps
 - Configuring Secrets
 
 ### Configuring Command and Arguments on applications
-specifying the command in a pod definition replaces the Dockerfile's ENTRYPOINT entirely, while the args field only overrides the default parameters defined by CMD.
 
-```
-containers:
-- name: ubuntu-sleeper
-  image: ubuntu-sleeper
-  command: ["sleep2.0"]
-  args: ["10"]
-```
+when you specify a command field in the Pod spec, it completely replaces both the Docker ENTRYPOINT and CMD. It doesn't append to or modify the ENTRYPOINT.
 
-### Configuring Environment Variables
+[](./cmdref.md#cmd-and-args)
+
+`python app.py --color green` - This would only happen if the Pod used args instead of command. 
+`python app.py` - the Pod manifest’s command: ["--color","green"] overrides the Dockerfile’s ENTRYPOINT (python app.py), not just the CMD
+
+
+### Configure env
 
 To set an environment variable set an *env* property in pod defination file.
 
