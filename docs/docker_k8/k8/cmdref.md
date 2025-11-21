@@ -251,3 +251,99 @@ spec:
     image: kodekloud/webapp-color
     command: ["--color","green"]
 ```
+
+
+## env variables
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    name: webapp-color
+  name: webapp-color
+  namespace: default
+spec:
+  containers:
+    - name: webapp-color
+      image: kodekloud/webapp-color
+      env:
+        - name: APP_COLOR
+          value: green
+```
+
+
+## config maps
+
+kubectl create configmap webapp-color --from-literal=APP_COLOR=darkblue --from-literal=APP_OTHER=green
+kubectl create configmap dbconfig --from-file=dbconfig.properties
+
+```yaml
+# configmap.yaml
+apiVersion: v1
+data:
+  APP_COLOR: darkblue
+  APP_OTHER: green
+kind: ConfigMap
+metadata:
+  name: webapp-color
+  namespace: default
+```
+
+### configmap into pod
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    name: webapp-color
+  name: webapp-color
+  namespace: default
+spec:
+  containers:
+    - name: webapp-color
+      image: kodekloud/webapp-color
+      env:
+        - name: APP_COLOR
+          valueFrom: 
+            configMapKeyRef:
+              name: webapp-config-map
+              key: APP_COLOR
+```
+
+## secrets
+
+kubectl create secret generic app-secret  --from-literal=DB_Host=mysql
+kubectl create secret generic app-secret --from-file=app_secret.properties
+
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: db-secret
+data:
+  DB_Host: c3FsMDE=
+  DB_User: cm9vdA==
+  DB_Password: cGFzc3dvcmQxMjM=
+```
+
+### inject secrets into pod
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: simple-webapp-color
+  labels:
+    name: simple-webapp-color
+spec:
+  containers:
+  - name: simple-webapp-color
+    image: simple-webapp-color
+    ports:
+    - containerPort: 8080
+    envFrom:
+    - secretRef:
+        name: db-secret
+```

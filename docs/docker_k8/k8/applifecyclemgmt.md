@@ -72,50 +72,14 @@ env:
 ## ConfigMaps
 
 There are 2 phases involved in configuring ConfigMaps.
-  First, create the configMaps, Second, Inject then into the pod.
 
-There are 2 ways of creating a configmap.
-#### Imperative
+1. create the configMaps
 
-```
-$ kubectl create configmap dbconfig --from-literal=DB_HOST="mysql_db" --from-literal=DB_PASSWORD= "mysql" --from-literal=DB_PORT=3306
+[config_maps](./cmdref.md#config-maps)
 
-$ kubectl create configmap dbconfig --from-file=dbconfig.properties (Another way)
-```
+2. Inject then into the pod.
 
-#### Declarative
-
-```
-apiVersion: v1
-kind: ConfigMap
-metadata:
-    name: dbconfig
-data:
-  DB_HOST: "mysql_db"
-  DB_PASSWORD: "mysql"
-  DB_PORT: "3306"
-```
-
-reference these config maps to the pods and then check by logging into the pod, you must be able to see the env variables.
-
-```
-containers:
-  - name: env-configmap
-    image: nginx
-    envFrom:
-      - configMapRef:
-          name: dbconfig
-```
-
-```
-kubectl get pods -o wide
-kubectl exec -it pod/pod-name sh
-env
-```
-There are other ways to inject configuration variables into pod
-
-- You can inject it as a single environment variable.
-- You can inject it as a file in a Volume.
+[config_maps_pod](./cmdref.md#configmap-into-pod)
 
 ## Secrets
 
@@ -124,6 +88,11 @@ How Kubernetes handles secrets ?
 - A secret is only sent to a node if a pod on that node requires it.
 - Kubelet stores the secret into a tmpfs so that the secret is not written to disk storage.
 - Once the Pod that depends on the secret is deleted, kubelet will delete its local copy of the secret data as well.
+
+[secrets](./cmdref.md#secrets)
+
+encoding: echo -n 'mysql' | base64
+decoding: echo -n 'bXlzcWw=' | base64 --decode
 
 ## Multi Container Pod
 There are at times you need to have an container which has two or more services required to be available ( e.g webserver & log agent). They need to co-exists and hence they are create/deleted at the same time. Such cases we are required to have multi container pods. They would share same namespaces, network isolations etc .
