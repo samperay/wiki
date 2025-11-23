@@ -347,3 +347,197 @@ spec:
     - secretRef:
         name: db-secret
 ```
+
+## Multicontainer pods
+
+### reguler multipod containers
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-redis
+  labels:
+    name: nginx-redis
+spec:
+  containers:
+      - name: nginx
+        image: nginx:latest
+      - name: redis
+        image: redis
+```
+
+### initcontainer
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: initcontainer
+  labels:
+    name: initcontainer
+spec:
+  containers:
+  - name: myapp-container
+    image: busybox:1.28
+    command: ['sh', '-c', 'echo The app is running! && sleep 3600']
+  initContainers:
+  - name: init-myservice
+    image: busybox
+    command: ['sh', '-c', 'git clone <some-repository-that-will-be-used-by-application> ; done;']
+```
+
+### multi_init
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: multi_init
+  labels:
+    name: multi_init
+spec:
+  containers:
+  - name: myapp-container
+    image: busybox:1.28
+    command: ['sh', '-c', 'echo The app is running! && sleep 3600']
+  initContainers:
+  - name: init-myservice
+    image: busybox:1.28
+    command: ['sh', '-c', 'until nslookup myservice; do echo waiting for myservice; sleep 2; done;']
+  - name: init-mydb
+    image: busybox:1.28
+    command: ['sh', '-c', 'until nslookup mydb; do echo waiting for mydb; sleep 2; done;']
+```
+
+### sidecar
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    name: app
+  name: app
+  namespace: elastic-stack
+spec:
+  initContainers:
+  - name: sidecar
+    image: kodekloud/filebeat-configured
+    restartPolicy: Always
+    volumeMounts:
+      - name: log-volume
+        mountPath: /var/log/event-simulator
+
+  containers:
+  - image: kodekloud/event-simulator
+    name: app
+    resources: {}
+    volumeMounts:
+    - mountPath: /log
+      name: log-volume
+
+  volumes:
+  - hostPath:
+      path: /var/log/webapp
+      type: DirectoryOrCreate
+    name: log-volume
+```
+
+
+## flask deployment app
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-web-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: flask-app
+  template:
+    metadata:
+      labels:
+        app: flask-app
+    spec:
+      containers:
+      - name: flask
+        image: rakshithraka/flask-web-app
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flask-web-app-service
+spec:
+  type: ClusterIP
+  selector:
+    app: flask-app
+  ports:
+   - port: 80
+     targetPort: 80 
+```
+
+## HPA
+
+kubectl autoscale deployment nginx-deployment --max=3 --cpu-percent=80
+kubectl get hpa
+kubectl event hpa
+
+
+This command configures the "my-app" deployment to maintain 50% CPU utilization, scaling the number of pods between 1 and 10:
+kubectl autoscale deployment my-app --cpu-percent=50 --min=1 --max=10
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    app: nginx
+spec:
+  replicas: 7
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.14.2
+        ports:
+        - containerPort: 80
+        resources:
+         requests: # manual setting hpa limits
+           cpu: 100m  
+         limits:
+           cpu: 200m
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: nginx-deployment
+spec:
+  minReplicas: 1
+  maxReplicas: 3
+  metrics:
+  - resource:
+      name: cpu
+      target:
+        averageUtilization: 80
+        type: Utilization
+    type: Resource
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: nginx-deployment
+status:
+  currentMetrics: null
+  desiredReplicas: 0
+  currentReplicas: 0
+```

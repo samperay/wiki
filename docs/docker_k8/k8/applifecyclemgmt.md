@@ -94,67 +94,46 @@ How Kubernetes handles secrets ?
 encoding: echo -n 'mysql' | base64
 decoding: echo -n 'bXlzcWw=' | base64 --decode
 
-## Multi Container Pod
-There are at times you need to have an container which has two or more services required to be available ( e.g webserver & log agent). They need to co-exists and hence they are create/deleted at the same time. Such cases we are required to have multi container pods. They would share same namespaces, network isolations etc .
+## MultiContainer Pod
+There are at times you need to have an container which has two or more services required to be available ( e.g webserver & log agent). They need to co-exists and hence they are create/deleted at the same time. Such cases we are required to have multi container pods. They would share same namespaces, network isolations etc but we are not sure as to which would start first. 
 
-There are 3 common patterns, when it comes to designing multi-container PODs. The first and what we just saw with the logging service example is known as a *side car pattern*. The others are the adapter and the ambassador pattern.
+There are 3 common patterns, when it comes to designing multi-container PODs. 
 
+- **regular co-existing containers** (app and db)
 
-```
-spec:
-  containers:
-      - name: nginx
-        image: nginx:latest
-      - name: redis
-        image: redis
-```
-what incase if you require any container to be run only once in the multi pod container ?
-i.e to pull a code or binary from a repository that will be used by the main web application. That is a task that will be run only  one time when the pod is first created. Or a process that waits  for an external service or database to be up before the actual application starts
+[multicontainerpods](./cmdref.md#reguler-multipod-containers)
 
-Those can be configured as *initContainers*.
+- **init containers** (start before main application as helper and dies once done. (api startup or db ready))
 
-## initContainers
-An initContainer is configured in a pod like all other containers, except that it is specified inside a initContainers section,  like this:
+[initcontainer](./cmdref.md#initcontainer)
 
-```
-spec:
-  containers:
-  - name: myapp-container
-    image: busybox:1.28
-    command: ['sh', '-c', 'echo The app is running! && sleep 3600']
-  initContainers:
-  - name: init-myservice
-    image: busybox
-    command: ['sh', '-c', 'git clone <some-repository-that-will-be-used-by-application> ; done;']
-```
+[multi_init_containers](./cmdref.md#multi_init)
 
-When a POD is first created the initContainer is run, and the process in the initContainer must run to a completion before the real container hosting the application starts.
+- **sidecar containers** (starts before the application and continues to run.(istio, file beat etc))
 
-You can configure multiple such initContainers as well, like how we did for multi-pod containers. In that case each init container is run one at a time in sequential order.
-
-```
-  containers:
-  - name: myapp-container
-    image: busybox:1.28
-    command: ['sh', '-c', 'echo The app is running! && sleep 3600']
-  initContainers:
-  - name: init-myservice
-    image: busybox:1.28
-    command: ['sh', '-c', 'until nslookup myservice; do echo waiting for myservice; sleep 2; done;']
-  - name: init-mydb
-    image: busybox:1.28
-    command: ['sh', '-c', 'until nslookup mydb; do echo waiting for mydb; sleep 2; done;']
-```
-
-# Liveness, Readiness, Startup probes
-
-Many applications running for long periods of time eventually transition to broken states, and cannot recover except by being restarted. Kubernetes provides liveness probes to detect and remedy such situations.
-
-kubelet uses readiness probes to know when a container is ready to start accepting traffic. one use of this signal is to control which pods are used as backend for services. when pod is not ready, its removed from service LB. Sometimes, applications are temporarily unable to serve traffic. For example, an application might need to load large data or configuration files during startup, or depend on external services after startup. In such cases, you don't want to kill the application, but you don't want to send it requests either. Kubernetes provides readiness probes to detect and mitigate these situations
-
-kubelet uses startup probes to know when a container application has started. if any such probe is configured, it disables liveness and readiness checks until it succeeds. Sometimes, you have to deal with legacy applications that might require an additional startup time on their first initialization. In such cases, it can be tricky to set up liveness probe parameters without compromising the fast response to deadlocks that motivated such a probe
+[sidecar](./cmdref.md#sidecar)
 
 
+## autoscaling
 
-References:
-https://kubernetes.io/docs/tasks/debug-application-cluster/get-shell-running-container/
+Two primary scaling strategies in Kubernetes:
+
+- Scaling workloads – adding or removing containers (Pods) in the cluster.
+  - **Horizontal scaling**: Create more Pods.
+  - **Vertical scaling**: Increase resource limits and requests for existing Pods.
+
+- Scaling the underlying cluster infrastructure – adding or removing nodes (servers) in the cluster.
+  - **Horizontal scaling**: Add more nodes to the cluster.
+  - **Vertical scaling**: Increase resources (CPU, memory) on existing nodes
+
+
+### HPA
+
+**Horizontal Pod Autoscalar**
+
+[hpa](./cmdref.md#hpa)
+
+### VPA
+
+**Vertical Pod Autoscalar**
+
