@@ -15,7 +15,7 @@ Communication between the applications within cluster is defined by *network pol
 
 there are two types of users,
 
-- users ( admin/developer)
+- users (admin/developer)
 - service accounts (third party for service integrations, bots )
 
 All the user access is managed by API server and all requests go through it.
@@ -48,28 +48,17 @@ static file and token would be the easiest but not recommended, instead use *rol
 
 A certificate is used to gurantee trust between 2 parties during a transaction. tls certificates ensure that the communication between them is encrypted.
 
-### Symmetric
-
-It uses the same key to encrypt and decrypt the data and the key has to be exchanged between the sender and the receiver
-
-### Asymmetric
-
-Instead of using single key to encrpyt and decrypt data, asymmetric encryption uses a pair of keys, a private key and a public key.
-
-## Certificate naming conventions
-*certificate public key* *.crt, *.pem
-*Certificate private key* *.pem
+**Symmetric** - uses single key to encrypt and decrypt the data and the key has to be exchanged between the sender and the receiver.
+**Asymmetric** - instead of using sinfle key, asymmetric encryption uses a pair of keys,** private key(*.pem) and a public key**(*.crt).
 
 ## Kubernetes TLS Certificates
-Since, the method is being used for creation cluster is *kubeadm*, all the certificates are stored in below localtion.
-*/etc/kubernetes/pki/*
+Since, the method is being used for creation cluster is *kubeadm*, all the certificates are stored in below location `/etc/kubernetes/pki/`
 
-Some of the certitcates are listed below
+- Server Certificates for Servers
 
-Server Certificates for Servers
-Client Certificates for Clients
+- Client Certificates for Clients
 
-Public keys
+- Public keys
 ```
 apiserver-etcd-client.crt  
 apiserver-kubelet-client.crt  
@@ -79,7 +68,7 @@ front-proxy-ca.crt
 front-proxy-client.crt
 ```
 
-Private keys
+- Private keys
 ```
 apiserver-etcd-client.key  
 apiserver-kubelet-client.key  
@@ -90,19 +79,14 @@ front-proxy-client.key
 sa.key
 ```
 
-Viewing, certiticate details, these below to be looked into certificates
+Viewing, certiticate details : ```openssl x509 -in /etc/kubernetes/pki/apiserver.crt -text -noout```
+Fields to be viewed : 
 
-```
-openssl x509 -in /etc/kubernetes/pki/apiserver.crt -text -noout
-```
-
-- Issuer
-- Validity
-- Subject
-- Subject Alternative Names
+```Issuer - Validity - Subject - Subject Alternative Names```
 
 Troubleshooting, kubeadm installation method.
-```
+
+```yaml
 kubectl logs etcd-master
 docker ps -a
 docker logs <container-id>
@@ -119,14 +103,15 @@ Kubernetes has a built-in certificates API that can do this for you.
 - Share to Users
 
 So user does create a key and CSR
-```
+
+```yaml
 openssl genrsa -out jane.key 2048
 openssl req -new -key jane.key -subj "/CN=jane" -out jane.csr
 ```
 
 Sends the request to the administrator and the adminsitrator takes the key and creates a CSR object, with kind as "CertificateSigningRequest" and a encoded "jane.csr"
 
-```
+```yaml
 apiVersion: certificates.k8s.io/v1beta1
 kind: CertificateSigningRequest
 metadata:
@@ -142,7 +127,7 @@ spec:
     <certificate-goes-here>
 ```
 
-```
+```yaml
 kubectl get csr
 kubectl certificate approve jane
 kubectl get csr jane -o yaml
@@ -150,13 +135,15 @@ echo "<certificate>" |base64 --decode
 ```
 
 Deny request if its inappropriate
-```
+
+```yaml
 kubectl certificate deny jane
 kubectl delete csr jane
 ```
 
 All the certificate releated operations are carried out by the controller manager.
-```
+
+```yaml
 $ cat kube-controller-manager.yaml
 apiVersion: v1
 kind: Pod
@@ -181,9 +168,7 @@ spec:
 
 Client uses the certificate file and key to query the kubernetes Rest API for a list of pods using curl.
 
-```
-kubectl get pods --kubeconfig config
-```
+```kubectl get pods --kubeconfig config ```
 
 The kubeconfig file has 3 sections
 
