@@ -1,5 +1,13 @@
 # Application Life Cycle Management
 
+Understanding the container lifecycle is crucial ..
+
+1. **Image Pulling** - pulls the container image (e.g., nginx:latest) from the image registry to the node. With correct registry credentials, this step completes successfully
+2. **Container Configuration** - creates the container configuration by setting environment variables, command arguments, resource limits, volume mounts, network settings, security contexts..etc (incase failed - **CreateContainerConfigError** )
+3. **Container Creation** - The container runtime (e.g., containerd or Docker) creates the container using the pulled image. This involves establishing the filesystem and Linux namespaces. (incase failed - **CreateContainerError**)
+4. **Container Start** - the container's process starts by executing the defined command or entry point. Errors occurring at this stage are often referred to as **run container errors**, **signaling problems with the process startup**.
+
+
 ## Rollout and Versioning in a Deployment
 when you first create deployment, it will create a rollout which trigger deployment ( e.g v1), future when the application is upgraded meaning when the container version is updated to a new one a new rollout is triggered and a new deployment revision is created named revision (v2). These revisions help you track changes and enable rollbacks to previous versions if issues arise.
 
