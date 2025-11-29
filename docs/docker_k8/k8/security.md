@@ -374,7 +374,7 @@ containers:
 
 If you have to modify the docker containers which has to be provided with the secrets, kubernets have secrets where you can store your credentials.
 
-```
+```yaml
 kubectl create secret docker-registry private-reg-cred --docker-username=dock_user --docker-password=dock_password --docker-server=myprivateregistry.com:5000 --docker-email=dock_user@myprivateregistry.com
 ```
 you would be using these credentials for the pod in applications to be up and running.
@@ -391,26 +391,5 @@ spec:
 ## Secrurity Contexts
 You may choose to configure the security settings at a container level or at a pod level.
 
-To add security context on the container and a field called securityContext under the spec section.
+[pod and container security](./cmdref.md#pod-and-container-security)
 
-```
-spec:
-  securityContext:
-    runAsUser: 1010
-  containers:
-  - name: ubuntu
-```
-
-To add security context at security level,
-
-```
-spec:
-  containers:
-  - name: ubuntu
-    image: ubuntu
-    command: ["sleep", "3600"]
-    securityContext:
-      runAsUser: 1000
-      capabilities:
-        add: ["MAC_ADMIN"]
-```

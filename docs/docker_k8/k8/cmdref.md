@@ -1195,3 +1195,29 @@ verbs: ["get"]
 
 
 This is used in secure enterprises.
+
+## pod and container security
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: multi-pod
+spec:
+  # pod level security 
+  securityContext: 
+    runAsUser: 1001
+  containers:
+  -  image: ubuntu
+     name: web
+     command: ["sleep", "5000"]
+     # container security
+     securityContext:
+      runAsUser: 1002
+      capabilities:
+        add: ["SYS_TIME", "NET_ADMIN"]
+
+  -  image: ubuntu
+     name: sidecar
+     command: ["sleep", "5000"]
+```
