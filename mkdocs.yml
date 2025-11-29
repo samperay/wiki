@@ -214,6 +214,8 @@ nav:
                 - "access control": "nginx/access_control.md"
                 - "cryptography": "nginx/cryptography.md"
                 - "reverse proxy": "nginx/reverse_proxy.md"
+        - "SRE":
+                - "Overview": "sre/overview.md"
 
         - "softskills":
                 - "Overview": "softskills/overview.md"
