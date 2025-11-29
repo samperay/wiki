@@ -189,10 +189,10 @@ nav:
                 
                 - "AI":
                         - "Overview": "ds_ai_ml/ai/overview.md"
-                        - "chatbot": "ds_ai_ml/ai/chatbot.md"
-                        - "movie poster": "ds_ai_ml/ai/movie_poster.md"
                         - "text summarization": "ds_ai_ml/ai/text_summariztion.md"
-
+                        - "movie poster": "ds_ai_ml/ai/movie_poster.md"
+                        - "chatbot": "ds_ai_ml/ai/chatbot.md"
+                        
                 - "mlops": 
                         - Overview: "ds_ai_ml/mlops/overview.md"
                         - "Introduction": "ds_ai_ml/mlops/introduction.md"
