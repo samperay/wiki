@@ -1,4 +1,4 @@
-## Introduction
+## Fundamentals
 
 SRE is considered a specific implementation of DevOps principles, focusing on reliability engineering and providing concrete practices.
 
@@ -32,13 +32,13 @@ Questions for SRE to ask.
 
 ![simplicity](./images/simplicity.png)
 
-![devops_sre](devops_sre.png)
+![devops_sre](./images/devops_sre.png)
 
-![devops_principle](devops_principle.png)
+![devops_principle](./images/devops_principle.png)
 
-![sre_principles](sre_principles.png)
+![sre_principles](./images/sre_principles.png)
 
-![devops_sre_shared_principles](devops_sre_shared_principles.png)
+![devops_sre_shared_principles](./images/devops_sre_shared_principles.png)
 
 Devops: cultural mindset and philosphy for delivering software systems faster and more collaboratively. It mainly about "what" and "why" 
 
@@ -46,23 +46,20 @@ SRE: Concentre implementation focussed on the realibility through engineering pr
 
 ### SRE Team models
 
-![embedded](embedded.png)
+![embedded](./images/embedded.png)
 
-![centralized](centralized.png)
+![centralized](./images/centralized.png)
 
-![consulting](consulting.png)
+![consulting](./images/consulting.png)
 
-![hybrid](hybrid.png)
+![hybrid](./images/hybrid.png)
 
-![models_comp_use](models_comp_use.png)
+![models_comp_use](./images/models_comp_use.png)
 
-![sre_roles](sre_roles.png)
+![sre_roles](./images/sre_roles.png)
 
-![sre_roles_1](sre_roles_1.png)
+![sre_roles_1](./images/sre_roles_1.png)
 
-## Fundamenrals
-
-## SLO & Measurements
 
 ## Manage complexties/risk/toil
 
