@@ -32,6 +32,34 @@ Questions for SRE to ask.
 
 ![simplicity](./images/simplicity.png)
 
+![devops_sre](devops_sre.png)
+
+![devops_principle](devops_principle.png)
+
+![sre_principles](sre_principles.png)
+
+![devops_sre_shared_principles](devops_sre_shared_principles.png)
+
+Devops: cultural mindset and philosphy for delivering software systems faster and more collaboratively. It mainly about "what" and "why" 
+
+SRE: Concentre implementation focussed on the realibility through engineering process. Its mainly on "how" on scalibility and realibility. It puts things in practice. 
+
+### SRE Team models
+
+![embedded](embedded.png)
+
+![centralized](centralized.png)
+
+![consulting](consulting.png)
+
+![hybrid](hybrid.png)
+
+![models_comp_use](models_comp_use.png)
+
+![sre_roles](sre_roles.png)
+
+![sre_roles_1](sre_roles_1.png)
+
 ## Fundamenrals
 
 ## SLO & Measurements
