@@ -62,6 +62,25 @@ Once you have identified whats SLI you need, you would choose for the queries to
 
 ![availability_sli_1](./images/availability_sli_1.png)
 
+# 📊 Availability vs Allowed Downtime — Cheat Sheet
+
+## 🔢 Uptime Targets
+
+| Availability | Allowed Downtime per Day | per Week | per Month (30 days) | per Year |
+|--------------|--------------------------|----------|----------------------|----------|
+| **99% (Two nines)**      | **14m 24s**        | **1h 40m 48s** | **7h 18m**         | **3 days 15h** |
+| **99.9% (Three nines)**  | **1m 26s**         | **10m 4s**     | **43m 12s**        | **8h 45m** |
+| **99.99% (Four nines)**  | **8.6 seconds**    | **1 minute**   | **4m 32s**         | **52m 34s** |
+| **99.999% (Five nines)** | **0.86 seconds**   | **6 seconds**  | **26 seconds**     | **5m 15s** |
+
+---
+
+## 🧮 Formula
+
+Allowed downtime = (1 - Availability%) × Total period
+Allowed downtime(99.99%) = (1-99.99%) i.e 0.0001 × (30 days × 24 × 60 minutes) = 4.32 minutes
+
+
 ### Latency SLI
 
 ![latency_sli](./images/latency_sli.png)
@@ -86,3 +105,6 @@ Once you have identified whats SLI you need, you would choose for the queries to
 
 ![saturation_usecases](./images/saturation_usecases.png)
 
+## SLO Game
+
+![slo_game](./images/slo_game.png)
