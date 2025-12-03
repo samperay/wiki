@@ -1,6 +1,4 @@
-
-
-## SR measures
+## SRE Measurements
 
 ![sla](./images/sla.png)
 
@@ -108,3 +106,67 @@ Allowed downtime(99.99%) = (1-99.99%) i.e 0.0001 × (30 days × 24 × 60 minutes
 ## SLO Game
 
 ![slo_game](./images/slo_game.png)
+
+## Implementing Error budgets
+
+its just a tradeoff for SLO
+
+![availability_err_budget](./images/availability_err_budget.png)
+
+![latency_err_budget](./images/latency_err_budget.png)
+
+![policy_err_budget](./images/policy_err_budget.png)
+
+![err_budget_implementation](./images/err_budget_implementation.png)
+
+![err_budget_implementation_1](./images/err_budget_implementation_1.png)
+
+![err_budget_challenges](./images/err_budget_challenges.png)
+
+## visualization measurements
+
+Effective SLO Dashboard
+
+- Focus on user fist
+    - Primary panels show user facing SLIs
+    - Clear visual indication of SLO compliance status
+    - User journey success rates
+
+- Implement visual hierarchy
+
+![visual_hierarchy](./images/visual_hierarchy.png)
+
+- Use color strategically
+    - Green: comfortably meeting SLO
+    - Red: SLO violation
+    - Yellow: within SLO but trending toward threshold.
+
+- Include error budget visuallizations
+    - Total error budget for the period
+    - Current consyumption percentage
+    - Burn rate
+    - Projected depletion date at current burn rate
+
+- Include contextual information
+    - SLO targets clearly labeled
+    - time window of measurement
+    - links to incident response procedures
+    - service dependencies status
+
+
+## Takeaways
+
+**Monitoring Implementation:**
+
+- Metrics collection starts at the application level with instrumented code.
+- Prometheus acts as the central metrics storage and query engine.
+- Grafana provides visualization and dashboarding capabilities.=
+- Both metrics collection and visualization require careful configuration for accuracy and relevance.
+
+**Dashboard Best Practices:**
+
+- Prioritize user-experienced metrics when defining SLIs and SLOs.
+- Choose appropriate visualization types based on the nature of the metric.
+- Set meaningful thresholds aligned with SLO targets.
+- Include both real-time and historical views for context and trend analysis.
+
