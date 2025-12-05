@@ -1221,3 +1221,204 @@ spec:
      name: sidecar
      command: ["sleep", "5000"]
 ```
+
+## Blue Green deployment. 
+
+```yaml
+kubectl create ns demo
+
+# app-v1.yaml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-v1
+  namespace: demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: demo-app
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: demo-app
+        version: v1
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:alpine
+        ports:
+        - containerPort: 80
+        env:
+        - name: APP_VERSION
+          value: "v1"
+        volumeMounts:
+        - name: html
+          mountPath: /usr/share/nginx/html
+      volumes:
+      - name: html
+        configMap:
+          name: app-v1-html
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-v1-html
+  namespace: demo
+data:
+  index.html: |
+    <h1 style="color:blue">BLUE Version v1</h1>
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-v1-svc
+  namespace: demo
+spec:
+  selector:
+    app: demo-app
+    version: v1
+  ports:
+  - port: 80
+    targetPort: 80
+```
+
+```yaml
+# app-v2.yaml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-v2
+  namespace: demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: demo-app
+      version: v2
+  template:
+    metadata:
+      labels:
+        app: demo-app
+        version: v2
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:alpine
+        ports:
+        - containerPort: 80
+        env:
+        - name: APP_VERSION
+          value: "v2"
+        volumeMounts:
+        - name: html
+          mountPath: /usr/share/nginx/html
+      volumes:
+      - name: html
+        configMap:
+          name: app-v2-html
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-v2-html
+  namespace: demo
+data:
+  index.html: |
+    <h1 style="color:green">GREEN Version v2</h1>
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-v2-svc
+  namespace: demo
+spec:
+  selector:
+    app: demo-app
+    version: v2
+  ports:
+  - port: 80
+    targetPort: 80
+```
+
+
+```yaml
+kubectl apply -f app-v1.yaml
+kubectl apply -f app-v2.yaml
+```
+
+Ingress controller
+
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: demo-ingress
+  namespace: demo
+  annotations:
+    kubernetes.io/ingress.class: nginx
+spec:
+  rules:
+  - host: demo.local
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: app-v1-svc   # BLUE (current)
+            port:
+              number: 80
+```
+
+kubectl apply -f bluegreen-ingress.yaml
+
+Add incase in /etc/hosts. 
+
+127.0.0.1 demo.local
+
+curl http://demo.local # Blue version v1
+
+
+
+```yaml
+# bluegreen-ingress.yaml
+        backend:
+          service:
+            name: app-v3-svc   # Switch to GREEN
+            port:
+              number: 80
+```
+
+### Canary deployment
+
+```yaml
+# canary-ingress.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: demo-canary
+  namespace: demo
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/canary: "true"
+    nginx.ingress.kubernetes.io/canary-weight: "20"  # 20% traffic to v2
+spec:
+  rules:
+  - host: demo.local
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: app-v2-svc
+            port:
+              number: 80
+
+```
+
+curl -s http://demo.local | grep Version
