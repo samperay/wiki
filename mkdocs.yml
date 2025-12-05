@@ -217,6 +217,7 @@ nav:
         - "SRE":
                 - "Overview": "sre/overview.md"
                 - "SRE measurements": "sre/sre_measure.md"
+                - "Managing complexity": "sre/manage_complexity.md"
 
         - "softskills":
                 - "Overview": "softskills/overview.md"
