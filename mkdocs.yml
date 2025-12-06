@@ -219,6 +219,7 @@ nav:
                 - "SRE measurements": "sre/sre_measure.md"
                 - "Managing complexity": "sre/manage_complexity.md"
                 - "Incident Management": "sre/incident_management.md"
+                - "Release Engineering": "sre/release_engineering.md"
                 
 
         - "softskills":
