@@ -28,7 +28,7 @@ traces: where is the slow ?
 - Can you wake up the right person automatically ?
 
 
-# Configuration Management
+## Configuration Management
 
 ![config_mgmt_pitfalls](./images/config_mgmt_pitfalls.png)
 
