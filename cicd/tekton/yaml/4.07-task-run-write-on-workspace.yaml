@@ -1,0 +1,10 @@
+apiVersion: tekton.dev/v1beta1
+kind: TaskRun
+metadata:
+  name: 4-07-task-run-write-on-workspace
+spec:
+  taskRef:
+    name: 4-07-task-write-on-workspace
+  workspaces:
+    - name: messages
+      emptyDir: {}
