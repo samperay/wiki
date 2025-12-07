@@ -220,6 +220,7 @@ nav:
                 - "Managing complexity": "sre/manage_complexity.md"
                 - "Incident Management": "sre/incident_management.md"
                 - "Release Engineering": "sre/release_engineering.md"
+                - "Chaos Engineering": "sre/chaos_engineering.md"
                 
 
         - "softskills":
