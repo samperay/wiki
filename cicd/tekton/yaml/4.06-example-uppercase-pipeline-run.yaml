@@ -1,0 +1,8 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  name: 4-06-example-uppercase-pipeline-run
+spec:
+  pipelineRef:
+    name: 4-06-example-uppercase-pipeline
+
