@@ -144,8 +144,6 @@ Available only in few models
 
 ![embedding_model](embedding_model.png)
 
-![embedding_output](embedding_output.png)
-
 ## Data Chunking
 
 ![data_chunking](data_chunking.png)

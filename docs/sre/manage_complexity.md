@@ -59,7 +59,7 @@ Factors afftecting blast radius
 
 ![bulk_heads](./images/bulk_heads.png)
 
-![bulk_heads_examples](./images/imbulk_heads_examplesge.png)
+![bulk_heads_examples](./images/bulk_heads_examples.png)
 
 ## Change Management
 

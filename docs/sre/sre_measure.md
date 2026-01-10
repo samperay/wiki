@@ -42,7 +42,7 @@ Details the information for debug and diagonizes the cause for SLO viloations..
 
 ![4_golden_rules](./images/4_golden_rules.png)
 
-![monitoring_window](./images/imamonitoring_windowge.png)
+![monitoring_window](./images/monitoring_window.png)
 
 ![common_pitfalls](./images/common_pitfalls.png)
 

@@ -161,9 +161,11 @@ nav:
                         - "IBM Automation Tools": "cloud/ibm/automated_dev_tools.md"
                         - "IBM application Deployment": "cloud/ibm/application_deployment.md"
                         - "IBM Cloud Schematics": "cloud/ibm/cloud_schematics.md"
-                  - "amazon":
+                  - "aws":
                         - "Amazon Overview": "cloud/aws/overview.md"
-                        - "faq": "cloud/aws/faq.md"
+                        - "practitioner":
+                                - "Summary": "cloud/aws/practitioner/summary.md"
+                                
 
                   - "terraform":
                         - "overview": "cloud/terraform/overview.md"

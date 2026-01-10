@@ -71,6 +71,6 @@ echo "<h1>Hello World from $(hostname -f)</h1>" > /var/www/html/index.html
 
 registered target groups
 
-![registered_tg](registered_tg.png)
+![registered_tg](./images/registered_tg.png)
 
-![health_checks](health_checks.png)
+![health_checks](./images/health_checks.png)
