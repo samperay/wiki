@@ -162,7 +162,6 @@ nav:
                         - "IBM application Deployment": "cloud/ibm/application_deployment.md"
                         - "IBM Cloud Schematics": "cloud/ibm/cloud_schematics.md"
                   - "aws":
-                        - "Amazon Overview": "cloud/aws/overview.md"
                         - "practitioner":
                                 - "Summary": "cloud/aws/practitioner/summary.md"
                                 
