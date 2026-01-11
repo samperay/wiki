@@ -2,19 +2,19 @@
 
 ## Shared responsibility Model 
 
-![aws_shared_responsibility_modal](aws_shared_responsibility_modal.png)
+![aws_shared_responsibility_modal](../images/aws_shared_responsibility_modal.png)
 
 
 [Official link Shared Responsibility Model](https://aws.amazon.com/compliance/shared-responsibility-model/)
 
 ## IAM
 
-![aws_shared_responsibility_modal_iam](aws_shared_responsibility_modal_iam.png)
+![aws_shared_responsibility_modal_iam](../images/aws_shared_responsibility_modal_iam.png)
 
 
-![iam_summary](iam_summary.png)
+![iam_summary](../images/iam_summary.png)
 
-![advance_iam_identity](advance_iam_identity.png)
+![advance_iam_identity](../images/advance_iam_identity.png)
 
 
 ## Compute
@@ -41,14 +41,14 @@ echo "<h1>Hello World from $(hostname -f)</h1>" > /var/www/html/index.html
 
 ### Serverless
 
-![compute_serverless_1](compute_serverless_1.png)
+![compute_serverless_1](../images/compute_serverless_1.png)
 
-![compute_serverless_2](compute_serverless_2.png)
+![compute_serverless_2](../images/compute_serverless_2.png)
 
 
 ## Storage
 
-![iam_ec2_instance_storage_summary](iam_ec2_instance_storage_summary.png)
+![iam_ec2_instance_storage_summary](../images/iam_ec2_instance_storage_summary.png)
 
 ## Load Balancers and ASG
 
@@ -120,53 +120,53 @@ registered target groups when doing the lab
 
 ![health_checks](../images/health_checks.png)
 
-![lb_asg_summary](lb_asg_summary.png)
+![lb_asg_summary](../images/lb_asg_summary.png)
 
 ## S3
 
-![aws_s3_summary](aws_s3_summary.png)
+![aws_s3_summary](../images/aws_s3_summary.png)
 
 ## Infra Deployment@scale
 
-![deployment_summary](deployment_summary.png)
+![deployment_summary](../images/deployment_summary.png)
 
-![developer_services_summary](developer_services_summary.png)
+![developer_services_summary](../images/developer_services_summary.png)
 
 ## Global Applications
 
-![global_app_summary_1](global_app_summary_1.png)
+![global_app_summary_1](../images/global_app_summary_1.png)
 
-![aglobal_app_summary_2](global_app_summary_2.png)
+![aglobal_app_summary_2](../images/global_app_summary_2.png)
 
 ## Cloud integrations
 
-![aws_integrations_summary_1](aws_integrations_summary_1.png)
+![aws_integrations_summary_1](../images/aws_integrations_summary_1.png)
 
 ## Monitoring
 
-![monitoring_summary_1](monitoring_summary_1.png)
+![monitoring_summary_1](../images/monitoring_summary_1.png)
 
 ## VPC
 
-![vpc_summary_1](vpc_summary_1.png)
+![vpc_summary_1](../images/vpc_summary_1.png)
 
-![vpc_summary_2](vpc_summary_2.png)
+![vpc_summary_2](../images/vpc_summary_2.png)
 
 ## security
 
-![security_compliance_summary_1](security_compliance_summary_1.png)
+![security_compliance_summary_1](../images/security_compliance_summary_1.png)
 
-![security_compliance_summary_2](security_compliance_summary_2.png)
+![security_compliance_summary_2](../images/security_compliance_summary_2.png)
 
 ## Databaase and Analytics
 
-![db_analytics_summary](db_analytics_summary.png)
+![db_analytics_summary](../images/db_analytics_summary.png)
 
 ## Account Management & Billing
 
-![account_mgmt_summary_1](account_mgmt_summary_1.png)
+![account_mgmt_summary_1](../images/account_mgmt_summary_1.png)
 
-![account_mgmt_summary_2](account_mgmt_summary_2.png)
+![account_mgmt_summary_2](../images/account_mgmt_summary_2.png)
 
 ## Other AWS services
 
