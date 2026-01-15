@@ -1,5 +1,8 @@
 ## CLF-C022026
 
+Course downloads can be found below. 
+[Downloads](./mats/)
+
 ## Shared responsibility Model 
 
 ![aws_shared_responsibility_modal](../images/aws_shared_responsibility_modal.png)
