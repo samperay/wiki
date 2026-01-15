@@ -1,8 +1,5 @@
 ## CLF-C022026
 
-Course downloads can be found below. 
-[Downloads](./mats/)
-
 ## Shared responsibility Model 
 
 ![aws_shared_responsibility_modal](../images/aws_shared_responsibility_modal.png)
@@ -42,7 +39,7 @@ systemctl enable httpd
 echo "<h1>Hello World from $(hostname -f)</h1>" > /var/www/html/index.html
 ```
 
-### Serverless
+## Serverless Compute
 
 ![compute_serverless_1](../images/compute_serverless_1.png)
 
