@@ -152,6 +152,18 @@ registered target groups when doing the lab
 
 ![vpc_summary_2](../images/vpc_summary_2.png)
 
+![cidr_subnet_mask](cidr_subnet_mask.png)
+
+https://www.ipaddressguide.com/cidr
+
+AWS resevres 5 ip address in each subnet, e.g 10.0.0.0/24
+
+10.0.0.0 - network address
+10.0.0.1 - reserved by aws for vpc router
+10.0.0.2 - reserved by aws for mapping to amazon provided dns
+10.0.0.3 - reseced by aws for future aws
+10.0.0.255 - netwrok broadcase address. aws does not suppose broacase in a vpc thefor reseverd.
+
 ## security
 
 ![security_compliance_summary_1](../images/security_compliance_summary_1.png)
