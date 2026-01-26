@@ -164,6 +164,30 @@ AWS resevres 5 ip address in each subnet, e.g 10.0.0.0/24
 10.0.0.3 - reseced by aws for future aws
 10.0.0.255 - netwrok broadcase address. aws does not suppose broacase in a vpc thefor reseverd.
 
+### DemoVPC
+
+**Public Subnet:**
+
+![demo_vpc_public](demo_vpc_public.png)
+
+
+![demo_vpc_private](demo_vpc_private.png)
+
+### VPC Peering
+
+![vpc_peering](vpc_peering.png)
+
+### VPC endpooint
+
+There are two types of endpoints are only for **S3 and Dynamo DB** which are HA and scalable. The main purpose of using this is you dont need to connect to internet to access the AWS services. since they are privately available you can use this service.
+
+- Interface: these would have an cost and would be more useful incase of S2S connectivity or any on-prem
+- Gateway: Free of cost and performs same like interface.
+
+Deploy Endpoints in the privatesubnet route entry. earlier this used to be NAT gateway, you can remove entry from NAT, which goes to IGW to get access to your s3 using public, instead remove those NAT and add private GW.
+
+![vpc_endpoint](vpc_endpoint.png)
+
 ## security
 
 ![security_compliance_summary_1](../images/security_compliance_summary_1.png)
