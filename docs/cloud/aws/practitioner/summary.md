@@ -170,14 +170,13 @@ AWS resevres 5 ip address in each subnet, e.g 10.0.0.0/24
 
 ![demo_vpc_public](demo_vpc_public.png)
 
-
 ![demo_vpc_private](demo_vpc_private.png)
 
 ### VPC Peering
 
 ![vpc_peering](vpc_peering.png)
 
-### VPC endpooint
+### VPC endpoint
 
 There are two types of endpoints are only for **S3 and Dynamo DB** which are HA and scalable. The main purpose of using this is you dont need to connect to internet to access the AWS services. since they are privately available you can use this service.
 
@@ -187,6 +186,86 @@ There are two types of endpoints are only for **S3 and Dynamo DB** which are HA 
 Deploy Endpoints in the privatesubnet route entry. earlier this used to be NAT gateway, you can remove entry from NAT, which goes to IGW to get access to your s3 using public, instead remove those NAT and add private GW.
 
 ![vpc_endpoint](vpc_endpoint.png)
+
+### Site-to-Site VPN (S2S VPN)
+
+A secure IPsec VPN tunnel over the public internet between:
+Your on-prem data center +  Your AWS VPC
+
+### Customer Gateway (CGW)
+
+The on-prem side of the VPN. It can be 
+firewall / Router /VPN appliance (Cisco, FortiGate, Palo Alto, etc.)
+
+### Virtual Private Gateway (VGW)
+
+The AWS side of the VPN attached to VPC
+
+Its main responsibility is to terminate VPN tunnels and advertise routes to AWS
+
+![s2s_vpn](s2s_vpn.png)
+
+```On-Prem Network
+     |
+[Customer Gateway]
+     |
+==== Encrypted IPsec Tunnel ====
+     |
+[Virtual Private Gateway]
+     |
+   AWS VPC
+```
+
+### AWS Direct Connect (DX)
+
+A dedicated private physical connection(Private fiber link) from your data center to AWS
+
+![direct_link](direct_link.png)
+
+### Direct Connect Gateway (DXGW)
+
+A global gateway that allows one Direct Connect to connect to multiple VPCs (even across regions).
+
+- Without DXGW → DX is tied to one VPC
+- With DXGW → DX can serve many VPCs
+
+Use cases: 
+- Multi-account
+- Multi-region
+- Hub-and-spoke networking
+
+### Transit Gateway (TGW)
+
+Transit Gateway = a central network hub for AWS 
+A cloud router that connects many networks together
+
+
+it can connect:
+
+- Multiple VPCs
+- On-prem networks
+- VPNs
+- Direct Connect
+
+Instead of creating many peer-to-peer connections, everything connects to one hub.
+
+```
+Transit Gateway
+   ├─ VPC Attachment
+   ├─ VPN Attachment
+   ├─ DX Gateway Attachment
+   └─ TGW Peering
+```
+
+![transit_gw_dx](transit_gw_dx.png)
+
+### egress-gw
+
+allow instances in your VPC outbound connections over ipv6 while preventing the internet to initiate an ipv6 connection to your instances
+
+![egress_gw](egress_gw.png)
+
+
 
 ## security
 
