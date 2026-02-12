@@ -171,3 +171,329 @@ curl has an advantage over raw telnet for web server troubleshooting in that it 
 ```
 curl http://1.2.3.4
 ```
+
+## DNS troubleshooting
+
+Utility tools
+
+| Tool               | Purpose                         | When to Use             |
+| ------------------ | ------------------------------- | ----------------------- |
+| `dig`              | Detailed DNS query tool         | Primary debugging       |
+| `nslookup`         | Simple DNS lookup               | Quick checks            |
+| `host`             | Lightweight DNS lookup          | Fast validation         |
+| `ping`             | Check resolution + reachability | Basic connectivity      |
+| `getent hosts`     | OS-level resolver check         | Check NSS resolution    |
+| `resolvectl`       | systemd-resolved debugging      | Modern Ubuntu           |
+| `tcpdump`          | Packet-level DNS tracing        | Deep analysis           |
+| `ss` / `netstat`   | Check DNS port usage            | DNS service issues      |
+| `systemctl status` | Check DNS services              | Local resolver problems |
+| `journalctl`       | DNS service logs                | Service debugging       |
+
+
+
+| Tool       | What to Check               |
+| ---------- | --------------------------- |
+| ping       | Name resolution success     |
+| host       | CNAME or A record           |
+| nslookup   | DNS server used             |
+| dig        | Status, TTL, answer section |
+| dig @dns   | Compare DNS servers         |
+| dig +trace | Resolution chain            |
+| dig -x     | Reverse DNS                 |
+| resolvectl | Local resolver              |
+| tcpdump    | Packet flow                 |
+| dig +tcp   | UDP blocking                |
+| dig AAAA   | IPv6 issues                 |
+
+
+### Application cannot reach mail.google.com
+
+
+1. ping -> Basic Resolution Test -> did it resolve and any packet loss
+
+```
+➜  ~ ping -c2 mail.google.com
+PING mail.google.com (142.250.77.37): 56 data bytes
+64 bytes from 142.250.77.37: icmp_seq=0 ttl=119 time=18.928 ms
+64 bytes from 142.250.77.37: icmp_seq=1 ttl=119 time=21.889 ms
+
+--- mail.google.com ping statistics ---
+2 packets transmitted, 2 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 18.928/20.409/21.889/1.481 ms
+➜  ~
+```
+
+**Issues:**
+
+If it says Temporary failure in name resolution → DNS issue. 
+If IP resolves but no reply → network issue(firewall blocking), not DNS
+
+2. host - Quick DNS Lookup
+
+```
+  ~ host mail.google.com
+mail.google.com has address 142.250.77.37
+mail.google.com has IPv6 address 2404:6800:4009:81c::2005
+➜  ~
+```
+
+**Issues:**
+
+If alias exists → follow CNAME chain.
+If no address → DNS misconfiguration.
+
+3. nslookup - Simple Resolver Query
+
+Which DNS server responded?
+What IP did it return?
+Is it authoritative?
+
+```nslookup mail.google.com
+Server:		192.168.1.1
+Address:	192.168.1.1#53
+
+Non-authoritative answer:
+Name:	mail.google.com
+Address: 142.250.77.37
+
+➜  ~
+```
+
+If wrong DNS server → resolver issue.
+
+4. dig - primary DNS debug tool
+
+```
+~ dig mail.google.com
+
+; <<>> DiG 9.10.6 <<>> mail.google.com
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 37108
+;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 4096
+;; QUESTION SECTION:
+;mail.google.com.		IN	A
+
+;; ANSWER SECTION:
+mail.google.com.	18	IN	A	142.250.77.37
+
+;; Query time: 8 msec
+;; SERVER: 192.168.1.1#53(192.168.1.1)
+;; WHEN: Thu Feb 12 12:57:49 IST 2026
+;; MSG SIZE  rcvd: 60
+
+➜  ~
+```
+
+HEADER -> status: NOERROR
+
+ANSWER SECTION -> 
+Record type -> A
+TTL value -> 18 seconds
+correct ip returned -> 142.250.77.37
+
+Query time -> 8 msec
+
+if more than 200ms then DNS latency issue
+
+SERVER -> confirms which DNS server responded(192.168.1.1)
+
+5. query specific DNS server
+
+```
+➜  ~ dig @8.8.8.8 mail.google.com
+
+; <<>> DiG 9.10.6 <<>> @8.8.8.8 mail.google.com
+; (1 server found)
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 30080
+;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 512
+;; QUESTION SECTION:
+;mail.google.com.		IN	A
+
+;; ANSWER SECTION:
+mail.google.com.	81	IN	A	142.251.220.69
+
+;; Query time: 25 msec
+;; SERVER: 8.8.8.8#53(8.8.8.8)
+;; WHEN: Thu Feb 12 13:04:30 IST 2026
+;; MSG SIZE  rcvd: 60
+
+```
+
+```
+➜  ~ dig @1.1.1.1 mail.google.com
+
+; <<>> DiG 9.10.6 <<>> @1.1.1.1 mail.google.com
+; (1 server found)
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 11108
+;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 1232
+;; QUESTION SECTION:
+;mail.google.com.		IN	A
+
+;; ANSWER SECTION:
+mail.google.com.	245	IN	A	142.251.222.165
+
+;; Query time: 16 msec
+;; SERVER: 1.1.1.1#53(1.1.1.1)
+;; WHEN: Thu Feb 12 13:04:49 IST 2026
+;; MSG SIZE  rcvd: 60
+
+```
+
+If public works but internal fails → internal DNS issue.
+
+6. trace full resolution path
+
+- Root servers response
+- TLD (.com)
+- Authoritative nameserver
+- Final record
+
+```
+~ dig +trace mail.google.com
+
+; <<>> DiG 9.10.6 <<>> +trace mail.google.com
+;; global options: +cmd
+.			499971	IN	NS	m.root-servers.net.
+.			499971	IN	NS	h.root-servers.net.
+.			499971	IN	NS	d.root-servers.net.
+.			499971	IN	NS	j.root-servers.net.
+.			499971	IN	NS	a.root-servers.net.
+.			499971	IN	NS	b.root-servers.net.
+.			499971	IN	NS	f.root-servers.net.
+.			499971	IN	NS	c.root-servers.net.
+.			499971	IN	NS	e.root-servers.net.
+.			499971	IN	NS	g.root-servers.net.
+.			499971	IN	NS	k.root-servers.net.
+.			499971	IN	NS	l.root-servers.net.
+.			499971	IN	NS	i.root-servers.net.
+.			499971	IN	RRSIG	NS 8 0 518400 20260224220000 20260211210000 21831 . jHotSqe/L+74ckVYvjjBAKrwjrovZbppJ4aFruufW6TdLrqGbx3MPRDx tvFWlbhK8gMEG8MI0jTyc+m/ZxTCkmLbTUIO7ZFL093fEGBGdvHSo1Xe UTb0E1R1QAGkw2+S5qqkaQuq/RMAU+LuTNxwWkXI33fEQqXQb1mkjmjo 4c2KfkDVnbJl6rpHKGJQ6zVjXvTkooQ/wUSGwmOVCKZx6i6FRUuLXrvR JNEEDx0vqxAckaDL7zUlLRMiz46MKsUGC/d1A5zwg7sqA/31QjPpPJfg ReRYz7AFG55jiiAyjXgxZ8k2hXwvbcNurc7od5uyUugTbMjuVuue+jJJ N7bf9g==
+;; Received 525 bytes from 192.168.1.1#53(192.168.1.1) in 8 ms
+
+com.			172800	IN	NS	h.gtld-servers.net.
+com.			172800	IN	NS	m.gtld-servers.net.
+com.			172800	IN	NS	i.gtld-servers.net.
+com.			172800	IN	NS	b.gtld-servers.net.
+com.			172800	IN	NS	g.gtld-servers.net.
+com.			172800	IN	NS	c.gtld-servers.net.
+com.			172800	IN	NS	d.gtld-servers.net.
+com.			172800	IN	NS	e.gtld-servers.net.
+com.			172800	IN	NS	a.gtld-servers.net.
+com.			172800	IN	NS	f.gtld-servers.net.
+com.			172800	IN	NS	j.gtld-servers.net.
+com.			172800	IN	NS	k.gtld-servers.net.
+com.			172800	IN	NS	l.gtld-servers.net.
+com.			86400	IN	DS	19718 13 2 8ACBB0CD28F41250A80A491389424D341522D946B0DA0C0291F2D3D7 71D7805A
+com.			86400	IN	RRSIG	DS 8 1 86400 20260225050000 20260212040000 21831 . X/cQ1bCPaNoI5BWEG6MtuEwl1QsPr/oLjhFRuY/2lbRNzM7xl4CPdE8c R58+jbslIfnaqLgkhZ701BVzXibnMEkBMohiG5DkxiR+lh8XkeFCmZA+ cXqv3sMOur0kGu4hRWYVvbfeBfGH/FHtgA+9UGTYO/PN9lEt6YMNBbJ4 z+HhaMZJQp789bB7eoj09pX7vEKYDHLHh++zfKC96zwY7o+PPIwnKMLq jGxMaZQ5+7Am3GSTRPQkTjX/Pba91x0l0WtyIMbspcjpQVx6h7nxl/BM 9IyGldqlMhf3+vH+jVV32q+WkyVSdNE6EQjwfoCCozDRrw3G55cpi2nU zy53jQ==
+;; Received 1178 bytes from 192.112.36.4#53(g.root-servers.net) in 120 ms
+
+google.com.		172800	IN	NS	ns2.google.com.
+google.com.		172800	IN	NS	ns1.google.com.
+google.com.		172800	IN	NS	ns3.google.com.
+google.com.		172800	IN	NS	ns4.google.com.
+CK0POJMG874LJREF7EFN8430QVIT8BSM.com. 900 IN NSEC3 1 1 0 - CK0Q3UDG8CEKKAE7RUKPGCT1DVSSH8LL  NS SOA RRSIG DNSKEY NSEC3PARAM
+CK0POJMG874LJREF7EFN8430QVIT8BSM.com. 900 IN RRSIG NSEC3 13 2 900 20260219002710 20260211231710 35511 com. Mvv0e2CAo+51hb57tq/ZXEzWjXkEfM8X3D6ADwGLSILhSJWvfQX1mLrG HfALHK8iWVGiXEQONeHDUytDqXVMIA==
+S84BOR4DK28HNHPLC218O483VOOOD5D8.com. 900 IN NSEC3 1 1 0 - S84BR9CIB2A20L3ETR1M2415ENPP99L8  NS DS RRSIG
+S84BOR4DK28HNHPLC218O483VOOOD5D8.com. 900 IN RRSIG NSEC3 13 2 900 20260216013314 20260209002314 35511 com. 458nY1ZPTiQMjwm578DuB+xnSPZBWY2vcyKJXEBgRZ8Aj0NHLrv6Vncp 7O5nLIWLxDEvc3ma9Acjso+RedbqTg==
+;; Received 649 bytes from 192.42.93.30#53(g.gtld-servers.net) in 154 ms
+
+mail.google.com.	300	IN	A	142.250.70.37
+;; Received 60 bytes from 216.239.32.10#53(ns1.google.com) in 82 ms
+
+```
+
+If it fails at:
+Root → network issue
+TLD → domain misconfigured
+Authoritative → zone issue
+
+7. reverse lookup
+
+PTR record exists?
+Reverse DNS configured?
+
+```
+dig -x 142.250.77.37
+
+; <<>> DiG 9.10.6 <<>> -x 142.250.77.37
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 56031
+;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 4096
+;; QUESTION SECTION:
+;37.77.250.142.in-addr.arpa.	IN	PTR
+
+;; ANSWER SECTION:
+37.77.250.142.in-addr.arpa. 68939 IN	PTR	bom07s26-in-f5.1e100.net.
+
+;; Query time: 10 msec
+;; SERVER: 192.168.1.1#53(192.168.1.1)
+;; WHEN: Thu Feb 12 13:12:06 IST 2026
+;; MSG SIZE  rcvd: 93
+➜  ~
+```
+
+8. check OS resolver
+
+```
+cat /etc/resolv.conf`
+```
+
+Nameserver IP
+Search domain
+Multiple nameservers?
+
+9. systemd-resolved Debug
+
+Ubuntu
+
+```resolvectl status```
+
+Current DNS server
+DNSSEC status
+Domain routing
+
+Flush cache if ip is pointing to wrong DNS servers
+
+```sudo resolvectl flush-caches```
+
+10. packaet capture
+
+Is DNS query leaving?
+Is response coming back?
+
+```
+sudo tcpdump -i eth0 port 53
+```
+
+Request sent but no reply → firewall or upstream DNS down
+No request → local resolver issue
+
+11. Check DNS over TCP 
+
+Some firewalls block UDP 53:
+
+```
+dig +tcp main.google.com
+```
+if TCP works but UDP doesn’t → firewall blocking UDP.
+
+What is difference between A and CNAME?
+
+An A record maps a hostname directly to an IPv4 address, while a CNAME maps a hostname to another hostname. CNAME adds an extra resolution step and is typically used for aliasing services like CDNs or load balancers. However, a hostname cannot have both A and CNAME records simultaneously.
