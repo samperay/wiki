@@ -140,10 +140,9 @@ nav:
                 - "Overview": sysdesign/architecting.md
                 
                 - "app":    
-                  - "Selecting a database": sysdesign/app/selectingdb.md
-                  - "Design newsletter": sysdesign/app/papersource.md
-                  - "Design Autonomous cars" : sysdesign/app/autonomouscars.md
-                  - "Design gross collections": sysdesign/app/grosscollections.md
+                  - "Newsletter": sysdesign/app/papersource.md
+                  - "Autonomous cars" : sysdesign/app/autonomouscars.md
+                  - "Gross collections": sysdesign/app/grosscollections.md
                   - "Payment processing": sysdesign/app/paymentprocessing.md
                   - "Airbnb": sysdesign/app/airbnb.md
                   - "Amazon": sysdesign/app/amazon.md
