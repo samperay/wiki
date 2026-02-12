@@ -51,7 +51,7 @@ the space for the log file for 1 min procssing time
 
 ## Map the components
 
-![payment_processing_components](../images/payment_processing_components.png)
+![payment_processing_components](../../images/payment_processing_components.png)
 
 - Passes payloads from logic unit to another.
 - Balances load.
@@ -193,7 +193,7 @@ consure group itself would be availble to deal with traffic
 
 you can use elk component for log storage and visualizations. 
 
-![payment_processing_log_component](../images/payment_processing_log_component.png)
+![payment_processing_log_component](../../images/payment_processing_log_component.png)
 
 You can use serilog to transport file to the elastic db. from queue, you can send the data using logstash.
 beats or .... would be used to send the data to the elastic. 
@@ -203,12 +203,12 @@ beats or .... would be used to send the data to the elastic.
 
 ### logic 
 
-![payment_processing_logic_diag](../images/payment_processing_logic_diag.png)
+![payment_processing_logic_diag](../../images/payment_processing_logic_diag.png)
 
 ### technical
 
-![payment_processing_technical_diag](../images/payment_processing_technical_diag.png)
+![payment_processing_technical_diag](../../images/payment_processing_technical_diag.png)
 
 ### physical
 
-![payment_processing_physical_diag](../images/payment_processing_physical_diag.png)
+![payment_processing_physical_diag](../../images/payment_processing_physical_diag.png)

@@ -136,23 +136,26 @@ nav:
 
                   
         - "sysdesign":
-                  - "Architecture process": sysdesign/arch_process.md
-                  - "Selecting a database": sysdesign/selectingdb.md
-                  - "Design newsletter": sysdesign/papersource.md
-                  - "Design Autonomous cars" : sysdesign/autonomouscars.md
-                  - "Design gross collections": sysdesign/grosscollections.md
-                  - "Payment processing": sysdesign/paymentprocessing.md
-                  - "Airbnb": sysdesign/airbnb.md
-                  - "Amazon": sysdesign/amazon.md
-                  - "Facebook": sysdesign/facebook.md
-                  - "Google Maps": sysdesign/gmaps.md
-                  - "Notification service": sysdesign/notifications.md
-                  - "Twitter": sysdesign/twitter.md
-                  - "Uber": sysdesign/uber.md
-                  - "Whatsapp": sysdesign/whatsapp.md
-                  - "Youtube": sysdesign/youtube.md
-                  - "URL Shortner": sysdesign/url_shortner.md
-                  - "Zoom": sysdesign/zoom.md
+                - "Introduction": "sysdesign/components.md"
+                - "Overview": sysdesign/architecting.md
+                
+                - "app":    
+                  - "Selecting a database": sysdesign/app/selectingdb.md
+                  - "Design newsletter": sysdesign/app/papersource.md
+                  - "Design Autonomous cars" : sysdesign/app/autonomouscars.md
+                  - "Design gross collections": sysdesign/app/grosscollections.md
+                  - "Payment processing": sysdesign/app/paymentprocessing.md
+                  - "Airbnb": sysdesign/app/airbnb.md
+                  - "Amazon": sysdesign/app/amazon.md
+                  - "Facebook": sysdesign/app/facebook.md
+                  - "Google Maps": sysdesign/app/gmaps.md
+                  - "Notification service": sysdesign/app/notifications.md
+                  - "Twitter": sysdesign/app/twitter.md
+                  - "Uber": sysdesign/app/uber.md
+                  - "Whatsapp": sysdesign/app/whatsapp.md
+                  - "Youtube": sysdesign/app/youtube.md
+                  - "URL Shortner": sysdesign/app/url_shortner.md
+                  - "Zoom": sysdesign/app/zoom.md
                   
 
         - "cloud": 
@@ -195,13 +198,16 @@ nav:
                         - "chatbot": "ds_ai_ml/ai/chatbot.md"
                         
                 - "mlops": 
-                        - Overview: "ds_ai_ml/mlops/overview.md"
+                        - "Overview": "ds_ai_ml/mlops/overview.md"
                         - "Introduction": "ds_ai_ml/mlops/introduction.md"
                         - "Data":  "ds_ai_ml/mlops/data.md"
                         - "Models": "ds_ai_ml/mlops/models.md"
                         - "Insurance Claim": "ds_ai_ml/mlops/project.md"
                         - "Security": "ds_ai_ml/mlops/security_gov.md"
                         - "AWS sagemaker": "ds_ai_ml/mlops/aws_sage_maker.md"
+
+                - "mcp": 
+                        - "Overview": "ds_ai_ml/mcp/overview.md"
 
         - "nginx":
                 - "web server": "nginx/webserver_overview.md"

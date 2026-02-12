@@ -1,3 +1,5 @@
+# Architecting requirements
+
 ## Functional system requirements
 
 The requirements are usually defined by the system analysts

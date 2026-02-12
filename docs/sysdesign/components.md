@@ -1,4 +1,4 @@
-# Systen design fundamentals 
+# Compenents for system design architecting
 
 ## Load Balancing
 
@@ -13,7 +13,7 @@ The load balancer forwards the incoming traffic to the selected server or resour
 The server or resource processes the request and sends a response back to the load balancer.
 The load balancer receives the response from the server or resource and sends it to the client or user who made the request.
 
-![simple_lb](./diagrams/simple_lb.png)
+![simple_lb](./images/simple_lb.png)
 
 Typically a load balancer sits between the **client and the server accepting incoming network and application traffic and distributing the traffic** across multiple backend servers using various algorithms. By balancing application requests across multiple servers, a **load balancer reduces the load** on individual servers and prevents any **one server from becoming a single point of failure**, thus improving overall application availability and responsiveness.
 
@@ -23,7 +23,7 @@ Between the user and the web server
 Between web servers and an internal platform layer, like application servers or cache servers
 Between internal platform layer and database.
 
-![internal_lb](./diagrams/internal_lb.png)
+![internal_lb](./images/internal_lb.png)
 
 ### Key terminology and concepts
 

@@ -65,7 +65,7 @@ Entities: Employee, Vacation, Salary
 Interface to payment system
 ```
 
-![papersource_functional_nonfunctional](../images/papersource_func_nonfunc_req.png)
+![papersource_functional_nonfunctional](../../images/papersource_func_nonfunc_req.png)
 
 ### logging services
 

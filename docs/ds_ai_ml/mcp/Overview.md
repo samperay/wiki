@@ -24,7 +24,7 @@ M - Model (AI LLM)
 C - Context (Giving AI context )
 P - Prtocol ( Define set of standards)
 
-![mcp-key-details](mcp-key-detail.png)
+![mcp-key-details](./images/mcp-key-detail.png)
 
 https://modelcontextprotocol.io/docs/getting-started/intro
 
@@ -43,7 +43,7 @@ The architecture of an MCP server is designed around a client-server model where
 
 ## Build MCP Server
 
-![mcp_build](mcp_build.png)
+![mcp_build](./images/mcp_build.png)
 
 You just need **SDK** to build an MCP server. 
 
