@@ -61,7 +61,7 @@ yearly = ~1800GB/year = ~2TB/year
 - mark items
 - export list to payment engine
 
-![gross_components](../images/gross_components.png)
+![gross_components](../../images/gross_components.png)
 
 
 we keep list receiver and service differently, because in future if there is any change in the database we don't have to work completely modifying the service..
@@ -209,8 +209,8 @@ soln: Nil
 
 ## Technical diagram
 
-![gross_collections_tech_diagram](../images/gross_collections_tech_diagram.png)
+![gross_collections_tech_diagram](../../images/gross_collections_tech_diagram.png)
 
 ## physical diagram
 
-![gross_collections_phy_diagram](../images/gross_collections_phy_diagram.png)
+![gross_collections_phy_diagram](../../images/gross_collections_phy_diagram.png)

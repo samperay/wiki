@@ -306,4 +306,4 @@ Power BI - Microsoft
 ableau 
 
 Note: Designing BI is not part of arch job
-Inform the customer saying that we are not part of BI experts, he can bring anyone he wishes to and we would be working with him to assist him as we laid out the high level system specs.
+Inform the customer saying that we are not part of BI experts, he can bring anyone he wishes to and we would be working with him to assist him as we laid out the high level system specs
