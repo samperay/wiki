@@ -39,11 +39,29 @@ Session Persistence: A technique used to ensure that subsequent requests from th
 
 SSL/TLS Termination: The process of decrypting SSL/TLS-encrypted traffic at the load balancer level, offloading the decryption burden from backend servers and allowing for centralized SSL/TLS management.
 
+### Misc terms
+
+#### Availability & Realibility
 availability is about whether a system is "up," while reliability is about whether it "works correctly" once it’s up
 
-e.g
-
 A Car: If you have a car in your driveway ready to drive, it is available. However, if that car stalls every time you hit 60 mph, it is unreliable.
-
 A Website: A site that loads but gives you an error every time you click "Checkout" has high availability (it's online) but low reliability (it fails to perform its function).
 
+#### Upstream and Downstream
+The exact meaning depends on the point of reference in the architecture
+e.g 
+
+```User requests → Load Balancer → App Server → Database```
+
+**Upstream** = Traffic **going OUT(moving away)** from your system to another system/service. 
+**Downstream** = Traffic **coming INTO(coming into)** your system from another system/service.
+
+From the App Server’s perspective:
+
+Downstream → User requests / Load Balancer (requests coming in)
+Upstream → Database (requests going out)
+
+From the Load Balancer perspective:
+
+Downstream -> User requests
+upstream -> App server(backend servers) 
