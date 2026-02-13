@@ -97,3 +97,234 @@ High availability: If a server fails or becomes unreachable, anycast automatical
 A Content Delivery Network (CDN) is a network of distributed servers that cache and deliver web content to users based on their geographic location. CDNs help improve the performance, reliability, and security of websites and web services by distributing the load among multiple servers and serving content from the server closest to the user.
 
 When a user requests content from a website using a CDN, the CDN's DNS server determines the best server to deliver the content based on the user's location and other factors. The DNS server then responds with the IP address of the chosen server, allowing the user to access the content quickly and efficiently.
+
+# Network essentials
+
+Differences Between HTTP and HTTPS
+
+## HTTP vs HTTPS Comparison
+
+| Feature        | HTTP                                                   | HTTPS                                                   |
+|----------------|--------------------------------------------------------|---------------------------------------------------------|
+| **Security**   | No encryption; data is sent in plain text             | Encrypted using SSL/TLS protocols                        |
+| **Port**       | 80                                                    | 443                                                      |
+| **Performance**| Slightly faster due to lack of encryption overhead    | Slightly slower due to encryption processes              |
+| **SEO Ranking**| Lower search engine ranking                           | Higher search engine ranking                             |
+| **Use Cases**  | Non-sensitive data transmission                       | Sensitive transactions (e.g., banking, e-commerce)       |
+
+
+## TCP vs UDP
+
+these two of the main protocols used for transmitting data over the internet.
+
+
+**TCP (Transmission Control Protocol)**
+
+TCP is a connection-oriented protocol that ensures reliable, ordered, and error-checked delivery of a stream of bytes between applications.
+
+**Characteristics**
+- Reliability: TCP ensures that data is delivered accurately and in order, retransmitting lost or corrupted packets.
+- Connection-Oriented: Establishes a connection between sender and receiver before transmitting data.
+- Flow Control: Manages data transmission rate to prevent network congestion.
+- Congestion Control: Adjusts the transmission rate based on network traffic conditions.
+- Acknowledgements and Retransmissions: Uses acknowledgments to confirm receipt of data and retransmits if necessary.
+
+e.g: Loading a webpage: TCP is used to ensure all web content is loaded correctly and in the right order.
+
+
+**UDP(User Datagram Protocol)**
+
+UDP is a connectionless protocol that sends messages, called **datagrams**, without establishing a prior connection and without guaranteeing reliability or order.
+
+**Characteristics**
+- Low Overhead: Does not establish a connection, leading to lower overhead and latency.
+- Unreliable Delivery: Does not guarantee message delivery, order, or error checking.
+- Speed: Faster than TCP due to its simplicity and lack of retransmission mechanisms.
+- No Congestion Control: Does not reduce transmission rates under network congestion.
+
+e.g: Streaming a live sports event: UDP is used for faster transmission, even if it means occasional pixelation or minor video artifacts.
+
+**TCP vs UDP Comparison**
+
+| Feature | TCP | UDP |
+|----------|------|------|
+| **Reliability** | Reliable transmission, ensuring data is delivered accurately and in order | Unreliable transmission; data may be lost or arrive out of order |
+| **Connection** | Connection-oriented; establishes a connection before transmitting data | Connectionless; sends data without establishing a connection |
+| **Speed and Overhead** | Slower due to handshaking, acknowledgments, and congestion control | Faster with minimal overhead, suitable for real-time applications |
+| **Data Integrity** | High data integrity, suitable for applications like file transfers and web browsing | Lower data integrity, acceptable for applications like streaming where perfect accuracy is less critical |
+| **Use Case Suitability** | Used when data accuracy is more critical than speed | Used when speed is more critical than accuracy |
+
+# HTTP/1.0 vs HTTP/1.1 vs HTTP/2 vs HTTP/3
+
+## 📌 Executive Summary
+
+HTTP has evolved to improve:
+- ⚡ Performance (faster loading)
+- 🔐 Security (stronger encryption)
+- 📡 Efficiency (better bandwidth usage)
+- 🌍 Scalability (handling modern traffic)
+
+Each version builds upon the previous one to address web scalability challenges.
+
+---
+
+# 🔎 High-Level Comparison
+
+| Feature | HTTP/1.0 | HTTP/1.1 | HTTP/2 | HTTP/3 |
+|----------|-----------|-----------|---------|---------|
+| **Release Year** | 1996 | 1997 | 2015 | 2020 |
+| **Connection Model** | New TCP connection per request | Persistent connections (Keep-Alive) | Multiplexed streams over single TCP connection | Multiplexed streams over QUIC (UDP) |
+| **Protocol Format** | Text | Text | Binary | Binary |
+| **Multiplexing** | ❌ No | ❌ No | ✅ Yes | ✅ Yes |
+| **Header Compression** | ❌ No | ❌ Limited | ✅ HPACK | ✅ QPACK |
+| **Head-of-Line Blocking** | Yes | Yes | Yes (TCP-level) | No |
+| **Transport Protocol** | TCP | TCP | TCP | UDP (QUIC) |
+| **Security** | Optional | Optional | Usually HTTPS | Mandatory TLS 1.3 |
+| **Latency** | High | Medium | Low | Very Low |
+| **Packet Loss Handling** | Poor | Poor | Better | Excellent |
+| **Typical Use Case** | Static websites | Dynamic web apps | High-traffic apps | Real-time applications |
+
+---
+
+# 📚 Version-by-Version Summary
+
+---
+
+## 🚀 HTTP/1.0 (1996)
+
+### Characteristics
+- One request = one TCP connection
+- Stateless
+- Basic headers
+- High latency
+
+### Limitations
+- Connection overhead
+- Slow page loads
+- Not suitable for modern resource-heavy websites
+
+### Best Used For
+- Simple static websites
+- Early web applications
+
+---
+
+## 🚀 HTTP/1.1 (1997)
+
+### Improvements Over 1.0
+- Persistent connections (Keep-Alive)
+- Chunked transfer encoding
+- Host header (virtual hosting)
+- Better caching
+
+### Benefits
+- Reduced latency
+- Efficient resource usage
+- Enabled shared hosting
+
+### Still Has
+- Head-of-line blocking
+- Text-based inefficiencies
+
+### Best Used For
+- Dynamic websites
+- E-commerce platforms
+- APIs
+
+---
+
+## 🚀 HTTP/2 (2015)
+
+### Major Enhancements
+- Binary protocol
+- Multiplexing (multiple requests over one connection)
+- Header compression (HPACK)
+- Server Push
+
+### Benefits
+- Significant performance improvement
+- Faster page loads
+- Efficient bandwidth usage
+
+### Limitation
+- Still uses TCP → TCP-level head-of-line blocking
+
+### Best Used For
+- Social media platforms
+- Streaming services
+- Large web applications
+
+---
+
+## 🚀 HTTP/3 (2020)
+
+### Built On
+- QUIC protocol (UDP-based)
+
+### Major Advantages
+- Eliminates TCP head-of-line blocking
+- 0-RTT handshake (faster connection setup)
+- Better packet loss handling
+- Built-in TLS 1.3 (mandatory encryption)
+
+### Benefits
+- Lower latency
+- More resilient on unstable networks
+- Better mobile performance
+
+### Best Used For
+- Video conferencing (Zoom, Teams)
+- Online gaming
+- Live streaming
+- Real-time apps
+
+---
+
+# 📊 Evolution Summary
+
+| Improvement Area | 1.0 | 1.1 | 2 | 3 |
+|------------------|------|------|------|------|
+| Connection Efficiency | ❌ | ✅ | ✅ | ✅ |
+| Multiplexing | ❌ | ❌ | ✅ | ✅ |
+| Header Compression | ❌ | ❌ | ✅ | ✅ |
+| TCP Head-of-Line Fix | ❌ | ❌ | ❌ | ✅ |
+| Built-in Encryption | ❌ | ❌ | ❌ | ✅ |
+
+---
+
+## 🎯 Why Upgrade to Newer Versions?
+
+- ⚡ Faster performance
+- 🔐 Better security
+- 📉 Reduced latency
+- 📈 Improved scalability
+- 🌐 Better real-world network handling
+
+---
+
+## 🧠 Quick Memory Trick
+
+- **HTTP/1.0** → One request, one connection  
+- **HTTP/1.1** → Keep connection alive  
+- **HTTP/2** → Multiplex everything  
+- **HTTP/3** → Replace TCP with QUIC (UDP)
+
+---
+
+# 🏁 Final Conclusion
+
+The evolution from HTTP/1.0 to HTTP/3 represents:
+
+> From simple request-response communication  
+> ➜ to high-performance, encrypted, multiplexed, real-time web communication.
+
+Modern web applications should use:
+- **HTTP/2 or HTTP/3** whenever possible.
+- HTTP/3 is ideal for mobile-heavy and real-time workloads.
+
+## URL vs. URI vs. URN
+
+URL: Specifies both the identity and the location of a resource (How and Where). (https://www.example.com/path?query=term#section)
+URI: A more comprehensive term covering both URLs (identifying and locating) and URNs (just identifying). (https://www.example.com/path?query=term#section)
+URN: Focuses only on uniquely identifying a resource, not on where it is located or how to access it. (urn:isbn:0451450523)
+
