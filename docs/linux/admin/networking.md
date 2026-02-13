@@ -172,7 +172,146 @@ curl has an advantage over raw telnet for web server troubleshooting in that it 
 curl http://1.2.3.4
 ```
 
-## DNS troubleshooting
+## DNS
+
+DNS resolution is the process of converting a domain name into its corresponding IP address. There are two types of DNS queries involved in this process: recursive and iterative queries.
+
+**Recursive query:** In a recursive query, the DNS resolver asks for the complete answer to a query from the DNS server. If the server has the answer, it responds with the required information. If not, the server takes responsibility for contacting other DNS servers to find the answer and then returns it to the resolver. Recursive queries put more responsibility on the DNS server to find the requested information.
+
+**Iterative query:** In an iterative query, the DNS resolver asks the DNS server for the best answer it has at the moment. If the server doesn't have the complete answer, it responds with a referral to another server that might have more information. The resolver then contacts that server with a new iterative query, repeating the process until it finds the complete answer. In iterative queries, the resolver takes on more responsibility for finding the requested information.
+
+**DNS caching and TTL (Time To Live)**
+
+To speed up the DNS resolution process, resolvers and servers cache the results of previous queries. When a resolver receives a query, it first checks its cache to see if the answer is already available. If it finds the cached information, it returns the answer without contacting other servers, saving time and reducing network traffic.
+
+Each DNS record has an associated Time To Live (TTL) value, which specifies how long the record should be stored in the cache. TTL is measured in seconds, and once the TTL expires, the cached information is removed to ensure that outdated information is not used.
+
+**Negative caching**
+
+Negative caching is the process of caching the non-existence of a DNS record. When a resolver receives a query for a non-existent domain or record, it caches this information as a negative response, preventing repeated queries for the same non-existent resource. This reduces the load on DNS servers and improves overall performance.
+
+DNS is essential for the smooth functioning of the internet. Some of its key benefits include:
+
+User-friendliness: Domain names are easier to remember and type than IP addresses, which are long strings of numbers.
+Scalability: DNS is a distributed and hierarchical system, allowing it to handle the ever-growing number of domain names and IP addresses on the internet.
+Flexibility: DNS allows websites to change their IP addresses without affecting users. When a website's IP address changes, the DNS records are updated, and users can continue accessing the site using the same domain name.
+Load balancing: DNS can distribute user requests across multiple servers, improving the performance and reliability of websites.
+
+Domain names: A domain name is a human-readable address used to access a website or other resources on the internet. It consists of a series of character strings separated by dots
+
+TLDs (Top-Level Domains): A top-level domain (TLD) is the rightmost part of a domain name, such as ".com". TLDs are managed by various organizations and can be divided into two categories: **generic TLDs (gTLDs)**, like .com, .org, or .net, and **country-code TLDs (ccTLDs)**, which represent specific countries or territories, like .in for the India
+
+Subdomains: A subdomain is a subdivision of a domain name, allowing the creation of separate sections or areas within a website. Subdomains appear to the left of the main domain name, such as blog.example.com, where "blog" is the subdomain of example.com.
+
+Root servers: Root servers are the highest level of DNS servers and are responsible for directing queries to the appropriate TLD servers. There are 13 root server clusters worldwide, managed by various organizations, each having multiple servers for redundancy and reliability.
+
+TLD servers: TLD servers store information about domain names within their specific TLD(.com, .org..etc). When they receive a query, they direct it to the appropriate authoritative name server responsible for that domain.
+
+Authoritative name servers: These servers hold the actual DNS records for a domain, including its IP address and other information. They provide the final answer to DNS queries, allowing users to access the desired website or resource.
+
+A DNS resolver is any component (software or hardware) responsible for translating a human-friendly domain name (like example.com) into the IP address
+
+**The DNS Lookup Process in Brief**
+
+Before diving into the types of DNS resolvers, it helps to have a high-level overview of the DNS lookup process:
+
+You request a domain name (e.g., example.com) from your computer or device.
+Your computer’s resolver (or stub resolver) sends the request to a DNS recursive resolver (often your ISP’s or a public DNS like Google’s 8.8.8.8).
+The recursive resolver checks if it already has the domain name’s IP address in its cache. If so, it returns it immediately.
+If not, the recursive resolver queries the root DNS servers, then the TLD (Top-Level Domain) DNS servers, then the authoritative DNS server for the domain, following DNS hierarchy.
+Once the IP address is found, the resolver returns it to your computer. Your computer can then contact the web server at that IP.
+
+
+```
+User's Device (Stub Resolver)
+     |
+     v
+Recursive Resolver (Often ISP/ Public)
+     |
+     v
+  Root Server
+     |
+     v
+ TLD Server (.com, .net, etc.)
+     |
+     v
+ Authoritative Server (example.com)
+     |
+     v
+   IP Address
+```
+
+1. **Stub Resolver**
+
+A stub resolver is the minimal DNS client software running on your device that starts the DNS lookup process. It typically does not perform the full DNS query process by itself.
+
+**how it works?**
+
+- The stub resolver knows one or more DNS servers to send queries to. These DNS servers are often configured automatically (for example, via DHCP on your home router) or manually by users (e.g., configuring 8.8.8.8 for Google DNS).
+
+- When your device needs to resolve a domain name, the stub resolver sends a request to the configured DNS server and waits for the response.
+
+- The stub resolver takes the response (the IP address or an error) and hands it back to the application (like a web browser).
+
+
+2. **Recursive Resolver**
+
+A recursive resolver is a DNS server that actively performs the DNS query process on behalf of the client. It hunts down the IP address by querying multiple DNS servers until it gets the final answer.
+
+- The recursive resolver receives a request from a stub resolver (or another forwarder).
+
+- It first checks its local cache to see if the requested domain’s IP address is stored there. If found, it returns the cached answer immediately.
+
+- If the record is not cached, the resolver queries the root DNS servers to learn which TLD server (e.g., .com, .org) to query next.
+
+- It then queries the relevant TLD server to find the authoritative DNS server for the specific domain.
+
+- Finally, it queries the authoritative server to obtain the required DNS records (e.g., the A record for IPv4)
+
+- The resolved IP is cached for future requests and returned to the stub resolver.
+
+Public DNS Resolver: Google Public DNS (8.8.8.8), Cloudflare DNS (1.1.1.1), and OpenDNS (208.67.222.222) are common public recursive resolvers.
+
+3. **Caching-Only Resolver**
+
+A caching-only resolver is a type of DNS server whose primary function is to cache DNS query results and reuse them to speed up subsequent lookups. It does not host any DNS zones (i.e., it is not authoritative for any domain) and typically performs recursive lookups on behalf of clients.
+
+- Like a recursive resolver, a caching-only resolver forwards queries to other DNS servers if the record is not already in its cache.
+
+- Once it obtains the result, it stores (caches) the DNS records for the duration specified by their TTL (Time to Live).
+
+- Subsequent queries for the same domain within the TTL period are served faster from the cache, reducing the need for external lookups.
+
+4. **Forwarder**
+
+A forwarder is a DNS server that forwards all queries (or queries that it cannot resolve locally) to another DNS server instead of performing the complete recursive resolution process itself.
+
+- A DNS server is configured to send queries to an upstream DNS server, often a well-known public DNS or an ISP DNS.
+
+- The forwarder may still maintain a local cache to speed up DNS resolution for repeated queries.
+
+- This setup is common in corporate networks to manage and log DNS queries centrally or apply custom policies (e.g., content filtering).
+
+5. **Iterative (Non-Recursive) Resolver**
+
+Sometimes called a non-recursive resolver, an iterative resolver typically gives back partial results or referrals, instructing the client to continue the resolution process on its own.
+
+If a client asks this resolver for a record, the resolver either:
+Returns the answer if it is authoritative or has it cached, or
+Returns a referral with the address of another DNS server (for instance, the root or TLD server), prompting the client to “try there next.”
+This type is less common for end-user devices; it is often used by authoritative DNS servers to direct queries up or down the DNS hierarchy.
+
+
+Finally, example 
+
+1. Your Laptop (Stub Resolver) is set to use 8.8.8.8 (Google DNS).
+2. You type www.example.com into your browser.
+3. The stub resolver on your laptop sends the DNS query to 8.8.8.8 (a Public Recursive Resolver).
+4. Google DNS checks its cache:
+  - If www.example.com is cached, it returns the IP right away.
+  - If not, it queries the root server, then .com TLD server, then the example.com authoritative server in turn.
+5. Once found, the IP address is cached in Google’s DNS servers and returned to your laptop’s stub resolver.
+6. Your laptop connects to the returned IP address, and the website loads.
 
 Utility tools
 
@@ -189,7 +328,7 @@ Utility tools
 | `systemctl status` | Check DNS services              | Local resolver problems |
 | `journalctl`       | DNS service logs                | Service debugging       |
 
-
+Everyday tools for troubleshooting DNS queries
 
 | Tool       | What to Check               |
 | ---------- | --------------------------- |
