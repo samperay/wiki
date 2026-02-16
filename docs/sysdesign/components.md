@@ -66,9 +66,188 @@ From the Load Balancer perspective:
 Downstream -> User requests
 upstream -> App server(backend servers) 
 
+## Load Balancing Algorithms
+
+### RR
+
+It assigns a request to the first server, then moves to the second, third, and so on .. 
+
+Pros:
+
+- equal distribution among servers.
+- easy implementation and understand
+- works well when server has similar capabilities
+
+Cons:
+
+- no load awareness: does not take into account the current load or capacity of each servers. all are treated equally regardless of their current state. 
+- no sesstion affinity: prob for staeful servers as request may reach to other server. 
+- performace issue with different capacities.
+- Predictable Distribution Pattern: Round Robin is predictable in its request distribution pattern, which could potentially be exploited by attackers who can observe traffic patterns and might find vulnerabilities in specific servers by predicting which server will handle their requests.
+
+**Good usecases**
+
+Homogeneous Environments: Suitable for environments where all servers have similar capacity and performance.
+Stateless Applications: Works well for stateless applications where each request can be handled independently.
+
+### least connections
+
+The Least Connections algorithm is a dynamic load balancing technique that assigns incoming requests to the server with the fewest active connections at the time of the request
+useful especially in environments where traffic patterns are unpredictable and request processing times vary.
+
+Pros:
+
+- Load Awareness: Takes into account the current load on each server by considering the number of active connections, leading to better utilization of server resources.
+- Dynamic Distribution: Adapts to changing traffic patterns and server loads, ensuring no single server becomes a bottleneck.
+- Efficiency in Heterogeneous Environments: Performs well when servers have varying capacities and workloads, as it dynamically allocates requests to less busy servers.
+
+Cons:
+
+- Higher Complexity: More complex to implement compared to simpler algorithms like Round Robin, as it requires real-time monitoring of active connections.
+- State Maintenance: Requires the load balancer to maintain the state of active connections, which can increase overhead.
+- Potential for Connection Spikes: In scenarios where connection duration is short, servers can experience rapid spikes in connection counts, leading to frequent rebalancing.
+
+Use Cases
+- Heterogeneous Environments: Suitable for environments where servers have different capacities and workloads, and the load needs to be dynamically distributed.
+- Variable Traffic Patterns: Works well for applications with unpredictable or highly variable traffic patterns, ensuring that no single server is overwhelmed.
+- Stateful Applications: Effective for applications where maintaining session state is important, as it helps distribute active sessions more evenly.
+
+### Weighted RR
+
+It assigns weights to each server based on their capacity or performance, distributing incoming requests proportionally according to these weights. This ensures that more powerful servers handle a larger share of the load, while less powerful servers handle a smaller share.
+
+Pros
+
+- Load Distribution According to Capacity: Servers with higher capacities handle more requests, leading to better utilization of resources.
+- Flexibility: Easily adjustable to accommodate changes in server capacities or additions of new servers.
+- Improved Performance: Helps in optimizing overall system performance by preventing overloading of less powerful servers.
+
+Cons
+
+- Complexity in Weight Assignment: Determining appropriate weights for each server can be challenging and requires accurate performance metrics.
+- Increased Overhead: Managing and updating weights can introduce additional overhead, especially in dynamic environments where server performance fluctuates.
+- Not Ideal for Highly Variable Loads: In environments with highly variable load patterns, WRR may not always provide optimal load balancing as it doesn't consider real-time server load.
+
+Use Cases
+- Heterogeneous Server Environments: Ideal for environments where servers have different processing capabilities, ensuring efficient use of resources.
+- Scalable Web Applications: Suitable for web applications where different servers may have varying performance characteristics.
+- Database Clusters: Useful in database clusters where some nodes have higher processing power and can handle more queries.
+
+### weighted least connections
+
+combines the principles of the Least Connections and Weighted Round Robin algorithms. It takes into account both the current load (number of active connections) on each server and the relative capacity of each server (weight)
+
+Pros
+Dynamic Load Balancing: Adjusts to the real-time load on each server, ensuring a more balanced distribution of requests.
+Capacity Awareness: Takes into account the relative capacity of each server, leading to better utilization of resources.
+Flexibility: Can handle environments with heterogeneous servers and variable load patterns effectively.
+Cons
+Complexity: More complex to implement compared to simpler algorithms like Round Robin and Least Connections.
+State Maintenance: Requires the load balancer to keep track of both active connections and server weights, increasing overhead.
+Weight Assignment: Determining appropriate weights for each server can be challenging and requires accurate performance metrics.
+Use Cases
+Heterogeneous Server Environments: Ideal for environments where servers have different processing capacities and workloads.
+High Traffic Web Applications: Suitable for web applications with variable traffic patterns, ensuring no single server becomes a bottleneck.
+Database Clusters: Useful in database clusters where nodes have varying performance capabilities and query loads.
+
+### IP Hash
+
+The load balancer uses a hash function to convert the client's IP address into a hash value, which is then used to determine which server should handle the request. This method ensures that requests from the same client IP address are consistently routed to the same server, providing session persistence.
+
+Pros
+Session Persistence: Ensures that requests from the same client IP address are consistently routed to the same server, which is beneficial for stateful applications.
+Simplicity: Easy to implement and does not require the load balancer to maintain the state of connections.
+Deterministic: Predictable and consistent routing based on the client's IP address.
+Cons
+Uneven Distribution: If client IP addresses are not evenly distributed, some servers may receive more requests than others, leading to an uneven load.
+Dynamic Changes: Adding or removing servers can disrupt the hash mapping, causing some clients to be routed to different servers.
+Limited Flexibility: Does not take into account the current load or capacity of servers, which can lead to inefficiencies.
+Use Cases
+Stateful Applications: Ideal for applications where maintaining session persistence is important, such as online shopping carts or user sessions.
+Geographically Distributed Clients: Useful when clients are distributed across different regions and consistent routing is required.
+
+### least response time
+
+TODO
+
+## Usea of load balancing
+
+### HA and Fault tolerance: 
+
+A load balancer performs Health Checks. It acts as the heartbeat monitor for your cluster. It constantly pings your backend servers ("Are you alive? Can you take a request?"). If a server fails to answer or returns a 5xx error, the LB cuts it off instantly. It stops sending traffic to the corpse and reroutes it to the living.
+
+### Horizontal Scalability
+
+The LB acts as the Unified Entry Point (Virtual IP). Clients only know the LB's address. When traffic spikes, you spin up more backend instances, register them with the LB, and boom, you have more capacity.
+
+
+### Blue/Green deployments
+
+Load balancers allow for Connection Draining and strategies like Blue-Green Deployment. You can signal the LB to stop sending new connections to a specific server while allowing existing connections to finish naturally, then take it offline for patching.
+
+### Shield
+
+A Load Balancer acts as a **Reverse Proxy**. It terminates the connection. The client talks to the LB; the LB talks to the server. The internet never touches your backend. Furthermore, the LB can absorb DDoS attacks (Distributed Denial of Service) and filter malicious traffic before it even reaches your expensive application logic.
+
+### SSL Termination (The "Offloader")
+
+Encryption is expensive. Handshaking SSL/TLS (decrypting HTTPS traffic) takes significant CPU power. You can offload this to the Load Balancer. This is called **SSL Termination**. The client speaks HTTPS to the Load Balancer. The Load Balancer decrypts it and speaks HTTP (or lighter encryption) to your backend servers inside your secure private network.
+
+
 ### DNS Load Balancing and High Availability
 
 DNS load balancing and high availability techniques, such as round-robin DNS, geographically distributed servers, anycast routing, and Content Delivery Networks (CDNs), help distribute the load among multiple servers, reduce latency for end-users, and maintain uninterrupted service, even in the face of server failures or network outages.
+
+## LB types
+
+### Hardware Load Balancing
+
+They use specialized hardware components, such as Application-Specific Integrated Circuits (ASICs) or Field-Programmable Gate Arrays (FPGAs), to efficiently distribute network traffic
+
+Use case: A large e-commerce company uses a hardware load balancer to distribute incoming web traffic among multiple web servers, ensuring fast response times and a smooth shopping experience for customers.
+
+### Software Load Balancing
+
+Software load balancers are applications that run on general-purpose servers or virtual machines. They use software algorithms to distribute incoming traffic among multiple servers or resources.
+
+Use case: A startup with a growing user base deploys a software load balancer on a cloud-based virtual machine, distributing incoming requests among multiple application servers to handle increased traffic.
+
+### Cloud-based Load Balancing
+
+Cloud-based load balancers are provided as a service by cloud providers. They offer load balancing capabilities as part of their infrastructure, allowing users to easily distribute traffic among resources within the cloud environment.
+
+Use case: A mobile app developer uses a cloud-based load balancer provided by their cloud provider to distribute incoming API requests among multiple backend servers, ensuring smooth app performance and quick response times.
+
+### DNS Load Balancing
+
+DNS (Domain Name System) load balancing relies on the DNS infrastructure to distribute incoming traffic among multiple servers or resources. It works by resolving a domain name to multiple IP addresses, effectively directing clients to different servers based on various policies.
+
+Use case: A content delivery network (CDN) uses DNS load balancing to direct users to the closest edge server based on their geographical location, ensuring faster content delivery and reduced latency.
+
+### Global Server Load Balancing 
+
+GSLB is a technique used to distribute traffic across geographically dispersed data centers. It combines DNS load balancing with health checks and other advanced features to provide a more intelligent and efficient traffic distribution method.
+
+Use case: A multinational corporation uses GSLB to distribute incoming requests for its web applications among several data centers around the world, ensuring high availability and optimal performance for users in different regions.
+
+### Hybrid Load Balancing
+
+Hybrid load balancing combines the features and capabilities of multiple load balancing techniques to achieve the best possible performance, scalability, and reliability. It typically involves a mix of hardware, software, and cloud-based solutions to provide the most effective and flexible load balancing strategy for a given scenario.
+
+Use case: A large-scale online streaming platform uses a hybrid load balancing strategy, combining hardware load balancers in their data centers for high-performance traffic distribution, cloud-based load balancers for scalable content delivery, and DNS load balancing for global traffic management. This approach ensures optimal performance, scalability, and reliability for their millions of users worldwide.
+
+### Layer 4 Load Balancing
+
+Layer 4 load balancing, also known as transport layer load balancing, operates at the transport layer of the OSI model (the fourth layer). It distributes incoming traffic based on information from the TCP or UDP header, such as source and destination IP addresses and port numbers.
+
+Use case: An online gaming platform uses Layer 4 load balancing to distribute game server traffic based on IP addresses and port numbers, ensuring that players are evenly distributed among available game servers for smooth gameplay.
+
+### Layer 7 Load Balancing
+
+Layer 7 load balancing, also known as application layer load balancing, operates at the application layer of the OSI model (the seventh layer). It takes into account application-specific information, such as HTTP headers, cookies, and URL paths, to make more informed decisions about how to distribute incoming traffic.
+
+Use case: A web application with multiple microservices uses Layer 7 load balancing to route incoming API requests based on the URL path, ensuring that each microservice receives only the requests it is responsible for handling.
+
 
 #### RR DNS
 
