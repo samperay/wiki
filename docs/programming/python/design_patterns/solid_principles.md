@@ -10,6 +10,21 @@
 
 The Single Responsibility Principle (SRP) states that a class or module should have only one reason to change. In other words, each class or module should have a single responsibility or purpose.
 
+A class should be responsible for one specific task.
+A method should perform one specific action.
+A module should handle one specific area of functionality.
+
+Simplifies Maintenance: When a class has a single responsibility, it’s easier to understand, debug, and modify. This reduces the likelihood of introducing bugs when making changes.
+
+Encourages Reusability: Classes that focus on one task are more reusable across different parts of the application or even in different projects.
+
+Makes Code Scalable: As your application grows, classes that follow SRP are easier to extend without becoming messy or bloated.
+
+Promotes High Cohesion: SRP ensures that each class or module is cohesive, meaning it focuses on a single task, which leads to more readable and maintainable code.
+
+Supports Low Coupling: By separating responsibilities, you reduce the dependency between classes, making your system more modular and flexible.
+
+
 ```
 class Student:
     def __init__(self, name, id_number):
