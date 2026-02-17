@@ -39,33 +39,6 @@ Session Persistence: A technique used to ensure that subsequent requests from th
 
 SSL/TLS Termination: The process of decrypting SSL/TLS-encrypted traffic at the load balancer level, offloading the decryption burden from backend servers and allowing for centralized SSL/TLS management.
 
-### Misc terms
-
-#### Availability & Realibility
-availability is about whether a system is "up," while reliability is about whether it "works correctly" once it’s up
-
-A Car: If you have a car in your driveway ready to drive, it is available. However, if that car stalls every time you hit 60 mph, it is unreliable.
-A Website: A site that loads but gives you an error every time you click "Checkout" has high availability (it's online) but low reliability (it fails to perform its function).
-
-#### Upstream and Downstream
-The exact meaning depends on the point of reference in the architecture
-e.g 
-
-```User requests → Load Balancer → App Server → Database```
-
-**Upstream** = Traffic **going OUT(moving away)** from your system to another system/service. 
-**Downstream** = Traffic **coming INTO(coming into)** your system from another system/service.
-
-From the App Server’s perspective:
-
-Downstream → User requests / Load Balancer (requests coming in)
-Upstream → Database (requests going out)
-
-From the Load Balancer perspective:
-
-Downstream -> User requests
-upstream -> App server(backend servers) 
-
 ## Load Balancing Algorithms
 
 ### RR
@@ -248,7 +221,6 @@ Layer 7 load balancing, also known as application layer load balancing, operates
 
 Use case: A web application with multiple microservices uses Layer 7 load balancing to route incoming API requests based on the URL path, ensuring that each microservice receives only the requests it is responsible for handling.
 
-
 #### RR DNS
 
 Round-robin DNS is a simple load balancing technique in which multiple IP addresses are associated with a single domain name. When a resolver queries the domain name, the DNS server responds with one of the available IP addresses, rotating through them in a round-robin fashion. This distributes the load among multiple servers or resources, improving the performance and availability of the website or service.
@@ -276,6 +248,192 @@ High availability: If a server fails or becomes unreachable, anycast automatical
 A Content Delivery Network (CDN) is a network of distributed servers that cache and deliver web content to users based on their geographic location. CDNs help improve the performance, reliability, and security of websites and web services by distributing the load among multiple servers and serving content from the server closest to the user.
 
 When a user requests content from a website using a CDN, the CDN's DNS server determines the best server to deliver the content based on the user's location and other factors. The DNS server then responds with the IP address of the chosen server, allowing the user to access the content quickly and efficiently.
+
+## Stateless and stateful load balancing
+
+Stateless load balancers operate without maintaining any information about the clients' session or connection state. They make routing decisions based solely on the incoming request data, such as the client's IP address, request URL, or other headers.
+
+stateful load balancing preserves session information between requests. The load balancer assigns a client to a specific server and ensures that all subsequent requests from the same client are directed to that server.
+
+Stateful load balancing can be further categorized into two types:
+
+- Source IP Affinity: This form of stateful load balancing assigns a client to a specific server based on the client's IP address.
+- Session Affinity: In this type of stateful load balancing, the load balancer allocates a client to a specific server based on a session identifier, such as a cookie or URL parameter. This method ensures that requests from the same client consistently reach the same server, regardless of the client's IP address.
+
+Stateless load balancing is useful for applications capable of processing requests independently, while stateful load balancing is more appropriate for applications that depend on session data.
+
+## load balancing terminology
+
+### Availability & Realibility
+availability is about whether a system is "up," while reliability is about whether it "works correctly" once it’s up
+
+A Car: If you have a car in your driveway ready to drive, it is available. However, if that car stalls every time you hit 60 mph, it is unreliable.
+A Website: A site that loads but gives you an error every time you click "Checkout" has high availability (it's online) but low reliability (it fails to perform its function).
+
+### Upstream and Downstream
+The exact meaning depends on the point of reference in the architecture
+e.g 
+
+```User requests → Load Balancer → App Server → Database```
+
+**Upstream** = Traffic **going OUT(moving away)** from your system to another system/service. 
+**Downstream** = Traffic **coming INTO(coming into)** your system from another system/service.
+
+From the App Server’s perspective:
+
+Downstream → User requests / Load Balancer (requests coming in)
+Upstream → Database (requests going out)
+
+From the Load Balancer perspective:
+
+Downstream -> User requests
+upstream -> App server(backend servers) 
+
+### High Availability and Fault Tolerance
+
+To ensure high availability and fault tolerance, load balancers should be designed and deployed with redundancy in mind. 
+
+**Active-passive configuration:** one load balancer (the active instance) handles all incoming traffic while the other (the passive instance) remains on standby. If the active load balancer fails, the passive instance takes over and starts processing requests.
+
+**Active-active configuration:** In this setup, multiple load balancer instances actively process incoming traffic simultaneously. Traffic is distributed among the instances using methods such as DNS load balancing or an additional load balancer layer
+
+**Health checks and monitoring:** Health checks are periodic tests performed by the load balancer to determine the availability and performance of backend servers. load balancers can automatically remove unhealthy servers from the server pool and avoid sending traffic to them
+
+**Synchronization and State Sharing** 
+
+**Centralized configuration management:** Using a centralized configuration store (e.g., etcd, Consul, or ZooKeeper) to maintain and distribute configuration data among load balancer instances ensures that all instances are using the same settings and are aware of changes.
+
+**State sharing and replication:** In scenarios where load balancers must maintain session data or other state information, it is crucial to ensure that this data is synchronized and replicated across instances. This can be achieved through database replication, distributed caching systems (e.g., Redis or Memcached), or built-in state-sharing mechanisms provided by the load balancer software or hardware.
+
+### Scalability and Performance
+
+**Horizontal scaling:** This involves adding more load balancer instances to distribute traffic among them. Horizontal scaling is particularly effective for **active-active configurations**, where each load balancer instance actively processes traffic.
+
+**Vertical scaling:** This involves increasing the resources (e.g., CPU, memory, and network capacity) of the existing load balancer instance(s) to handle increased traffic.
+
+**Connection and request rate limits:** Overloading a load balancer or backend servers can result in **decreased performance or even service outages**. Implementing rate limiting(such as IP addresses, client domains, or URL patterns) and connection limits at the load balancer level can help prevent overloading and ensure consistent performance.
+
+**Caching and content optimization:** Load balancers can cache static content, such as images, CSS, and JavaScript files, to reduce the load on backend servers and improve response times. Additionally, some load balancers support content optimization features like compression or minification, which can further improve performance and reduce bandwidth consumption.
+
+### Impact of load balancers on latency
+
+While the impact is typically minimal, it is important to consider the potential latency introduced by the load balancer and optimize its performance accordingly.
+
+**Geographical distribution:** Deploying load balancers and backend servers in geographically distributed locations can help reduce latency for users by ensuring that their requests are processed by a nearby instance.
+
+**Connection reuse**: Many load balancers support connection reuse or keep-alive connections, which reduce the overhead of establishing new connections between the load balancer and backend servers for each request
+
+**Protocol optimizations:** Some load balancers support protocol optimizations, such as HTTP/2 or QUIC, which can improve performance by reducing latency and increasing throughput.
+
+### Challenges of Load Balancers
+
+**Single Point of Failure:** If not designed with redundancy and fault tolerance in mind, a load balancer can become a single point of failure in the system
+
+**Configuration Complexity:** Load balancers often come with a wide range of configuration options, including algorithms, timeouts, and health checks. Misconfigurations can lead to poor performance, uneven traffic distribution, or even service outages.
+
+**Scalability Limitations:** As traffic increases, the load balancer itself might become a performance bottleneck, especially if it is not configured to scale horizontally or vertically.
+
+**Latency:** Introducing a load balancer into the request-response path adds an additional network hop, which could lead to increased latency. While the impact is typically minimal, it is essential to consider the potential latency introduced by the load balancer and optimize its performance accordingly.
+
+**Sticky Sessions** Some applications rely on maintaining session state or user context between requests. In such cases, load balancers must be configured to use session persistence or "sticky sessions" to ensure subsequent requests from the same user are directed to the same backend server. However, this can lead to uneven load distribution and negate some of the benefits of load balancing.
+
+**Cost:** Deploying and managing load balancers, especially in high-traffic scenarios, can add to the overall cost of your infrastructure. This may include hardware or software licensing costs, as well as fees associated with managed load balancing services provided by cloud providers.
+
+**Health Checks and Monitoring:** Implementing effective health checks for backend servers is essential to ensure that the load balancer accurately directs traffic to healthy instances. Misconfigured or insufficient health checks can lead to the load balancer sending traffic to failed or underperforming servers, resulting in a poor user experience
+
+
+## API Gateway
+
+An API Gateway is a server-side architectural component in a software system that acts as an intermediary between clients (such as web browsers, mobile apps, or other services) and backend services, microservices, or APIs.
+
+Its main purpose is to provide a single entry point for external consumers to access the services and functionalities of the backend system. It receives client requests, forwards them to the appropriate microservice, and then returns the server’s response to the client.
+
+The API gateway is responsible for tasks such as routing, authentication, and rate limiting. This enables microservices to focus on their individual tasks and improves the overall performance and scalability of the system.
+
+![api_gw](./images/api_gw.png)
+
+### Differences between API Gateway and Load Balancer
+
+| Feature | API Gateway | Load Balancer |
+|----------|-------------|---------------|
+| Primary Purpose | Manages, secures, and routes API requests | Distributes incoming network traffic across multiple servers |
+| OSI Layer | Typically Layer 7 (Application Layer) | Layer 4 (Transport) and/or Layer 7 |
+| Protocol Handling | HTTP, HTTPS, WebSocket, REST, gRPC | TCP, UDP, HTTP, HTTPS |
+| Traffic Distribution | Routes based on API path, headers, authentication, version | Routes based on IP, port, protocol |
+| Authentication | Built-in authentication (OAuth, JWT, API keys) | No built-in authentication |
+| Rate Limiting | Supports throttling and rate limiting | Not typically supported |
+| Request Transformation | Can modify headers, payloads, and responses | Cannot modify request/response content |
+| Caching | Supports response caching | No caching |
+| SSL Termination | Yes | Yes |
+| Monitoring & Analytics | Detailed API-level metrics | Basic traffic-level metrics |
+| Use Case | Microservices architecture, external API exposure | High availability, horizontal scaling |
+| Example | AWS API Gateway, Kong, Apigee | AWS ALB, NLB, HAProxy |
+
+
+### Key Usages of API Gateways
+
+**Request Routing:** Directing incoming client requests to the appropriate backend service.
+
+**Aggregation of Multiple Services:** Combining responses from multiple backend services into a single response to the client.
+
+**Security Enforcement:** Implementing security measures such as authentication, authorization, and rate limiting.
+
+**Load Balancing:** Distributing incoming requests evenly across multiple instances of backend services to ensure no single service becomes a bottleneck
+
+**Caching Responses:** Storing frequently requested data to reduce latency and decrease the load on backend services.
+
+**Protocol Translation:** Converting requests and responses between different protocols used by clients and backend services.
+
+**Monitoring and Logging:** Tracking and recording request and response data for analysis, debugging, and performance monitoring.
+
+**Transformation of Requests and Responses:** Modifying the data format or structure of requests and responses to meet the needs of clients or services.
+
+**API Versioning:** Managing different versions of APIs to ensure backward compatibility and smooth transitions when updates are made.
+
+**Rate Limiting and Throttling:** Controlling the number of requests a client can make in a given time frame to protect backend services from being overwhelmed.
+
+**API Monetization:** Enabling businesses to monetize their APIs by controlling access, usage tiers, and billing.
+
+**Service Discovery Integration:** Facilitating dynamic discovery of backend services, especially in environments where services are frequently scaled up or down.
+
+**Circuit Breaker Pattern Implementation:** Preventing cascading failures by detecting when a backend service is failing and stopping requests to it temporarily.
+
+**Content-Based Routing:** Routing requests to different backend services based on the content of the request, such as headers, body, or query parameters.
+
+**SSL Termination:** Handling SSL/TLS encryption and decryption at the gateway level to offload this resource-intensive task from backend services.
+
+**Policy Enforcement:** Applying organizational policies consistently across all API traffic, such as data validation, request formatting, and access controls.
+
+**Multi-Tenancy Support:** Supporting multiple clients or tenants within a single API infrastructure while ensuring data isolation and customized configurations.
+
+**A/B Testing and Canary Releases:** Facilitating controlled testing of new features or services by directing a subset of traffic to different backend versions.
+
+**Localization and Internationalization Support:** Adapting responses based on the client's locale, such as language preferences or regional settings.
+
+**Reducing Client Complexity:** Simplifying the client-side logic by handling complex operations on the server side through the gateway.
+
+
+### Advantages of using API Gateway
+- Improved performance - cache responses, rate limit requests, and optimize communication between clients and backend services
+- Simplified system design - provides a single entry point for all API requests, making it easier to manage, monitor, and maintain APIs across multiple backend services.
+- Enhanced security - can enforce authentication and authorization policies, helping protect backend services from unauthorized access or abuse
+- Improved scalability - can distribute incoming requests among multiple instances of a microservice, enabling the system to scale more easily and handle a larger number of requests
+- Better monitoring and visibility - can collect metrics and other data about the requests and responses, providing valuable insights into the performance and behavior of the system
+- Simplified Client Integration - By providing a consistent and unified interface for clients to access multiple backend services, the API Gateway simplifies client-side development and reduces the need for clients to manage complex service interactions
+- Protocol and Data Format Transformation - can convert requests and responses between different protocols (e.g., HTTP to gRPC) or data formats (e.g., JSON to XML), enabling greater flexibility in how clients and services communicate
+- API Versioning and Backward Compatibility - can manage multiple versions of an API, allowing developers to introduce new features or make changes without breaking existing clients
+- Enhanced Error Handling - can provide a consistent way to handle errors and generate error responses
+- Load Balancing and Fault Tolerance - can distribute incoming traffic evenly among multiple instances of a backend service, improving performance and fault tolerance
+
+### Disadvantages of using API Gateway
+
+- Additional Complexity - adds an extra layer of complexity to your architecture
+- Single Point of Failure - If not configured correctly, the API Gateway could become a single point of failure in your system. If the gateway experiences an outage or performance issues, it can affect the entire system
+- Latency - adds an extra hop in the request-response path, which could introduce some latency, especially if the gateway is responsible for performing complex tasks like request/response transformation or authentication
+- Vendor Lock-in - managed API Gateway service provided by a specific cloud provider or vendor, you may become dependent on their infrastructure, pricing, and feature set. This could make it more challenging to migrate your APIs to a different provider
+- Cost - Running an API Gateway, especially in high-traffic scenarios, can add to the overall cost of your infrastructure
+- Maintenance Overhead - API Gateway requires monitoring, maintenance, and regular updates to ensure its security and reliability
+- Configuration Complexity - API Gateways often come with a wide range of features and configuration options. Setting up and managing these configurations can be complex and time-consuming, especially when dealing with multiple environments or large-scale deployments.
 
 # Network essentials
 
