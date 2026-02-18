@@ -413,7 +413,6 @@ The API gateway is responsible for tasks such as routing, authentication, and ra
 
 **Reducing Client Complexity:** Simplifying the client-side logic by handling complex operations on the server side through the gateway.
 
-
 ### Advantages of using API Gateway
 - Improved performance - cache responses, rate limit requests, and optimize communication between clients and backend services
 - Simplified system design - provides a single entry point for all API requests, making it easier to manage, monitor, and maintain APIs across multiple backend services.
@@ -666,3 +665,238 @@ URL: Specifies both the identity and the location of a resource (How and Where).
 URI: A more comprehensive term covering both URLs (identifying and locating) and URNs (just identifying). (https://www.example.com/path?query=term#section)
 URN: Focuses only on uniquely identifying a resource, not on where it is located or how to access it. (urn:isbn:0451450523)
 
+## Proxy
+
+**forward proxy**
+
+A forward proxy(proxy server)is a server that sits in front of one or more client machines and acts as an intermediary between the clients and the internet. When a client machine makes a request to a resource (like a web page or file) on the internet, the request is first sent to the proxy,  then forwards the request to the internet on behalf of the client machine and returns the response to the client machine. forward proxies are used to **cache data, filter requests, log requests, or transform requests (by adding/removing headers, encrypting/decrypting, or compressing a resource**).
+Proxies can combine the same data access requests into one request and then return the result to the user; this technique is called collapsed forwarding
+
+![proxy_server](./images/proxy_server.png)
+
+**Reverse Proxy**
+
+A reverse proxy is a server that sits in front of one or more web servers and acts as an intermediary between the web servers and the Internet. When a client makes a request to a resource on the internet, the request is first sent to the reverse proxy. The reverse proxy then forwards the request to one of the web servers, which returns the response to the reverse proxy. The reverse proxy then returns the response to the client. Contrary to the forward proxy, which hides the client's identity, a reverse proxy hides the server's identity. this can be used for caching, load balancing, or routing requests to the appropriate servers
+
+![reverse_proxy](./images/reverse_proxy.png)
+
+### forward vs reverse proxy
+
+![fw_rev_proxy](./images/fw_rev_proxy.png)
+
+### Uses of Proxies
+
+- Performance enhancement - cache frequently accessed content, reducing the need for repeated requests to the target server.
+
+- Security enhancement - protective barrier between clients and target servers, protect internal networks from external threats and prevent unauthorized access to sensitive resources
+
+- Anonymity and privacy - can mask the client's IP address and other identifying information, providing a level of anonymity and privacy when accessing the internet or other network resources
+
+- Load balancing - Reverse proxy servers can distribute client requests across multiple target servers, preventing individual servers from becoming overburdened and ensuring high availability and performance
+
+- Centralized control and monitoring - Proxy servers enable centralized control and monitoring of network traffic, facilitating easier administration and management of network resources. Administrators can implement policies, filters, and other configurations on the proxy server to manage traffic and optimize network performance.
+
+- Content filtering and access control - can be configured to block or filter specific content types, websites, or services based on predetermined policies. This functionality is often used in educational and corporate environments to enforce acceptable use policies or comply with regulatory requirements
+
+- Content adaptation and transformation - Proxy servers can modify and adapt content to suit specific client requirements, such as altering image formats, compressing data, or adjusting content for mobile or low-bandwidth devices. 
+
+- Logging and auditing - can log and record network traffic, providing a valuable source of information for auditing, troubleshooting, and monitoring purposes
+
+- SSL termination - Reverse proxy servers can handle SSL/TLS encryption and decryption, offloading this task from the target servers
+
+- Application-level gateway - can act as an application-level gateway, processing and forwarding application-specific requests and responses between clients and servers. This capability allows proxy servers to provide added functionality, such as authentication, content filtering, or protocol translation, at the application level.
+
+### VPN Vs Proxy
+
+| Feature | VPN (Virtual Private Network) | Proxy Server |
+|----------|--------------------------------|--------------|
+| Definition | Creates a secure encrypted tunnel between your device and the internet | Acts as an intermediary between client and destination server |
+| Encryption | Encrypts all traffic from your device | Usually does NOT encrypt traffic (unless HTTPS proxy) |
+| Security Level | High – protects against ISP tracking, hackers, MITM attacks | Low to Moderate – mainly hides IP address |
+| IP Masking | Yes – hides your real IP address | Yes – hides your real IP address |
+| Scope of Protection | Entire device (all applications) | Specific application (e.g., browser) |
+| Performance | Slightly slower due to encryption overhead | Generally faster (no encryption overhead) |
+| Use Cases | Secure remote work, public WiFi protection, accessing private networks | Bypassing geo-restrictions, web scraping, basic anonymity |
+| Configuration Level | OS-level configuration | Application-level configuration |
+| Logging | Depends on provider | Depends on provider |
+| Protocol Examples | OpenVPN, IPSec, WireGuard | HTTP Proxy, SOCKS5 |
+| Cost | Usually paid service | Often free or low cost |
+
+---
+
+**When to Use VPN?**
+
+- Working remotely (secure corporate access)
+- Using public Wi-Fi
+- Protecting sensitive data
+- Securing DevOps/admin access to private servers
+
+**When to Use Proxy?**
+
+- Bypassing website blocks
+- Web scraping
+- Testing geo-location-based content
+- Lightweight IP masking
+
+
+## Distributed FS
+
+type of file system that manage the storage and retrieval of data across multiple servers and locations
+
+- Cloud Storage Services: Services like Google Drive, Dropbox, and others use distributed file systems to store user files across many servers.
+- Big Data Applications: Systems like Hadoop Distributed File System (HDFS) are specifically designed for storing and processing large datasets.
+- Content Delivery Networks: Distributing content across different regions to improve access speed and reliability.
+- High-Performance Computing: Where large datasets need to be accessed and processed concurrently by multiple systems.
+
+
+### Arch components of DFS
+
+- **Client Interface:** - Provides a way for clients (users or applications) to access and manipulate files as if they were on a local file system.
+
+- **Metadata Servers:** - Manage metadata about files, such as location information, directory structures, permissions, and file attributes.
+
+- **Data Nodes or Storage Nodes:** - Store the actual file data
+
+- **Replication and Redundancy Mechanism:** - Ensures data availability and durability by replicating files across multiple nodes.
+
+- **Load Balancer or Scheduler:** - Distributes workload evenly across different nodes and manages resource allocation.
+
+- **Network Infrastructure:** - Connects all components of the DFS and facilitates communication between them.
+
+- **Synchronization and Consistency Mechanisms:** - Ensures that all copies of a file are kept consistent across the system.
+
+- **Fault Tolerance and Recovery Mechanisms:** - Handles failures of nodes or network components without data loss or significant downtime.
+
+- **Security Features:** - Protects data from unauthorized access and ensures secure communication across the network.
+
+### key components
+
+#### Replication
+
+**Purpose:** ensuring data availability and durability. By creating multiple copies of data across different nodes, DFS protects against data loss due to node failures
+
+**Implementation:** Files are often divided into blocks, and each block is replicated across multiple nodes. DFS usually allows configuring the replication factor, i.e., the number of replicas for each block. Intelligent placement of replicas across different nodes or racks to ensure high availability and fault tolerance.
+
+**Challenges:** Replication consumes network bandwidth, especially during the initial copying of data, Requires additional storage capacity for replicas.
+
+
+#### Scalability
+
+**Purpose:** DFS can grow in capacity and performance as the amount of data or the number of users increases.
+
+**Implementation:** Horizontal Scaling, Load Distribution, Avoids single points of failure and bottlenecks, allowing for seamless scaling.
+
+**Challenges:** Scaling up involves efficiently managing metadata so that it doesn't become a bottleneck. Ensuring new nodes are effectively utilized and the load is evenly distributed
+
+#### Consistency
+
+**Purpose:** ensuring that all clients see the same data at any given time, despite data replication and concurrent modifications.
+
+**Implementation:** use different consistency models()
+    strict consistency - where all nodes see the data at the same time 
+    eventual consistency - where data updates will eventually propagate to all nodes but are not immediately visible
+
+**Challenges:** Strong consistency can impact system performance and latency. Ensuring data integrity in the presence of concurrent accesses and updates.
+
+## Redunancy & replication
+
+### Redunancy
+
+Redundancy refers to the duplication of critical components or functions to increase the reliability, availability, and fault tolerance of a system.
+
+### Benefits
+
+- **Improved reliability:** can continue to function despite individual component failures, ensuring the availability of critical services and applications
+
+- **Enhanced fault tolerance:** a system can better tolerate and recover from faults or failures, essential for maintaining high availability and minimizing downtime, particularly in mission-critical systems
+
+- **Increased availability:**  services and applications remain available even during component failures or maintenance
+
+- **Simplified maintenance:** maintenance and upgrades to be performed without disrupting system operation
+ 
+- **Disaster recovery:** geographically distributed copies of data and resources, organizations can recover more quickly from disasters or catastrophic events that may affect a single location
+
+### replication
+
+Database replication is the process of copying and synchronizing data from one database to one or more additional databases.
+
+#### strategies
+
+**Synchronous replication** database replication where changes made to the primary database are immediately replicated to the replica databases before the write operation is considered complete. strong consistency between the primary and replica databases
+
+**Asynchronous replication:** the changes made to the primary database are queued and replicated to the replicas at a later time.
+
+**Semi-synchronous replication:** synchronous + asynchronous replication. changes made to the primary database are immediately replicated to at least one replica database, while other replicas may be updated asynchronously. the write operation on the primary is not considered complete until at least one replica database has confirmed that it has received and processed the changes. This ensures that there is some level of strong consistency between the primary and replica databases, while also providing improved performance compared to fully synchronous replication
+
+![replication_types](./images/replication_types.png)
+
+### Replication Methods
+
+**Single-leader replication:** one node handles all writes while one or more followers asynchronously or synchronously replicate its state.
+
+**Multi-leader replication:** multiple nodes can accept writes; they asynchronously propagate changes to each other, resolving conflicts via timestamps or application logic.
+
+**Leaderless:** No designated leader—clients send reads/writes to any replica set and rely on read/write quorums to ensure consistency.
+
+**Chain replication:** Nodes are arranged in a fixed chain. Writes flow from head → … → tail; reads are served from the tail, so they see all preceding writes.
+
+**Read-replica replication:** A variation of single-leader (primary-backup) replication where the leader handles all writes and one or more replicas serve only read traffic. Replicas continuously pull or receive a stream of write updates from the leader but never accept writes themselves.
+
+**Snapshot replication:** Rather than continuously shipping every change, snapshot replication takes a full copy of the source dataset at a specific point in time and pushes that snapshot to one or more targets on a scheduled basis.
+
+**Summary:**
+
+- Single-leader is the easiest option but is limited by having only one writer.
+- Multi-leader boosts write locality at the cost of conflict resolution.
+- Leaderless (quorum) removes single points but needs careful quorum tuning.
+- Chain gives strong ordering and pipelining, yet ties latency to chain length.
+- Read-replica replication is perfect when you need to scale out reads under a single-writer model, but be mindful of replica lag and write bottlenecks.
+- Snapshot replication is a straightforward way to distribute a point-in-time copy of data on a schedule, best suited for static or slowly changing - datasets where resource cost and latency between snapshots are acceptable.
+
+### Redundancy vs Replication
+
+| Feature | Redundancy | Replication |
+|----------|------------|-------------|
+| Definition | Duplication of critical components or systems to increase availability and eliminate single points of failure | Copying data from one system to another to ensure data availability and consistency |
+| Primary Goal | High Availability & Fault Tolerance | Data Consistency & Data Availability |
+| Scope | Infrastructure, hardware, network, power, systems | Primarily data (databases, storage, files) |
+| Example | Multiple servers behind a load balancer | Primary database replicating to secondary database |
+| Data Synchronization | Not always required | Required (synchronous or asynchronous) |
+| Failure Handling | If one component fails, another takes over | If primary fails, replica can be promoted |
+| Complexity | Infrastructure-level complexity | Data consistency and conflict-handling complexity |
+| Cost | Higher (duplicate infrastructure) | Moderate to high (depends on replication strategy) |
+| Use Case | Multi-AZ deployment in cloud | Read replicas, disaster recovery database setup |
+| Performance Impact | May improve load handling | May improve read performance (read replicas) |
+
+---
+
+#### 🔹 Redundancy Example (Infrastructure Level)
+
+- Two web servers in different Availability Zones
+- Load balancer distributes traffic
+- If one server fails → traffic shifts automatically
+
+Example:
+- AWS: EC2 instances in multiple AZs behind an ALB
+- IBM Cloud: VSI instances behind a Load Balancer
+
+---
+
+#### 🔹 Replication Example (Data Level)
+
+- Primary PostgreSQL database
+- Secondary standby database
+- Data copied continuously
+- If primary crashes → standby promoted
+
+Replication Types:
+- Synchronous Replication
+- Asynchronous Replication
+- Multi-Master Replication
+
+---
+
+## 🔥 Key Difference in One Line
+
+- **Redundancy = Duplicate system components**
+- **Replication = Duplicate data**
