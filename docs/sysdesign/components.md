@@ -354,7 +354,7 @@ The API gateway is responsible for tasks such as routing, authentication, and ra
 
 ![api_gw](./images/api_gw.png)
 
-### Differences between API Gateway and Load Balancer
+### Diff between API G/W and LB
 
 | Feature | API Gateway | Load Balancer |
 |----------|-------------|---------------|
@@ -436,11 +436,11 @@ The API gateway is responsible for tasks such as routing, authentication, and ra
 - Maintenance Overhead - API Gateway requires monitoring, maintenance, and regular updates to ensure its security and reliability
 - Configuration Complexity - API Gateways often come with a wide range of features and configuration options. Setting up and managing these configurations can be complex and time-consuming, especially when dealing with multiple environments or large-scale deployments.
 
-# Network essentials
+## Network essentials
 
 Differences Between HTTP and HTTPS
 
-## HTTP vs HTTPS Comparison
+### HTTP vs HTTPS Comparison
 
 | Feature        | HTTP                                                   | HTTPS                                                   |
 |----------------|--------------------------------------------------------|---------------------------------------------------------|
@@ -451,16 +451,13 @@ Differences Between HTTP and HTTPS
 | **Use Cases**  | Non-sensitive data transmission                       | Sensitive transactions (e.g., banking, e-commerce)       |
 
 
-## TCP vs UDP
+### TCP vs UDP
 
 these two of the main protocols used for transmitting data over the internet.
 
+**TCP:** TCP is a connection-oriented protocol that ensures reliable, ordered, and error-checked delivery of a stream of bytes between applications.
 
-**TCP (Transmission Control Protocol)**
-
-TCP is a connection-oriented protocol that ensures reliable, ordered, and error-checked delivery of a stream of bytes between applications.
-
-**Characteristics**
+**Characteristics:**
 - Reliability: TCP ensures that data is delivered accurately and in order, retransmitting lost or corrupted packets.
 - Connection-Oriented: Establishes a connection between sender and receiver before transmitting data.
 - Flow Control: Manages data transmission rate to prevent network congestion.
@@ -469,17 +466,13 @@ TCP is a connection-oriented protocol that ensures reliable, ordered, and error-
 
 e.g: Loading a webpage: TCP is used to ensure all web content is loaded correctly and in the right order.
 
+**UDP:** UDP is a connectionless protocol that sends messages, called **datagrams**, without establishing a prior connection and without guaranteeing reliability or order.
 
-**UDP(User Datagram Protocol)**
-
-UDP is a connectionless protocol that sends messages, called **datagrams**, without establishing a prior connection and without guaranteeing reliability or order.
-
-**Characteristics**
+**Characteristics:**
 - Low Overhead: Does not establish a connection, leading to lower overhead and latency.
 - Unreliable Delivery: Does not guarantee message delivery, order, or error checking.
 - Speed: Faster than TCP due to its simplicity and lack of retransmission mechanisms.
 - No Congestion Control: Does not reduce transmission rates under network congestion.
-
 e.g: Streaming a live sports event: UDP is used for faster transmission, even if it means occasional pixelation or minor video artifacts.
 
 **TCP vs UDP Comparison**
@@ -492,9 +485,9 @@ e.g: Streaming a live sports event: UDP is used for faster transmission, even if
 | **Data Integrity** | High data integrity, suitable for applications like file transfers and web browsing | Lower data integrity, acceptable for applications like streaming where perfect accuracy is less critical |
 | **Use Case Suitability** | Used when data accuracy is more critical than speed | Used when speed is more critical than accuracy |
 
-# HTTP/1.0 vs HTTP/1.1 vs HTTP/2 vs HTTP/3
+### HTTP/1.0 vs HTTP/1.1 vs HTTP/2 vs HTTP/3
 
-## 📌 Executive Summary
+Summary:
 
 HTTP has evolved to improve:
 - ⚡ Performance (faster loading)
@@ -504,9 +497,7 @@ HTTP has evolved to improve:
 
 Each version builds upon the previous one to address web scalability challenges.
 
----
-
-# 🔎 High-Level Comparison
+Comparison:
 
 | Feature | HTTP/1.0 | HTTP/1.1 | HTTP/2 | HTTP/3 |
 |----------|-----------|-----------|---------|---------|
@@ -524,146 +515,97 @@ Each version builds upon the previous one to address web scalability challenges.
 
 ---
 
-# 📚 Version-by-Version Summary
+#####  HTTP/1.0 (1996)
 
----
-
-## 🚀 HTTP/1.0 (1996)
-
-### Characteristics
+Characteristics:
 - One request = one TCP connection
 - Stateless
 - Basic headers
 - High latency
 
-### Limitations
+Limitations:
 - Connection overhead
 - Slow page loads
 - Not suitable for modern resource-heavy websites
 
-### Best Used For
+Use cases:
 - Simple static websites
 - Early web applications
 
----
+#### HTTP/1.1 (1997)
 
-## 🚀 HTTP/1.1 (1997)
-
-### Improvements Over 1.0
+Improvements Over 1.0:
 - Persistent connections (Keep-Alive)
 - Chunked transfer encoding
 - Host header (virtual hosting)
 - Better caching
 
-### Benefits
+Benefits:
 - Reduced latency
 - Efficient resource usage
 - Enabled shared hosting
 
-### Still Has
+Still Has:
 - Head-of-line blocking
 - Text-based inefficiencies
 
-### Best Used For
+Best Used For:
 - Dynamic websites
 - E-commerce platforms
 - APIs
 
----
+####  HTTP/2 (2015)
 
-## 🚀 HTTP/2 (2015)
-
-### Major Enhancements
+Major Enhancements:
 - Binary protocol
 - Multiplexing (multiple requests over one connection)
 - Header compression (HPACK)
 - Server Push
 
-### Benefits
+Benefits:
 - Significant performance improvement
 - Faster page loads
 - Efficient bandwidth usage
 
-### Limitation
+Limitation:
 - Still uses TCP → TCP-level head-of-line blocking
 
-### Best Used For
+Best Used For:
 - Social media platforms
 - Streaming services
 - Large web applications
 
----
+#### HTTP/3 (2020)
 
-## 🚀 HTTP/3 (2020)
-
-### Built On
+Built On:
 - QUIC protocol (UDP-based)
 
-### Major Advantages
+Major Advantages:
 - Eliminates TCP head-of-line blocking
 - 0-RTT handshake (faster connection setup)
 - Better packet loss handling
 - Built-in TLS 1.3 (mandatory encryption)
 
-### Benefits
+Benefits:
 - Lower latency
 - More resilient on unstable networks
 - Better mobile performance
 
-### Best Used For
+Best Used For
 - Video conferencing (Zoom, Teams)
 - Online gaming
 - Live streaming
 - Real-time apps
 
----
+Conclusion:
 
-# 📊 Evolution Summary
+The evolution from HTTP/1.0 to HTTP/3 represents, from simple request-response communication to to high-performance, encrypted, multiplexed, real-time web communication.
 
-| Improvement Area | 1.0 | 1.1 | 2 | 3 |
-|------------------|------|------|------|------|
-| Connection Efficiency | ❌ | ✅ | ✅ | ✅ |
-| Multiplexing | ❌ | ❌ | ✅ | ✅ |
-| Header Compression | ❌ | ❌ | ✅ | ✅ |
-| TCP Head-of-Line Fix | ❌ | ❌ | ❌ | ✅ |
-| Built-in Encryption | ❌ | ❌ | ❌ | ✅ |
-
----
-
-## 🎯 Why Upgrade to Newer Versions?
-
-- ⚡ Faster performance
-- 🔐 Better security
-- 📉 Reduced latency
-- 📈 Improved scalability
-- 🌐 Better real-world network handling
-
----
-
-## 🧠 Quick Memory Trick
-
-- **HTTP/1.0** → One request, one connection  
-- **HTTP/1.1** → Keep connection alive  
-- **HTTP/2** → Multiplex everything  
-- **HTTP/3** → Replace TCP with QUIC (UDP)
-
----
-
-# 🏁 Final Conclusion
-
-The evolution from HTTP/1.0 to HTTP/3 represents:
-
-> From simple request-response communication  
-> ➜ to high-performance, encrypted, multiplexed, real-time web communication.
-
-Modern web applications should use:
-- **HTTP/2 or HTTP/3** whenever possible.
-- HTTP/3 is ideal for mobile-heavy and real-time workloads.
-
-## URL vs. URI vs. URN
-
+#### URL vs. URI vs. URN
 URL: Specifies both the identity and the location of a resource (How and Where). (https://www.example.com/path?query=term#section)
+
 URI: A more comprehensive term covering both URLs (identifying and locating) and URNs (just identifying). (https://www.example.com/path?query=term#section)
+
 URN: Focuses only on uniquely identifying a resource, not on where it is located or how to access it. (urn:isbn:0451450523)
 
 ## Proxy
@@ -738,7 +680,6 @@ A reverse proxy is a server that sits in front of one or more web servers and ac
 - Web scraping
 - Testing geo-location-based content
 - Lightweight IP masking
-
 
 ## Distributed FS
 
