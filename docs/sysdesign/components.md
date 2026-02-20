@@ -769,29 +769,22 @@ Example:
 Database replication is the process of copying and synchronizing data from one database to one or more additional databases.
 **Replication = Duplicate data**
 
-#### strategies
+**strategies:**
 
 **Synchronous:** database replication where changes made to the primary database are immediately replicated to the replica databases before the write operation is considered complete. strong consistency between the primary and replica databases
-
 **Asynchronous:** the changes made to the primary database are queued and replicated to the replicas at a later time.
-
 **Semi-synchronous:** synchronous + asynchronous replication. changes made to the primary database are immediately replicated to at least one replica database, while other replicas may be updated asynchronously. the write operation on the primary is not considered complete until at least one replica database has confirmed that it has received and processed the changes. This ensures that there is some level of strong consistency between the primary and replica databases, while also providing improved performance compared to fully synchronous replication
 
 ![replication_types](./images/replication_types.png)
 
-#### Methods
+**Methods:**
 
-**Single-leader replication:** one node handles all writes while one or more followers asynchronously or synchronously replicate its state.
-
-**Multi-leader replication:** multiple nodes can accept writes; they asynchronously propagate changes to each other, resolving conflicts via timestamps or application logic.
-
-**Leaderless:** No designated leader—clients send reads/writes to any replica set and rely on read/write quorums to ensure consistency.
-
-**Chain replication:** Nodes are arranged in a fixed chain. Writes flow from head → … → tail; reads are served from the tail, so they see all preceding writes.
-
-**Read-replica replication:** A variation of single-leader (primary-backup) replication where the leader handles all writes and one or more replicas serve only read traffic. Replicas continuously pull or receive a stream of write updates from the leader but never accept writes themselves.
-
-**Snapshot replication:** Rather than continuously shipping every change, snapshot replication takes a full copy of the source dataset at a specific point in time and pushes that snapshot to one or more targets on a scheduled basis.
+- **Single-leader replication:** one node handles all writes while one or more followers asynchronously or synchronously replicate its state.
+- **Multi-leader replication:** multiple nodes can accept writes; they asynchronously propagate changes to each other, resolving conflicts via timestamps or application logic.
+- **Leaderless:** No designated leader—clients send reads/writes to any replica set and rely on read/write quorums to ensure consistency.
+- **Chain replication:** Nodes are arranged in a fixed chain. Writes flow from head → … → tail; reads are served from the tail, so they see all preceding writes.
+- **Read-replica replication:** A variation of single-leader (primary-backup) replication where the leader handles all writes and one or more replicas serve only read traffic. Replicas continuously pull or receive a stream of write updates from the leader but never accept writes themselves.
+- **Snapshot replication:** Rather than continuously shipping every change, snapshot replication takes a full copy of the source dataset at a specific point in time and pushes that snapshot to one or more targets on a scheduled basis.
 
 **Summary:**
 
