@@ -280,48 +280,31 @@ Let's say when you are working on the feature branch, there are few of the bug f
 
 When the above keeps happening for a quite long time, your branch would have all the **merge commits from main** and your **commits description on the feature would not be so much visible**. Hence in this case, we would use **rebase** all the feature branch commits would be available at the tip of master branch, so no merge commits
 
-```
-mkdir music
-cd music; git init 
-vim songs.txt
-
-git add songs.txt
-git commit -m 'added songs file' 
-
-vim songs.txt
-git commit -m 'added two film albums'
-
-git switch newalbum 
-vim songs.txt
-git add songs.txt
-
-git commit -am 'two more new albums added' 
-```
-
-let's say couple of songs added by someone and merged into master 
+Merge (creates extra commit)
 
 ```
-git switch master
-vim songs.txt
-git commit -am 'couple more albums added' 
+main:      A---B---C
+               \
+feature:        D---E
+
+After merge:
+
+main:      A---B---C--------M
+               \          /
+feature:        D---E------
 ```
-
-however, you are still working on the feat branch and would like to bring changes from master. Hence you would start merging changes on the master. 
-
-```
-git switch feat - your working branch
-git merge master
-
-< Now you have a merge commit from master branch >
-
-git log --oneline
-```
-
-When above process has been repeated, you would have more merge commits. In order to make the merge commit appear at the last of the feature branch, we would go for **rebase**
+Rebase (rewrites history)
 
 ```
-git switch feat
-git rebase master
+main:      A---B---C
+               \
+feature:        D---E
+
+After rebase:
+
+main:      A---B---C
+                    \
+feature:             D'---E'
 ```
 
 When, you have a conflict in the master branch, you would fix the conflict and add the files to the branch. 
