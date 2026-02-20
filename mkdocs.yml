@@ -136,7 +136,7 @@ nav:
 
                   
         - "sysdesign":
-                - "Introduction": "sysdesign/components.md"
+                - "System Components": "sysdesign/components.md"
                 - "Overview": sysdesign/architecting.md
                 
                 - "app":    

@@ -39,9 +39,9 @@ Session Persistence: A technique used to ensure that subsequent requests from th
 
 SSL/TLS Termination: The process of decrypting SSL/TLS-encrypted traffic at the load balancer level, offloading the decryption burden from backend servers and allowing for centralized SSL/TLS management.
 
-## Load Balancing Algorithms
+### Load Balancing Algorithms
 
-### RR
+#### RR
 
 It assigns a request to the first server, then moves to the second, third, and so on .. 
 
@@ -63,7 +63,7 @@ Cons:
 Homogeneous Environments: Suitable for environments where all servers have similar capacity and performance.
 Stateless Applications: Works well for stateless applications where each request can be handled independently.
 
-### least connections
+#### least connections
 
 The Least Connections algorithm is a dynamic load balancing technique that assigns incoming requests to the server with the fewest active connections at the time of the request
 useful especially in environments where traffic patterns are unpredictable and request processing times vary.
@@ -85,7 +85,7 @@ Use Cases
 - Variable Traffic Patterns: Works well for applications with unpredictable or highly variable traffic patterns, ensuring that no single server is overwhelmed.
 - Stateful Applications: Effective for applications where maintaining session state is important, as it helps distribute active sessions more evenly.
 
-### Weighted RR
+#### Weighted RR
 
 It assigns weights to each server based on their capacity or performance, distributing incoming requests proportionally according to these weights. This ensures that more powerful servers handle a larger share of the load, while less powerful servers handle a smaller share.
 
@@ -106,7 +106,7 @@ Use Cases
 - Scalable Web Applications: Suitable for web applications where different servers may have varying performance characteristics.
 - Database Clusters: Useful in database clusters where some nodes have higher processing power and can handle more queries.
 
-### weighted least connections
+#### weighted least connections
 
 combines the principles of the Least Connections and Weighted Round Robin algorithms. It takes into account both the current load (number of active connections) on each server and the relative capacity of each server (weight)
 
@@ -123,7 +123,7 @@ Heterogeneous Server Environments: Ideal for environments where servers have dif
 High Traffic Web Applications: Suitable for web applications with variable traffic patterns, ensuring no single server becomes a bottleneck.
 Database Clusters: Useful in database clusters where nodes have varying performance capabilities and query loads.
 
-### IP Hash
+#### IP Hash
 
 The load balancer uses a hash function to convert the client's IP address into a hash value, which is then used to determine which server should handle the request. This method ensures that requests from the same client IP address are consistently routed to the same server, providing session persistence.
 
@@ -139,10 +139,10 @@ Use Cases
 Stateful Applications: Ideal for applications where maintaining session persistence is important, such as online shopping carts or user sessions.
 Geographically Distributed Clients: Useful when clients are distributed across different regions and consistent routing is required.
 
-### least response time
+#### least response time
 TODO
 
-### DNS Load Balancing and High Availability
+### DNS LB & HA
 
 #### RR DNS
 
@@ -150,7 +150,7 @@ Round-robin DNS is a simple load balancing technique in which multiple IP addres
 
 However, **round-robin DNS does not take into account the actual load** on each server or the geographic location of the client, which can lead to uneven load distribution or increased latency in some cases.
 
-#### Geographically distributed DNS servers
+#### Geo distributed DNS servers
 
 By distributing DNS servers across different regions, they can provide faster and more reliable DNS resolution for users located closer to a server.
 
@@ -172,85 +172,85 @@ A Content Delivery Network (CDN) is a network of distributed servers that cache 
 
 When a user requests content from a website using a CDN, the CDN's DNS server determines the best server to deliver the content based on the user's location and other factors. The DNS server then responds with the IP address of the chosen server, allowing the user to access the content quickly and efficiently.
 
-## Usea of load balancing
+### Uses of load balancing
 
-### HA and Fault tolerance: 
+#### HA & Fault tolerance: 
 
 A load balancer performs Health Checks. It acts as the heartbeat monitor for your cluster. It constantly pings your backend servers ("Are you alive? Can you take a request?"). If a server fails to answer or returns a 5xx error, the LB cuts it off instantly. It stops sending traffic to the corpse and reroutes it to the living.
 
-### Horizontal Scalability
+#### Horizontal Scalability
 
 The LB acts as the Unified Entry Point (Virtual IP). Clients only know the LB's address. When traffic spikes, you spin up more backend instances, register them with the LB, and boom, you have more capacity.
 
 
-### Blue/Green deployments
+#### Blue/Green deployments
 
 Load balancers allow for Connection Draining and strategies like Blue-Green Deployment. You can signal the LB to stop sending new connections to a specific server while allowing existing connections to finish naturally, then take it offline for patching.
 
-### Shield
+#### Shield
 
 A Load Balancer acts as a **Reverse Proxy**. It terminates the connection. The client talks to the LB; the LB talks to the server. The internet never touches your backend. Furthermore, the LB can absorb DDoS attacks (Distributed Denial of Service) and filter malicious traffic before it even reaches your expensive application logic.
 
-### SSL Termination (The "Offloader")
+#### SSL Termination (The "Offloader")
 
 Encryption is expensive. Handshaking SSL/TLS (decrypting HTTPS traffic) takes significant CPU power. You can offload this to the Load Balancer. This is called **SSL Termination**. The client speaks HTTPS to the Load Balancer. The Load Balancer decrypts it and speaks HTTP (or lighter encryption) to your backend servers inside your secure private network.
 
 
-### DNS Load Balancing and High Availability
+#### DNS Load Balancing and HA
 
 DNS load balancing and high availability techniques, such as round-robin DNS, geographically distributed servers, anycast routing, and Content Delivery Networks (CDNs), help distribute the load among multiple servers, reduce latency for end-users, and maintain uninterrupted service, even in the face of server failures or network outages.
 
-## LB types
+### LB types
 
-### Hardware Load Balancing
+#### Hardware Load Balancing
 
 They use specialized hardware components, such as Application-Specific Integrated Circuits (ASICs) or Field-Programmable Gate Arrays (FPGAs), to efficiently distribute network traffic
 
 Use case: A large e-commerce company uses a hardware load balancer to distribute incoming web traffic among multiple web servers, ensuring fast response times and a smooth shopping experience for customers.
 
-### Software Load Balancing
+#### Software Load Balancing
 
 Software load balancers are applications that run on general-purpose servers or virtual machines. They use software algorithms to distribute incoming traffic among multiple servers or resources.
 
 Use case: A startup with a growing user base deploys a software load balancer on a cloud-based virtual machine, distributing incoming requests among multiple application servers to handle increased traffic.
 
-### Cloud-based Load Balancing
+#### Cloud-based Load Balancing
 
 Cloud-based load balancers are provided as a service by cloud providers. They offer load balancing capabilities as part of their infrastructure, allowing users to easily distribute traffic among resources within the cloud environment.
 
 Use case: A mobile app developer uses a cloud-based load balancer provided by their cloud provider to distribute incoming API requests among multiple backend servers, ensuring smooth app performance and quick response times.
 
-### DNS Load Balancing
+#### DNS Load Balancing
 
 DNS (Domain Name System) load balancing relies on the DNS infrastructure to distribute incoming traffic among multiple servers or resources. It works by resolving a domain name to multiple IP addresses, effectively directing clients to different servers based on various policies.
 
 Use case: A content delivery network (CDN) uses DNS load balancing to direct users to the closest edge server based on their geographical location, ensuring faster content delivery and reduced latency.
 
-### Global Server Load Balancing 
+#### Global Server Load Balancing 
 
 GSLB is a technique used to distribute traffic across geographically dispersed data centers. It combines DNS load balancing with health checks and other advanced features to provide a more intelligent and efficient traffic distribution method.
 
 Use case: A multinational corporation uses GSLB to distribute incoming requests for its web applications among several data centers around the world, ensuring high availability and optimal performance for users in different regions.
 
-### Hybrid Load Balancing
+#### Hybrid Load Balancing
 
 Hybrid load balancing combines the features and capabilities of multiple load balancing techniques to achieve the best possible performance, scalability, and reliability. It typically involves a mix of hardware, software, and cloud-based solutions to provide the most effective and flexible load balancing strategy for a given scenario.
 
 Use case: A large-scale online streaming platform uses a hybrid load balancing strategy, combining hardware load balancers in their data centers for high-performance traffic distribution, cloud-based load balancers for scalable content delivery, and DNS load balancing for global traffic management. This approach ensures optimal performance, scalability, and reliability for their millions of users worldwide.
 
-### Layer 4 Load Balancing
+#### Layer 4 Load Balancing
 
 Layer 4 load balancing, also known as transport layer load balancing, operates at the transport layer of the OSI model (the fourth layer). It distributes incoming traffic based on information from the TCP or UDP header, such as source and destination IP addresses and port numbers.
 
 Use case: An online gaming platform uses Layer 4 load balancing to distribute game server traffic based on IP addresses and port numbers, ensuring that players are evenly distributed among available game servers for smooth gameplay.
 
-### Layer 7 Load Balancing
+#### Layer 7 Load Balancing
 
 Layer 7 load balancing, also known as application layer load balancing, operates at the application layer of the OSI model (the seventh layer). It takes into account application-specific information, such as HTTP headers, cookies, and URL paths, to make more informed decisions about how to distribute incoming traffic.
 
 Use case: A web application with multiple microservices uses Layer 7 load balancing to route incoming API requests based on the URL path, ensuring that each microservice receives only the requests it is responsible for handling.
 
-## Stateless and stateful load balancing
+### Stateless and stateful LB
 
 Stateless load balancers operate without maintaining any information about the clients' session or connection state. They make routing decisions based solely on the incoming request data, such as the client's IP address, request URL, or other headers.
 
@@ -263,15 +263,15 @@ Stateful load balancing can be further categorized into two types:
 
 Stateless load balancing is useful for applications capable of processing requests independently, while stateful load balancing is more appropriate for applications that depend on session data.
 
-## load balancing terminology
+### load balancing terminology
 
-### Availability & Realibility
+#### Availability & Realibility
 availability is about whether a system is "up," while reliability is about whether it "works correctly" once it’s up
 
 A Car: If you have a car in your driveway ready to drive, it is available. However, if that car stalls every time you hit 60 mph, it is unreliable.
 A Website: A site that loads but gives you an error every time you click "Checkout" has high availability (it's online) but low reliability (it fails to perform its function).
 
-### Upstream and Downstream
+#### Upstream and Downstream
 The exact meaning depends on the point of reference in the architecture
 e.g 
 
@@ -290,7 +290,7 @@ From the Load Balancer perspective:
 Downstream -> User requests
 upstream -> App server(backend servers) 
 
-### High Availability and Fault Tolerance
+### LB HA and Fault Tolerance
 
 To ensure high availability and fault tolerance, load balancers should be designed and deployed with redundancy in mind. 
 
@@ -316,7 +316,7 @@ To ensure high availability and fault tolerance, load balancers should be design
 
 **Caching and content optimization:** Load balancers can cache static content, such as images, CSS, and JavaScript files, to reduce the load on backend servers and improve response times. Additionally, some load balancers support content optimization features like compression or minification, which can further improve performance and reduce bandwidth consumption.
 
-### Impact of load balancers on latency
+### LB Latency
 
 While the impact is typically minimal, it is important to consider the potential latency introduced by the load balancer and optimize its performance accordingly.
 
@@ -326,7 +326,7 @@ While the impact is typically minimal, it is important to consider the potential
 
 **Protocol optimizations:** Some load balancers support protocol optimizations, such as HTTP/2 or QUIC, which can improve performance by reducing latency and increasing throughput.
 
-### Challenges of Load Balancers
+### Challenges of LB
 
 **Single Point of Failure:** If not designed with redundancy and fault tolerance in mind, a load balancer can become a single point of failure in the system
 
