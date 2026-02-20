@@ -265,13 +265,15 @@ Stateless load balancing is useful for applications capable of processing reques
 
 ### load balancing terminology
 
-#### Availability & Realibility
+#### Availabilty & Realibility
+
 availability is about whether a system is "up," while reliability is about whether it "works correctly" once it’s up
 
 A Car: If you have a car in your driveway ready to drive, it is available. However, if that car stalls every time you hit 60 mph, it is unreliable.
 A Website: A site that loads but gives you an error every time you click "Checkout" has high availability (it's online) but low reliability (it fails to perform its function).
 
 #### Upstream and Downstream
+
 The exact meaning depends on the point of reference in the architecture
 e.g 
 
@@ -290,7 +292,7 @@ From the Load Balancer perspective:
 Downstream -> User requests
 upstream -> App server(backend servers) 
 
-### LB HA and Fault Tolerance
+#### LB HA and Fault Tolerance
 
 To ensure high availability and fault tolerance, load balancers should be designed and deployed with redundancy in mind. 
 
@@ -306,7 +308,7 @@ To ensure high availability and fault tolerance, load balancers should be design
 
 **State sharing and replication:** In scenarios where load balancers must maintain session data or other state information, it is crucial to ensure that this data is synchronized and replicated across instances. This can be achieved through database replication, distributed caching systems (e.g., Redis or Memcached), or built-in state-sharing mechanisms provided by the load balancer software or hardware.
 
-### Scalability and Performance
+#### Scalability and Performance
 
 **Horizontal scaling:** This involves adding more load balancer instances to distribute traffic among them. Horizontal scaling is particularly effective for **active-active configurations**, where each load balancer instance actively processes traffic.
 
@@ -316,7 +318,7 @@ To ensure high availability and fault tolerance, load balancers should be design
 
 **Caching and content optimization:** Load balancers can cache static content, such as images, CSS, and JavaScript files, to reduce the load on backend servers and improve response times. Additionally, some load balancers support content optimization features like compression or minification, which can further improve performance and reduce bandwidth consumption.
 
-### LB Latency
+#### LB Latency
 
 While the impact is typically minimal, it is important to consider the potential latency introduced by the load balancer and optimize its performance accordingly.
 
@@ -341,7 +343,6 @@ While the impact is typically minimal, it is important to consider the potential
 **Cost:** Deploying and managing load balancers, especially in high-traffic scenarios, can add to the overall cost of your infrastructure. This may include hardware or software licensing costs, as well as fees associated with managed load balancing services provided by cloud providers.
 
 **Health Checks and Monitoring:** Implementing effective health checks for backend servers is essential to ensure that the load balancer accurately directs traffic to healthy instances. Misconfigured or insufficient health checks can lead to the load balancer sending traffic to failed or underperforming servers, resulting in a poor user experience
-
 
 ## API Gateway
 
