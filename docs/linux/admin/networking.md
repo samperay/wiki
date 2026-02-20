@@ -636,3 +636,204 @@ if TCP works but UDP doesn’t → firewall blocking UDP.
 What is difference between A and CNAME?
 
 An A record maps a hostname directly to an IPv4 address, while a CNAME maps a hostname to another hostname. CNAME adds an extra resolution step and is typically used for aliasing services like CDNs or load balancers. However, a hostname cannot have both A and CNAME records simultaneously.
+
+
+## Proxy
+
+### Forward proxy
+
+A forward proxy(proxy server)is a server that sits in front of one or more client machines and acts as an intermediary between the clients and the internet. When a client machine makes a request to a resource (like a web page or file) on the internet, the request is first sent to the proxy,  then forwards the request to the internet on behalf of the client machine and returns the response to the client machine.
+
+We would have an demostration of forward proxy using EC2 instance. we would use squid for forward proxy as demo.. 
+
+1. Create custom vpc where it has public and private subnets. 
+
+![proxy_vpc](proxy_vpc.png)
+
+2. Create an EC2(Ubuntu image 24.02) in public subnet with public ip attached to it. allow your SG groups from your IP to ports 22, 443 and 3128(squid)
+
+3. login to the ec2 using public ip and configure squid. 
+
+```
+sudo apt update
+sudo apt install -y squid
+sudo mv /etc/squid/squid.conf /etc/squid/squid.conf.original
+sudo vim /etc/squid/squid.conf
+
+http_port 3128
+
+# Your client IP (update this!)
+acl myip src <LAPTOP_PUBLIC_IP>/32
+
+# HTTPS tunnel support
+acl SSL_ports port 443
+acl CONNECT method CONNECT
+
+# Allow CONNECT to 443 only for your IP
+http_access allow myip CONNECT SSL_ports
+
+# Allow normal HTTP for your IP
+http_access allow myip
+
+# Deny everything else
+http_access deny all
+```
+
+```
+sudo systemctl restart squid
+sudo tail -f /var/log/squid/access.log
+```
+
+
+**Testing**
+
+```
+➜  ~ curl -x http://13.221.194.201:3128 https://www.google.com -v
+
+or 
+
+➜  ~ curl -X GET -x http://13.221.194.201:3128 https://www.google.com -v
+
+
+
+*   Trying 13.221.194.201:3128...
+* Connected to 13.221.194.201 (13.221.194.201) port 3128
+* CONNECT tunnel: HTTP/1.1 negotiated
+* allocate connect buffer
+* Establish HTTP proxy tunnel to www.google.com:443
+> CONNECT www.google.com:443 HTTP/1.1
+> Host: www.google.com:443
+> User-Agent: curl/8.7.1
+> Proxy-Connection: Keep-Alive
+>
+< HTTP/1.1 200 Connection established
+<
+* CONNECT phase completed
+* CONNECT tunnel established, response 200
+* ALPN: curl offers h2,http/1.1
+* (304) (OUT), TLS handshake, Client hello (1):
+*  CAfile: /etc/ssl/cert.pem
+*  CApath: none
+* (304) (IN), TLS handshake, Server hello (2):
+* (304) (IN), TLS handshake, Unknown (8):
+* (304) (IN), TLS handshake, Certificate (11):
+* (304) (IN), TLS handshake, CERT verify (15):
+* (304) (IN), TLS handshake, Finished (20):
+* (304) (OUT), TLS handshake, Finished (20):
+* SSL connection using TLSv1.3 / AEAD-CHACHA20-POLY1305-SHA256 / [blank] / UNDEF
+* ALPN: server accepted h2
+* Server certificate:
+*  subject: CN=www.google.com
+*  start date: Jan 19 08:39:05 2026 GMT
+*  expire date: Apr 13 08:39:04 2026 GMT
+*  subjectAltName: host "www.google.com" matched cert's "www.google.com"
+*  issuer: C=US; O=Google Trust Services; CN=WR2
+*  SSL certificate verify ok.
+* using HTTP/2
+* [HTTP/2] [1] OPENED stream for https://www.google.com/
+* [HTTP/2] [1] [:method: GET]
+* [HTTP/2] [1] [:scheme: https]
+* [HTTP/2] [1] [:authority: www.google.com]
+* [HTTP/2] [1] [:path: /]
+* [HTTP/2] [1] [user-agent: curl/8.7.1]
+* [HTTP/2] [1] [accept: */*]
+> GET / HTTP/2
+> Host: www.google.com
+> User-Agent: curl/8.7.1
+> Accept: */*
+>
+* Request completely sent off
+< HTTP/2 200
+< date: Fri, 20 Feb 2026 04:00:43 GMT
+< expires: -1
+< cache-control: private, max-age=0
+< content-type: text/html; charset=ISO-8859-1
+< content-security-policy-report-only: object-src 'none';base-uri 'self';script-src 'nonce-i2hPbsYVMJV0kT-IsNrJ0g' 'strict-dynamic' 'report-sample' 'unsafe-eval' 'unsafe-inline' https: http:;report-uri https://csp.withgoogle.com/csp/gws/other-hp
+< reporting-endpoints: default="//www.google.com/httpservice/retry/jserror?ei=a9yXaabCKI-g5NoPoIrd0AU&cad=crash&error=Page%20Crash&jsel=1&bver=2382&dpf=I0qA2q1Zg-5SxZAegZEdGIYXEUJxOGrccG_kcqSQlrI"
+< accept-ch: Sec-CH-Prefers-Color-Scheme
+< p3p: CP="This is not a P3P policy! See g.co/p3phelp for more info."
+< server: gws
+< x-xss-protection: 0
+< x-frame-options: SAMEORIGIN
+< set-cookie: __Secure-STRP=AD6Dogt9i7XASweFBmNTQF9gAZDVVRRbxVWLT3r3TsnW5ahXd-425gpnwZiZ1GuLWZ8D7vkKxx4fIBXZrJ7D7Bz9QRWWgNEAplbB; expires=Fri, 20-Feb-2026 04:05:43 GMT; path=/; domain=.google.com; Secure; SameSite=strict
+< set-cookie: AEC=AaJma5tco9TRnmsynZ31OC7HI9Z8LzeMac36UIFJnW5izuQgIJCptYpd4A; expires=Wed, 19-Aug-2026 04:00:43 GMT; path=/; domain=.google.com; Secure; HttpOnly; SameSite=lax
+< set-cookie: NID=529=XrnU6xOgTWqktw_8A87XZI3pb-Uh6R6YoRkrZmIrl7buLFzJLhhHS5QhfybcMH7M-kyCe6WBqvGNAN_nYnEgFnJJnHysK9YunfBIrtzNwVgx74A_ryzZeQt3hctoWl_nyjMXuXlZCQYftP64d5O5XYrrSwr68_TTwMG0gDDD8nOs428svQZThabqD1HwHvGR2-CfI_hZhQhXJ43Xzu_6FO_bmqz9pnp5LJgmIA; expires=Sat, 22-Aug-2026 04:00:43 GMT; path=/; domain=.google.com; HttpOnly
+< set-cookie: __Secure-BUCKET=CKEE; expires=Wed, 19-Aug-2026 04:00:43 GMT; path=/; domain=.google.com; Secure; HttpOnly
+< alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+< accept-ranges: none
+< vary: Accept-Encoding
+<
+..
+..
+..
+```
+
+
+HTTP/1.1 200 Connection established (from Squid)
+
+Because you requested an HTTPS site through an HTTP proxy, curl uses the CONNECT method:
+
+```
+Your Laptop (public IP: X.X.X.X) → CONNECT google.com:443
+        ↓
+AWS EC2 Proxy (public IP: 13.221.194.201) → Client: 200 Connection established
+```
+
+This means: “Tunnel is created. Now you (client) talk TLS directly to google.com through me.”
+
+
+After the tunnel is established, curl completes TLS with www.google.com and requests /, it responds with 
+* Request completely sent off
+< HTTP/2 200
+
+
+
+Full flow summary for above request 
+
+1. TCP connect to proxy
+2. CONNECT request to proxy
+3. Proxy returns 200 (tunnel established)
+4. TLS handshake with Google
+5. Encrypted GET request
+6. Google returns 200
+7. Page delivered
+
+
+```
+sudo tail -f /var/log/squid/access.log
+
+timestamp       duration  client_ip  result/status  bytes  method  url  user  hierarchy/server_ip
+1771560044.160    962 103.5.134.43 TCP_TUNNEL/200 23622 CONNECT www.google.com:443 - HIER_DIRECT/142.251.179.104 -
+```
+
+There are manual ways to troubleshooting the request(telnet or nc), nc is cleaner way
+
+nc 13.221.194.201 3128
+GET http://example.com/ HTTP/1.1
+Host: example.com
+
+PRESS ENTER TWICE
+
+The above one works only for HTTP not HTTPS...
+
+Because HTTPS requires:
+CONNECT tunnel
+TLS handshake
+Encrypted GET
+
+You cannot manually type TLS handshake in terminal, so curl would do it automatically. 
+
+
+If You Want to Manually Do HTTPS Properly..
+
+```
+openssl s_client -proxy 13.221.194.201:3128 -connect google.com:443
+GET / HTTP/1.1
+Host: google.com
+
+
+PRESS ENTER TWICE
+```
+
+Now you’ll see proper HTTPS response...
+
