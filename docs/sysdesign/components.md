@@ -745,34 +745,41 @@ type of file system that manage the storage and retrieval of data across multipl
 ### Redunancy
 
 Redundancy refers to the duplication of critical components or functions to increase the reliability, availability, and fault tolerance of a system.
+**Redundancy = Duplicate system components**
 
-### Benefits
+**Benefits:**
 
 - **Improved reliability:** can continue to function despite individual component failures, ensuring the availability of critical services and applications
-
 - **Enhanced fault tolerance:** a system can better tolerate and recover from faults or failures, essential for maintaining high availability and minimizing downtime, particularly in mission-critical systems
-
 - **Increased availability:**  services and applications remain available even during component failures or maintenance
-
 - **Simplified maintenance:** maintenance and upgrades to be performed without disrupting system operation
- 
 - **Disaster recovery:** geographically distributed copies of data and resources, organizations can recover more quickly from disasters or catastrophic events that may affect a single location
+
+e.g(infra)
+- Two web servers in different Availability Zones
+- Load balancer distributes traffic
+- If one server fails → traffic shifts automatically
+
+Example:
+- AWS: EC2 instances in multiple AZs behind an ALB
+- IBM Cloud: VSI instances behind a Load Balancer
 
 ### replication
 
 Database replication is the process of copying and synchronizing data from one database to one or more additional databases.
+**Replication = Duplicate data**
 
 #### strategies
 
-**Synchronous replication** database replication where changes made to the primary database are immediately replicated to the replica databases before the write operation is considered complete. strong consistency between the primary and replica databases
+**Synchronous:** database replication where changes made to the primary database are immediately replicated to the replica databases before the write operation is considered complete. strong consistency between the primary and replica databases
 
-**Asynchronous replication:** the changes made to the primary database are queued and replicated to the replicas at a later time.
+**Asynchronous:** the changes made to the primary database are queued and replicated to the replicas at a later time.
 
-**Semi-synchronous replication:** synchronous + asynchronous replication. changes made to the primary database are immediately replicated to at least one replica database, while other replicas may be updated asynchronously. the write operation on the primary is not considered complete until at least one replica database has confirmed that it has received and processed the changes. This ensures that there is some level of strong consistency between the primary and replica databases, while also providing improved performance compared to fully synchronous replication
+**Semi-synchronous:** synchronous + asynchronous replication. changes made to the primary database are immediately replicated to at least one replica database, while other replicas may be updated asynchronously. the write operation on the primary is not considered complete until at least one replica database has confirmed that it has received and processed the changes. This ensures that there is some level of strong consistency between the primary and replica databases, while also providing improved performance compared to fully synchronous replication
 
 ![replication_types](./images/replication_types.png)
 
-### Replication Methods
+#### Methods
 
 **Single-leader replication:** one node handles all writes while one or more followers asynchronously or synchronously replicate its state.
 
@@ -812,38 +819,7 @@ Database replication is the process of copying and synchronizing data from one d
 
 ---
 
-#### 🔹 Redundancy Example (Infrastructure Level)
-
-- Two web servers in different Availability Zones
-- Load balancer distributes traffic
-- If one server fails → traffic shifts automatically
-
-Example:
-- AWS: EC2 instances in multiple AZs behind an ALB
-- IBM Cloud: VSI instances behind a Load Balancer
-
----
-
-#### 🔹 Replication Example (Data Level)
-
-- Primary PostgreSQL database
-- Secondary standby database
-- Data copied continuously
-- If primary crashes → standby promoted
-
-Replication Types:
-- Synchronous Replication
-- Asynchronous Replication
-- Multi-Master Replication
-
----
-
-## 🔥 Key Difference in One Line
-
-- **Redundancy = Duplicate system components**
-- **Replication = Duplicate data**
-
-## Key Char(DFS)
+## Key Char - DFS
 
 ### Scalability
 
@@ -887,7 +863,6 @@ Different consistency models provide different trade-offs between availability, 
 - **Weak consistency** allows for temporary inconsistencies between replicas, with the advantage of improved availability and performance. 
 
 - **Eventual consistency** guarantees that all replicas will eventually converge to the same data, providing a balance between consistency, availability, and performance.
-
 
 - **Availability through Health Monitoring and Alerts:** 
 
@@ -963,8 +938,6 @@ Coordination services are specialized components or tools that help manage distr
 - **Monotonic Read Consistency:** Ensures that if a read operation reads a value of a data item, any subsequent read operations will never see an older value.
 
 - **Linearizability (Strong Consistency):** A stronger version of sequential consistency, it ensures that all operations are atomic and instantly visible to all nodes.
-
-
 
 ### Monitoring and Observability
 
