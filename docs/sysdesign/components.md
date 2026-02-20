@@ -900,3 +900,133 @@ Replication Types:
 
 - **Redundancy = Duplicate system components**
 - **Replication = Duplicate data**
+
+## Key Char(DFS)
+
+### Scalability
+
+ability of a system to handle an increasing workload, either by adding more resources (**scaling out**) or by upgrading the capacity of existing resources.
+
+Horizontal scaling, also known as scaling out, involves adding more machines or nodes to a system to distribute the workload evenly. This approach allows the system to handle an increased number of requests without overloading individual nodes.
+
+Vertical scaling, or scaling up, refers to increasing the capacity of individual nodes within a system. This can be achieved by upgrading the hardware, such as adding more CPU, memory, or storage. Vertical scaling can help improve the performance of a system by allowing it to handle more workloads on a single node
+
+### Availability
+
+Availability is a measure of how accessible and reliable a system is to its users. In distributed systems, high availability is crucial to ensure that the system remains operational even in the face of failures or increased demand
+
+**Strategies for Achieving High Availability:**
+
+- **High Availability through Redundancy and Replication:** 
+
+Duplicating critical components or entire systems, we can ensure that if one fails, the redundant system takes over seamlessly, avoiding any interruption in service.
+Replication involves creating multiple copies of data, ensuring that it is available even if one copy becomes inaccessible.
+
+
+- **Availability through Load Balancing:** 
+
+Load balancing involves distributing workloads across multiple servers, ensuring that no single server is overwhelmed. Through intelligent load-balancing algorithms, organizations can optimize resource utilization, prevent bottlenecks, and enhance high availability by evenly distributing traffic.
+
+Load balancing is particularly useful in web applications, where a large number of users access the system simultaneously. By distributing incoming requests across multiple servers, load balancers ensure that no single server becomes overloaded, leading to improved performance and availability.
+
+- **Availability through Distributed Data Storage:** 
+
+Storing data across multiple locations or data centers enhances high availability by reducing the risk of data loss or corruption. Distributed data storage systems replicate data across geographically diverse locations, ensuring that even if one site experiences an outage, data remains accessible from other locations.
+
+Distributed data storage is crucial for organizations that deal with large volumes of data and cannot afford to lose it. By replicating data across multiple sites, organizations can ensure that data is always available, even in the event of a catastrophic failure at one location.
+
+- **Availability and Consistency Models (Strong, Weak, Eventual):** 
+
+Consistency models define how a distributed system maintains a coherent and up-to-date view of its data across all replicas. 
+Different consistency models provide different trade-offs between availability, performance, and data correctness.
+
+- **Strong consistency** ensures that all replicas have the same data at all times, at the cost of reduced availability and performance. 
+
+- **Weak consistency** allows for temporary inconsistencies between replicas, with the advantage of improved availability and performance. 
+
+- **Eventual consistency** guarantees that all replicas will eventually converge to the same data, providing a balance between consistency, availability, and performance.
+
+
+- **Availability through Health Monitoring and Alerts:** 
+
+Health monitoring involves continuously monitoring system performance, resource utilization, and various metrics to detect any anomalies or potential issues. Alerts are triggered when predefined thresholds are exceeded, allowing IT teams to take immediate action and prevent service disruptions
+
+- **Availability through Regular System Maintenance and Updates:** 
+
+Regular system maintenance and updates are crucial for achieving high availability. By keeping systems up to date with the latest patches, security enhancements, and bug fixes, organizations can mitigate the risk of failures and vulnerabilities that could compromise system availability.
+
+System maintenance involves tasks such as hardware inspections, software updates, and routine checks to ensure that all components are functioning correctly. By staying proactive and addressing any potential issues promptly, organizations can maintain high availability and minimize the impact of system failures.
+
+- **Availability through Geographic Distribution:** 
+
+Geographic distribution is a strategy that involves deploying system components across multiple locations or data centers. This ensures that even if one region or data center experiences an outage, users can still access the system from other geographically dispersed locations.
+
+Geographic distribution is particularly important for organizations with a global presence or those that rely heavily on cloud infrastructure. By strategically placing system components in different geographical areas, organizations can ensure that users from various locations can access the system without any interruptions, regardless of localized incidents or natural disasters.
+
+### Latency & performance 
+
+ability to handle large amounts of data and traffic
+
+- **Data Locality:** storing related data close together or near the nodes that access it most frequently, you can reduce the latency associated with data retrieval and improve overall performance
+
+- **Load Balancing:**  distributing incoming network traffic or computational workload across multiple nodes or resources to ensure that no single node is overwhelmed
+
+- **Caching Strategies:**  Caching is a technique used to store frequently accessed data or computed results temporarily, allowing the system to quickly retrieve the data from cache instead of recalculating or fetching it from the primary data source
+
+### Concurrancy and cordination 
+
+Concurrency control is the process of managing simultaneous access to shared resources or data in a distributed system. It ensures that multiple processes can work together efficiently while avoiding conflicts or inconsistencies.
+
+#### Concurrency Control
+
+**Locking:** Locks are used to restrict access to shared resources or data, ensuring that only one process can access them at a time.
+
+**Optimistic concurrency control:** This approach assumes that conflicts are rare and allows multiple processes to work simultaneously. Conflicts are detected and resolved later, usually through a validation and rollback mechanism.
+
+**Transactional memory:** This technique uses transactions to group together multiple operations that should be executed atomically, ensuring data consistency and isolation.
+
+#### Synchronization
+
+Synchronization is the process of coordinating the execution of multiple processes or threads in a distributed system to ensure correct operation
+
+**Barriers:** Barriers are used to synchronize the execution of multiple processes or threads, ensuring that they all reach a specific point before proceeding.
+
+**Semaphores:** Semaphores are signaling mechanisms that control access to shared resources and maintain synchronization among multiple processes or threads.
+
+**Condition variables:** Condition variables allow processes or threads to wait for specific conditions to be met before proceeding with their execution.
+
+**Concurrency Control vs. Synchronization**
+The main objective of concurrency control is to manage access to shared resources (like data or hardware resources) in an environment where multiple processes or threads are executing simultaneously.
+
+The purpose of synchronization is to coordinate the timing of multiple concurrent processes or threads. It's about managing the execution order and timing of processes to ensure correct operation.
+
+#### Coordination Services
+
+Coordination services are specialized components or tools that help manage distributed systems' complexity by providing a set of abstractions and primitives for tasks like configuration management, service discovery, leader election, and distributed locking.
+
+#### Consistency Models
+
+- **Strong Consistency:** After a write operation completes, any subsequent read operation will immediately see the new value.
+
+- **Eventual Consistency:** Over time, all accesses to a particular data item will eventually return the last updated value. The time it takes to achieve consistency after a write is not guaranteed
+
+- **Causal Consistency:**  Operations that are causally related are seen by all processes in the same order. Concurrent operations might be seen in a different order on different nodes.
+
+- **Read-Your-Writes Consistency:** Guarantees that once a write operation completes, any subsequent reads (by the same client) will see that write or its effects.
+
+- **Session Consistency:** A stronger version of read-your-writes consistency. It extends this guarantee to a session of interactions, ensuring consistency within the context of a single user session
+
+- **Sequential Consistency:** Operations from all nodes or processes are seen in the same order. There is a global order of operations, but it doesn't have to be real-time.
+
+- **Monotonic Read Consistency:** Ensures that if a read operation reads a value of a data item, any subsequent read operations will never see an older value.
+
+- **Linearizability (Strong Consistency):** A stronger version of sequential consistency, it ensures that all operations are atomic and instantly visible to all nodes.
+
+
+
+### Monitoring and Observability
+
+### Resilence and error handling
+
+### fault tolerance vs HA
+
