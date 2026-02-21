@@ -1084,29 +1084,7 @@ Techniques like symmetric and asymmetric encryption, as well as protocols such a
 
 **TLS Handshake**
 
-```mermaid
-sequenceDiagram
-    participant Client
-    participant Server
-
-    Client->>Server: ClientHello (TLS version, cipher suites, random)
-    Server->>Client: ServerHello (chosen cipher, random)
-    Server->>Client: Server Certificate (Public Key)
-    Server->>Client: ServerHelloDone
-
-    Client->>Server: Verify Certificate (CA validation)
-    Client->>Server: Pre-Master Secret (encrypted with server public key)
-
-    Server->>Server: Decrypt Pre-Master Secret (using private key)
-
-    Client->>Server: ChangeCipherSpec
-    Client->>Server: Finished (encrypted with session key)
-
-    Server->>Client: ChangeCipherSpec
-    Server->>Client: Finished (encrypted with session key)
-
-    Note over Client,Server: Secure symmetric communication starts (AES)
-```
+![tls_handshake](./images/tls_handshake.png)
 
 TLS uses asymmetric encryption only to exchange keys, then switches to symmetric encryption for data transfer.
 
