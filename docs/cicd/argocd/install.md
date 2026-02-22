@@ -150,6 +150,13 @@ type: Opaque
 OaCPRywZZoH585nE%                                                                                                                                   ➜  ~
 ```
 
+you could also use the below to get password
+
+```
+kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
+```
+
+
 Expose the argocd-server to connect to UI by port-forwarding
 
 ```
