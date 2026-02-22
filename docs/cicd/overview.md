@@ -33,3 +33,60 @@ Acceptance-Test Driven Development is practiced, guiding development efforts and
 
 ### Phase 7 - Continuous Deployment
 Confidence in the automated unit, integration and acceptance tests is now such that teams can apply the automated deployment techniques developed in the previous phase to push out new changes directly into production. The progression between levels here is of course somewhat approximate, and may not always match real-world situations
+
+# POC
+
+we would deploy an flask application as part of entrire CICD pipeline. so when the application commits from the app, and if the CI pipeline is successful, then it would be direcly deplpyed into an local cluster(minikube/rancher desktop..etc) using the Argo CD. 
+
+## Pre-requsites
+
+Create two repos for CI and CD seperately. 
+Make sure those repos have token and access to RW for the repos and update those in secrets where we could access as variables.
+
+How to create **MANIFESTS_REPO_PAT**
+
+```
+GitHub profile →
+  → Settings → Developer settings→ Personal access tokens
+```
+
+Token name: manifests-repo-ci
+
+select `demo-ci` and `demo-ci` repository access. 
+Repository permissions: Contents: Read and write (least-privilege)
+
+Go to `demo-ci` and `demo-cd` repo ... 
+
+```
+Settings → Secrets and variables → Actions → New repository secret
+```
+
+## CI 
+
+CI: https://github.com/samperay/demo-ci
+
+You will have to create steps in `.github/workflows/ci.yaml`
+
+https://github.com/samperay/demo-ci/blob/master/.github/workflows/ci.yml
+
+## CD
+
+CD: https://github.com/samperay/demo-cd
+
+Install Argo CD for local deployment.
+
+Make sure you have a local cluster running and update the below
+
+```
+kubectl create namespace argocd
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
+kubectl -n argocd port-forward svc/argocd-server 8081:443
+http://localhost:8081
+Username: admin
+Password: 
+```
+
+Argo CD would take the file https://github.com/samperay/demo-cd/blob/master/apps/poc/argocd-app.yaml and any drift changes would update to the latest release. 
+
+
