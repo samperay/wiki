@@ -1188,3 +1188,96 @@ cache replacement policy to determine which items in the cache should be removed
 
 ### Cache Invalidation
 
+
+## CDN
+
+A Content Delivery Network (CDN) is a distributed network of servers strategically located across various geographical locations to deliver web content, such as images, videos, and other static assets, more efficiently to users. The primary purpose of a CDN is to reduce latency and improve the overall performance of web applications by serving content from the server nearest to the user. CDNs can also help improve reliability, availability, and security of web applications.
+
+**Key terminology and concepts**
+
+1. Point of Presence (PoP): PoPs are strategically placed close to end-users to minimize latency and improve content delivery performance.
+
+2. Edge Server: An edge server is a CDN server located at a PoP, responsible for caching and delivering content to end-users. These servers store cached copies of the content, reducing the need to fetch data from the origin server.
+
+3. Origin Server: The origin server is the primary server where the original content is stored(website's content, including HTML files, images, stylesheets, JavaScript, videos, and other digital assets). CDNs fetch content from the origin server and cache it on edge servers for faster delivery to end-users.
+
+4. Cache Warming: Cache warming is the process of preloading content into the edge server's cache before it is requested by users, ensuring that the content is available for fast delivery when it is needed.
+
+5. Time to Live (TTL) : TTL is a value that determines how long a piece of content should be stored in the cache before it is considered stale and needs to be refreshed from the origin server.
+
+6. Anycast: Anycast is a network routing technique used by CDNs to direct user requests to the nearest available edge server, based on the lowest latency or the shortest network path.
+
+7. Content Invalidation: Content invalidation is the process of removing or updating cached content when the original content on the origin server changes, ensuring that end-users receive the most up-to-date version of the content.
+
+8. Cache Purging: Cache purging is the process of forcibly removing content from the edge server's cache, usually triggered manually or automatically when specific conditions are met.
+
+**Benefits of using a CDN**
+
+CDNs play a crucial role in enhancing the performance, reliability, and security of modern web applications. By serving content from geographically distributed edge servers, CDNs can provide users with a fast and seamless experience, while reducing load on origin servers and protecting against security threats. Here are the top benefits of using CDNs:
+
+1. Reduced latency: By serving content from geographically distributed edge servers, CDNs reduce the time it takes for content to travel from the server to the user, resulting in faster page load times and improved user experience.
+
+2. Improved performance: CDNs can offload static content delivery from the origin server, freeing up resources for dynamic content generation and reducing server load. This can lead to improved overall performance for web applications.
+
+3. Enhanced reliability and availability: With multiple edge servers in different locations, CDNs can provide built-in redundancy and fault tolerance. If one server becomes unavailable, requests can be automatically rerouted to another server, ensuring continuous content delivery.
+
+4. Scalability: CDNs can handle sudden traffic spikes and large volumes of concurrent requests, making it easier to scale web applications to handle growing traffic demands.
+
+5. Security: Many CDNs offer additional security features, such as DDoS protection, Web Application Firewalls (WAF), and SSL/TLS termination at the edge, helping to safeguard web applications from various security threats.
+
+### CDN Routing and Request Handling
+
+CDN routing is the process of directing user requests to the most suitable edge server. Routing decisions are typically based on factors such as network latency, server load, and the user's geographical location
+
+Anycast Routing: In anycast routing, multiple edge servers share a single IP address. When a user sends a request to that IP address, the network's routing system directs the request to the nearest edge server based on network latency or the number of hops.
+
+DNS-based Routing: With DNS-based routing, when a user requests content, the CDN's DNS server responds with the IP address of the most suitable edge server. This approach can take into account factors such as geographical proximity and server load to select the best edge server for handling the request.
+
+GeoIP-based Routing: In this approach, the user's geographical location is determined based on their IP address. The request is then directed to the nearest edge server in terms of geographical distance, which often corresponds to lower network latency.
+
+### Caching Mechanisms
+
+Edge servers cache content to reduce latency and offload traffic from the origin server. Various caching mechanisms can be employed to determine what content is stored, when it is updated, and when it should be removed from the cache
+
+Time-to-Live (TTL): TTL is a value set by the origin server that determines how long a piece of content should be stored in the cache before it is considered stale and needs to be fetched again from the origin server.
+
+Cache Invalidation: Cache invalidation is the process of removing content from the cache before its TTL expires. This is typically done when content is updated or deleted on the origin server and needs to be reflected immediately in the CDN.
+
+Cache Control Headers: Cache control headers are used by the origin server to provide instructions to the CDN regarding caching behavior. These headers can dictate the cacheability of content, its TTL, and other caching-related settings.
+
+### CDN Network Topologies
+
+Flat Topology: In a flat topology, all edge servers in the CDN are directly connected to the origin server. 
+
+Hierarchical Topology: In a hierarchical topology, edge servers are organized into multiple tiers, with each tier being responsible for serving content to the tier below it. This approach can improve scalability by distributing the load among multiple levels of servers and reducing the number of direct connections to the origin server.
+
+Mesh Topology: In a mesh topology, edge servers are interconnected, allowing them to share content and load with each other. This approach can enhance the redundancy and fault tolerance of the CDN, as well as improve content delivery performance by reducing the need to fetch content from the origin server.
+
+Hybrid Topology: A hybrid topology combines elements from various topologies to create an optimized CDN architecture tailored to specific needs. For example, a CDN could use a hierarchical structure for serving static content, while employing a mesh topology for dynamic content delivery.
+
+### Push CDN vs Pull CDN
+
+| Aspect | Push CDN | Pull CDN |
+|--------|----------|----------|
+| **Definition** | Content is manually uploaded ("pushed") to the CDN server in advance. | CDN automatically fetches ("pulls") content from the origin server when requested. |
+| **How It Works** | You upload files to the CDN storage. CDN serves files directly from its edge locations. | User requests content → CDN checks cache → If not available, CDN pulls from origin → Caches and serves it. |
+| **Content Update** | Requires manual re-upload when content changes. | Automatically updates when cache expires or is purged. |
+| **Best For** | Static content (images, videos, downloads, software packages). | Dynamic or frequently changing content (websites, APIs, blogs). |
+| **Origin Server Load** | Very low, since CDN already has the content. | Higher initially (on first request or cache miss). |
+| **Setup Complexity** | Slightly more setup (need upload process or pipeline). | Easier setup (just configure origin server). |
+| **Storage Requirement** | Requires CDN storage space. | No extra storage management required. |
+| **Control Over Content** | Full control over what is uploaded. | CDN decides what to cache based on requests. |
+| **Cost Consideration** | Can be cheaper for large static assets with predictable traffic. | May incur more origin bandwidth cost on cache misses. |
+| **Example Use Case** | Hosting software downloads, media streaming files, large static assets. | Hosting a website where content updates frequently. |
+
+---
+
+### Advantages and Disadvantages of Push CDN vs Pull CDN
+
+| CDN Type | Advantages | Disadvantages |
+|-----------|------------|--------------|
+| **Push CDN** | • Reduced load on origin server<br>• Faster delivery for large static files<br>• Full control over uploaded content<br>• Predictable performance<br>• Good for high-traffic static assets | • Manual upload required<br>• Content updates need re-uploading<br>• Extra storage management<br>• Slightly more operational overhead<br>• Not ideal for frequently changing content |
+| **Pull CDN** | • Easy setup (just configure origin)<br>• Automatically fetches updated content<br>• No manual upload process<br>• Good for dynamic or frequently updated websites<br>• Lower operational effort | • Initial request may cause latency (cache miss)<br>• Higher load on origin during cache misses<br>• Less control over what gets cached<br>• Possible stale content if cache settings are incorrect<br>• Bandwidth costs may increase with frequent misses |
+
+- **Push CDN → You upload content to CDN**
+- **Pull CDN → CDN fetches content from your server when needed**
