@@ -1125,3 +1125,66 @@ Responsive Plan: Having a response plan in place, including procedures for ident
 Good Security Hygiene: Regularly updating security protocols and educating users about the risks of malware
 
 Scalable Infrastructure: Utilizing cloud services with the ability to scale rapidly can absorb and disperse high traffic loads during an attack
+
+## Caching
+
+The cache is a high-speed storage layer that sits between the application and the original source of the data, such as a database, a file system, or a remote web service. When data is requested by the application, it is first checked in the cache. If the data is found in the cache, it is returned to the application. If the data is not found in the cache, it is retrieved from its original source, stored in the cache for future use, and returned to the application.
+
+**Key terminology and concepts**
+
+1. Cache: A temporary storage location for data or computation results, typically designed for fast access and retrieval.
+
+2. Cache hit: When a requested data item or computation result is found in the cache.
+
+3. Cache miss: When a requested data item or computation result is not found in the cache and needs to be fetched from the original data source or recalculated.
+
+4. Cache eviction: The process of removing data from the cache, typically to make room for new data or based on a predefined cache eviction policy.
+
+5. Cache staleness: When the data in the cache is outdated compared to the original data source.
+
+**Advantages:**
+
+- **Reduced latency:**  By serving data from the cache, which is typically faster to access than the original data source
+
+- **Improved system performance:**  reducing the number of times data needs to be fetched from its original source, this results in a significant reduction in processing time, which leads to a more responsive application
+
+- **Reduced network load:**  reduce network load by minimizing the amount of data that needs to be transmitted over the network
+
+- **Increased scalability:** improve the scalability of an application by reducing the load on the original source.
+
+- **Better user experience:** Faster response times and reduced latency can lead to a better user experience.
+
+### Types of Caching
+
+![cache_types](./images/cache_types.png)
+
+- **In-memory caching:** - In-memory caching is useful for frequently accessed data that can fit into the available memory. commonly used for caching API responses, session data, and web page fragments.(Memcached or Redis)
+
+- **Disk caching:** - Disk caching is useful for data that is too large to fit in memory or for data that needs to persist between application restarts. commonly used for caching database queries and file system data.
+
+- **Database caching:** - This type of caching is useful for data that is stored in a database and frequently accessed by multiple users
+
+- **Client-side caching:** - This type of caching occurs on the client device, such as a web browser or mobile app. Client-side caching stores frequently accessed data, such as images, CSS, or JavaScript files, to reduce the need for repeated requests to the server. 
+
+- **Server-side caching:** - Server-side caching can be used to store frequently accessed data, precomputed results, or intermediate processing results to improve the performance of the server. Examples of server-side caching include full-page caching, fragment caching, and object caching
+
+- **CDN caching:** - CDN caching stores data on a distributed network of servers, reducing the latency of accessing data from remote locations.
+
+- **DNS caching:** - DNS caching improves the performance of the DNS system by reducing the number of requests made to DNS servers.
+
+![caching_flow](./images/caching_flow.png)
+
+### Cache Replacement Policies
+
+cache replacement policy to determine which items in the cache should be removed when the cache becomes full
+
+- **Least Recently Used (LRU):** - LRU is a cache replacement policy that removes the least recently used item from the cache when it becomes full
+
+- **Least Frequently Used (LFU):** - removes the least frequently used item from the cache when it becomes full
+
+- **First In, First Out (FIFO):** - removes the oldest item from the cache when it becomes full.
+
+- **Random Replacement:** - removes a random item from the cache when it becomes full
+
+### Cache Invalidation
+
