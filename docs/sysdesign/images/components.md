@@ -1188,6 +1188,54 @@ cache replacement policy to determine which items in the cache should be removed
 
 ### Cache Invalidation
 
+While caching can significantly improve performance, we must ensure that the data in the cache is still correct—otherwise, we serve out-of-date (stale) information (you risk presenting users with wrong information or invalid results). This is where cache invalidation comes in.
+
+When the underlying data changes—say a product’s price updates in your database—you must mark or remove the old (cached) data so users don’t see stale information. This process is called “cache invalidation.”
+
+Large systems often have multiple caching layers. If any of these layers serve old data while others serve new data, users can encounter conflicting information.
+
+Cache invalidation strategies (e.g., time-to-live/TTL, manual triggers, event-based invalidation) are designed to minimize the performance cost of continuously “refreshing” the cache.
+
+- **Write-through cache**
+
+Under this scheme, data is written into the cache and the corresponding database simultaneously. The cached data allows for fast retrieval and, since the same data gets written in the permanent storage, we will have complete data consistency between the cache and the storage. Since every write operation must be done twice before returning success to the client, this scheme has the disadvantage of higher latency for write operations.
+
+- **Write-around cache**
+
+This technique is similar to write-through cache, but data is written directly to permanent storage, bypassing the cache. This can reduce the cache being flooded with write operations that will not subsequently be re-read, but has the disadvantage that a read request for recently written data will create a “cache miss” and must be read from slower back-end storage and experience higher latency.
+
+- **Write-back cache**
+
+Under this scheme, data is written to cache alone, and completion is immediately confirmed to the client. The write to the permanent storage is done based on certain conditions, for example, when the system needs some free space. This results in low-latency and high-throughput for write-intensive applications; however, this speed comes with the risk of data loss in case of a crash or other adverse event because the only copy of the written data is in the cache.
+
+- **Write-behind cache**
+
+Under this scheme, data is written to cache alone, and completion is immediately confirmed to the client.
+but it is not immediately written to the permanent storage.
+
+In write-back caching, data is only written to the permanent storage when it is necessary for the cache to free up space, while in write-behind caching, data is written to the permanent storage at specified intervals.
+
+### Cache Invalidations Methods
+
+Purge: removes cached content for a specific object, URL, or a set of URLs.(hard delete)
+
+Refresh: When a refresh request is received, the cached content is updated with the latest version from the origin server, ensuring that the content is up-to-date.
+
+Ban: The ban method invalidates cached content based on specific criteria, such as a URL pattern or header
+
+(TTL) expiration: This method involves setting a time-to-live value for cached content, after which the content is considered stale and must be refreshed
+
+## Cache Read Strategies
+
+### Read through cache
+
+A read-through cache strategy is a caching mechanism where the cache itself is responsible for retrieving the data from the underlying data store when a cache miss occurs. This approach helps to maintain consistency between the cache and the data store, as the cache is always responsible for retrieving and updating the data. It also simplifies the application code since the application doesn't need to handle cache misses and data retrieval logic.
+
+### Read aside cache
+
+application is responsible for retrieving the data from the underlying data store when a cache miss occurs
+
+![cache_read_strategies](./images/cache_read_strategies.png)
 
 ## CDN
 
@@ -1281,3 +1329,14 @@ Hybrid Topology: A hybrid topology combines elements from various topologies to 
 
 - **Push CDN → You upload content to CDN**
 - **Pull CDN → CDN fetches content from your server when needed**
+
+## Quorum
+
+In a distributed environment, a quorum is the minimum number of servers on which a distributed operation needs to be performed successfully before declaring the operation's overall success. quorum refers to the minimum number of machines that perform the same action (commit or abort) for a given transaction in order to decide the final operation for that transaction.
+
+Choosing quorum - **more than half of the number of nodes(n/2+1) in the cluste**r:  where  is the total number of nodes in the cluster.
+
+every read will see at least one copy of the latest value written
+
+(N=3, W=1, R=3): fast write, slow read, not very durable
+(N=3, W=3, R=1): slow write, fast read, durable
