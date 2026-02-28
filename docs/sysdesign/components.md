@@ -1340,3 +1340,87 @@ every read will see at least one copy of the latest value written
 
 (N=3, W=1, R=3): fast write, slow read, not very durable
 (N=3, W=3, R=1): slow write, fast read, durable
+
+## Data partitioning
+
+Data partitioning is a technique used in distributed systems and databases to divide a large dataset into smaller, more manageable parts, referred to as partitions(partitioned based on a certain criterion, such as **data range, data size, or data type**). Each partition is independent and contains a subset of the overall data. Each partition is then assigned to a separate processing node which can perform operations on its assigned data subset independently of the others(it allows processing to be distributed across multiple nodes, minimizing data transfer and reducing processing time).
+
+Partition: A partition is a smaller, more manageable part of a larger dataset, created as a result of data partitioning.
+
+Partition key: The partition key is a data attribute used to determine how data is distributed across partitions. An effective partition key should provide an even distribution of data and support efficient query patterns.
+
+Shard: A shard is a term often used interchangeably with a partition, particularly in the context of horizontal partitioning (will be discussed later).
+
+### Horizontal Partitioning
+
+aka **sharding**, dividing a database table into multiple partitions or shards, with each partition containing a subset of rows. Each shard is typically assigned to a different database server, which allows for parallel processing and faster query execution times. 
+
+
+### Vertical Partitioning
+
+Vertical data partitioning involves splitting a database table into multiple partitions or shards, with each partition containing a subset of columns. This technique can help optimize performance by reducing the amount of data that needs to be scanned, especially when certain columns are accessed more frequently than others.
+
+### Hybrid Partitioning
+
+This technique can help optimize performance by distributing the data evenly across multiple servers, while also minimizing the amount of data that needs to be scanned.
+
+### Sharding techniques
+
+- **Range-based Sharding:** - data is divided into shards based on a specific range of values for a given partitioning key. Each shard is responsible for a specific range, ensuring that the data is distributed in a predictable manner.
+
+- **Hash-based Sharding:** - Hash-based sharding involves applying a consistent hash function to the partitioning key, which generates a hash value that determines the destination shard for each data entry. This method ensures an even distribution of data across shards and is particularly useful when the partitioning key has a large number of distinct values or is not easily divided into ranges.
+
+![common_sharding](./images/common_sharding.png)
+
+- **Directory-based Sharding:** - Directory-based sharding uses a lookup table, often referred to as a directory, to map each data entry to a specific shard. This method offers greater flexibility, as shards can be added, removed, or reorganized without the need to rehash or reorganize the entire dataset. However, it introduces an additional layer of complexity, as the directory must be maintained and kept consistent.
+
+![directory_based_sharding](./images/directory_based_sharding.png)
+
+- **Geographical Sharding:** - Geographical sharding involves partitioning data based on geographical locations, such as countries or regions. This method can help reduce latency and improve performance for users in specific locations by storing their data closer to them.
+
+- **Dynamic Sharding:** - Dynamic sharding is an adaptive approach that automatically adjusts the number of shards based on the data’s size and access patterns. This method can help optimize resource utilization and performance by creating shards as needed and merging or splitting them as the data grows or shrinks.
+
+- **Hybrid Sharding: The Best of Many Worlds:** -  It might combine Geo-based with Directory-based sharding, or any other mix that suits a system's needs.
+
+![hybrid_sharding](./images/hybrid_sharding.png)
+
+### Benefits of Data Partitioning
+
+Data partitioning offers a wide range of benefits that can significantly improve the performance, scalability, and resilience of data-driven systems. 
+
+- **Improved Query Performance:** - When data is partitioned, queries can be targeted at specific partitions, enabling the system to retrieve only the necessary data
+
+- **Enhanced Scalability:** - Partitioning data across multiple storage resources allows for greater system scalability.
+
+- **Load Balancing:** - Data partitioning helps distribute the workload evenly across multiple storage nodes or servers
+
+- **Data Isolation:** - Partitioning data can provide a level of data isolation, where the failure or corruption of one partition does not necessarily impact the other partitions. 
+
+- **Parallel Processing:** - Data partitioning enables parallel processing, where multiple partitions can be processed simultaneously by different processors or systems.
+
+- **Storage Efficiency:** - Frequently accessed data can be stored on faster, more expensive storage resources, while less critical data can be stored on cheaper, slower storage resources.
+
+- **Simplified Data Management:** - Data partitioning can make data management tasks, such as backup, archiving, and maintenance, more manageable and efficient
+
+- **Better Resource Utilization:** - By aligning the data with the appropriate storage and processing resources, organizations can maximize the performance and efficiency of their data-driven systems.
+
+- **Improved Data Security:** - By isolating sensitive data in separate partitions, organizations can implement stronger security measures for those partitions, minimizing the risk of unauthorized access or data breaches
+
+- **Faster Data Recovery:** - By focusing on recovering specific partitions rather than the entire dataset, organizations can reduce downtime and restore critical data more quickly.
+
+## Common Problems Associated with Data Partitioning
+
+- **Complexity:** - added complexity can lead to increased development and maintenance efforts, as well as a steeper learning curve for team members.
+
+- **Data Skew:** - data partitioning can result in uneven data distribution across partitions, known as data **skew**
+Data skew can result in reduced performance and resource utilization, negating the benefits of partitioning
+
+- **Partitioning Key Selection:** - Choosing the appropriate partitioning key is crucial for achieving the desired benefits of data partitioning. An unsuitable partitioning key can lead to inefficient data distribution, performance bottlenecks, and increased management complexity.
+
+- **Cross-Partition Queries:** - When queries need to access data across multiple partitions, performance can suffer, as the system must search through and aggregate data from several partitions. 
+
+- **Data Migration:** - Partitioning can sometimes require significant data migration efforts, especially when changing partitioning schemes or adding new partitions. This can be time-consuming and resource-intensive, potentially causing disruptions to normal system operation.
+
+- **Partition Maintenance:** - As the data grows and evolves, organizations may need to reevaluate their partitioning strategies, which can involve repartitioning, merging, or splitting partitions. This can result in additional maintenance overhead and increased complexity
+
+- **Cost:** - Implementing a data partitioning strategy may require additional hardware, software, or infrastructure, leading to increased costs. Furthermore, the added complexity of managing a partitioned system may result in higher operational expenses.
