@@ -1424,3 +1424,32 @@ Data skew can result in reduced performance and resource utilization, negating t
 - **Partition Maintenance:** - As the data grows and evolves, organizations may need to reevaluate their partitioning strategies, which can involve repartitioning, merging, or splitting partitions. This can result in additional maintenance overhead and increased complexity
 
 - **Cost:** - Implementing a data partitioning strategy may require additional hardware, software, or infrastructure, leading to increased costs. Furthermore, the added complexity of managing a partitioned system may result in higher operational expenses.
+
+## Databases
+
+### index
+
+Database indexes are designed to improve the speed and efficiency of data retrieval operations
+
+Primary Index - The primary key is a column that uniquely identifies each row. **the primary index improves read performance for identifying specific rows**, with very little downside since every table usually needs a primary key.
+
+```sql
+SELECT * FROM Employees WHERE EmployeeID = 123 are very fast
+```
+
+Unique Index - A Unique Index ensures that all values in the indexed column are distinct. no two rows can have the same key value. A unique index functions like a regular index for lookup performance, but with the added rule that duplicate values are not allowed. Unique indexes **speed up read queries just as non-unique indexes do**, and in addition they guarantee data integrity by preventing duplicates.
+
+```sql 
+SELECT * FROM Users WHERE Email = 'alice@example.com' are fast
+```
+
+Clustered Index
+
+Non-Clustered Index
+
+Composite Index
+
+Full-Text Index
+
+Hash Index
+
