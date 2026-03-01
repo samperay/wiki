@@ -2,7 +2,7 @@
 
 https://cloudchamp.notion.site/Terraform-Scenario-based-Interview-Questions-bce29cb359b243b4a1ab3191418bfaab
 
-You can create 3-tier architecture using the below code base
+You can create 3-tier architecture using the below codebase
 https://github.com/ajitinamdar-tech/three-tier-arch-aws-terraform
 
 
@@ -18,17 +18,22 @@ variable "common_tags" {
     CostCenter  = "cc-123"
   }
 }
-
+# 
 locals {
-  tags = merge(var.common_tags, {
-    Environment = var.env
-  })
+  tags = merge(var.common_tags, 
+        { Environment = var.env }
+  )
 }
 
 resource "aws_vpc" "main" {
   cidr_block = "10.0.0.0/16"
   tags       = merge(local.tags, { Name = "main-vpc" })
 }
+
+output "debug_tags" {
+  value = local.tags
+}
+
 ```
 
 
@@ -37,6 +42,7 @@ resource "aws_vpc" "main" {
 ```h
 variable "subnet_ids" {
   type = list(string)
+  default = ["subnet-1"]
 }
 
 # index
@@ -54,18 +60,22 @@ resource "aws_network_interface" "eni" {
 ```h
 resource "aws_instance" "web" {
   count         = 3
-  ami           = var.ami_id
+  ami           = "ami-xxx"
   instance_type = "t2.micro"
-  subnet_id     = var.subnet_id
-  tags          = merge(local.tags, { Name = "web-${count.index}" })
+  tags          = { Name = "web-${count.index}" }
 }
+
+output "instances" {
+  value = aws_instance.web.*
+}
+
 ```
 
 
 - Required to create 1 instance of t2.micro and t3.xlarge based on the dev / prod environment ?
 
 ```h
-variable "env" { type = string } # dev/prod
+variable "env" { type = string }
 
 locals {
   instance_type = var.env == "prod" ? "t3.xlarge" : "t2.micro"
@@ -75,6 +85,10 @@ resource "aws_instance" "app" {
   ami           = var.ami_id
   instance_type = local.instance_type
   subnet_id     = var.subnet_id
+}
+
+output "env_instance" {
+  value = aws_instance.app.*
 }
 ```
 
@@ -199,7 +213,7 @@ output "vpc_id" {
 }
 ```
 
-- How do you use the modulues which are already created by Hashicorp and use in the terrafor m script ?
+- How do you use the modulues which are already created by Hashicorp and use in the terraform script ?
 
 ```h
 module "vpc" {
@@ -313,9 +327,10 @@ terraform {
 terraform plan: computes changes needed to match config with real infra.
 
 terraform refresh (legacy): updates state from real resources (doesn’t change infra).
+
 Modern approach: terraform apply -refresh-only.
 
-- I do need to destroy certain resournces in the terraform, how do I do it in particular ?
+- I do need to destroy certain resources in the terraform, how do I do it in particular ?
 
 ```h
 terraform destroy -target=aws_instance.web[0]
@@ -356,7 +371,6 @@ variable "env" { type = string }
 # terraform.tfvars
 env = "dev"
 ```
-
 
 - I would required to create an RDS instance before by AWS instance, How do I do it ?
 
