@@ -1,9 +1,8 @@
 # Terraform
 
-Important points to be covered for the exam.
-https://learn.hashicorp.com/terraform/certification/terraform-associate-study-guide
+Terraform is not a configuration management tool, its a declarative language(HCL). It supports a syntax that is JSON compatible and primarily designed on immutable infrastructure principles.
 
-We would go through some of the important points as we read through above study guide in theory.
+Terraform analyses any expressions within a resource block to find references to other objects and treats those references as implicit ordering requirements when creating, updating, or destroying resources.
 
 ## IaC
 
@@ -39,13 +38,15 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 5.0" # Version constraint
+      # Version constraint
+      version = "~> 5.0" 
     }
   }
 }
 
 provider "aws" {
-  region = "us-east-1" # Provider-specific configuration
+  # Provider-specific configuration
+  region = "us-east-1" 
 }
 ```
 
@@ -62,11 +63,14 @@ provider "aws" {
 ```h
 terraform {
   backend "s3" {
-    bucket         = "my-terraform-state-bucket"   # Name of the S3 bucket
-    key            = "prod/terraform.tfstate"      # Path to the state file in the bucket
-    region         = "us-east-1"                   # AWS Region
-    encrypt        = true                          # Enable server-side encryption
-    dynamodb_table = "terraform-lock-table"        # Optional: For state locking
+    # Name of the S3 bucket
+    bucket         = "my-terraform-state-bucket"
+    # Path to the state file in the bucket   
+    key            = "prod/terraform.tfstate"      
+    region         = "us-east-1"                   
+    encrypt        = true 
+    # Optional: For state locking                         
+    dynamodb_table = "terraform-lock-table"        
   }
 }
 ```
@@ -133,23 +137,15 @@ command manually marks a Terraform-managed resource as tainted, forcing it to be
 command is used for advanced state management, Terraform usage becomes more advanced, there are some cases where you may need to modify the *terraform.tfstate*
 
 **terraform workspaces**
-Terraform starts with a single workspace named "default". This workspace is special both because it is the default and also because it cannot ever be deleted.
+Terraform starts with a single workspace named "default". This workspace is special both because it is the default and can't delete.
 
-For local state, Terraform stores the workspace states in a directory called *terraform.tfstate.d*. some teams commit these files to version control, although using a remote backend instead is recommended when there are multiple collaborators.
+For local state, Terraform stores the workspace states in a directory called `terraform.tfstate.d`. some teams commit these files to version control, although using a remote backend and is always recommented when there are multiple collaborators.
 
 For remote state, the workspaces are stored directly in the configured backend.
 Multiple workspaces are currently supported by the following backends
 
 ```
-AzureRM
-Consul
-COS
-GCS
-Local
-Manta
-Postgres
-Remote
-S3
+AzureRM |  Consul | COS | COS | GCS | Local | Postgres | Remote | S3 | Manta
 ```
 
 **Note:** Workspaces, managed with the terraform workspace command, isn't the same thing as Terraform Cloud's workspaces. Terraform Cloud workspaces act more like completely separate working directories.
@@ -176,7 +172,7 @@ command is used to reconcile the state Terraform knows about (via its statefile)
 **terraform show**
 The terraform show command is used to provide human-readable output from a state or plan file. This can be used to inspect a plan to ensure that the planned operations are expected, or to inspect the current state as Terraform sees it.
 
-## modeules
+## modules
 
 Terraform Registry makes it simple to find and use modules.(https://registry.terraform.io/)
 The syntax for referencing a registry module **<NAMESPACE>/<NAME>/<PROVIDER>** (hashicorp/consul/aws)
@@ -223,42 +219,40 @@ If a root module variable uses a type constraint to require a complex value (lis
 export TF_VAR_availability_zone_names='["us-west-1b","us-west-1d"]'
 ```
 
-**Variable Definition Precedence**
+**Vars precedence**
 
-```
-- Environment variables
-- The terraform.tfvars file, if present.
-- The terraform.tfvars.json file, if present.
-- Any *.auto.tfvars or *.auto.tfvars.json files, processed in lexical order of their filenames.
-- Any -var and -var-file options on the command line, in the order they are provided.
-```
+1. env vars (TF_VAR_<varname>)
+2. The terraform.tfvars file, if present.
+3. The terraform.tfvars.json file, if present.
+4. Any *.auto.tfvars or *.auto.tfvars.json files, processed in lexical order of their filenames.
+4. Any -var and -var-file options on the command line, in the order they are provided.
 
-Q) In order to make a Terraform configuration file dynamic and/or reusable, static values should be converted to use what?
+## Resource data blocks
 
-Solution: Input variables serve as parameters for a Terraform module, allowing aspects of the module to be customized without altering the module's own source code, and allowing modules to be shared between different configurations.
+### Resources
 
-### Read and write configuration
-**Resources**
-Each resource block describes one or more infrastructure objects, such as virtual networks, compute instances, or higher-level components such as DNS records.
+Each resource block describes one or more infrastructure objects, such as virtual networks, compute instances..etc
 
 A resource block declares a resource of a given type ("aws_instance") with a given local name ("web"). The name is used to refer to this resource from elsewhere in the same Terraform module, but has no significance outside of the scope of a module
 
-**Meta-Arguments**
-```
-- depends_on, for specifying hidden dependencies
-- count, for creating multiple resource instances according to a count
-- for_each, to create multiple instances according to a map, or set of strings
-- provider, for selecting a non-default provider configuration
-- lifecycle, for lifecycle customizations
-- provisioner and connection, for taking extra actions after resource creation
-```
+### Meta-Arguments
+
+- depends_on -  for specifying hidden dependencies
+- count -  for creating multiple resource instances according to a count
+- for_each -  to create multiple instances according to a map, or set of strings
+- provider -  for selecting a non-default provider configuration
+- lifecycle -  for lifecycle customizations
+- provisioner and connection - for taking extra actions after resource creation
+
 Explicitly specifying a dependency is only necessary when a resource relies on some other resource's behavior but doesn't access any of that resource's data in its arguments.
+
 e.g, creation of s3 bucket before aws_instance is provisioned.
 
-**Data sources**
+### Data references
+
 Data sources allow data to be **fetched or computed** for use elsewhere in Terraform configuration.
 
-**References to Named Values**
+#### Named values
 
 - `<RESOURCE TYPE>.<NAME>` is an object representing a managed resource of the given type and name.
 - `var.<NAME>` is the value of the input variable of the given name.
@@ -270,31 +264,30 @@ Data sources allow data to be **fetched or computed** for use elsewhere in Terra
 - `path.cwd` is the filesystem path of the current working directory. In normal use of Terraform this is the same as path.root, but some advanced uses of Terraform run it from a directory other than the root module directory, causing these paths to be different.
 - `terraform.workspace` is the name of the currently selected workspace.
 
-**Local Named Values**
-```
-count.index, in resources that use the count meta-argument.
-each.key / each.value, in resources that use the for_each meta-argument.
-self, in provisioner and connection blocks.
-```
+#### local values
 
-**References to Resource Attributes**
+- count.index - in resources that use the count meta-argument.
+- each.key / each.value -  in resources that use the for_each meta-argument.
+- self - in provisioner and connection blocks.
+
+#### resource references
 The most common reference type is a reference to an attribute of a resource which has been declared either with a resource or data block
 
-```
+```h
+
+data aws_resource_ami ubuntu_image {
+  ...
+}
+
 resource "aws_instance" "example" {
-  ami           = "ami-abc123"
-  instance_type = "t2.micro"
-
-  ebs_block_device {
-    device_name = "sda2"
-    volume_size = 16
-  }
+  ami           = aws_resource_ami.ubuntu_image
+  instance_type = "var.image"
 ```
 
-**dynamic blocks**
+### dynamic blocks
 Within top-level block constructs like resources, expressions can usually be used only when assigning a value to an argument using the name = expression form.
 
-```
+```h
 resource "aws_elastic_beanstalk_environment" "tfenvtest" {
   name                = "tf-test-name"
   application         = "${aws_elastic_beanstalk_application.tftest.name}"
@@ -311,71 +304,38 @@ resource "aws_elastic_beanstalk_environment" "tfenvtest" {
 }
 ```
 
-**Type Constraints**
-https://www.terraform.io/docs/configuration/types.html primitive type is a simple type that isn't made from any other types.
+## Type Constraints
+https://www.terraform.io/docs/configuration/types.html 
 
- - string
- - number
- - bool
+### primitive type 
+simple type that isn't made from any other types.(string | number | bool)
 
-**Complex types**
+### Complex types
 
-  **Collection Types**
-  A collection type allows multiple values of one other type to be grouped together as a single value. The type of value within a collection is called its element type.
-
-  - list
-  - map
-  - set
+- **Collection Types:** Collection type allows multiple values of one other type to be grouped together as a single value. The type of value within a collection is called its **element type**.
+`list | map | set`
   
-  **Structural types**
-  A structural type allows multiple values of several distinct types to be grouped together as a single value.
+- **Structural types:** A structural type allows multiple values of several distinct types to be grouped together as a single value.
+`object | tuple`
 
-  - object
-  - tuple
+Built-in-functions
 
-**Built-in-functions**
 https://www.terraform.io/docs/configuration/functions.html
 
-- string
-- chomp
-- format
-- formatlist
-- indent
-- join
-- lower
-- regex
-- regexall
-- replace
-- split
-- strrev
-- substr
-- title
-- trim
-- trimprefix
-- trimsuffix
-- trimspace
-- upper
+`string| chomp| format| formatlist| indent| join| lower| regex| regexall| replace| split| strrev| substr| title| trim| trimprefix| trimsuffix| trimspace| upper `
 
-**Numberic**
+Numberic - `abs| ceil| floor| log| max| min| parseint| pow| signum`
 
-- abs
-- ceil
-- floor
-- log
-- max
-- min
-- parseint
-- pow
-- signum
+## State Management
 
-### Manage state
-
-**state locking**
+### state locking
 If supported by your backend, Terraform will lock your state for all operations that could write state. This prevents others from acquiring the lock and potentially corrupting your state. State locking happens automatically on all operations that could write state.
 
-**force-unlock**, Be very careful with this command. If you unlock the state when someone else is holding the lock it could cause multiple writers. Force unlock should only be used to unlock your own lock in the situation where automatic unlocking failed.
+### force-unlock
 
-**Sensitive Data in State**
+Be very careful with this command. If you unlock the state when someone else is holding the lock it could cause multiple writers. Force unlock should only be used to unlock your own lock in the situation where automatic unlocking failed.
+
+### Sensitive Data in State
 Terraform state can contain sensitive data, depending on the resources in use and your definition of "sensitive." The state contains resource IDs and all resource attribute. When using *local state*, state is stored in plain-text JSON files.
 
 When using *remote state*, state is only ever held in memory when used by Terraform. It may be encrypted at rest, but this depends on the specific remote state backend.
@@ -384,32 +344,39 @@ Terraform Cloud always encrypts state at rest and protects it with TLS in transi
 
 The S3 backend supports encryption at rest when the encrypt option is enabled. IAM policies and logging can be used to identify any invalid access. Requests for the state go over a TLS connection.
 
-**backends**
+## backends
+
 A "backend" in Terraform determines how state is loaded and how an operation such as apply is executed.
 
-*benefits of backends*
-- *Working in a team*, Backends can store their state remotely and protect that state with locks to prevent corruption
-- *Keeping sensitive information off disk*, State is retrieved from backends on demand and only stored in memory
-- *Remote operations*,  For larger infrastructures or certain changes, terraform apply can take a long, long time
+### Benefits
 
-With a partial configuration, the remaining configuration arguments must be provided as part of the initialization process
+- *Working in a team* - Backends can store their state remotely and protect that state with locks to prevent corruption
 
-*Interactively*: Terraform will interactively ask you for the required values, unless interactive input is disabled.
-*File*: A configuration file may be specified via the init command line. To specify a file, use the *-backend-config=PATH* option when running terraform init.
-*Command-line key/value pairs*: Key/value pairs can be specified via the init command line. Note that many shells retain command-line flags in a history file, so this isn't recommended for secrets. To specify a single key/value pair, use the *-backend-config="KEY=VALUE"* option when running terraform init.
+- *Keeping sensitive information off disk* - State is retrieved from backends on demand and only stored in memory
 
-**changing configuration**
+- *Remote operations* -  For larger infrastructures or certain changes, terraform apply can take a long, long time.
+
+- *Interactively* -  Terraform will interactively ask you for the required values, unless interactive input is disabled.
+
+- *File*: A configuration file may be specified via the init command line. To specify a file, use the *-backend-config=PATH* option when running terraform init.
+
+- *Command-line key/value pairs*: Key/value pairs can be specified via the init command line. 
+
+Note that many shells retain command-line flags in a history file, so this isn't recommended for secrets. To specify a single key/value pair, use the *-backend-config="KEY=VALUE"* option when running terraform init.
+
+### Configuration Change
+
 You can change your backend configuration at any time. You can change both the configuration itself as well as the type of backend (for example from "consul" to "s3").
 
 Terraform will automatically detect any changes in your configuration and request a reinitialization. As part of the reinitialization process, Terraform will ask if you'd like to migrate your existing state to the new configuration. This allows you to easily switch from one backend to another.
 
-**unconfiguring backend**
+### Unconfiguring
 If you no longer want to use any backend, you can simply remove the configuration from the file.
 
-**local backend**
+### local backend
 The local backend stores state on the local filesystem, locks that state using system APIs, and performs operations locally.
 
-```
+```h
 terraform {
   backend "local" {
     path = "relative/path/to/terraform.tfstate"
@@ -417,8 +384,10 @@ terraform {
 }
 
 ```
+
 Render your data from the path of the terraform.tfstate that exists locally.
-```
+
+```h
 data "terraform_remote_state" "foo" {
   backend = "local"
 
@@ -428,27 +397,25 @@ data "terraform_remote_state" "foo" {
 }
 ```
 
-**Backend Types**
+### Backend Types**
 - Standard
 - Enhanced
 
 *Manual State Pull/Push*
-You can still manually retrieve the state from the remote state using the *terraform state pull* command. You can also manually write state with terraform state push. This is extremely dangerous and should be avoided if possible. This will overwrite the remote state. This can be used to do manual fixups if necessary.
+You can still manually retrieve the state from the remote state using the **terraform state pull** command. You can also manually write state with terraform state push. This is extremely dangerous and should be avoided if possible. This will overwrite the remote state. This can be used to do manual fixups if necessary.
 
-### Debug in Terraform
+### Debug
 Terraform has detailed logs which can be enabled by setting the *TF_LOG* environment variable to any value. This will cause detailed logs to appear on stderr
 
 You can set TF_LOG to one of the log levels *TRACE, DEBUG, INFO, WARN or ERROR* to change the verbosity of the logs. **TRACE** is the most verbose and it is the default if TF_LOG is set to something other than a log level name.
 
 To persist logged output you can set **TF_LOG_PATH** in order to force the log to always be appended to a specific file when logging is enabled
 
-### Understand Terraform Cloud and Enterprise
-
-**Terraform Cloud and Terraform Enterprise**
+## Understand Terraform Cloud and Enterprise
 
 Terraform Cloud is an application that helps teams use Terraform together. It manages Terraform runs in a consistent and reliable environment, and includes easy access to shared state and secret data, access controls for approving changes to infrastructure, a private registry for sharing Terraform modules, detailed policy controls for governing the contents of Terraform configurations.
 
-*terraform cloud features*
+### terraform cloud features
 - Terraform Workflow
 - Remote Terraform Execution
 - Workspaces for Organizing Infrastructure
@@ -457,44 +424,31 @@ Terraform Cloud is an application that helps teams use Terraform together. It ma
 - Command Line Integration
 - Private Module Registry
 
-*terraform cloud integrations*
+### terraform cloud integrations
 - Full API
 - Notifications
 
-*ACL and Governance*
+### ACL and Governance
 - Team based permissions systems
 - Sentinel policies
 - Cost Estimations
 
 Terraform Cloud supports the following VCS providers.
 
-```
-GitHub
-GitHub.com (OAuth)
-GitHub Enterprise
-GitLab.com
-GitLab EE and CE
-Bitbucket Cloud
-Bitbucket Server
-Azure DevOps Server
-Azure DevOps Services
-```
+`GitHub | GitHub.com (OAuth) | GitHub Enterprise | GitLab.com | GitLab EE and CE | Bitbucket Cloud | Bitbucket Server | Azure DevOps Server | Azure DevOps Services`
 
 Terraform Enterprise, our self-hosted distribution of Terraform Cloud. It offers enterprises a private instance of the Terraform Cloud application, with no resource limits and with additional enterprise-grade architectural features like audit logging and SAML single sign-on.
 
-**Sentinel Overview**
+### Sentinel Overview
 It enables fine-grained, logic-based policy decisions, and can be extended to use information from external sources.
 
-Sentinel with Terraform Cloud involves,
+Sentinel with Terraform Cloud involves
+
 *Defining the policies*: Policies are defined using the policy language with imports for parsing the Terraform plan, state and configuration.
+
 *Managing policies for organizations*: Users with permission to manage policies can add policies to their organization by configuring VCS integration or uploading policy sets through the API
+
 *Enforcing policy checks on runs*:  Policies are checked when a run is performed, after the terraform plan but before it can be confirmed or the terraform apply is executed
+
 *Mocking Sentinel Terraform data*: Terraform Cloud provides the ability to generate mock data for any run within a workspace
 
-**Terraform language**
-Terraform is not a configuration management tool.
-Terraform is a declarative language.
-Terraform supports a syntax that is JSON compatible.
-Terraform is primarily designed on immutable infrastructure principles.
-
-Terraform analyses any expressions within a resource block to find references to other objects and treats those references as implicit ordering requirements when creating, updating, or destroying resources.
