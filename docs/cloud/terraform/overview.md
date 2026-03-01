@@ -26,10 +26,9 @@ We would go through some of the important points as we read through above study 
 
 Terraform is cloud-agnostic and allows a single configuration to be used to manage multiple providers, and to even handle cross-cloud dependencies. This simplifies management and orchestration, helping operators build large-scale multi-cloud infrastructures.
 
-### Manage infrastructure
-https://github.com/terraform-providers/terraform-provider-aws
+## Manage infra
 
-**terraform init**, Running this command will download and initialize any providers that are not already initialized and are installed in the current working directory.
+**terraform init:** will download and initialize any providers that are not already initialized and are installed in the current working directory.
 
 To upgrade to latest version of all terraform modules `terraform init -upgrade`
 
@@ -49,7 +48,8 @@ provider "aws" {
   region = "us-east-1" # Provider-specific configuration
 }
 ```
-**purpose of terraform state:**
+
+**statefile uses:**
 
 **Mapping to the Real World**, When you have a resource resource "aws_instance" "foo" in your configuration, Terraform uses this map to know that instance i-abcd1234 is represented by that resource.
 
@@ -75,20 +75,15 @@ terraform {
 Provisioners can be used to model specific actions on the local machine or on a remote machine in order to prepare servers or other infrastructure objects for service.
 https://www.terraform.io/docs/provisioners/#provisioners-are-a-last-resort
 
-### Master the workflow
-**Core Terraform workflow**
-- **write**, Author infrastructure as code.
-- **plan**,  Preview changes before applying.
-- **apply**, Provision reproducible infrastructure.
+## terraform workflow
 
-**terraform init**
-- **Copy a Source Module**, During init, it assumes that the working directory already contains a configuration and will attempt to initialize that configuration.
+**terraform init:** will download automatically(only Hasicorp) and initialize any providers that are not already initialized and are installed in the current working directory.
 
-- **Backend Initialization**, During init, the root configuration directory is consulted for backend configuration and the chosen backend is initialized using the given configuration settings.
+- **Backend Initialization:** the root configuration directory is consulted for backend configuration and the chosen backend is initialized using the given configuration settings.
 
-- **Child Module Installation**, During init, the configuration is searched for module blocks, and the source code for referenced modules is retrieved from the locations given in their source arguments.
+- **Child Module Installation:** the configuration is searched for module blocks, and the source code for referenced modules is retrieved from the locations given in their source arguments.
 
-- **Plugin Installation**, For providers distributed by HashiCorp, init will automatically download and install plugins if necessary. Plugins can also be manually installed in the user plugins directory, located at ~/.terraform.d/plugins on most operating systems and %APPDATA%\terraform.d\plugins on Windows.
+- **Plugin Installation**:, For providers distributed by HashiCorp, init will automatically download and install plugins if necessary. Plugins can also be manually installed in the user plugins directory, located at ~/.terraform.d/plugins on most operating systems.
 
 **terraform validate**
 Validate runs checks that verify whether a configuration is syntactically valid and internally consistent, regardless of any provided variables or existing state. It is thus primarily useful for general verification of reusable modules, including correctness of attribute names and value types.
@@ -116,8 +111,6 @@ The terraform destroy command is used to destroy the Terraform-managed infrastru
 
 The *-target* flag, instead of affecting "dependencies" will instead also destroy any resources that depend on the target(s) specified. The behavior of any terraform destroy command can be previewed at any time with an equivalent.
 **terraform plan -destroy command**
-
-### Learn more subcommands
 
 **terraform force-unlock**
 Manually unlock the state for the defined configuration. This command removes the lock on the state for the current configuration. The behavior of this lock is dependent on the backend being used. Local state files cannot be unlocked by another process.
@@ -178,12 +171,13 @@ terraform import 'aws_instance.baz["example"]' i-abcd1234
 command is used to extract the value of an output variable from the state file.
 
 **terraform refresh**
-command is used to reconcile the state Terraform knows about (via its statefile) with the real-world infrastructure. This can be used to detect any drift from the last-known state, and to update the state file. This does not modify infrastructure, but does modify the state file. If the state is changed, this may cause changes to occur during the next plan or apply.
+command is used to reconcile the state Terraform knows about (via its statefile) with the real-world infrastructure. This can be used to detect any drift from the last-known state, and to update the state file. **This does not modify infrastructure, but does modify the state file**. If the state is changed, this may cause changes to occur during the next plan or apply.
 
 **terraform show**
 The terraform show command is used to provide human-readable output from a state or plan file. This can be used to inspect a plan to ensure that the planned operations are expected, or to inspect the current state as Terraform sees it.
 
-### Use and create modules
+## modeules
+
 Terraform Registry makes it simple to find and use modules.(https://registry.terraform.io/)
 The syntax for referencing a registry module **<NAMESPACE>/<NAME>/<PROVIDER>** (hashicorp/consul/aws)
 
@@ -191,7 +185,8 @@ You can also use modules from a private registry of the form **<HOSTNAME>/<NAMES
 
 **Module versioning**
 We recommend explicitly constraining the acceptable version numbers for each external module to avoid unexpected or unwanted changes
-```
+
+```h
 module "consul" {
   source  = "hashicorp/consul/aws"
   version = "0.0.5"
@@ -200,17 +195,6 @@ module "consul" {
 ```
 
 **variables**
-The name of a variable can be any valid identifier except the following,
-```
-source
-version
-providers
-count
-for_each
-lifecycle
-depends_on
-locals
-```
 
 variables on the command line can be associated like below
 
@@ -240,6 +224,7 @@ export TF_VAR_availability_zone_names='["us-west-1b","us-west-1d"]'
 ```
 
 **Variable Definition Precedence**
+
 ```
 - Environment variables
 - The terraform.tfvars file, if present.
