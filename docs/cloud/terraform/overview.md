@@ -1,13 +1,12 @@
-# Study Guide - Terraform Associate Certification
+# Terraform
 
 Important points to be covered for the exam.
 https://learn.hashicorp.com/terraform/certification/terraform-associate-study-guide
 
 We would go through some of the important points as we read through above study guide in theory.
 
-## TOC
+## IaC
 
-### Learn about IaC
 - IaC makes it easy to provision and apply infrastructure configurations, saving time. It standardizes workflows across different infrastructure providers (e.g., VMware, AWS, Azure, GCP, etc.) by using a common syntax across all of them.
 - **Makes infra more reliable**, IaC makes changes idempotent, consistent, repeatable, and predictable.
 - With IaC, we can test the code and review the results before the code is applied to our target environments.
@@ -15,38 +14,40 @@ We would go through some of the important points as we read through above study 
 - **Makes infra more manageable**, IaC provides benefits that enable mutation, when necessary
 
 **Terraform use case**
-- **Heroku App Setup**
-- **Multi-Tier Applications**
-- **Self-Service Clusters**
-- **Software Demos**
-- **Disposable Environments**
-- **Software Defined Networking**
-- **Resource Schedulers**
-- **Multi-Cloud Deployment**, Terraform is cloud-agnostic and allows a single configuration to be used to manage multiple providers, and to even handle cross-cloud dependencies. This simplifies management and orchestration, helping operators build large-scale multi-cloud infrastructures.
+
+- Heroku App Setup
+- Multi-Tier Applications
+- Self-Service Clusters
+- Software Demos
+- Disposable Environments
+- Software Defined Networking
+- Resource Schedulers
+- Multi-Cloud Deployment 
+
+Terraform is cloud-agnostic and allows a single configuration to be used to manage multiple providers, and to even handle cross-cloud dependencies. This simplifies management and orchestration, helping operators build large-scale multi-cloud infrastructures.
 
 ### Manage infrastructure
 https://github.com/terraform-providers/terraform-provider-aws
 
 **terraform init**, Running this command will download and initialize any providers that are not already initialized and are installed in the current working directory.
 
-**Note:** terraform init cannot automatically download providers that are not distributed by HashiCorp(0.0.12v), however it is possible in terraform version(0.0.13v)
+To upgrade to latest version of all terraform modules `terraform init -upgrade`
 
-To upgrade to latest version of all terraform modules ```terraform init -upgrade```
 you can also use provider constraints using "version" within a provider block but that declares a new provider configuration that may cause problems particularly when writing shared modules. Hence recommended using **required_providers**
 
-To defined multiple providers you can use "alias", all the plugins would be installed in below location
-```
-windows: %APPDATA%\terraform.d\plugins
-Linux: ~/.terraform.d/plugins
-```
-OS which are supported by terraform,
-```
-darwin
-freebsd
-linux
-openbsd
-solaris
-windows
+```h
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0" # Version constraint
+    }
+  }
+}
+
+provider "aws" {
+  region = "us-east-1" # Provider-specific configuration
+}
 ```
 **purpose of terraform state:**
 
@@ -58,18 +59,17 @@ windows
 
 **Syncing**, Terraform can use remote locking as a measure to avoid two or more different users accidentally running Terraform at the same time, and thus ensure that each Terraform run begins with the most recent updated state.
 
-**terraform settings**, "required_version" setting can be used to constrain which versions of the Terraform CLI can be used with your configuration
-
-```
+```h
 terraform {
-  required_providers {
-    aws = {
-      version = ">= 2.7.0"
-    }
+  backend "s3" {
+    bucket         = "my-terraform-state-bucket"   # Name of the S3 bucket
+    key            = "prod/terraform.tfstate"      # Path to the state file in the bucket
+    region         = "us-east-1"                   # AWS Region
+    encrypt        = true                          # Enable server-side encryption
+    dynamodb_table = "terraform-lock-table"        # Optional: For state locking
   }
 }
 ```
-
 **provisioners**
 
 Provisioners can be used to model specific actions on the local machine or on a remote machine in order to prepare servers or other infrastructure objects for service.
