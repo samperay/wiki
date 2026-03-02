@@ -1319,7 +1319,7 @@ def fact(n):
 print(fact(5)) # 120
 ```
 
-**fibonacci series**
+**sum fibonacci series**
 
 ```python
 def fib(n):
@@ -1334,8 +1334,6 @@ def fib(n):
 
 fib(90) # 0 1 1 2 3 5 8 13 21 34 55 89 
 
-# Print fibonacci numbers using recurrsion
-
 def fib(n):
     if n == 0:
         return 0
@@ -1347,16 +1345,18 @@ def fib(n):
 print(fib(6)) # 8
 ```
 
-**sum of fibonacci numbers**
+**list fibonacci numbers**
 
 ```python
 def fib(n):
-    if n <= 1:
-        return n
-    else:
-        return fib(n-1) + fib(n-2)
+    a,b=0,1
+    while a < n:
+        print(a,end= ' ')
+        a, b = b, a+b
+        print(b)
 
-print(fib(10))
+print(fib(5)) # 0,1,1,2,3
+
 ```
 
 **string reverse**
@@ -1374,6 +1374,12 @@ while i>=0 :
     revlist.append(string1[i])
     i-=1
 print("".join(revlist))
+
+revstr=''
+for char in string:
+    revstr = char + revstr
+print("reverse of string: ", revstr)
+
 ```
 
 **reverse sentence**
@@ -1478,6 +1484,14 @@ def reverse(x):
         x //= 10
     return rev
 print(reverse(1234))
+
+def reverse(n):
+    revnum=''
+    for n in str(n):
+        revnum = n + revnum
+    return revnum
+
+print(reverse(123456))
 ```
 
 **sum digit**
@@ -1610,12 +1624,12 @@ print(flatten([1, [2, [3, 4], 5], 6]))  # [1,2,3,4,5,6]
 
  **Find Duplicate Characters in a String**
 
- ```python
+```python
  def find_duplicates(s):
     return [char for char, count in Counter(s).items() if count > 1]
 
 print(find_duplicates("programming"))  # ['r', 'g', 'm']
- ```
+```
 
 **Check Armstrong Number**
 
