@@ -1,0 +1,18 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: 4-06-example-uppercase-pipeline
+spec:
+  tasks:
+    - name: task-process-input
+      taskRef:
+        name: 4-06-uppercase-task-with-input-and-result
+      params:
+        - name: input-message
+          value: "Hello fellow people!"
+    - name: print-message
+      taskRef:
+        name: 4-05-echo-task-with-input
+      params:
+        - name: input-message
+          value: "$(tasks.task-process-input.results.output-message)"

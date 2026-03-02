@@ -1,0 +1,7 @@
+apiVersion: tekton.dev/v1beta1
+kind: TaskRun
+metadata:
+  name: 4-02-echo-task-run
+spec:
+  taskRef:
+    name: 4-01-echo-task

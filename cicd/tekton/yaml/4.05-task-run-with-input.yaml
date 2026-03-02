@@ -1,0 +1,10 @@
+apiVersion: tekton.dev/v1beta1
+kind: TaskRun
+metadata:
+  name: 4-05-example-taskrun-override
+spec:
+  taskRef:
+    name: 4-05-echo-task-with-input
+  params:
+    - name: input-message
+      value: "Hello fellow people!"
