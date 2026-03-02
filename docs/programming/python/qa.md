@@ -1719,7 +1719,8 @@ print(parsed_data)     # {'name': 'DevOps', 'role': 'SRE'}
 ```
 
  **Check if a List is Sorted**
- ```python
+ 
+```python
  def is_sorted(lst):
     return lst == sorted(lst)
 
@@ -1743,6 +1744,7 @@ print(first_non_repeating("aabbccdef"))  # d
 ```
 
 **Move All Zeros to the End of the List**
+
 ```python
 def move_zeros(lst):
     non_zeros = [x for x in lst if x != 0]
@@ -1754,10 +1756,12 @@ print(move_zeros([0, 1, 0, 3, 12]))  # [1, 3, 12, 0, 0]
 **Count Occurrences of Each Word in a String**
 
 ```python
+from collections import Counter
 def word_frequency(s):
     words = s.lower().split()
     return dict(Counter(words))
 
+# {'this': 2, 'is': 2, 'a': 1, 'test.': 1, 'test': 1, 'simple.': 1}
 print(word_frequency("This is a test. This test is simple."))
 ```
 
@@ -1782,7 +1786,6 @@ print(second_largest([4, 1, 3, 2, 5]))  # 4
 ```
 
 **Check Leap Year**
-
 ```python
 def is_leap(year):
     return (year % 4 == 0 and year % 100 != 0) or (year % 400 == 0)
@@ -1791,7 +1794,6 @@ print(is_leap(2024))  # True
 ```
 
 **Extract Digits from a String**
-
 ```python
 def extract_digits(s):
     return [int(char) for char in s if char.isdigit()]
