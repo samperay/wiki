@@ -27,7 +27,7 @@ In the large environment, with a lot of users deploying a lot of pods, the users
 
 A Persistent Volume is a cluster-wide pool of storage volumes configured by an administrator to be used by users deploying application on the cluster. The users can now select storage from this pool using Persistent Volume Claims.
 
-```
+```yaml
 kind: PersistentVolume
 apiVersion: v1
 metadata:
@@ -40,7 +40,7 @@ spec:
    path: /tmp/data
 ```
 
-```
+```yaml
 kubectl create -f pv.yaml
 kubectl get pv
 kubectl delete pv pv-vol1
@@ -50,7 +50,7 @@ kubectl delete pv pv-vol1
 Now we will create a Persistent Volume Claim to make the storage available to the node. Volumes and Persistent Volume Claim are two separate objects in the Kubernetes namespace.
 *Once the Persistent Volume Claim created, Kubernetes binds the Persistent Volumes to claim based on the request and properties set on the volume.*
 
-```
+```yaml
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
@@ -92,7 +92,7 @@ We need to create manually each time when we define in the Pod definition file. 
 ### Dynamic Provisioning
 No we have a Storage Class, So we no longer to define Persistent Volume. It will create automatically when a Storage Class is created. It's called Dynamic Provisioning
 
-```
+```yaml
 sc-definition.yaml
 
 apiVersion: storage.k8s.io/v1
@@ -106,12 +106,12 @@ parameters:
   fsType: ext4
 ```
 
-```
+```yaml
 kubectl create -f sc-definition.yaml
 kubectl get sc
 ```
 
-```
+```yaml
 pvc-definition.yaml
 
 kind: PersistentVolumeClaim
@@ -126,7 +126,7 @@ spec:
      storage: 500Mi
 ```
 
-```
+```yaml
 pod-definition.yaml
 
 apiVersion: v1
