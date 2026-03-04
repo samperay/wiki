@@ -114,6 +114,29 @@ The application runs on IBM Code Engine with horizontal scaling, and asynchronou
 “In production environments…”
 
 
+## Practice Aloud
+
+Pick **one topic** and explain it for **60 seconds**.
+
+Examples:
+
+- Kubernetes pod lifecycle
+- Terraform state
+- TCP three-way handshake
+- Incident response process
+- CI/CD pipeline flow
+
+### Tips
+
+- Speak as if you are explaining to an interviewer.
+- Try to structure your explanation:
+  1. What it is
+  2. How it works
+  3. Example or real-world usage
+- Record yourself if possible and review your explanation.
+
+With consistent practice, your explanations will become **clearer and more structured within a week**.
+
 ## MyQs
 
 ### About(yourself) 
