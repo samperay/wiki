@@ -1,0 +1,11 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  name: 4-07-example-pipeline-run-workspace-demo
+spec:
+  pipelineRef:
+    name: 4-07-example-pipeline-workspace-demo
+  workspaces:
+    - name: messages # this workspace name must be declared in the Task
+      persistentVolumeClaim:
+        claimName: 4-07-tekton-test-claim
