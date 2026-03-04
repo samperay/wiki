@@ -243,6 +243,7 @@ nav:
                 - "srdevops": "jobdesc/srdevops.md"
                           
         - about: about.md
+        - interviews: tech-interview-cheatsheet.md
 theme:
         name: material
         features:
