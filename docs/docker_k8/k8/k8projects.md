@@ -16,4 +16,4 @@
 [tThree-Tier Web Application Deployment on AWS EKS using AWS EKS,ArgoCD, Prometheus, Grafana, and Jenkinst](https://blog.stackademic.com/advanced-end-to-end-devsecops-kubernetes-three-tier-project-using-aws-eks-argocd-prometheus-fbbfdb956d1a)
 
 
-![advance_kube](advance_kube.png)
+![advance_kube](./images/advance_kube.png)

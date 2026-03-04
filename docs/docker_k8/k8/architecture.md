@@ -67,3 +67,42 @@ The Kube-proxy service ensures that the necessary rules are in place on the work
 when user types *kubectl get nodes*, kube-api server authenticates the requests, validates it and gets information by *etcd* which stores all the dats using key/value pair. when new pod is created, kubeapi server authenticates first, and then validated. it then creates a pod without assigning it to a node, updates information in *etcd* and *etcd* reverts back to kube-api that information has been updated.
 
 Now, you have a container which is not assigned to any node, this is being seen by *kube-scheduler*  which verifies the requirements of container and would assign to right nodes and it would update the *kube-api* as to which nodes this container has to be scheduled, then *kube-api* would be send this request to *etcd* to update the inforamtion as to which nodes this container needs to be scheduuled, after which *kube-api* would pass this information to *kubelet* to start the container in appropriate worker node. kubelet then creates pod on the node and instructs the container runtime engine to deploy the image. Once done *kubelet* updates back inforamtion to *kube-api* which then sends back information to *etcd*
+
+## Brief summary components
+
+✨ Control Plane (The Brain)
+API Server – Entry point for all requests (kubectl / UI / CI-CD)
+Scheduler – Decides where Pods run
+Controller Manager – Ensures desired state matches actual state
+etcd – Stores cluster state (key-value store)
+
+✨ Worker Nodes (Where workloads run)
+Kubelet – Ensures containers are running as expected
+Kube-proxy – Handles networking rules
+Pods – Smallest deployable unit (one or more containers)
+CNI + Container Runtime – Networking + container execution
+
+✨ Traffic Flow
+Service – Stable endpoint for Pods (ClusterIP / NodePort / LoadBalancer)
+Ingress – Layer 7 routing (HTTP/HTTPS)
+CoreDNS – Service discovery inside the cluster
+
+✨ Storage
+PVC → PV → StorageClass → Physical storage
+ Decouples infrastructure from workloads.
+
+✨ Autoscaling
+HPA (Horizontal scaling)
+VPA (Vertical scaling)
+Cluster Autoscaler (Node scaling)
+
+✨ Security
+RBAC
+Network Policies
+Secrets
+
+✨ Observability
+Prometheus + Grafana
+Fluentd / ELK stack
+
+![kube_arch](./images/kube_arch.png)
