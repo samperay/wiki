@@ -230,7 +230,7 @@ nav:
                 
 
         - "softskills":
-                - "Presentation Skills": "softskills/presentation_skills.md"
+                - "Communication": "softskills/communication.md"
 
         - "kafka": 
                 - "Overview": "kafka/overview.md"
