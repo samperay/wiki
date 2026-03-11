@@ -1237,6 +1237,58 @@ application is responsible for retrieving the data from the underlying data stor
 
 ![cache_read_strategies](./images/cache_read_strategies.png)
 
+### Cache Coherence and Consistency Models
+
+Cache coherence and consistency models are essential concepts in the context of caching, particularly in distributed systems or multi-core processors
+
+**Cache Coherence:**
+
+Cache coherence is a property of multi-core processors or distributed systems that ensures all processors or nodes see the same view of shared data.
+
+To achieve cache coherence, various protocols and techniques can be employed, such as:
+
+Write-invalidate: When a cache writes to its copy of the shared data, it broadcasts a message to other caches, invalidating their copies. When another cache requires the updated data, it fetches the new data from the memory or the cache that made the change.
+
+Write-update (or write-broadcast): When a cache writes to its copy of the shared data, it broadcasts the updated data to all other caches, which update their local copies accordingly.
+
+### Cache Consistency Models
+
+Cache consistency models define the rules and guarantees for how data is updated and accessed in a distributed system with multiple caches. 
+
+Strict Consistency: In this model, any write to a data item is instantly visible to all caches. This model provides the highest level of consistency but is difficult to achieve in practice, as it may require significant synchronization overhead and negatively impact performance.
+
+Sequential Consistency: In this model, all operations on data items appear to occur in a specific sequential order across all caches. While this model allows for better performance than strict consistency, it still requires considerable synchronization and may not be practical in many distributed systems.
+
+Causal Consistency: In this model, operations that are causally related (i.e., one operation depends on the outcome of another) are guaranteed to appear in order across all caches. Operations that are not causally related can occur in any order. This model provides better performance than sequential consistency while still ensuring a reasonable level of data accuracy.
+
+Eventual Consistency: In this model, all updates to a data item will eventually propagate to all caches, but there is no guarantee about the order or timing of the updates. This model offers the best performance among the consistency models but provides the weakest consistency guarantees. Eventual consistency is often used in distributed systems where performance and scalability are prioritized over strict data accuracy.
+
+### Caching Challenges
+
+**Thundering Herd:** The thundering herd problem occurs when a popular piece of data expires from the cache, leading to a sudden surge in requests to the origin server to fetch the missing data. This can cause excessive load on the origin server and degrade performance.
+
+**Cache Penetration:** Cache penetration refers to the situation where requests for data bypass the cache and directly access the origin server, reducing the benefits of caching. 
+
+**Big Key:** A big key is a large piece of data that consumes a significant portion of the cache's capacity
+
+**Hot Key:** A hot key refers to a piece of data that is frequently accessed, causing contention and performance issues in the caching system
+
+**Cache Stampede:** Cache stampede occurs when multiple requests for the same data are made simultaneously, causing excessive load on the cache and the origin server.
+
+**Cache Pollution** Cache pollution occurs when less frequently accessed data displaces more frequently accessed data in the cache, leading to a reduced cache hit rate
+
+**Cache Drift** Cache drift refers to the inconsistency between cached data and the data on the origin server, typically caused by updates or changes in the data.
+
+### Cache Performance Metrics
+
+**Hit rate:** The hit rate is the percentage of requests that are served by the cache without accessing the original source
+
+**Miss rate:** The miss rate is the percentage of requests that are not served by the cache and need to be fetched from the original source
+
+**Cache size:** The cache size is the amount of memory or storage allocated for the cache. The cache size can impact the hit rate and miss rate of the cache
+
+**Cache latency:** The cache latency is the time it takes to access data from the cache. A lower cache latency indicates that the cache is faster and more effective in reducing latency and improving system performance.
+
 ## CDN
 
 A Content Delivery Network (CDN) is a distributed network of servers strategically located across various geographical locations to deliver web content, such as images, videos, and other static assets, more efficiently to users. The primary purpose of a CDN is to reduce latency and improve the overall performance of web applications by serving content from the server nearest to the user. CDNs can also help improve reliability, availability, and security of web applications.
@@ -1427,11 +1479,15 @@ Data skew can result in reduced performance and resource utilization, negating t
 
 ## Databases
 
+### SQL Vs NoSQL
+
 ### index
 
 Database indexes are designed to improve the speed and efficiency of data retrieval operations
 
-Primary Index - The primary key is a column that uniquely identifies each row. **the primary index improves read performance for identifying specific rows**, with very little downside since every table usually needs a primary key.
+#### index types
+
+**Primary Index:** The primary key is a column that uniquely identifies each row. **the primary index improves read performance for identifying specific rows**, with very little downside since every table usually needs a primary key.
 
 ```sql
 SELECT * FROM Employees WHERE EmployeeID = 123 are very fast
@@ -1443,13 +1499,14 @@ Unique Index - A Unique Index ensures that all values in the indexed column are 
 SELECT * FROM Users WHERE Email = 'alice@example.com' are fast
 ```
 
-Clustered Index
+**Clustered Index:** TBD
 
-Non-Clustered Index
+**Non-Clustered Index:** TBD
 
-Composite Index
+**Composite Index:** TBD
 
-Full-Text Index
+**Full-Text Index:** TBD
 
-Hash Index
+**Hash Index:** TBD
 
+## 
