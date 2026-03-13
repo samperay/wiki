@@ -166,6 +166,8 @@ nav:
                   - "aws":
                         - "practitioner":
                                 - "Summary": "cloud/aws/practitioner/summary.md"
+                        - "projects":
+                                - "usecases": "cloud/aws/projects/usecases.md"
                                 
 
                   - "terraform":
