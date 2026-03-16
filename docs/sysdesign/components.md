@@ -1509,4 +1509,60 @@ SELECT * FROM Users WHERE Email = 'alice@example.com' are fast
 
 **Hash Index:** TBD
 
-## 
+## Distributed Messaging System
+
+### messaging system
+
+A messaging system is responsible for transferring data among services, applications, processes, or servers. Such a system helps decouple different parts of a distributed system by providing an **asynchronous** way of transferring messaging(**Queuing and Publish-Subscribe**) between the sender and the receiver
+
+**Queue** messages are stored sequentially in a queue. Producers push messages to the rear of the queue, and consumers extract the messages from the front of the queue.
+
+![queue](./images/queue.png)
+
+**Publish-subscribe** messages are divided into topics. 
+
+A publisher (or a producer) sends a message to a topic that gets stored in the messaging system under that topic. Subscribers (or the consumer) subscribe to a topic to receive every message published to that topic. e.g Kafka
+
+![pubsub](./images/pubsub.png)
+
+The messaging system that stores and maintains the messages is commonly known as the message **broker**. 
+
+### Kafka
+
+Apache Kafka is an open-source publish-subscribe-based messaging system. It is distributed, durable, fault-tolerant, and highly scalable by design.  Fundamentally, it is a system that takes streams of messages from applications known as producers, stores them reliably on a central cluster (containing a set of brokers), and allows those messages to be received by applications (known as consumers) that process the messages.
+
+At a high level, applications (**producers**) send messages to a Kafka broker, and these messages are read by other applications called **consumers**. Messages get stored in a topic, and consumers subscribe to the topic to receive new messages.
+
+![kafka](./images/kafka.png)
+
+
+#### Use-cases
+
+Metrics: Kafka can be used to collect and aggregate monitoring data. Distributed services can push different operational metrics to Kafka servers. These metrics can then be pulled from Kafka to produce aggregated statistics.
+
+Log Aggregation: Kafka can be used to collect logs from multiple sources and make them available in a standard format to multiple consumers.
+
+Stream processing: Kafka is quite useful for use cases where the collected data undergoes processing at multiple stages
+
+Commit Log: Kafka can be used as an external commit log for any distributed system. Distributed services can log their transactions to Kafka to keep track of what is happening
+
+Website activity tracking: One of Kafka's original use cases was to build a user activity tracking pipeline
+
+Product suggestions: Imagine an online shopping site like amazon.com, which offers a feature of 'similar products' to suggest lookalike products that a customer could be interested in buying. To make this work, we can track every consumer action, like search queries, product clicks, time spent on any product, etc., and record these activities in Kafka. Then, a consumer application can read these messages to find correlated products that can be shown to the customer in real-time.
+
+#### Kafka common terms
+
+**Brokers:** A Kafka server is also called a **broker**. Brokers are responsible for reliably storing data provided by the producers and making it available to the consumers.
+
+**Records:** A record is a message or an event that gets stored in Kafka. Essentially, it is the data that travels from producer to consumer through Kafka. A record contains a key, a value, a timestamp, and optional metadata headers.
+
+**Topics:** a topic is like a table in a database, and the messages are the rows in that table.
+
+- Each message that Kafka receives from a producer is associated with a topic.
+- Consumers can subscribe to a topic to get notified when new messages are added to that topic.
+- A topic can have multiple subscribers that read messages from it.
+- In a Kafka cluster, a topic is identified by its name and must be unique.
+
+**Producers:** Producers are applications that publish (or write) records to Kafka.
+
+**Consumers:** Consumers are the applications that subscribe to (read and process) data from Kafka topics. Consumers subscribe to one or more topics and consume published messages by pulling data from the brokers.
