@@ -1649,3 +1649,90 @@ Load balancing refers to distributing incoming messages evenly among multiple co
 
 d. Message Batching and Compression
 Message batching is the process of combining multiple messages into a single batch before processing or transmitting them. This approach can improve throughput and reduce the overhead of processing individual messages. Compression, on the other hand, reduces the size of the messages, leading to less network bandwidth usage and faster transmission. For example, Apache Kafka supports both batching and compression: Producers can batch messages together, and the system can compress these batches using various compression algorithms like Snappy or Gzip, reducing the amount of data transmitted and improving overall performance.
+
+## CAP
+
+Consistency, Availability, and Partition Tolerance, it states that a distributed system cannot guarantee all three at the same time. a distributed system can only guarantee 2/3 properties at any given time. 
+
+CAP is a simplified model that only considers a binary state (partition or no partition)
+
+Consistency (C): In the context of CAP, consistency means that all nodes see the same data at the same time. More formally, every read receives the result of the most recent write – no matter which replica node it connects to, similarly, If you write some data, a consistent system ensures any subsequent read (on any node) will return that data
+
+Whenever data is written to one node, that data is immediately (and synchronously) replicated to all nodes before the write is considered successful. This guarantees that any client, reading from any replica, will get the latest data i.e **strong consistency**. 
+
+There are weaker forms of consistency (like eventual consistency) where all nodes will eventually have the same data, but not instantly. Those are typically what an “AP” system offers
+
+For CAP, think of consistency as the strictest form: **every read reflects the most recent write**.
+
+
+Availability (A): Availability means the system always responds to requests. In practice, this means even if parts of the system go down, the service as a whole is still accessible. An available system can tolerate node failures – clients can always read or write something. in other words, **every request gets a response even during failures**
+
+Partition Tolerance (P): Partition tolerance means the system continues to operate despite network partitions or communication failures between nodes. A partition is a break in connectivity that splits the network into disjoint parts. In a partition-tolerant system, even if nodes are cut off from each other due to network issues, each part can keep working (possibly in a degraded mode). Essentially, the system can lose arbitrarily many messages between nodes (or even whole nodes) and still keep going. In modern distributed systems, network partitions will happen (due to outages, delays, etc.), so tolerance to partitions is a must.
+
+![cap_theorem](./images/cap_theorem.png)
+
+CAP theorem tells us that when a network partition occurs, a system must choose between being Consistent or being Available – it cannot be both
+
+### Trade-offs in CAP Theorem
+
+Why can’t a distributed system have Consistency, Availability, and Partition tolerance all at once? 
+
+If the system decides to remain consistent (C), it cannot allow conflicting updates on different sides of the partition. So at least one side of the partition must stop accepting operations (to avoid divergence). That means some part of the system becomes unavailable (not serving requests). This is a CP choice – consistency over availability during partitions.
+
+If the system decides to remain available (A), it must keep serving requests on all sides of the partition. That means each side might proceed independently, leading to inconsistencies (different parts have different data until they can sync up later). This is an AP choice – availability over consistency.
+
+CP (Consistency + Partition tolerance, no guarantee of Availability): These systems choose consistency over availability when a failure happens. If a network partition occurs, a CP system will refuse to accept some requests or answers on one side in order to keep the data consistent
+
+e.g 
+
+Apache ZooKeeper is a CP system – it will shut down or refuse requests if it loses a quorum of nodes, ensuring no two clients see different data
+
+MongoDB is a CP system – If the primary node in a MongoDB replica set goes down, the system halts writes until a new primary is elected, pausing availability briefly to maintain a single up-to-date source of truth.
+
+financial applications prefer CP, as seen in banking: it’s better for the system to refuse an operation than to allow inconsistent money transfers.
+
+AP (Availability + Partition tolerance, no immediate Consistency guarantee): During a partition, they allow all nodes to continue operating, even if that means some clients see out-of-date data.
+
+Apache Cassandra is a classic AP datastore – it’s designed to always accept reads/writes on any node, even during network issues, and resolves conflicts asynchronously
+
+DynamoDB is a AP - “always-on” shopping cart service where the requirement was that the system must accept reads/writes even amid failures
+
+DNS is a AP -  it’s virtually always available globally, but updates (like changing a domain’s IP) take time to propagate, meaning not everyone sees the change immediately
+
+AP systems are great for use cases like caches, shopping carts, or social media feeds 
+
+CA (Consistency + Availability, no Partition tolerance): These systems provide consistency and availability as long as the system is whole, but they are not partition-tolerant. 
+
+single-node relational database can be viewed as CA
+
+CA is usually only achievable in a single-site or tightly coupled system.
+
+
+## PACELC Theorem
+
+If a partition (P) occurs: the system must choose either Availability (A) or Consistency (C) (this is essentially the CAP theorem trade-off during a failure).
+Else (no partition): the system must choose between Latency (L) and Consistency (C).
+“if P then A or C; else L or C" 
+
+PACELC thus fills in the gap that CAP leaves: CAP is silent when the system is running well. PACELC says even with no failures, you’re either prioritizing speed or consistency.
+
+
+![pacelc_theorem](./images/pacelc_theorem.png)
+
+Let’s illustrate PACELC with examples:
+
+Cassandra under PACELC: We said Cassandra is AP in CAP terms. Under PACELC, we classify it as PA/EL – Partition tolerant + Available, and Else (when no partition) it prefers low Latency over full consistency. Cassandra’s design optimizes for fast writes and reads (low latency) rather than blocking to synchronize every replica on each request. So it’s Available under partition, and in normal times it’s still favoring performance (with eventual consistency). In PACELC notation: PA/EL.
+
+MongoDB under PACELC: MongoDB was CP in CAP. Under PACELC, it’s often described as PC/EC – Partition tolerant + Consistent, and Else Consistent. That means even with no partition, MongoDB (by default) chooses consistency over latency (it funnels writes through one primary and replicates synchronously to secondaries). During a partition, it sacrifices availability to keep data consistent (only a majority partition can accept writes). So MongoDB is PC/EC by default configuration.
+
+Google Spanner: Google Spanner is a globally-distributed SQL database. It aims to be strongly consistent and highly available, by using synchronized clocks (TrueTime) to minimize uncertainty. According to PACELC, Spanner can be seen as PC/EC (much like MongoDB – it prioritizes consistency in all cases). In CAP terms, Spanner is technically a CP system (it will sacrifice availability if a major partition occurs), but through engineering (and controlling clock drift) Google made partitions rare and short, so in effect Spanner behaves like a CA system for practical use. Spanner chooses consistency even if that means a bit more latency (transactions wait out clock uncertainty), thus it fits PACELC’s PC/EC category (favoring consistency both during and outside partitions).
+
+The PACELC theorem reminds us that performance (latency) is part of the equation. A system that is strongly consistent even without failures might incur higher response times, while a system that gives snappy responses might be doing so by not waiting on cross-node consensus.
+
+CRDTs and Hybrid Systems
+
+Convergent Replicated Data Types (CRDTs) are data structures designed to allow multiple replicas to be updated independently and converge to a consistent state without requiring coordination. CRDTs can help system designers achieve both strong eventual consistency and high availability. By combining CRDTs with other techniques, it is possible to build hybrid systems that provide tunable consistency guarantees, enabling applications to make trade-offs based on their specific requirements.
+
+Application-specific trade-offs
+
+The CAP theorem and its extensions provide valuable insights into the fundamental trade-offs in distributed systems design. However, it is crucial to remember that real-world systems often involve more complex and application-specific trade-offs. As a system designer, it is important to understand the unique requirements and constraints of your application and make informed decisions about the trade-offs that best meet those needs.
