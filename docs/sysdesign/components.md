@@ -1481,6 +1481,73 @@ Data skew can result in reduced performance and resource utilization, negating t
 
 ### SQL Vs NoSQL
 
+RDBMS: store data in tables with predefined relationships between them. language for RDBMSs is SQL. they are known for their consistency, reliability, and powerful query capabilities
+
+NoSQL(Not Only SQL): store data in various formats, such as key-value, document, column-family, or graph. NoSQL databases are known for their ability to scale horizontally and handle unstructured or semi-structured data. prioritize flexibility, scalability, and performance under specific workloads
+
+**SQL Vs NoSQL**
+
+| Aspect        | SQL (Relational Databases)                                                                 | NoSQL (Non-Relational Databases)                                                                 |
+|--------------|---------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------|
+| **Storage**  | Data is stored in tables with rows and columns. Each row represents an entity, and each column represents attributes (e.g., Color, Make, Model for a car). | Uses multiple storage models such as key-value, document, graph, and columnar.                  |
+| **Schema**   | Fixed schema. Columns must be defined before inserting data. Every row must follow the same structure. Schema changes require migration and possible downtime. | Dynamic schema. Fields can be added anytime, and records do not need to follow a fixed structure. |
+| **Querying** | Uses SQL (Structured Query Language), which is standardized and powerful for complex queries. | Uses database-specific query languages (sometimes called UnQL). Syntax varies across databases. |
+| **Scalability** | Typically vertically scalable (increase CPU, RAM). Scaling across servers is complex and costly. | Horizontally scalable. Easy to add more servers. Cost-effective and supports distributed systems. |
+| **Reliability (ACID)** | Strong ACID compliance (Atomicity, Consistency, Isolation, Durability). Ensures reliable transactions. | Often sacrifices strict ACID compliance for better performance, availability, and scalability. |
+
+
+### Pros and Cons of SQL Databases
+
+| Category                         | Pros                                                                                                              | Cons                                                                                                                     |
+|----------------------------------|-------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------|
+| **ACID Properties & Consistency** | Ensures reliable transactions with Atomicity, Consistency, Isolation, and Durability. Data remains accurate and consistent. | Strict ACID compliance can impact performance and scalability, especially in distributed systems.                        |
+| **Structured Schema**             | Enforces a predefined schema, making data structured, consistent, and easier to maintain and understand.         | Schema changes require migrations and can lead to downtime or complex updates in large systems.                          |
+| **Query Language & Optimization** | Powerful SQL language supports complex queries (joins, filtering, grouping). Query optimizers improve performance. | Complex queries can become resource-intensive and harder to manage as data size grows.                                   |
+| **Scalability & Performance**     | Supports vertical scaling by increasing server resources (CPU, memory, storage).                                  | Horizontal scaling is difficult due to relational constraints and ACID compliance, leading to potential bottlenecks.     |
+
+### Types of NoSQL Databases
+
+| Type                              | Description                                                                                                                                | Use Cases                                                   | Examples                                                  |
+|-----------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------|-----------------------------------------------------------|
+| **Key-Value Databases**           | Stores data as key-value pairs where the key is a unique identifier and the value is the associated data. Optimized for high read/write performance. | Session management, user preferences, product recommendations | Amazon DynamoDB, Azure Cosmos DB, Redis                  |
+| **In-Memory Key-Value Databases** | Stores data primarily in memory instead of disk, enabling very low latency. May risk data loss unless persistence mechanisms are used.       | Caching, real-time analytics, session storage               | Redis, Memcached, Amazon ElastiCache                     |
+| **Document Databases**            | Stores data in documents (JSON, BSON, XML, YAML) with nested fields and flexible schema for hierarchical data.                              | User profiles, product catalogs, content management         | MongoDB, Amazon DocumentDB, CouchDB                      |
+| **Wide-Column Databases**         | Uses tables without strict schema; rows can have different columns and data formats. Designed for large-scale distributed storage.          | Telemetry, analytics, messaging, time-series data           | Cassandra, Accumulo, Azure Table Storage, HBase          |
+| **Graph Databases**               | Represents data using nodes (entities) and edges (relationships), ideal for connected data.                                                 | Social networks, recommendation engines, fraud detection    | Neo4j, Amazon Neptune, Azure Cosmos DB (Gremlin)         |
+| **Time-Series Databases**         | Stores data indexed by time, optimized for time-based queries and sequential data ingestion.                                                | DevOps monitoring, IoT, industrial telemetry                | Graphite, Prometheus, Amazon Timestream                  |
+
+![nosql_db](./images/nosql_db.png)
+
+### Pros and Cons of NoSQL Databases
+
+| Category                          | Pros                                                                                                                     | Cons                                                                                                                              |
+|----------------------------------|--------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------|
+| **Flexibility & Schema-less Design** | Schema-less design allows handling dynamic and diverse data. Easy to adapt to changing requirements without schema migrations. | Lack of strict schema can lead to inconsistent data and makes validation and governance more challenging.                         |
+| **Horizontal Scalability**        | Designed for horizontal scaling. Supports sharding, replication, and distributed architectures. Suitable for large-scale systems. | Managing distributed systems can add complexity, including data consistency and operational overhead.                             |
+| **Performance (Specific Workloads)** | High performance for write-heavy workloads, large datasets, and specific use cases (e.g., caching, analytics, real-time apps). | Performance depends on use case; not ideal for complex transactional workloads or relational queries.                              |
+| **CAP Theorem Trade-offs**        | Prioritizes availability and partition tolerance, ensuring system remains operational even during failures.               | Often sacrifices strong consistency (eventual consistency), which can lead to data conflicts and integrity challenges.             |
+| **Query Complexity & Expressiveness** | Some NoSQL DBs provide flexible query models tailored for specific use cases.                                             | Less expressive than SQL for complex queries (joins, aggregations). Requires learning different query languages across databases. |
+
+
+### SQL vs NoSQL - Decisions
+
+| Factor                         | SQL Databases                                                                                                      | NoSQL Databases                                                                                                      |
+|--------------------------------|--------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------|
+| **Data Model & Schema**        | Best for structured data with fixed schema (tables, rows, columns). Schema changes require modifications.         | Best for unstructured/semi-structured data. Flexible schema allows easy changes and diverse data handling.          |
+| **Scalability**                | Vertically scalable (add CPU, RAM). Limited by single server capacity and can be expensive.                        | Horizontally scalable (add more servers). Ideal for large-scale, high-throughput applications.                      |
+| **Consistency & Transactions** | Strong consistency with full ACID compliance. Suitable for transactional systems (banking, e-commerce).           | Eventual consistency (CAP theorem). Prioritizes availability and partition tolerance over strict consistency.       |
+| **Query Complexity & Frequency** | Powerful SQL supports complex queries (joins, aggregations, reporting). Ideal for analytics-heavy workloads.       | Limited or specialized query capabilities. Best for simple queries or specific patterns (key-value, graph, etc.).  |
+| **Performance & Latency**      | Reliable general-purpose performance across various workloads.                                                      | Optimized for specific workloads (high writes, large datasets, low latency).                                        |
+| **Operational Complexity & Maintenance** | Easier to manage in simpler setups. Mature tooling for monitoring, backup, and recovery.                         | More complex due to distributed nature (sharding, replication). Requires expertise in scaling and maintenance.      |
+| **Deployment**                 | May require manual setup and scaling.                                                                               | Often supports easy deployment with managed services and distributed architecture.                                  |
+| **Monitoring**                 | Mature monitoring tools and ecosystem.                                                                              | Requires advanced monitoring for distributed systems.                                                                |
+| **Backup & Recovery**          | Strong and well-defined backup/recovery mechanisms.                                                                 | Depends on implementation; may require additional configuration for reliability.                                    |
+| **Security**                   | Strong built-in security features (encryption, access control, auditing).                                          | Varies by database; requires careful configuration for secure distributed systems.                                  |
+| **Community & Support**        | Large, mature community with extensive documentation and support.                                                   | Growing ecosystem; strong support for popular NoSQL databases.                                                       |
+| **Cost**                       | Can be expensive due to vertical scaling and licensing.                                                             | Cost-effective for scaling using commodity hardware or cloud-based solutions.                                       |
+
+![sql_vs_nosql](./images/sql_vs_nosql.png)
+
 ### index
 
 Database indexes are designed to improve the speed and efficiency of data retrieval operations
