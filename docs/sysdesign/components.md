@@ -1803,3 +1803,261 @@ Convergent Replicated Data Types (CRDTs) are data structures designed to allow m
 Application-specific trade-offs
 
 The CAP theorem and its extensions provide valuable insights into the fundamental trade-offs in distributed systems design. However, it is crucial to remember that real-world systems often involve more complex and application-specific trade-offs. As a system designer, it is important to understand the unique requirements and constraints of your application and make informed decisions about the trade-offs that best meet those needs.
+
+## Batch Processing vs. Stream Processing
+
+| Aspect                     | Batch Processing                                                                 | Stream Processing                                                                 |
+|--------------------------|----------------------------------------------------------------------------------|-----------------------------------------------------------------------------------|
+| **Definition**            | Processes large volumes of data in a single batch collected over time           | Processes data in real-time as it is generated or received                        |
+| **Processing Type**       | Delayed processing                                                              | Real-time processing                                                              |
+| **Data Handling**         | Data is collected first, then processed                                         | Data is processed continuously in small chunks                                    |
+| **Latency**               | High latency                                                                    | Low latency                                                                       |
+| **Throughput**            | High throughput for large datasets                                              | Moderate throughput but continuous                                                |
+| **Complexity**            | Supports complex computations                                                   | Handles simpler, fast computations                                                |
+| **Data Volume**           | Designed for very large volumes                                                 | Handles smaller chunks continuously                                               |
+| **Resource Usage**        | Resource-intensive, often scheduled during off-peak hours                       | Requires always-on resources but optimized per event                              |
+| **Processing Frequency**  | Periodic (daily, weekly, monthly)                                               | Continuous                                                                        |
+| **Examples**              | ETL jobs, data warehousing, billing systems                                     | Fraud detection, live analytics, IoT data processing                              |
+| **Use Cases**             | End-of-day reports, monthly billing, ETL pipelines                              | Stock market analysis, social media streams, sensor data                          |
+
+---
+
+Key Differences Summary
+
+| Category                  | Batch Processing                                  | Stream Processing                                 |
+|--------------------------|--------------------------------------------------|--------------------------------------------------|
+| **Data Processing Time**  | Processes data after collection (delay)           | Processes data immediately                        |
+| **Latency**               | Higher latency                                   | Lower latency                                    |
+| **Computation Type**      | More complex processing                          | Faster, simpler processing                       |
+| **Data Volume Handling**  | Large volumes at once                            | Smaller chunks continuously                      |
+| **Resource Pattern**      | Runs in intervals (often scheduled)              | Runs continuously (always active)                |
+
+
+## Synchronous vs Asynchronous Communication
+
+| Aspect                     | Synchronous Communication                                                  | Asynchronous Communication                                                  |
+|---------------------------|---------------------------------------------------------------------------|----------------------------------------------------------------------------|
+| **Definition**             | Sender and receiver communicate at the same time                          | Sender and receiver communicate at different times                          |
+| **Communication Timing**   | Real-time                                                                 | Not real-time                                                               |
+| **Interaction Type**       | Immediate interaction                                                     | Delayed interaction                                                         |
+| **Dependency**             | Sender waits for receiver response                                        | Sender does not wait for response                                           |
+| **Processing Behavior**    | Blocking (waits for completion)                                           | Non-blocking (continues execution)                                          |
+| **Examples**               | Phone calls, video calls, live chat, real-time systems                    | Email, messaging apps, queues, background jobs                              |
+| **Response Time**          | Immediate                                                                | Delayed                                                                     |
+| **Resource Utilization**   | High (both parties must be active)                                        | Efficient (independent execution)                                           |
+| **Complexity**             | Easier to understand but can be resource-heavy                            | More complex to implement but scalable                                      |
+| **Use Cases**              | Real-time systems, transactions, sequential workflows                     | Event-driven systems, notifications, background processing                  |
+
+---
+
+Pros and Cons
+
+| Type                     | Pros                                                                 | Cons                                                                 |
+|--------------------------|----------------------------------------------------------------------|----------------------------------------------------------------------|
+| **Synchronous**           | Immediate feedback, simple flow, easy debugging                      | Blocking, slower overall throughput, resource-intensive              |
+| **Asynchronous**          | Scalable, non-blocking, better resource utilization                  | Delayed feedback, harder debugging, increased system complexity      |
+
+---
+
+Key Differences Summary
+
+| Category                  | Synchronous Communication                        | Asynchronous Communication                      |
+|--------------------------|------------------------------------------------|------------------------------------------------|
+| **Timing**                | Real-time                                      | Delayed                                        |
+| **Execution Model**       | Blocking                                       | Non-blocking                                   |
+| **Coupling**              | Tightly coupled                                | Loosely coupled                                |
+| **Scalability**           | Limited                                        | High                                           |
+| **Responsiveness**        | Immediate                                      | Eventual                                       |
+| **Best For**              | Immediate actions, transactions                 | Background jobs, distributed systems            |
+
+
+## Push vs Pull Notification Systems
+
+| Aspect                     | Push Notification System                                              | Pull Notification System                                              |
+|---------------------------|-----------------------------------------------------------------------|------------------------------------------------------------------------|
+| **Definition**             | Server proactively sends notifications to users                      | Client/user actively requests updates from the server                  |
+| **Initiation**             | Server-initiated                                                     | Client/user-initiated                                                  |
+| **Communication Type**     | Proactive                                                            | Reactive                                                              |
+| **Delivery Timing**        | Real-time / near-instant                                             | On-demand (may have delay)                                             |
+| **User Action Required**   | No                                                                  | Yes (manual refresh or request)                                        |
+| **User Control**           | Limited (depends on permissions/settings)                           | High (user decides when to fetch data)                                 |
+| **Examples**               | Email alerts, social media notifications, ride updates              | Refreshing email, checking news feed, polling APIs                     |
+| **Use Cases**              | Alerts, reminders, live updates, messaging apps                     | Periodic checks, dashboards, manual updates                            |
+| **Intrusiveness**          | Can be intrusive (notification fatigue)                             | Non-intrusive                                                          |
+| **Internet Dependency**    | Requires continuous connection for real-time delivery               | Requires connection only when user requests                            |
+| **Implementation Complexity** | Complex (needs event systems, subscriptions, permissions)         | Simpler (request-response model)                                       |
+
+---
+
+Pros and Cons
+
+| Type                     | Pros                                                                 | Cons                                                                 |
+|--------------------------|----------------------------------------------------------------------|----------------------------------------------------------------------|
+| **Push**                 | Real-time updates, no user action required, improves engagement      | Intrusive, requires permissions, more complex implementation         |
+| **Pull**                 | User-controlled, simple implementation, less intrusive               | Delayed updates, depends on user action, less engagement             |
+
+---
+
+Key Differences Summary
+
+| Category                  | Push Notification System                        | Pull Notification System                        |
+|--------------------------|------------------------------------------------|------------------------------------------------|
+| **Initiation**            | Server                                         | Client/User                                    |
+| **Timeliness**            | Immediate                                      | On-demand                                      |
+| **Engagement**            | High                                           | Moderate                                       |
+| **Intrusiveness**         | High                                           | Low                                            |
+| **Complexity**            | Higher                                         | Lower                                          |
+| **Best For**              | Alerts, real-time systems                      | Manual checks, dashboards                      |
+
+## Microservices vs Serverless Architecture
+
+| Aspect                     | Microservices Architecture                                              | Serverless Architecture                                              |
+|---------------------------|-------------------------------------------------------------------------|----------------------------------------------------------------------|
+| **Definition**             | Application is built as a collection of loosely coupled services       | Cloud model where infrastructure is managed by the provider          |
+| **Architecture Style**     | Service-based (multiple independent services)                          | Function-based (event-driven functions)                              |
+| **Infrastructure Management** | Managed by team (VMs, containers, Kubernetes)                       | Fully managed by cloud provider                                      |
+| **Scalability**            | Manual or orchestrated scaling (e.g., Kubernetes)                      | Automatic scaling based on demand                                    |
+| **Deployment**             | Independent deployment of each service                                 | Deploy individual functions                                          |
+| **Execution Model**        | Long-running services                                                  | Short-lived, stateless functions                                     |
+| **Cost Model**             | Pay for provisioned infrastructure                                     | Pay-per-execution (usage-based)                                      |
+| **Complexity**             | High operational complexity                                            | Lower infra complexity but limitations exist                         |
+| **Technology Flexibility** | Language-agnostic services                                             | Limited to provider-supported runtimes                               |
+| **Examples**               | E-commerce services (auth, orders, inventory)                          | Image processing on upload, event triggers                           |
+| **Use Cases**              | Large-scale, complex applications                                      | Event-driven apps, lightweight APIs, automation                      |
+
+---
+
+Pros and Cons
+
+| Type                     | Pros                                                                 | Cons                                                                 |
+|--------------------------|----------------------------------------------------------------------|----------------------------------------------------------------------|
+| **Microservices**         | High flexibility, independent scaling, team autonomy                 | Complex operations, requires infra management                        |
+| **Serverless**            | No server management, auto-scaling, cost-efficient                   | Execution limits, vendor lock-in, cold start latency                 |
+
+---
+
+Key Differences Summary
+
+| Category                  | Microservices Architecture                     | Serverless Architecture                      |
+|--------------------------|-----------------------------------------------|----------------------------------------------|
+| **Infra Management**      | Managed by engineers                          | Managed by cloud provider                    |
+| **Scaling Control**       | Fine-grained control                          | Fully automatic                              |
+| **Cost Model**            | Fixed / provisioned                           | Pay-per-use                                  |
+| **Execution Type**        | Long-running services                         | Event-driven functions                       |
+| **Operational Effort**    | High                                          | Low                                          |
+| **Best For**              | Complex, large systems                        | Event-driven, unpredictable workloads        |
+
+
+## Message Queues vs Service Bus
+
+| Aspect                     | Message Queues                                                      | Service Bus (ESB)                                                     |
+|---------------------------|----------------------------------------------------------------------|------------------------------------------------------------------------|
+| **Definition**             | Asynchronous communication system for sending messages between services | Middleware platform for routing, transforming, and orchestrating messages |
+| **Communication Model**    | Point-to-point (1 producer → 1 consumer)                            | Multiple patterns (pub/sub, request/response, orchestration)          |
+| **Complexity**             | Simple and lightweight                                               | Complex and feature-rich                                               |
+| **Decoupling**             | Strong decoupling between sender and receiver                        | Decouples systems but introduces centralized control                  |
+| **Message Handling**       | Basic message delivery (often FIFO)                                  | Advanced routing, filtering, transformation                           |
+| **Scalability**            | Highly scalable (horizontal scaling)                                 | More complex to scale due to centralization                           |
+| **Processing Style**       | Asynchronous task processing                                         | Workflow orchestration and integration                                |
+| **Centralization**         | Distributed (no central brain)                                       | Central hub for communication                                         |
+| **Use Cases**              | Task queues, background jobs, load distribution                      | Enterprise integration, complex workflows                             |
+| **Examples**               | Image processing queue, job workers                                  | Order workflow across billing, inventory, shipping                    |
+
+---
+
+Pros and Cons
+
+| Type                     | Pros                                                                 | Cons                                                                 |
+|--------------------------|----------------------------------------------------------------------|----------------------------------------------------------------------|
+| **Message Queues**        | Simple, scalable, efficient, loosely coupled                        | Limited features (no routing/transformation)                         |
+| **Service Bus**           | Rich features, supports complex workflows, integration-friendly     | High complexity, central bottleneck risk                             |
+
+---
+
+Key Differences Summary
+
+| Category                  | Message Queues                               | Service Bus                                  |
+|--------------------------|-----------------------------------------------|----------------------------------------------|
+| **Focus**                 | Message delivery                             | Integration & orchestration                  |
+| **Pattern**               | Point-to-point                               | Pub/Sub, request-response, workflows         |
+| **Architecture Style**    | Distributed                                  | Centralized                                  |
+| **Scalability**           | Easier                                       | Harder                                       |
+| **Best For**              | Async processing, decoupling                 | Enterprise workflows, complex integrations   |
+
+
+## Stateful vs Stateless Architecture
+
+| Aspect                     | Stateful Architecture                                                  | Stateless Architecture                                                |
+|---------------------------|------------------------------------------------------------------------|------------------------------------------------------------------------|
+| **Definition**             | Server maintains session/state information across requests            | Server does not store any session/state between requests              |
+| **Session Management**     | Session data stored on server                                         | No session stored; each request is independent                        |
+| **Request Handling**       | Depends on previous interactions                                      | Each request contains all required information                        |
+| **Scalability**            | Less scalable (state sharing needed across servers)                   | Highly scalable (no dependency between requests)                      |
+| **Resource Usage**         | Higher (stores session data in memory/db)                             | Lower (no session storage required)                                   |
+| **Performance**            | Can be slower due to session handling                                 | Faster due to independent processing                                  |
+| **Complexity**             | More complex (session replication, consistency)                       | Simpler design                                                        |
+| **User Experience**        | Personalized (remembers user context)                                 | Generic (no memory of past interactions)                              |
+| **Fault Tolerance**        | Harder (session loss affects user)                                    | Easier (any server can handle request)                                |
+| **Examples**               | Shopping cart sessions, online banking sessions                       | REST APIs with tokens, microservices                                  |
+| **Use Cases**              | Real-time apps, gaming, session-based systems                         | APIs, scalable web services, distributed systems                      |
+
+
+![stateful_stateless_arch](./images/stateful_stateless_arch.png)
+
+---
+
+Pros and Cons
+
+| Type                     | Pros                                                                 | Cons                                                                 |
+|--------------------------|----------------------------------------------------------------------|----------------------------------------------------------------------|
+| **Stateful**             | Personalized experience, maintains context                           | Hard to scale, higher resource usage, session management complexity  |
+| **Stateless**            | Highly scalable, simple, better performance                          | No built-in personalization, requires client to send context         |
+
+---
+
+Key Differences Summary
+
+| Category                  | Stateful Architecture                        | Stateless Architecture                      |
+|--------------------------|----------------------------------------------|---------------------------------------------|
+| **State Handling**        | Stores session                              | No session stored                           |
+| **Request Dependency**    | Dependent                                   | Independent                                 |
+| **Scalability**           | Limited                                     | High                                        |
+| **Performance**           | Moderate                                    | High                                        |
+| **Best For**              | User sessions, real-time apps               | APIs, microservices                         |
+
+## Event-Driven vs Polling Architecture
+
+| Aspect                     | Event-Driven Architecture                                           | Polling Architecture                                                  |
+|---------------------------|---------------------------------------------------------------------|------------------------------------------------------------------------|
+| **Definition**             | System reacts to events emitted by producers                        | System repeatedly checks for changes at regular intervals              |
+| **Communication Model**    | Event-based (publish/subscribe)                                     | Request-based (client polls server)                                   |
+| **Processing Type**        | Reactive                                                            | Active checking                                                       |
+| **Execution Model**        | Asynchronous, non-blocking                                          | Often synchronous, can be blocking                                    |
+| **Coupling**               | Loosely coupled                                                     | More tightly coupled                                                  |
+| **Response Time**          | Immediate (real-time)                                               | Delayed (depends on polling interval)                                 |
+| **Resource Utilization**   | Efficient (only reacts when needed)                                 | Less efficient (constant checking even if no change)                  |
+| **Scalability**            | Highly scalable                                                     | Harder to scale with frequent polling                                 |
+| **Complexity**             | More complex (event brokers, consumers)                             | Simpler to implement                                                  |
+| **Examples**               | Kafka, RabbitMQ, Webhooks, event streams                            | Cron jobs, API polling, periodic health checks                        |
+| **Use Cases**              | Real-time systems, notifications, microservices communication       | Monitoring, periodic updates, low-frequency checks                    |
+
+---
+
+Pros and Cons
+
+| Type                     | Pros                                                                 | Cons                                                                 |
+|--------------------------|----------------------------------------------------------------------|----------------------------------------------------------------------|
+| **Event-Driven**          | Real-time, efficient, scalable, loosely coupled                     | Complex setup, debugging challenges                                  |
+| **Polling**               | Simple, predictable load, easy to implement                         | Resource waste, delayed response, poor scalability                   |
+
+---
+
+Key Differences Summary
+
+| Category                  | Event-Driven Architecture                    | Polling Architecture                        |
+|--------------------------|----------------------------------------------|---------------------------------------------|
+| **Trigger Mechanism**     | Event-based                                  | Time-based (interval polling)               |
+| **Latency**               | Low (instant reaction)                       | Higher (depends on interval)                |
+| **Efficiency**            | High                                         | Lower                                      |
+| **Implementation**        | Complex                                      | Simple                                     |
+| **Best For**              | Real-time systems, streaming                 | Scheduled checks, non-critical updates      |
