@@ -197,6 +197,7 @@ nav:
                         - "text summarization": "ds_ai_ml/ai/text_summariztion.md"
                         - "movie poster": "ds_ai_ml/ai/movie_poster.md"
                         - "chatbot": "ds_ai_ml/ai/chatbot.md"
+                        - "AI Agent": "ds_ai_ml/ai/ai_agent.md"
                         
                 - "mlops": 
                         - "Overview": "ds_ai_ml/mlops/overview.md"
