@@ -1,8 +1,20 @@
-# Compenents for system design architecting
+# Components for System Design
+
+## TL;DR
+
+This is the core reference for distributed systems components — the building blocks used in every system design interview and every real-world production architecture. It covers load balancing algorithms, API gateways, networking fundamentals (HTTP versions, TCP vs UDP, proxies), distributed file systems, redundancy and replication strategies, caching (read/write strategies, invalidation, CDN), data partitioning and sharding, database selection (SQL vs NoSQL), distributed messaging (Kafka, RabbitMQ), the CAP and PACELC theorems, and a suite of architectural pattern comparisons. Each section answers: what is it, when would you use it, and what are the trade-offs?
+
+See also: [SRE Overview](../sre/overview.md) | [SRE Measurements](../sre/sre_measure.md) | [Kafka](../kafka/)
+
+---
 
 ## Load Balancing
 
-### Working principle 
+A load balancer is the traffic cop of your infrastructure. When millions of requests hit your service every minute, no single server can handle them all — a load balancer distributes that traffic across a fleet of backend servers, ensuring no single instance becomes the bottleneck. Understanding how load balancers work, which algorithm to choose, and how they contribute to high availability is foundational knowledge for any SRE or system designer.
+
+**When would you use this?** Any service that needs to handle more requests than a single server can serve, or that needs to stay online even when individual servers fail, needs a load balancer. This covers virtually every production web service.
+
+### Working principle
 
 Load balancers work by distributing incoming network traffic across multiple servers or resources to ensure efficient utilization of computing resources and prevent overload. Here are the general steps that a load balancer follows to distribute traffic:
 
@@ -345,6 +357,10 @@ While the impact is typically minimal, it is important to consider the potential
 **Health Checks and Monitoring:** Implementing effective health checks for backend servers is essential to ensure that the load balancer accurately directs traffic to healthy instances. Misconfigured or insufficient health checks can lead to the load balancer sending traffic to failed or underperforming servers, resulting in a poor user experience
 
 ## API Gateway
+
+An API Gateway is the "front door" to your microservices architecture. Where a load balancer decides *which server* handles a request, an API Gateway decides *which service* handles it — and applies cross-cutting concerns (authentication, rate limiting, logging, transformation) at that boundary. For SREs, the API Gateway is a critical observability and control plane: it is where you enforce rate limits to protect your services, where you collect per-endpoint metrics, and where you implement circuit breaking.
+
+**When would you use this?** Any architecture with multiple backend services that external clients need to reach. Rather than exposing 20 different microservice endpoints, expose one API Gateway endpoint that routes to all of them.
 
 An API Gateway is a server-side architectural component in a software system that acts as an intermediary between clients (such as web browsers, mobile apps, or other services) and backend services, microservices, or APIs.
 
@@ -1128,6 +1144,12 @@ Scalable Infrastructure: Utilizing cloud services with the ability to scale rapi
 
 ## Caching
 
+Caching is the single most effective performance optimisation in distributed systems. By storing the results of expensive operations — database queries, API calls, computed results — close to where they are needed, you can reduce response times from hundreds of milliseconds to single-digit milliseconds. Every major web property (Google, Facebook, Amazon) has caching at every layer of its architecture, from browser caches to CDN edge nodes to in-process memory caches.
+
+**The fundamental trade-off:** Caches trade memory for speed and freshness for performance. A cache that is too aggressive serves stale data; a cache that invalidates too eagerly negates the performance benefit.
+
+**When would you use this?** Any time the cost (latency + resource consumption) of computing or fetching a value exceeds the benefit of always having the most current version. Database-heavy APIs, rendered page fragments, session data, and geolocation lookups are classic candidates.
+
 The cache is a high-speed storage layer that sits between the application and the original source of the data, such as a database, a file system, or a remote web service. When data is requested by the application, it is first checked in the cache. If the data is found in the cache, it is returned to the application. If the data is not found in the cache, it is retrieved from its original source, stored in the cache for future use, and returned to the application.
 
 **Key terminology and concepts**
@@ -1289,7 +1311,11 @@ Eventual Consistency: In this model, all updates to a data item will eventually 
 
 **Cache latency:** The cache latency is the time it takes to access data from the cache. A lower cache latency indicates that the cache is faster and more effective in reducing latency and improving system performance.
 
-## CDN
+## CDN (Content Delivery Network)
+
+A CDN is a geographically distributed cache for static and semi-static content. Rather than serving all your images, videos, JavaScript, and CSS from a single origin data centre, a CDN replicates this content to hundreds of "edge" servers located close to users worldwide. A user in Bangalore gets served from a nearby PoP instead of a US East Coast origin — cutting latency from ~250ms to ~10ms for that asset.
+
+**When would you use this?** Any service with a global audience serving static assets (images, videos, CSS, JS), software downloads, or even API responses that can be cached. CDNs are also a primary DDoS mitigation layer.
 
 A Content Delivery Network (CDN) is a distributed network of servers strategically located across various geographical locations to deliver web content, such as images, videos, and other static assets, more efficiently to users. The primary purpose of a CDN is to reduce latency and improve the overall performance of web applications by serving content from the server nearest to the user. CDNs can also help improve reliability, availability, and security of web applications.
 
@@ -1384,6 +1410,10 @@ Hybrid Topology: A hybrid topology combines elements from various topologies to 
 
 ## Quorum
 
+Quorum is the distributed systems answer to "how do I make a decision when not all participants can agree?" Rather than requiring every node to respond (which would make the system unavailable any time a single node fails), a quorum system only requires a *majority* of nodes to agree before declaring an operation successful. This is the mechanism behind etcd, ZooKeeper, Raft consensus, and Cassandra's configurable consistency levels.
+
+**When would you use this?** Any distributed database or consensus system where you need strong consistency guarantees despite node failures.
+
 In a distributed environment, a quorum is the minimum number of servers on which a distributed operation needs to be performed successfully before declaring the operation's overall success. quorum refers to the minimum number of machines that perform the same action (commit or abort) for a given transaction in order to decide the final operation for that transaction.
 
 Choosing quorum - **more than half of the number of nodes(n/2+1) in the cluste**r:  where  is the total number of nodes in the cluster.
@@ -1393,7 +1423,11 @@ every read will see at least one copy of the latest value written
 (N=3, W=1, R=3): fast write, slow read, not very durable
 (N=3, W=3, R=1): slow write, fast read, durable
 
-## Data partitioning
+## Data Partitioning
+
+Data partitioning — splitting a large dataset across multiple storage nodes — is how you scale a database horizontally beyond what a single server can hold. Without partitioning, you hit a hard ceiling: the largest single machine you can buy. With partitioning, you can scale to petabytes by adding commodity nodes. The challenge is choosing the right partition key and strategy to keep data evenly distributed and queries efficient.
+
+**When would you use this?** When your dataset grows beyond the capacity of a single database server, or when query load exceeds what a single node can handle. Exhaust all single-node options (read replicas, better indexes, query optimisation) before introducing partitioning.
 
 Data partitioning is a technique used in distributed systems and databases to divide a large dataset into smaller, more manageable parts, referred to as partitions(partitioned based on a certain criterion, such as **data range, data size, or data type**). Each partition is independent and contains a subset of the overall data. Each partition is then assigned to a separate processing node which can perform operations on its assigned data subset independently of the others(it allows processing to be distributed across multiple nodes, minimizing data transfer and reducing processing time).
 
@@ -1478,6 +1512,10 @@ Data skew can result in reduced performance and resource utilization, negating t
 - **Cost:** - Implementing a data partitioning strategy may require additional hardware, software, or infrastructure, leading to increased costs. Furthermore, the added complexity of managing a partitioned system may result in higher operational expenses.
 
 ## Databases
+
+Choosing the right database is one of the most consequential architectural decisions you will make. The wrong choice is expensive to undo — migrating from SQL to NoSQL (or vice versa) at scale is a multi-month engineering project. The right choice depends on your data model, query patterns, consistency requirements, and scale expectations.
+
+**The key insight:** SQL databases give you ACID guarantees and powerful ad-hoc queries at the cost of horizontal scalability. NoSQL databases give you horizontal scalability and flexible schemas at the cost of query expressiveness and, often, strong consistency. Neither is universally better — the right choice is the one that fits your access patterns.
 
 ### SQL Vs NoSQL
 
@@ -1578,7 +1616,11 @@ SELECT * FROM Users WHERE Email = 'alice@example.com' are fast
 
 ## Distributed Messaging System
 
-### messaging system
+Distributed messaging systems decouple producers (things that generate events) from consumers (things that process events). Without messaging, Service A must directly call Service B — which means A breaks when B is slow or down. With messaging, A publishes an event to a broker, B consumes it at its own pace, and neither service needs to know the other exists. This is the foundation of event-driven architecture, microservices communication, and real-time data pipelines.
+
+**The two fundamental patterns:** Message queues (each message is consumed by exactly one consumer — used for task distribution) and Pub/Sub (each message is delivered to all subscribers — used for event broadcasting). Kafka supports both patterns; your choice depends on whether you need exclusive processing or fan-out.
+
+### Messaging System
 
 A messaging system is responsible for transferring data among services, applications, processes, or servers. Such a system helps decouple different parts of a distributed system by providing an **asynchronous** way of transferring messaging(**Queuing and Publish-Subscribe**) between the sender and the receiver
 
@@ -1717,7 +1759,11 @@ Load balancing refers to distributing incoming messages evenly among multiple co
 d. Message Batching and Compression
 Message batching is the process of combining multiple messages into a single batch before processing or transmitting them. This approach can improve throughput and reduce the overhead of processing individual messages. Compression, on the other hand, reduces the size of the messages, leading to less network bandwidth usage and faster transmission. For example, Apache Kafka supports both batching and compression: Producers can batch messages together, and the system can compress these batches using various compression algorithms like Snappy or Gzip, reducing the amount of data transmitted and improving overall performance.
 
-## CAP
+## CAP Theorem
+
+The CAP theorem is the most important theoretical framework for reasoning about distributed database trade-offs. It tells you something fundamental: in the presence of a network partition (which *will* happen in any distributed system), you must choose between consistency and availability. You cannot have both simultaneously.
+
+**Why this matters for an SRE:** When you choose a database or messaging system, you are implicitly choosing a position on the CAP triangle. Understanding that choice tells you what your system will do under failure — will it refuse writes to stay consistent (CP), or will it keep serving reads and writes at the cost of potential data divergence (AP)?
 
 Consistency, Availability, and Partition Tolerance, it states that a distributed system cannot guarantee all three at the same time. a distributed system can only guarantee 2/3 properties at any given time. 
 
@@ -2061,3 +2107,60 @@ Key Differences Summary
 | **Efficiency**            | High                                         | Lower                                      |
 | **Implementation**        | Complex                                      | Simple                                     |
 | **Best For**              | Real-time systems, streaming                 | Scheduled checks, non-critical updates      |
+
+---
+
+## Common Pitfalls
+
+**Choosing a load balancing algorithm without considering session state.** Round Robin is the simplest choice but breaks stateful applications where a user's requests must reach the same backend. If your application stores session state in memory (rather than an external store like Redis), you need sticky sessions — or better, redesign for statelessness.
+
+**Confusing an API Gateway with a load balancer.** A load balancer distributes traffic across identical instances of the same service. An API Gateway routes traffic to *different* services based on request content. They serve different purposes and are commonly used together.
+
+**Caching without a coherent invalidation strategy.** Adding a cache without planning how to invalidate it when the underlying data changes is how you ship stale data bugs. Design the invalidation strategy before you design the cache.
+
+**Over-sharding a database before you need to.** Sharding adds enormous operational complexity. Most services never need to shard; they need read replicas, better indexes, or query optimisation. Exhaust all single-node options before introducing sharding.
+
+**Choosing the wrong consistency model for your use case.** Using strong consistency (CP) for a social media like count wastes resources. Using eventual consistency (AP) for a bank balance causes real financial harm. Map your data's business requirements to a consistency model explicitly, not by default.
+
+**Not accounting for the Dead Letter Queue in messaging pipelines.** Messages that fail processing accumulate as invisible poison. Without a DLQ strategy, these messages block queues or silently disappear. Always plan for what happens to messages that cannot be processed.
+
+**Treating microservices as a cure-all.** Microservices add significant operational complexity: distributed tracing, network latency between services, partial failure handling, and multiple deployment pipelines. A well-structured monolith is often the right starting architecture. Microservices are an evolution, not a starting point.
+
+---
+
+## Interview Questions
+
+1. **Walk me through the trade-offs between L4 and L7 load balancing. When would you choose each?** (L4: faster, less overhead, works for any TCP/UDP traffic. L7: content-aware routing, SSL termination, cookie-based stickiness, A/B testing. Choose L7 for HTTP microservices; L4 for raw throughput or non-HTTP protocols.)
+
+2. **What is the CAP theorem and what does it mean for Cassandra vs MongoDB?** (Cassandra is AP — stays available during partitions at the cost of eventual consistency. MongoDB is CP — refuses writes during primary failure to maintain consistency.)
+
+3. **Explain write-through, write-around, and write-back caching. What are the failure risks of each?** (Write-through: consistent but higher write latency. Write-around: fast writes, cold cache for new data. Write-back: fastest writes, data loss risk if cache fails before flush to disk.)
+
+4. **You need to design a sharding strategy for a users table with 1 billion users. What partition key would you choose and why?** (User ID hash for even distribution. Avoid time-based keys — they create hot shards on the current time partition.)
+
+5. **What is the difference between Kafka and RabbitMQ? When would you choose each?** (Kafka: high throughput, persistent log, replay capability — use for event sourcing, stream processing, audit logs. RabbitMQ: lower latency, rich routing — use for task queues, RPC patterns, complex routing.)
+
+6. **How does a CDN reduce origin server load? What happens on a cache miss?** (CDN serves cached content from the edge. On cache miss: edge fetches from origin, caches the response respecting TTL/cache-control headers, serves subsequent requests from cache.)
+
+7. **Explain consistent hashing and why it is used in distributed systems.** (Maps both nodes and keys to points on a ring. Adding/removing a node only remaps keys adjacent to that node — critical for minimising rebalancing cost in caches and sharded databases.)
+
+8. **What is the difference between fault tolerance and high availability?** (FT: zero downtime, active-active redundancy, instantaneous failover — very high cost. HA: minimal downtime, active-passive with fast failover — moderate cost. Most production systems target HA; true FT is reserved for safety-critical systems.)
+
+9. **When would you use push notifications vs pull notifications?** (Push: real-time, server-initiated, requires persistent connections — complex at scale. Pull: simpler, client-controlled, higher latency — leads to thundering herd problems on popular polling intervals.)
+
+10. **Explain the PACELC theorem and why it extends CAP.** (CAP only addresses behaviour during partitions. PACELC also addresses the latency-consistency trade-off during normal operation. Most real-world database decisions are about the EL/EC trade-off: do you want fast reads or consistent reads when the system is healthy?)
+
+---
+
+## Key Takeaways
+
+- **Load balancers are the entry point to scalability and fault tolerance.** Choose the algorithm based on traffic pattern: Round Robin for homogeneous stateless services, Least Connections for variable-duration requests, IP Hash for stateful services needing session affinity.
+- **API Gateways and load balancers are complementary, not interchangeable.** The API Gateway owns routing, auth, and rate limiting at the application layer; the load balancer owns distribution across service instances.
+- **Caching is the highest-leverage performance optimisation — but it requires an explicit invalidation strategy.** Cache + no invalidation plan = eventual stale data incident.
+- **HTTP/2 multiplexing and HTTP/3's QUIC eliminate head-of-line blocking** from HTTP/1.1. Adopting HTTP/2 or HTTP/3 is a free latency improvement for high-concurrency services.
+- **CAP theorem: in a network partition, you must choose consistency or availability.** CP (MongoDB, ZooKeeper) refuses operations to stay consistent. AP (Cassandra, DynamoDB) keeps serving at the cost of temporary divergence. Know which your chosen datastore is.
+- **PACELC extends CAP:** even without failures, you trade latency for consistency. PA/EL systems (Cassandra) optimise for speed; PC/EC systems (MongoDB, Spanner) optimise for consistency.
+- **Sharding is a last resort.** Before sharding: add read replicas, add indexes, optimise queries, vertical scale. Shard only when single-node capacity is genuinely exhausted.
+- **Kafka's log retention and consumer group model are the key architectural differentiators.** Unlike a queue (messages disappear after consumption), Kafka retains messages for replay — enabling event sourcing, audit logs, and catch-up consumers.
+- **Stateless architectures scale horizontally; stateful architectures do not.** Design services to store session state in an external store (Redis, DynamoDB) rather than in process memory.
+- **Event-driven architectures decouple producers from consumers** and are more resilient than synchronous call chains. But they require investment in observability — distributed tracing, correlation IDs, and DLQ monitoring — or failures become invisible.
