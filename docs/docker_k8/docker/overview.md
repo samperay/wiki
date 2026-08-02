@@ -1,95 +1,134 @@
+## TL;DR
+
+Docker packages an application and its runtime dependencies into an image, then runs that image as an isolated container process. The core ideas are images, containers, registries, networks, volumes, and Dockerfiles. For an SRE or DevOps engineer, Docker matters because it makes deployments more repeatable, but container reliability still depends on correct process design, storage, networking, logging, resource limits, and image hygiene.
+
+See also: [Docker FAQ](faq.md), [Linux admin basics](../../linux/admin/basics.md), [Linux networking](../../linux/admin/networking.md), and [Linux storage](../../linux/admin/storage.md).
+
 ## Docker architecture
+
+Docker uses a client-server architecture. The Docker client talks to the Docker daemon, which does the heavy lifting of building, running, and distributing containers. The client and daemon can run on the same system, or a client can connect to a remote daemon. They communicate using the Docker API over a Unix socket or network interface.
+
+Docker Compose is another client that helps define and run applications made of multiple containers. In production, the same concepts extend into orchestration systems such as Kubernetes.
+
+```mermaid
+flowchart LR
+    A[Docker CLI / Compose] --> B[Docker API]
+    B --> C[Docker daemon: dockerd]
+    C --> D[Images]
+    C --> E[Containers]
+    C --> F[Networks]
+    C --> G[Volumes]
+    C --> H[Registries]
+```
+
+Main Docker architecture components:
 
 - Docker Daemon
 - Docker Client
 - Docker Registries
 - Docker Objects
 
+### Docker Daemon
 
-Docker uses a client-server architecture. The Docker client talks to the Docker daemon, which does the heavy lifting of building, running, and distributing your Docker containers. The Docker client and daemon can run on the same system, or you can connect a Docker client to a remote Docker daemon. The Docker client and daemon communicate using a REST API, over UNIX sockets or a network interface. Another Docker client is Docker Compose, that lets you work with applications consisting of a set of containers
-
-### Docker Daemon 
-The Docker daemon (dockerd) listens for Docker API requests and manages Docker objects such as images, containers, networks, and volumes. A daemon can also communicate with other daemons to manage Docker services.
+The Docker daemon, `dockerd`, listens for Docker API requests and manages Docker objects such as images, containers, networks, and volumes. It is the component that actually creates namespaces, configures networking, mounts storage, starts container processes, and talks to registries. A daemon can also communicate with other daemons when managing Docker services.
 
 ### Docker Client
 
-The Docker client (docker) is the primary way that many Docker users interact with Docker. When you use commands such as docker run, the client sends these commands to dockerd, which carries them out. The docker command uses the Docker API. The Docker client can communicate with more than one daemon. 
+The Docker client, `docker`, is the primary way many users interact with Docker. When you run commands such as `docker run`, the client sends those commands to `dockerd`, and the daemon carries them out. The Docker client can communicate with more than one daemon, which is useful for local development, remote build hosts, or administrative workflows.
 
 ### Docker registries
 
-A Docker registry stores Docker images. Docker Hub is a public registry that anyone can use, and Docker is configured to look for images on Docker Hub by default. You can even run your own private registry.
+A Docker registry stores Docker images. Docker Hub is a public registry, and Docker is configured to look for images there by default. Teams often use private registries for internal applications so they can control access, scanning, provenance, and retention.
 
 ### Docker Objects
 
-When you use Docker, you are creating and using images, containers, networks, volumes, plugins, and other objects
+When you use Docker, you create and use images, containers, networks, volumes, plugins, and other objects.
 
--  Images
-    An image is a read-only template with instructions for creating a Docker container. Often, an image is based on another image, with some additional customization.
+#### Images
 
-    Each instruction in a Dockerfile creates a layer in the image. When you change the Dockerfile and rebuild the image, only those layers which have changed are rebuilt. This is part of what makes images so lightweight, small, and fast, when compared to other virtualization technologies.
+An image is a read-only template with instructions for creating a Docker container. Images are often based on another image, such as `ubuntu`, `alpine`, or a language runtime, with application-specific customizations added on top.
 
-- Containers
+Each instruction in a Dockerfile creates a layer in the image. When you change the Dockerfile and rebuild the image, only changed layers and dependent later layers need to be rebuilt. This layering model is part of what makes images efficient compared with full virtual machine images.
 
-    A container is a runnable instance of an image. You can create, start, stop, move, or delete a container using the Docker API or CLI. You can connect a container to one or more networks, attach storage to it, or even create a new image based on its current state.
+#### Containers
 
-    By default, a container is relatively well isolated from other containers and its host machine. You can control how isolated a container’s network, storage, or other underlying subsystems are from other containers or from the host machine.
+A container is a runnable instance of an image. You can create, start, stop, move, or delete a container using the Docker API or CLI. You can connect a container to one or more networks, attach storage, set environment variables, define resource limits, and expose ports.
 
-    A container is defined by its image as well as any configuration options you provide to it when you create or start it. When a container is removed, any changes to its state that are not stored in persistent storage disappear. 
+By default, a container is isolated from other containers and from the host using Linux primitives such as namespaces and cgroups. You can control how isolated a container's network, storage, process, and other subsystems are.
 
-     Docker defines certain policies to restart the container
+A container is defined by its image plus runtime configuration. When a container is removed, changes inside the writable container layer disappear unless they were written to persistent storage such as a volume or bind mount.
 
-    - **On-failure:** container restarts only when a failure that occurred is not due to the user,
-    - **Unless-stopped**: container restarts only when a user executes the command to stop it,
-    - **Always:** the container is always restarted irrespective of error or other issues.
+Docker supports restart policies:
+
+- **On-failure:** the container restarts only when it exits with a failure status and the failure is not due to an explicit user stop.
+- **Unless-stopped:** the container restarts unless a user explicitly stopped it.
+- **Always:** the container is restarted regardless of exit status or daemon restart behavior.
 
 ## Docker Run
 
-- Pulls the <ubuntu> image: Docker checks for the presence of the ubuntu image and, if it doesn't exist locally on the host, then Docker downloads it from Docker Hub. If the image already exists, then Docker uses it for the new container. 
+`docker run` is a high-level command that pulls an image if needed, creates a container, configures runtime settings, starts the main process, and attaches/logs output depending on flags.
 
-- Creates a new container: Once Docker has the image, it uses it to create a container. 
+When you run a container, Docker:
 
-- Allocates a filesystem and mounts a read-write layer: The container is created in the file system and a read-write layer is added to the image. 
+- Pulls the image, such as `ubuntu`, if it is not already present locally.
+- Creates a new container from the image.
+- Allocates a filesystem and mounts a read-write container layer.
+- Allocates a network interface, usually on a bridge network by default.
+- Sets up an IP address from the network pool.
+- Executes the process specified by the image and command.
+- Captures and exposes stdout, stderr, and container logs.
 
-- Allocates a network / bridge interface: Creates a network interface that allows the Docker container to talk to the local host. 
+```mermaid
+flowchart TD
+    A[docker run] --> B{Image local?}
+    B -- no --> C[Pull from registry]
+    B -- yes --> D[Create container]
+    C --> D
+    D --> E[Attach writable layer]
+    E --> F[Configure network and mounts]
+    F --> G[Start process]
+    G --> H[Stream logs / exit code]
+```
 
-- Sets up an IP address: Finds and attaches an available IP address from a pool. 
+For production-like containers, explicitly define ports, environment, volumes, health checks, restart policy, and resource limits instead of relying only on defaults.
 
-- Executes a process that you specify: Runs your application, and; 
+## Docker Storage
 
-- Captures and provides application output: Connects and logs standard input, outputs and errors for you to see how your application is running. 
+Container storage has two major parts: image layers and runtime writable data. A Dockerfile builds an image as a series of read-only layers. During `docker run`, Docker adds a writable container layer on top of those image layers. This is called copy-on-write.
 
+Image layers are cached. If a later build reuses unchanged Dockerfile instructions, Docker can reuse the cached layers, making builds faster. This is why Dockerfile ordering matters: put slower-changing dependency steps before frequently changing application source code.
 
-  
-## Docker Storage 
+The writable container layer exists for the lifetime of the container. If the container is deleted, data written only to that layer is lost. To retain data, use persistent storage such as volumes or bind mounts.
 
-Lets discuss about the how containers are run and their association with volume mounts
+The classic volume mount syntax is:
 
-Once the **Dockerfile** all the commands, and when trying to build, it will create each layer of containers and finally makes a complete readonly snapshot of the image. These layes are called as **image layers** and they are in **read-only**. These intermidiate containers are stored in a cache, so incase if next build uses the same image it would be fetched from these containers, hence it will be taken very less time tp build.
+```bash
+# Run a container with a published port and a volume-style path mapping.
+docker run -d -p hostport:containerport -v localdata:containerpath image
+```
 
-Once the image is built, we will run **docker run image** which will copy the executable from the image layer and writes to an **read-write** layer. These are called as **copy-on-write**. when the container runs, the storage is created in the run time and persists only until the contaniner is up. once the container is destroyed, its volume mounts are destroyed.
+The newer `--mount` syntax is more explicit and easier to read.
 
-In order to make containers retain their data, we would be using something called as **persistant volumes**, where we would explictly say to mount the data of our local paths to container paths. These are available in **/var/lib/docker/volumes/**.
+```bash
+# Run a container with an explicit bind mount.
+docker run -d -p hostport:containerport --mount type=bind,src=localdata,dst=containerpath image
+```
 
-**docker run -d -p hostport:containerport -v localdata:container image**
+Different mount types:
 
-These types of mount are called as **volume mounts**
+- **Bind mounts:** stored anywhere on the host system and directly expose a host path into the container.
+- **Volume mounts:** managed by Docker and usually stored under Docker's data directory, such as `/var/lib/docker/volumes/`.
+- **tmpfs mounts:** stored in host memory and never written to the host filesystem.
 
-Newer version you would be using the same using **mount bind** and they are called as **volume binds**
-
-**docker run -d -p hostport:containerport --mount -bind src=localdata,destination=container image**
-
-Different mount types available:
-
-- **Bind mounts:** These can be stored anywhere on the host system
-- **Volume mount:** they are managed by Docker and are stored in a part of the host filesystem.
-- **tmpfs mount:** they are stored in the host system's memory. These mounts can never be written to the host's filesystem.
-
+For SRE work, choose storage intentionally. Use volumes for container-managed persistent data, bind mounts for explicit host integration, and tmpfs for temporary sensitive or high-speed ephemeral data.
 
 ## Docker Container lifecycle
 
+A container lifecycle tracks the state of the container process and its runtime configuration.
+
 - Create phase
 - Running phase
-- Paused phase/unpause phase
+- Paused/unpaused phase
 - Stopped phase
 - Killed phase
 
@@ -97,221 +136,245 @@ Different mount types available:
 
 ![Docker container lifecycle](../../images/docker-container-lifecycle.png)
 
+If the main process exits, the container exits. Containers are meant to run a foreground task or process. If an application in a container crashes, the container exits unless a restart policy or orchestrator restarts it.
 
-## stateful or stateless 
+## stateful or stateless
 
-Stateless applications should be preferred over a Stateful application for Docker Container. We can create one container from our application and take out the app's configurable state parameters. Once it is one, we can run the same container with different production parameters and other environments. Through the Stateless application, we can reuse the same image in distinct scenarios. It is also easier to scale a Stateless application than a Stateful application when it comes to Docker Containers.
+Stateless applications are generally easier to run in Docker than stateful applications. A stateless container can be replaced at any time because important state is stored outside the container in a database, object store, cache, queue, or mounted volume. This makes scaling, rolling updates, and recovery much easier.
 
+Stateful containers are possible, but they require deliberate storage, backup, restore, and placement strategy. In Kubernetes, this is usually handled with PersistentVolumes, StatefulSets, and storage classes. In plain Docker, it means you must be explicit about volumes and backup workflows.
 
-## Docker Networks 
+## Docker Networks
 
-- bridge: Default network which the containers connect to if the network is not specified otherwise
-- none: Connects to a container-specific network stack lacking a network interface
-- host: Connects to the host’s network stack
+Docker networking controls how containers communicate with each other, the host, and external systems.
 
-**default docker network**
-```
+- `bridge`: default network driver for standalone containers when no network is specified.
+- `none`: gives the container its own network namespace without external network interfaces.
+- `host`: shares the host's network stack with the container.
+
+### default docker network
+
+```bash
+# Run Nginx on the default bridge network and publish container port 80 to host port 8088.
 docker container run -d -p 8088:80 --name nginx-server1 nginx:alpine
 docker inspect nginx-server1
 docker container ps
-curl http://localhost:<port>
+curl http://localhost:8088
 ```
 
-**custom docker network**
-```
+### custom docker network
+
+```bash
+# Create a user-defined bridge network and run Nginx attached to it.
 docker network create -d bridge my-bridge-network
 docker container run -d -p 8788:80 --network="my-bridge-network" --name nginx-server2 nginx:alpine
 docker container ps
-curl http://localhost:<port>
+curl http://localhost:8788
 docker inspect nginx-server2
 ```
 
+User-defined bridge networks provide better container-to-container DNS behavior than the default bridge network. Prefer named networks when running multiple related containers.
+
 ## CMD Vs ENTRYPOINT
 
-*CMD* provides a default arguments for the container also can be overridden when its running. 
+`CMD` provides default arguments or a default command for the container. It can be overridden when the container is run.
 
 ```Dockerfile
-FROM Ubuntu:20.04 
+# Dockerfile: CMD provides a default command that can be replaced at runtime.
+FROM ubuntu:20.04
 CMD ["echo", "Hello from CMD"]
 
-# docker build -t cmd-example . 
-# docker run cmd-example # Output: Hello from CMD
-# docker run cmd-example "hi there" # Output: hi there
+# docker build -t cmd-example .
+# docker run cmd-example
+# docker run cmd-example echo "hi there"
 ```
 
-An ENTRYPOINT provides a fixed comamnd to run when container starts. its harder to override. Arguments passed during `docker run` are appended to ENTRYPOINT
+`ENTRYPOINT` provides the fixed command to run when the container starts. Arguments passed during `docker run` are appended to `ENTRYPOINT`.
 
 ```Dockerfile
+# Dockerfile: ENTRYPOINT fixes the executable and runtime args are appended.
 FROM ubuntu:20.04
 ENTRYPOINT ["echo", "hello from ENTRYPOINT"]
 
-# docker build -t entrypoint-example . 
-# docker run entrypoint-example # output hello from ENTRYPOINT
-# docker run entrypoint-example "hi there" # output: hello from ENTRYPOINT hi there
+# docker build -t entrypoint-example .
+# docker run entrypoint-example
+# docker run entrypoint-example "hi there"
 ```
 
-Containers are meant to run a task or a process. A container lives as long as a process within it is running. If an application in a container crashes, container exits.
+The difference between `CMD` and `ENTRYPOINT` is most visible when you pass arguments to `docker run`. `CMD` is replaced by supplied command arguments, while arguments are appended to `ENTRYPOINT`.
 
-Difference between the CMD and ENTRYPOINT with related to the supplied to the "docker run" command. While the CMD will be completely over-written by the supplied command (or args), for the ENTRYPOINT, the supplied command will be appended to it.
-
-```
-# Dockerfile
+```Dockerfile
+# Dockerfile: ENTRYPOINT plus CMD gives a fixed executable with default args.
 FROM ubuntu:20.04
 
 ENTRYPOINT ["echo"]
 CMD ["Hello from CMD"]
 
-docker build -t combined-example .
-docker run combined-example                    # Output: Hello from CMD
-docker run combined-example "Custom Message"   # Output: Custom Message
+# docker build -t combined-example .
+# docker run combined-example
+# docker run combined-example "Custom Message"
 ```
 
 ### Example
 
-Let's understand it with an ubuntu-sleeper example. 
+Containers are meant to run a task or process. A container lives as long as the main process is running. Ubuntu's default command is often a shell, but if no interactive input is attached, it may exit immediately.
 
-When you want to make a container run, it would check for the CMD to run the process, but when we have a bash which is just a listening terminal to get the input and if we don't provide it, it would just exit the conatiner. 
-
-
-
-```
-docker run ubutu:20.04 sleep 30 # provide an input to bash terminal for 30 sec.
+```bash
+# Run Ubuntu and override the command with sleep for 30 seconds.
+docker run ubuntu:20.04 sleep 30
 ```
 
-Let's make a docker equivalent file for above command
+Equivalent Dockerfile:
 
 ```Dockerfile
+# Dockerfile: always sleep for 30 seconds by default.
 FROM ubuntu:20.04
 CMD ["sleep", "30"]
 
-docker build -t ubuntu-sleep .
-docker run ubuntu-sleep
+# docker build -t ubuntu-sleep .
+# docker run ubuntu-sleep
 ```
 
-Container always sleep 30 sec once it started ! 
-So what if we need to change the time ? i.e sleep 10 ? 
-Since its hardcoded, we would now want to make it parametrized.. 
+If you want the sleep duration to be configurable, use `ENTRYPOINT` for the executable and `CMD` for default arguments.
 
 ```Dockerfile
+# Dockerfile: use ENTRYPOINT as the executable and CMD as default arguments.
 FROM ubuntu:20.04
-CMD ["30"]
 ENTRYPOINT ["sleep"]
+CMD ["30"]
 
-docker build -t ubuntu-sleep .
-docker run ubuntu-sleep # sleep for 30s when no args are passed
-docker run ubuntu-sleep 10 # sleep for 10 sec # observe that CMD has been overwritten for ENTRYPOINT
+# docker build -t ubuntu-sleep .
+# docker run ubuntu-sleep
+# docker run ubuntu-sleep 10
 ```
 
-incase you want to override the command itself in the ENTRYPOINT, then..
+Override the entrypoint itself only when necessary.
 
-```
+```bash
+# Override ENTRYPOINT at runtime.
 docker run --entrypoint new-sleep-command ubuntu-sleep 60
 ```
 
-## Dockerfile 
+## Dockerfile
 
-- **FROM** -  sets the base image for subsequent instructions, especially easier to start by pulling an image. 
+A Dockerfile defines how an image is built. Each instruction affects image layers, build cache, and runtime behavior.
 
-- **MAINTAINER** -  Author field of the generated images
+- **FROM:** sets the base image for subsequent instructions.
+- **MAINTAINER:** older author field for generated images. Prefer OCI labels such as `LABEL org.opencontainers.image.authors=...`.
+- **RUN:** executes commands in a new image layer and commits the result.
+- **CMD:** provides defaults for the running container.
+- **WORKDIR:** sets the working directory for later `RUN`, `CMD`, `ENTRYPOINT`, `COPY`, and `ADD` instructions.
+- **ENV:** sets environment variables available to later build steps and runtime containers.
+- **ADD:** copies files, directories, or remote URLs and can auto-extract local tar archives. Prefer `COPY` unless you need ADD-specific behavior.
+- **ENTRYPOINT:** configures the container to run as an executable.
 
-- **RUN** - execute any commands in a new layer on top of the current image and commit the results. The resulting committed image will be used for the next step in the *Dockerfile*..
-`RUN [ "echo", "$HOME" ]` will not do variable substitution on $HOME as *exec* won't invoke any command shell. if you want shell processing you need to specify the shell `RUN [ "sh", "-c", "echo", "$HOME" ]`
-
-- **CMD** - Command that needs to be executed while running container. The main purpose of a CMD is to provide defaults for an executing. These defaults can include an executable, or they can omit the executable, in which case we must specify an ENTRYPOINT instruction as well.
-
-    CMD It has 3 forms:
-
-    CMD ["executable","param1","param2"] (exec form, this is the preferred form)
-    CMD ["param1","param2"] (as default parameters to ENTRYPOINT)
-    CMD command param1 param2 (shell form)
-
-- **WORDDIR** AND **ENV** - The WORKDIR instruction sets the working directory for any RUN, CMD and ENTRYPOINT instructions that follow it in the Dockerfile. The WORKDIR instruction can resolve environment variables previously set using ENV. The ENV instruction sets the environment variable to the value . This value will be passed to all future RUN instructions. The environment variables set using ENV will persist when a container is run from the resulting image.
-
-- **ADD** copies new files, directories or remote file URLs from and adds them to the filesystem of the container at the path .
-
-- **ENTRYPOINT** allows us to configure a container that will run as an executable.
-
-### Example 
-
-lets create Dockerfile and check above actions 
+`RUN ["echo", "$HOME"]` will not do shell variable substitution because exec form does not invoke a shell. If you want shell processing, use:
 
 ```Dockerfile
-FROM ubuntu:20.04
-MAINTAINER samperay
-
-RUN apt-get update && apt-get install htop
-WORKDIR /root
-ENV TAG Dev
-
-# build image
-
-docker build -t demo . 
-docker images
-docker run -it --rm demo -- /bin/bash
-
-# insise docker image
-$ pwd
-/root 
-$ echo $TAG
-Dev
-$ 
+# Use shell form explicitly when shell expansion is required.
+RUN ["sh", "-c", "echo $HOME"]
 ```
 
-Now, lets create a script and make it to run from the container
+### Example
+
+Create a Dockerfile and check the instructions.
+
+```Dockerfile
+# Dockerfile: install htop, set a working directory, and define an environment variable.
+FROM ubuntu:20.04
+LABEL org.opencontainers.image.authors="samperay"
+
+RUN apt-get update && apt-get install -y htop && rm -rf /var/lib/apt/lists/*
+WORKDIR /root
+ENV TAG=Dev
+
+# docker build -t demo .
+# docker images
+# docker run -it --rm demo /bin/bash
+#
+# inside docker container:
+# pwd
+# echo "$TAG"
+```
+
+Now create a script and run it from the container.
 
 ```bash
-# run.sh
-
+# run.sh: print working directory, TAG variable, and runtime arguments.
 #!/bin/sh
-echo "The current directory : $(pwd)"
-echo "The Tag variable : $TAG"
-echo "There are $# arguments: $@"
+echo "The current directory: $(pwd)"
+echo "The TAG variable: ${TAG}"
+echo "There are $# arguments: $*"
 ```
 
 ```Dockerfile
-FROM ubnutu:20.04
+# Dockerfile: copy a script into the image and run it by default.
+FROM ubuntu:20.04
 WORKDIR /root
-ENV TAG Dev
-ADD run.sh /root/run.sh
-RUN chmod +x ./root/run.sh
-CMD ["./run.sh"]
+ENV TAG=Dev
+COPY run.sh /root/run.sh
+RUN chmod +x /root/run.sh
+CMD ["/root/run.sh"]
 
-
-docker build -t demo1 . 
-docker run -it --rm demo1
-docker container run -it --rm demo1 ./run.sh Hello Sunil
-
-# outputs 
-echo "The current directory : $(pwd)"
-echo "The Tag variable : $TAG"
-echo "There are $# arguments: $@"
+# docker build -t demo1 .
+# docker run -it --rm demo1
+# docker container run -it --rm demo1 /root/run.sh Hello Sunil
 ```
 
-Let's discuss about the `CMD` and `ENTRYPOINT` in above code. since we pass arguments, we can use that using CMD options to provide as an input to ENTRYPOINT.
-
+Use `ENTRYPOINT` when the container should behave like an executable and `CMD` should provide default arguments.
 
 ```Dockerfile
-FROM ubnutu:20.04
+# Dockerfile: run run.sh as the executable and provide a default argument.
+FROM ubuntu:20.04
 WORKDIR /root
-ENV TAG Dev
-ADD run.sh /root/run.sh
-RUN chmod +x ./root/run.sh
-ENTRYPOINT ["./run.sh"]
+ENV TAG=Dev
+COPY run.sh /root/run.sh
+RUN chmod +x /root/run.sh
+ENTRYPOINT ["/root/run.sh"]
 CMD ["arg1"]
 
-
-docker build -t demo2 . 
-docker run -it --rm demo2  
-
-# Output: 
-echo "The current directory : /root"
-echo "The TAG variable : Dev"
-echo "There are 1 arguments: arg1"
-
-
-docker container run -it --rm demo1 /bin/bash
-
-echo "The current directory : /root"
-echo "The TAG variable : Dev"
-echo "There are 1 arguments: /bin/bash"
+# docker build -t demo2 .
+# docker run -it --rm demo2
+# docker container run -it --rm demo2 /bin/bash
 ```
+
+Expected output for the default run:
+
+```text
+# Example output from docker run demo2.
+The current directory: /root
+The TAG variable: Dev
+There are 1 arguments: arg1
+```
+
+## Common Pitfalls
+
+- Assuming container data persists after deletion without a volume or bind mount.
+- Running multiple long-lived processes in one container without a clear process supervisor model.
+- Forgetting that the container exits when PID 1 exits.
+- Using `latest` image tags in production without pinning or provenance.
+- Building images with secrets in layers.
+- Using `ADD` when `COPY` is enough.
+- Not using `.dockerignore`, which can make builds slow and leak files into build context.
+- Running containers as root when the application does not require it.
+
+## Interview Questions
+
+- Explain Docker client-server architecture.
+- What is the difference between an image and a container?
+- What happens when you run `docker run nginx`?
+- Explain Docker image layers and copy-on-write.
+- What is the difference between a volume and a bind mount?
+- What happens when the main process in a container exits?
+- Compare Docker bridge, host, and none networks.
+- What is the difference between `CMD` and `ENTRYPOINT`?
+- Why is `.dockerignore` important?
+- How would you make a containerized app production-ready?
+
+## Key Takeaways
+
+Docker gives a repeatable packaging and runtime model, but it does not remove operational responsibility. You still need durable storage, safe networking, clear logs, health checks, resource limits, image scanning, and controlled deployment.
+
+For SRE work, think of a container as an isolated process with a filesystem, network, and runtime configuration. If you can reason about those pieces, Docker behavior becomes much easier to troubleshoot.
+
+See also: [Docker FAQ](faq.md), [Linux admin basics](../../linux/admin/basics.md), [Linux networking](../../linux/admin/networking.md), and [Linux storage](../../linux/admin/storage.md).
