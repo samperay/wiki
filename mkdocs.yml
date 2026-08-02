@@ -239,12 +239,6 @@ nav:
 
         - "kafka": 
                 - "Overview": "kafka/overview.md"
-                
-    
-        - "jobdesc":
-                - "sre": "jobdesc/sre.md"
-                - "devops": "jobdesc/devops.md"
-                - "srdevops": "jobdesc/srdevops.md"
                           
         - about: about.md
         - interviews: tech-interview-cheatsheet.md
