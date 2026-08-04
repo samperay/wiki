@@ -3,8 +3,9 @@
 # Serve:   mkdocs serve
 # Deploy:  mkdocs gh-deploy
 
-# Pin mkdocs to the 1.x series — mkdocs 2.0 is a breaking rewrite
-# (removes the plugin system; incompatible with mkdocs-material)
-mkdocs>=1.6,<2.0
-mkdocs-material>=9.5,<10.0
-pymdown-extensions>=10.0,<11.0
+# Pin mkdocs to the 1.x series.
+# mkdocs 2.0 is a breaking rewrite — incompatible with mkdocs-material and all plugins.
+mkdocs>=1.6.1,<2.0
+
+# mkdocs-material 9.x — pymdown-extensions is pulled in automatically as a dependency.
+mkdocs-material>=9.7.6,<10.0
