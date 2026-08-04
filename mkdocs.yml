@@ -1,8 +1,15 @@
 # -----------------------------------------------------------------------------
 # Site metadata
 # -----------------------------------------------------------------------------
-site_name: wiki
+site_name: Sunil's SRE & Engineering Wiki
 site_url: https://samperay.github.io/wiki/
+site_description: >
+  A personal knowledge base covering SRE, DevOps, Cloud, Kubernetes,
+  system design, programming, and more.
+site_author: Sunil Amperayani
+repo_name: samperay/wiki
+repo_url: https://github.com/samperay/wiki
+edit_uri: edit/main/docs/
 
 # -----------------------------------------------------------------------------
 # Navigation
@@ -242,39 +249,84 @@ theme:
   language: en
   font:
     text: Roboto Mono
+    code: Roboto Mono
+  icon:
+    repo: fontawesome/brands/github
+    edit: material/pencil
+    view: material/eye
   palette:
     - scheme: default
+      primary: indigo
+      accent: indigo
       toggle:
         icon: material/weather-night
         name: Switch to dark mode
     - scheme: slate
+      primary: indigo
+      accent: indigo
       toggle:
         icon: material/weather-sunny
         name: Switch to light mode
   features:
-    - navigation.section
-    - navigation.path
-    - navigation.top
-    - search.suggest
-    - search.highlight
-    - content.tabs.link
-    - content.code.annotation
-    - content.code.copy
-    - header.autohide
+    # Navigation
+    - navigation.instant          # Single-page app feel — no full page reloads
+    - navigation.instant.progress # Show a progress bar on slow page loads
+    - navigation.tracking         # URL updates as you scroll through a page
+    - navigation.sections         # Top-level nav items rendered as sections
+    - navigation.path             # Breadcrumb trail above the page title
+    - navigation.top              # Back-to-top button when scrolling up
+    - navigation.indexes          # Allow section index pages (e.g. section/index.md)
+    # Table of contents
+    - toc.follow                  # Sidebar TOC scrolls to follow reading position
+    # Search
+    - search.suggest              # Autocomplete suggestions while typing
+    - search.highlight            # Highlight search terms on the result page
+    - search.share                # Share button for search queries
+    # Content
+    - content.tabs.link           # Linked content tabs (same tab selected across pages)
+    - content.code.copy           # Copy button on all code blocks
+    - content.code.annotate       # Inline code annotations
+    - content.tooltips            # Improved tooltips on abbreviations and links
+    # Header
+    - header.autohide             # Hide header when scrolling down, show on scroll up
+
+# -----------------------------------------------------------------------------
+# Plugins
+# -----------------------------------------------------------------------------
+plugins:
+  - search:
+      lang: en
+  - minify:
+      minify_html: true
 
 # -----------------------------------------------------------------------------
 # Markdown extensions
 # -----------------------------------------------------------------------------
 markdown_extensions:
-  - admonition
-  - footnotes
-  - attr_list
-  - pymdownx.details
-  - pymdownx.mark
-  - pymdownx.snippets
-  - pymdownx.inlinehilite
+  # Built-in
+  - admonition          # !!! note / warning / tip blocks
+  - footnotes           # [^1] footnote syntax
+  - attr_list           # Add HTML attributes to elements { .class #id }
+  - md_in_html          # Write Markdown inside raw HTML blocks
+  - tables              # GitHub-flavoured tables
+  - toc:
+      permalink: true         # Anchor link on every heading
+      permalink_title: Link to this section
+      toc_depth: 3            # Show h2 and h3 in the right-hand TOC
+  # PyMdown extensions
+  - pymdownx.details          # Collapsible ??? blocks (extends admonition)
+  - pymdownx.mark             # ==highlight== syntax
+  - pymdownx.snippets         # --8<-- file inclusion
+  - pymdownx.inlinehilite     # `#!python inline code` syntax highlighting
+  - pymdownx.keys             # ++ctrl+c++ keyboard key rendering
+  - pymdownx.tasklist:        # - [x] checkbox lists
+      custom_checkbox: true
+  - pymdownx.tabbed:          # === "Tab" content tabs
+      alternate_style: true
   - pymdownx.highlight:
       anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
   - pymdownx.arithmatex:
       generic: true
   - pymdownx.superfences:
@@ -286,3 +338,24 @@ markdown_extensions:
       emoji_index: !!python/name:material.extensions.emoji.twemoji
       emoji_generator: !!python/name:material.extensions.emoji.to_svg
 
+# -----------------------------------------------------------------------------
+# Extra
+# -----------------------------------------------------------------------------
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/samperay
+      name: samperay on GitHub
+    - icon: fontawesome/brands/linkedin
+      link: https://www.linkedin.com/in/samperay
+      name: Sunil on LinkedIn
+  analytics:
+    provider: google
+    property: !ENV GOOGLE_ANALYTICS_ID
+
+extra_css:
+  - https://unpkg.com/katex@0/dist/katex.min.css
+
+extra_javascript:
+  - https://unpkg.com/katex@0/dist/katex.min.js
+  - https://unpkg.com/katex@0/dist/contrib/auto-render.min.js
