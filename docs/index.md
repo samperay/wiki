@@ -1,13 +1,5 @@
-# Sunil's Wiki
+# Sunil's SRE & Engineering Wiki
 
-This wiki document serves as a comprehensive repository for technical references and personal learnings. It aims to capture a wide range of topics related to various domains, including programming languages, frameworks, tools, and concepts. The document's purpose is to facilitate knowledge and continuous learning for me. It covers practical examples, code snippets, best practices, troubleshooting tips, and insights gained from personal experiences.
+This is a personal knowledge base built over 14+ years of hands-on work in SRE, DevOps, and platform engineering. It covers the full stack of topics that come up in day-to-day engineering and system design: **SRE principles** (SLOs, error budgets, incident management, chaos engineering, observability), **infrastructure** (Kubernetes, Docker, Istio, Ansible, Terraform), **CI/CD pipelines** (GitHub Actions, ArgoCD, Jenkins, Tekton), **cloud platforms** (AWS, IBM Cloud), **monitoring** (ELK stack), **secret management** (Vault), **messaging** (Kafka), **Nginx**, and **programming** (Python, Go). Each section is structured as a practical reference — concepts explained with prose, architecture diagrams, annotated code blocks, common pitfalls, and interview questions — so it works equally well as a study guide before an interview and as a runbook lookup during an incident.
 
-This wiki is a personal knowledge base that captures ongoing learning in software engineering, DevOps/SRE, cloud, and system design. Notes are organized by topic and focused on practical references: concepts, diagrams, checklists, and implementation details.
-
-
-**Documentation help**
-
-* `mkdocs new [dir-name]` - Create a new project.
-* `mkdocs serve` - Start the live-reloading docs server.
-* `mkdocs build` - Build the documentation site.
-* `mkdocs -h` - Print help message and exit.
+The system design section deserves a special mention: it covers the core distributed systems components (load balancing, caching, CDN, sharding, CAP theorem, messaging patterns) alongside 15 case studies of real-world systems (Uber, WhatsApp, YouTube, Airbnb, and more), using the same structured approach of trade-off analysis, component diagrams, and decision frameworks. If you are preparing for a senior SRE or staff engineer role, start there and work outward into the SRE and CI/CD sections.
