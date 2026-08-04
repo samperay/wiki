@@ -1,272 +1,288 @@
+# -----------------------------------------------------------------------------
+# Site metadata
+# -----------------------------------------------------------------------------
 site_name: wiki
 site_url: https://samperay.github.io/wiki/
+
+# -----------------------------------------------------------------------------
+# Navigation
+# -----------------------------------------------------------------------------
 nav:
-        - Home: index.md
-        - "programming":
-                  - "python":
-                            - "design patterns":
-                                      - "Solid principles" : "programming/python/design_patterns/solid_principles.md"
-                                      - "Adapter": "programming/python/design_patterns/adapter.md"
-                                      - "Bridge": "programming/python/design_patterns/bridge.md"
-                                      - "Builder": "programming/python/design_patterns/builder.md"
-                                      - "Builder facet": "programming/python/design_patterns/builder-facet.md"
-                                      - "Composite": "programming/python/design_patterns/composite.md"
-                                      - "Decorator": "programming/python/design_patterns/decorators.md"
-                                      - "Factory Methods": "programming/python/design_patterns/factory-method.md"
-                                      - "Prototype": "programming/python/design_patterns/prototype.md"
-                                      - "Singleton": "programming/python/design_patterns/singleton.md"
-                                      - "Observer" : "programming/python/design_patterns/observer.md"
-                                      
-                            - "data structures":
-                                      - "overview": "programming/python/data_structures/overview.md"
-                                      - "linked list": "programming/python/data_structures/linked_list.md"
-                                      - "sorting": "programming/python/data_structures/sorting.md"
-                                      - "stacks": "programming/python/data_structures/stacks.md"
-                                      - "queues": "programming/python/data_structures/queues.md"
-                                      - "recursions": "programming/python/data_structures/recursions.md"
-                                      - "trees": "programming/python/data_structures/trees.md"
-                                      - "hashing": "programming/python/data_structures/hashing.md"
+  - Home: index.md
 
-                            - "webapp framework":
-                                      - "fastapi": "programming/python/webapp_framework/fastapi/fastapi.md"
-                                      - "flask": "programming/python/webapp_framework/flask/flask.md"
+  - Programming:
+    - Python:
+      - Design Patterns:
+        - Solid Principles:    programming/python/design_patterns/solid_principles.md
+        - Adapter:             programming/python/design_patterns/adapter.md
+        - Bridge:              programming/python/design_patterns/bridge.md
+        - Builder:             programming/python/design_patterns/builder.md
+        - Builder Facet:       programming/python/design_patterns/builder-facet.md
+        - Composite:           programming/python/design_patterns/composite.md
+        - Decorator:           programming/python/design_patterns/decorators.md
+        - Factory Methods:     programming/python/design_patterns/factory-method.md
+        - Prototype:           programming/python/design_patterns/prototype.md
+        - Singleton:           programming/python/design_patterns/singleton.md
+        - Observer:            programming/python/design_patterns/observer.md
+      - Data Structures:
+        - Overview:            programming/python/data_structures/overview.md
+        - Linked List:         programming/python/data_structures/linked_list.md
+        - Sorting:             programming/python/data_structures/sorting.md
+        - Stacks:              programming/python/data_structures/stacks.md
+        - Queues:              programming/python/data_structures/queues.md
+        - Recursions:          programming/python/data_structures/recursions.md
+        - Trees:               programming/python/data_structures/trees.md
+        - Hashing:             programming/python/data_structures/hashing.md
+      - Web App Framework:
+        - FastAPI:             programming/python/webapp_framework/fastapi/fastapi.md
+        - Flask:               programming/python/webapp_framework/flask/flask.md
+      - Advanced Concepts:
+        - OOP:                 programming/python/oops.md
+        - Concepts:            programming/python/concepts.md
+      - Interviews:
+        - Q&A:                 programming/python/qa.md
+    - Clean Code:
+      - Overview:              programming/clean_code/overview.md
+      - Naming:                programming/clean_code/naming.md
+      - Structure:             programming/clean_code/structure.md
+      - Functions & Methods:   programming/clean_code/methods.md
+      - Control Structures:    programming/clean_code/control_structure.md
+      - OOP Principles:        programming/clean_code/ooo.md
+    - Pandas:
+      - Overview:              programming/pandas/overview.md
+    - Go:
+      - Overview:              programming/go/overview.md
+      - Basics:                programming/go/basics.md
+      - Interviews FAQ:        programming/go/interviews.md
 
-                            - "advance concepts":
-                                      - "oops": programming/python/oops.md
-                                      - "concepts": "programming/python/concepts.md"
-                                      
-                            - "interviews":
-                                      - "Q&A": "programming/python/qa.md"
+  - Database:
+    - PostgreSQL:
+      - Setup & Install:       db/postgresql/install.md
 
-                  - "clean code":
-                            - "overview": "programming/clean_code/overview.md"
-                            - "naming" : "programming/clean_code/naming.md"
-                            - "structure": "programming/clean_code/structure.md"
-                            - "func methods": "programming/clean_code/methods.md"
-                            - "control structures": "programming/clean_code/control_structure.md"
-                            - "oop principles": "programming/clean_code/ooo.md"
-                  - "pandas": 
-                            - "overview": "programming/pandas/overview.md"
+  - Docker & Kubernetes:
+    - Docker:
+      - Overview:              docker_k8/docker/overview.md
+      - FAQ:                   docker_k8/docker/faq.md
+    - Kubernetes:
+      - Architecture:          docker_k8/k8/architecture.md
+      - Command Reference:     docker_k8/k8/cmdref.md
+      - Core Concepts:         docker_k8/k8/core.md
+      - Scheduling:            docker_k8/k8/scheduling.md
+      - Networking:            docker_k8/k8/networking.md
+      - Storage:               docker_k8/k8/storage.md
+      - App Lifecycle Mgmt:    docker_k8/k8/applifecyclemgmt.md
+      - Cluster Maintenance:   docker_k8/k8/clustermaintenance.md
+      - Security:              docker_k8/k8/security.md
+      - Kubernetes Projects:   docker_k8/k8/k8projects.md
+      - Troubleshooting:
+        - Overview:            docker_k8/k8/troubleshooting/overview.md
+        - Issues:              docker_k8/k8/troubleshooting/issues.md
+      - Minikube:              docker_k8/k8/minikube.md
+    - Istio:
+      - Overview:              docker_k8/istio/istio_overview.md
+      - Traffic Management:    docker_k8/istio/traffic_mgmt.md
 
-                  - "go":
-                            - "overview": "programming/go/overview.md"
-                            - "basics": "programming/go/basics.md"
-                            - "interviews faq": programming/go/interviews.md
-        - "database":
-                  - "postgresql":
-                            - "setup and install": "db/postgresql/install.md"
+  - CI/CD:
+    - Overview:                cicd/overview.md
+    - GitHub Actions:
+      - Overview:              cicd/github_actions/overview.md
+      - Introduction:          cicd/github_actions/intro.md
+      - Triggers:              cicd/github_actions/workflow_triggers.md
+      - Variables:             cicd/github_actions/variables.md
+      - Matrix Strategy:       cicd/github_actions/matrix_strategy.md
+      - CI/CD Pipeline:        cicd/github_actions/cicd.md
+    - Jenkins:
+      - Overview:              cicd/jenkins/overview.md
+      - Deploy:                cicd/jenkins/deploy.md
+    - Tekton:
+      - Overview:              cicd/tekton/overview.md
+      - Concepts:              cicd/tekton/concepts.md
+      - Pipelines:             cicd/tekton/tasks_pipelines.md
+    - ArgoCD:
+      - Overview:              cicd/argocd/overview.md
+      - Install:               cicd/argocd/install.md
+      - Applications:          cicd/argocd/applications.md
+      - Sync:                  cicd/argocd/sync.md
+      - FAQ:                   cicd/argocd/faq.md
 
-        - "docker_k8": 
-                  - "docker":
-                        - "Overview": "docker_k8/docker/overview.md"
-                        - "FAQ": "docker_k8/docker/faq.md"
-                  - "k8":
-                        - "architecture": "docker_k8/k8/architecture.md"
-                        - "kube reference": "docker_k8/k8/cmdref.md"
-                        - "core concepts": "docker_k8/k8/core.md"
-                        - "scheduling": "docker_k8/k8/scheduling.md"
-                        - "networking": "docker_k8/k8/networking.md"
-                        - "storage": "docker_k8/k8/storage.md"
-                        - "applifecyclemgmt": "docker_k8/k8/applifecyclemgmt.md"
-                        - "clustermaintenance": "docker_k8/k8/clustermaintenance.md"
-                        - "security": "docker_k8/k8/security.md"
-                        - "troubleshooting": 
-                                - "issues": "docker_k8/k8/troubleshooting/issues.md"
-                                - "overview": "docker_k8/k8/troubleshooting/overview.md"
-                        - "minikube": "docker_k8/k8/minikube.md"
-                  - "istio": 
-                        - "Overview": "docker_k8/istio/istio_overview.md"
-                        - "Traffic Mgmt": "docker_k8/istio/traffic_mgmt.md"
+  - Version Control:
+    - Git:
+      - Overview:              vcontroller/git/overview.md
+      - FAQ:                   vcontroller/git/faq.md
 
-        - "cicd":
-                  - "Overview": "cicd/overview.md"
-                  - "github actions":
-                            - "Overview": "cicd/github_actions/overview.md"
-                            - "Introduction": "cicd/github_actions/intro.md"
-                            - "Triggers": "cicd/github_actions/workflow_triggers.md"
-                            - "Variables": "cicd/github_actions/variables.md"
-                            - "Matrix stratergy": "cicd/github_actions/matrix_strategy.md"
-                            - "CICD pipeline": "cicd/github_actions/cicd.md"
-                  - "jenkins":
-                            - "Overview": "cicd/jenkins/overview.md"
-                            - "deploy": "cicd/jenkins/deploy.md"
-                  - "tekton":
-                            - "overview": "cicd/tekton/overview.md"
-                            - "concepts": "cicd/tekton/concepts.md"
-                            - "pipelines": "cicd/tekton/tasks_pipelines.md"
-                  - "argocd":
-                            - "overview": "cicd/argocd/overview.md"
-                            - "install": "cicd/argocd/install.md"
-                            - "applications": "cicd/argocd/applications.md"
-                            - "sync": "cicd/argocd/sync.md"
-                            - "faq": "cicd/argocd/faq.md"
+  - Monitoring:
+    - ELK Stack:
+      - Elasticsearch:
+        - Setup & Install:     monitoring/elk/elasticsearch/01_install.md
+        - Managing Documents:  monitoring/elk/elasticsearch/02_managing_docs.md
+        - Mapping & Analysis:  monitoring/elk/elasticsearch/03_mapping_analysis.md
+      - Logstash:
+        - Overview:            monitoring/elk/logstash/overview.md
+      - Kibana:
+        - Overview:            monitoring/elk/kibana/overview.md
 
-        - "vcontroller":
-                  - "Overview": "vcontroller/git/overview.md"
-                  - "faq": "vcontroller/git/faq.md"
+  - Linux:
+    - Administration:
+      - Basics:                linux/admin/basics.md
+      - Networking:            linux/admin/networking.md
+      - Storage:               linux/admin/storage.md
+      - Security:              linux/admin/security.md
+      - Troubleshooting:       linux/admin/troubleshooting.md
+    - Scripting:
+      - Overview:              linux/scripting/overview.md
+      - FAQ:                   linux/scripting/faq.md
+      - HackerRank:            linux/scripting/hackerrank.md
+    - Ansible:
+      - Install:               linux/ansible/install.md
+      - Overview:              linux/ansible/overview.md
 
-        - "monitoring":
-                - "elk":
-                        - "elasticsearch":
-                                - "setup and install": "monitoring/elk/elasticsearch/01_install.md"
-                                - "managing documents": "monitoring/elk/elasticsearch/02_managing_docs.md"
-                                - "mapping and analysis": "monitoring/elk/elasticsearch/03_mapping_analysis.md"
-                        - "logstash":
-                                - "overview": monitoring/elk/logstash/overview.md
+  - System Design:
+    - System Components:       sysdesign/components.md
+    - Overview:                sysdesign/framework.md
+    - Case Studies:
+      - Newsletter:            sysdesign/app/papersource.md
+      - Autonomous Cars:       sysdesign/app/autonomouscars.md
+      - Gross Collections:     sysdesign/app/grosscollections.md
+      - Payment Processing:    sysdesign/app/paymentprocessing.md
+      - Airbnb:                sysdesign/app/airbnb.md
+      - Amazon:                sysdesign/app/amazon.md
+      - Facebook:              sysdesign/app/facebook.md
+      - Google Maps:           sysdesign/app/gmaps.md
+      - Notification Service:  sysdesign/app/notifications.md
+      - Twitter:               sysdesign/app/twitter.md
+      - Uber:                  sysdesign/app/uber.md
+      - WhatsApp:              sysdesign/app/whatsapp.md
+      - YouTube:               sysdesign/app/youtube.md
+      - URL Shortener:         sysdesign/app/url_shortner.md
+      - Zoom:                  sysdesign/app/zoom.md
 
-                        - "kibana":
-                                - "overview": monitoring/elk/kibana/overview.md
+  - Cloud:
+    - IBM:
+      - Cloud Developer Overview: cloud/ibm/ibm_professional_cloud_developer.md
+      - Automation Tools:         cloud/ibm/automated_dev_tools.md
+      - Application Deployment:   cloud/ibm/application_deployment.md
+      - Cloud Schematics:         cloud/ibm/cloud_schematics.md
+    - AWS:
+      - Practitioner:
+        - Summary:             cloud/aws/practitioner/summary.md
+      - Projects:
+        - TOC:                 cloud/aws/projects/toc.md
+        - CI/CD Use Case:      cloud/aws/projects/cicd.md
+    - Terraform:
+      - Overview:              cloud/terraform/overview.md
+      - FAQ:                   cloud/terraform/faq.md
 
-        - "linux":
-                - "administration":
-                        - "basic": "linux/admin/basics.md"
-                        - "network": "linux/admin/networking.md"
-                        - "storage": "linux/admin/storage.md"
-                        - "security": "linux/admin/security.md"
-                        - "booting issue": "linux/admin/troubleshooting.md"
+  - Secret Management:
+    - Vault:
+      - Introduction:          secretmgmt/vault/vault_overview.md
+      - Architecture:          secretmgmt/vault/vault_architecture.md
+      - Auth Methods:          secretmgmt/vault/auth_methods.md
+      - Policies:              secretmgmt/vault/policies.md
+      - Access Tokens:         secretmgmt/vault/access_vault_token.md
+      - Secret Engines:        secretmgmt/vault/secret_engine.md
+      - Agent:                 secretmgmt/vault/vault_agent.md
+      - Replication:           secretmgmt/vault/vault_replication.md
 
-                - "scripting":
-                        - "overview": "linux/scripting/overview.md"
-                        - "faq": "linux/scripting/faq.md"
-                        - "hackerrank": linux/scripting/hackerrank.md
+  - DS / AI / ML:
+    - Data Science:
+      - Overview:              ds_ai_ml/ds/overview.md
+    - AI:
+      - Overview:              ds_ai_ml/ai/overview.md
+      - Text Summarization:    ds_ai_ml/ai/text_summariztion.md
+      - Movie Poster:          ds_ai_ml/ai/movie_poster.md
+      - Chatbot:               ds_ai_ml/ai/chatbot.md
+      - AI Agent:              ds_ai_ml/ai/ai_agent.md
+    - MLOps:
+      - Overview:              ds_ai_ml/mlops/overview.md
+      - Introduction:          ds_ai_ml/mlops/introduction.md
+      - Data:                  ds_ai_ml/mlops/data.md
+      - Models:                ds_ai_ml/mlops/models.md
+      - Insurance Claim:       ds_ai_ml/mlops/project.md
+      - Security:              ds_ai_ml/mlops/security_gov.md
+      - AWS SageMaker:         ds_ai_ml/mlops/aws_sage_maker.md
+    - MCP:
+      - Overview:              ds_ai_ml/mcp/Overview.md
 
-                - "ansible":
-                        - "install": "linux/ansible/install.md"
-                        - "overview": "linux/ansible/overview.md"
-                        
+  - Nginx:
+    - Web Server:              nginx/webserver_overview.md
+    - HTTP Protocol:           nginx/http_protocol.md
+    - Nginx Overview:          nginx/nginx_overview.md
+    - Load Balancer:           nginx/load_balancer.md
+    - Caching:                 nginx/caching.md
+    - Static Assets:           nginx/static_assets.md
+    - Logging:                 nginx/logging.md
+    - HTTP Compression:        nginx/http_compression.md
+    - Access Control:          nginx/access_control.md
+    - Cryptography:            nginx/cryptography.md
+    - Reverse Proxy:           nginx/reverse_proxy.md
 
-                  
-        - "sysdesign":
-                - "System Components": "sysdesign/components.md"
-                - "Overview": sysdesign/architecting.md
-                
-                - "app":    
-                  - "Newsletter": sysdesign/app/papersource.md
-                  - "Autonomous cars" : sysdesign/app/autonomouscars.md
-                  - "Gross collections": sysdesign/app/grosscollections.md
-                  - "Payment processing": sysdesign/app/paymentprocessing.md
-                  - "Airbnb": sysdesign/app/airbnb.md
-                  - "Amazon": sysdesign/app/amazon.md
-                  - "Facebook": sysdesign/app/facebook.md
-                  - "Google Maps": sysdesign/app/gmaps.md
-                  - "Notification service": sysdesign/app/notifications.md
-                  - "Twitter": sysdesign/app/twitter.md
-                  - "Uber": sysdesign/app/uber.md
-                  - "Whatsapp": sysdesign/app/whatsapp.md
-                  - "Youtube": sysdesign/app/youtube.md
-                  - "URL Shortner": sysdesign/app/url_shortner.md
-                  - "Zoom": sysdesign/app/zoom.md
-                  
+  - SRE:
+    - Overview:                sre/overview.md
+    - Measurements:            sre/sre_measure.md
+    - Managing Complexity:     sre/manage_complexity.md
+    - Incident Management:     sre/incident_management.md
+    - Release Engineering:     sre/release_engineering.md
+    - Chaos Engineering:       sre/chaos_engineering.md
+    - Observability:           sre/observability.md
 
-        - "cloud": 
-                  - "ibm": 
-                        - "IBM Professional Cloud Developer Overview": "cloud/ibm/ibm_professional_cloud_developer.md"
-                        - "IBM Automation Tools": "cloud/ibm/automated_dev_tools.md"
-                        - "IBM application Deployment": "cloud/ibm/application_deployment.md"
-                        - "IBM Cloud Schematics": "cloud/ibm/cloud_schematics.md"
-                  - "aws":
-                        - "practitioner":
-                                - "Summary": "cloud/aws/practitioner/summary.md"
-                        - "projects":
-                                - "TOC": "cloud/aws/projects/toc.md"
-                                - "CICD usecase": "cloud/aws/projects/cicd.md"
-                                
+  - Kafka:
+    - Overview:                kafka/overview.md
 
-                  - "terraform":
-                        - "overview": "cloud/terraform/overview.md"
-                        - "faq": "cloud/terraform/faq.md"
-                        
+  - Soft Skills:
+    - Communication:           softskills/communication.md
 
-        - "secretmgmt":
-                - "vault": 
-                        - "introduction": "secretmgmt/vault/vault_overview.md"
-                        - "architecture": "secretmgmt/vault/vault_architecture.md"
-                        - "auth methods": "secretmgmt/vault/auth_methods.md"
-                        - "policies" : "secretmgmt/vault/policies.md"
-                        - "access token": "secretmgmt/vault/access_vault_token.md"
-                        - "secret engine": "secretmgmt/vault/secret_engine.md"
-                        - "agent": "secretmgmt/vault/vault_agent.md"
-                        - "replication": "secretmgmt/vault/vault_replication.md"
+  - About: about.md
+  - Interviews: tech-interview-cheatsheet.md
 
-
-        - "ds_ai_ml":
-                - "data science":
-                        - "Overview": "ds_ai_ml/ds/overview.md"
-                
-                - "AI":
-                        - "Overview": "ds_ai_ml/ai/overview.md"
-                        - "text summarization": "ds_ai_ml/ai/text_summariztion.md"
-                        - "movie poster": "ds_ai_ml/ai/movie_poster.md"
-                        - "chatbot": "ds_ai_ml/ai/chatbot.md"
-                        - "AI Agent": "ds_ai_ml/ai/ai_agent.md"
-                        
-                - "mlops": 
-                        - "Overview": "ds_ai_ml/mlops/overview.md"
-                        - "Introduction": "ds_ai_ml/mlops/introduction.md"
-                        - "Data":  "ds_ai_ml/mlops/data.md"
-                        - "Models": "ds_ai_ml/mlops/models.md"
-                        - "Insurance Claim": "ds_ai_ml/mlops/project.md"
-                        - "Security": "ds_ai_ml/mlops/security_gov.md"
-                        - "AWS sagemaker": "ds_ai_ml/mlops/aws_sage_maker.md"
-
-                - "mcp": 
-                        - "Overview": "ds_ai_ml/mcp/overview.md"
-
-        - "nginx":
-                - "web server": "nginx/webserver_overview.md"
-                - "http protocol": "nginx/http_protocol.md"
-                - "nginx overview": "nginx/nginx_overview.md"
-                - "load balancer": "nginx/load_balancer.md"
-                - "caching": "nginx/caching.md"
-                - "static assets": "nginx/static_assets.md"
-                - "logging": "nginx/logging.md"
-                - "http compression": "nginx/http_compression.md"
-                - "access control": "nginx/access_control.md"
-                - "cryptography": "nginx/cryptography.md"
-                - "reverse proxy": "nginx/reverse_proxy.md"
-        - "SRE":
-                - "Overview": "sre/overview.md"
-                - "SRE measurements": "sre/sre_measure.md"
-                - "Managing complexity": "sre/manage_complexity.md"
-                - "Incident Management": "sre/incident_management.md"
-                - "Release Engineering": "sre/release_engineering.md"
-                - "Chaos Engineering": "sre/chaos_engineering.md"
-                - "Observability": "sre/observability.md"
-                
-
-        - "softskills":
-                - "Communication": "softskills/communication.md"
-
-        - "kafka": 
-                - "Overview": "kafka/overview.md"
-                          
-        - about: about.md
-        - interviews: tech-interview-cheatsheet.md
+# -----------------------------------------------------------------------------
+# Theme
+# -----------------------------------------------------------------------------
 theme:
-        name: material
-        features:
-                # - toc.integrate
-                # - navigation.tabs
-                - navigation.section
-                - navigation.path
-                - navigation.top
-                - search.suggest
-                - search.highlight
-                - content.tabs.link
-                - content.code.annotation
-                - content.code.copy
-                - header.autohide
-        language: en
-        palette:
-                - scheme: default
-                  toggle:
-                          icon: material/weather-night
-                          name: Switch to dark mode
+  name: material
+  language: en
+  font:
+    text: Roboto Mono
+  palette:
+    - scheme: default
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - scheme: slate
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+  features:
+    - navigation.section
+    - navigation.path
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.tabs.link
+    - content.code.annotation
+    - content.code.copy
+    - header.autohide
 
-                # Palette toggle for dark mode
-                - scheme: slate
-                  toggle:
-                          icon: material/weather-sunny
-                          name: Switch to light mode
-        font:
-                text: Roboto Mono
+# -----------------------------------------------------------------------------
+# Markdown extensions
+# -----------------------------------------------------------------------------
+markdown_extensions:
+  - admonition
+  - footnotes
+  - attr_list
+  - pymdownx.details
+  - pymdownx.mark
+  - pymdownx.snippets
+  - pymdownx.inlinehilite
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+

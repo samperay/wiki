@@ -1,0 +1,10 @@
+# Wiki — Python dependencies
+# Install: pip install -r requirements.txt
+# Serve:   mkdocs serve
+# Deploy:  mkdocs gh-deploy
+
+# Pin mkdocs to the 1.x series — mkdocs 2.0 is a breaking rewrite
+# (removes the plugin system; incompatible with mkdocs-material)
+mkdocs>=1.6,<2.0
+mkdocs-material>=9.5,<10.0
+pymdown-extensions>=10.0,<11.0

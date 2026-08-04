@@ -4,7 +4,7 @@
 
 This is the core reference for distributed systems components — the building blocks used in every system design interview and every real-world production architecture. It covers load balancing algorithms, API gateways, networking fundamentals (HTTP versions, TCP vs UDP, proxies), distributed file systems, redundancy and replication strategies, caching (read/write strategies, invalidation, CDN), data partitioning and sharding, database selection (SQL vs NoSQL), distributed messaging (Kafka, RabbitMQ), the CAP and PACELC theorems, and a suite of architectural pattern comparisons. Each section answers: what is it, when would you use it, and what are the trade-offs?
 
-See also: [SRE Overview](../sre/overview.md) | [SRE Measurements](../sre/sre_measure.md) | [Kafka](../kafka/)
+See also: [SRE Overview](../sre/overview.md) | [SRE Measurements](../sre/sre_measure.md) | [Kafka Overview](../kafka/overview.md)
 
 ---
 

@@ -1,15 +1,12 @@
 # About
 
-This wiki is a personal knowledge base that captures ongoing learning in software engineering, DevOps/SRE, cloud, and system design. Notes are organized by topic and focused on practical references: concepts, diagrams, checklists, and implementation details.
+I’m a DevOps and SRE with 14+ years of experience, currently working at IBM where I focus on SRE automation and internal platform engineering.
 
-## What this wiki includes
+Over the last few years, I’ve been designing and building a Slack-based internal automation platform that streamlines incident management, warroom creation, GitHub workflows, and operational tasks. This reduced manual incident handling time from minutes to seconds and significantly improved operational efficiency.
 
-- Programming fundamentals and patterns (Python, Go, clean code)
-- DevOps and platform tooling (Docker, Kubernetes, CI/CD, Linux, monitoring)
-- Reliability engineering (incident management, observability, chaos engineering)
-- System design case studies and architecture notes
-- Cloud and MLOps overviews
+My core strengths are infrastructure automation using Terraform, Kubernetes operations, CI/CD pipeline design, and building scalable automation systems in AWS and IBM Cloud.
 
-## Why it exists
+Before this, I worked extensively in Linux infrastructure environments managing 300+ servers, implementing Ansible-based automation, security hardening, and performance optimization.
 
-The goal is to keep a durable, searchable set of notes for quick recall and continuous improvement, and to share learnings in a structured way.
+Overall, I specialize in reducing operational toil, improving reliability, and designing scalable systems with strong automation practices.
+
