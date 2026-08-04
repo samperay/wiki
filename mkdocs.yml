@@ -190,25 +190,15 @@ nav:
       - Agent:                 secretmgmt/vault/vault_agent.md
       - Replication:           secretmgmt/vault/vault_replication.md
 
-  - DS / AI / ML:
-    - Data Science:
-      - Overview:              ds_ai_ml/ds/overview.md
+  - AI Concepts:
     - AI:
-      - Overview:              ds_ai_ml/ai/overview.md
-      - Text Summarization:    ds_ai_ml/ai/text_summariztion.md
-      - Movie Poster:          ds_ai_ml/ai/movie_poster.md
-      - Chatbot:               ds_ai_ml/ai/chatbot.md
-      - AI Agent:              ds_ai_ml/ai/ai_agent.md
-    - MLOps:
-      - Overview:              ds_ai_ml/mlops/overview.md
-      - Introduction:          ds_ai_ml/mlops/introduction.md
-      - Data:                  ds_ai_ml/mlops/data.md
-      - Models:                ds_ai_ml/mlops/models.md
-      - Insurance Claim:       ds_ai_ml/mlops/project.md
-      - Security:              ds_ai_ml/mlops/security_gov.md
-      - AWS SageMaker:         ds_ai_ml/mlops/aws_sage_maker.md
+      - Overview:              ai_concepts/ai/overview.md
+      - Text Summarization:    ai_concepts/ai/text_summariztion.md
+      - Movie Poster:          ai_concepts/ai/movie_poster.md
+      - Chatbot:               ai_concepts/ai/chatbot.md
+      - AI Agent:              ai_concepts/ai/ai_agent.md
     - MCP:
-      - Overview:              ds_ai_ml/mcp/Overview.md
+      - Overview:              ai_concepts/mcp/Overview.md
 
   - Nginx:
     - Web Server:              nginx/webserver_overview.md

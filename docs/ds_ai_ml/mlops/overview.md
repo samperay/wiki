@@ -1,1 +1,0 @@
-![mlops_funda](./mlops_funda.png)
