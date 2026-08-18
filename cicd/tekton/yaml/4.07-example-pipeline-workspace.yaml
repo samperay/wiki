@@ -1,0 +1,20 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: 4-07-example-pipeline-workspace-demo
+spec:
+  workspaces:
+    - name: messages
+      description: |
+        Workspace defined at the pipeline level.
+  tasks:
+    - name: write-message
+      taskRef:
+        name: 4-07-task-write-on-workspace
+      workspaces:
+        - name: messages
+    - name: read-message
+      taskRef:
+        name: 4-07-task-read-from-workspace
+      workspaces:
+        - name: messages
