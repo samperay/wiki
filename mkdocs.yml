@@ -1,6 +1,4 @@
-# -----------------------------------------------------------------------------
-# Site metadata
-# -----------------------------------------------------------------------------
+# Sunil's SRE & Engineering Wiki — existing site configuration retained
 site_name: Sunil's SRE & Engineering Wiki
 site_url: https://samperay.github.io/wiki/
 site_description: >
@@ -11,221 +9,220 @@ repo_name: samperay/wiki
 repo_url: https://github.com/samperay/wiki
 edit_uri: edit/main/docs/
 
-# -----------------------------------------------------------------------------
-# Navigation
-# -----------------------------------------------------------------------------
 nav:
   - Home: index.md
 
   - Programming:
     - Python:
       - Design Patterns:
-        - Solid Principles:    programming/python/design_patterns/solid_principles.md
-        - Adapter:             programming/python/design_patterns/adapter.md
-        - Bridge:              programming/python/design_patterns/bridge.md
-        - Builder:             programming/python/design_patterns/builder.md
-        - Builder Facet:       programming/python/design_patterns/builder-facet.md
-        - Composite:           programming/python/design_patterns/composite.md
-        - Decorator:           programming/python/design_patterns/decorators.md
-        - Factory Methods:     programming/python/design_patterns/factory-method.md
-        - Prototype:           programming/python/design_patterns/prototype.md
-        - Singleton:           programming/python/design_patterns/singleton.md
-        - Observer:            programming/python/design_patterns/observer.md
+        - Solid Principles: programming/python/design_patterns/solid_principles.md
+        - Adapter: programming/python/design_patterns/adapter.md
+        - Bridge: programming/python/design_patterns/bridge.md
+        - Builder: programming/python/design_patterns/builder.md
+        - Builder Facet: programming/python/design_patterns/builder-facet.md
+        - Composite: programming/python/design_patterns/composite.md
+        - Decorator: programming/python/design_patterns/decorators.md
+        - Factory Methods: programming/python/design_patterns/factory-method.md
+        - Prototype: programming/python/design_patterns/prototype.md
+        - Singleton: programming/python/design_patterns/singleton.md
+        - Observer: programming/python/design_patterns/observer.md
       - Data Structures:
-        - Overview:            programming/python/data_structures/overview.md
-        - Linked List:         programming/python/data_structures/linked_list.md
-        - Sorting:             programming/python/data_structures/sorting.md
-        - Stacks:              programming/python/data_structures/stacks.md
-        - Queues:              programming/python/data_structures/queues.md
-        - Recursions:          programming/python/data_structures/recursions.md
-        - Trees:               programming/python/data_structures/trees.md
-        - Hashing:             programming/python/data_structures/hashing.md
+        - Overview: programming/python/data_structures/overview.md
+        - Linked List: programming/python/data_structures/linked_list.md
+        - Sorting: programming/python/data_structures/sorting.md
+        - Stacks: programming/python/data_structures/stacks.md
+        - Queues: programming/python/data_structures/queues.md
+        - Recursions: programming/python/data_structures/recursions.md
+        - Trees: programming/python/data_structures/trees.md
+        - Hashing: programming/python/data_structures/hashing.md
       - Web App Framework:
-        - FastAPI:             programming/python/webapp_framework/fastapi/fastapi.md
-        - Flask:               programming/python/webapp_framework/flask/flask.md
+        - FastAPI: programming/python/webapp_framework/fastapi/fastapi.md
+        - Flask: programming/python/webapp_framework/flask/flask.md
       - Advanced Concepts:
-        - OOP:                 programming/python/oops.md
-        - Concepts:            programming/python/concepts.md
+        - OOP: programming/python/oops.md
+        - Concepts: programming/python/concepts.md
       - Interviews:
-        - Q&A:                 programming/python/qa.md
+        - Q&A: programming/python/qa.md
     - Clean Code:
-      - Overview:              programming/clean_code/overview.md
-      - Naming:                programming/clean_code/naming.md
-      - Structure:             programming/clean_code/structure.md
-      - Functions & Methods:   programming/clean_code/methods.md
-      - Control Structures:    programming/clean_code/control_structure.md
-      - OOP Principles:        programming/clean_code/ooo.md
+      - Overview: programming/clean_code/overview.md
+      - Naming: programming/clean_code/naming.md
+      - Structure: programming/clean_code/structure.md
+      - Functions & Methods: programming/clean_code/methods.md
+      - Control Structures: programming/clean_code/control_structure.md
+      - OOP Principles: programming/clean_code/ooo.md
     - Pandas:
-      - Overview:              programming/pandas/overview.md
+      - Overview: programming/pandas/overview.md
     - Go:
-      - Overview:              programming/go/overview.md
-      - Basics:                programming/go/basics.md
-      - Interviews FAQ:        programming/go/interviews.md
+      - Overview: programming/go/overview.md
+      - Basics: programming/go/basics.md
+      - Interviews FAQ: programming/go/interviews.md
 
   - Database:
     - PostgreSQL:
-      - Setup & Install:       db/postgresql/install.md
+      - Setup & Install: db/postgresql/install.md
 
   - Docker & Kubernetes:
     - Docker:
-      - Overview:              docker_k8/docker/overview.md
-      - FAQ:                   docker_k8/docker/faq.md
+      - Overview: docker_k8/docker/overview.md
+      - FAQ: docker_k8/docker/faq.md
     - Kubernetes:
-      - Architecture:          docker_k8/k8/architecture.md
-      - Command Reference:     docker_k8/k8/cmdref.md
-      - Core Concepts:         docker_k8/k8/core.md
-      - Scheduling:            docker_k8/k8/scheduling.md
-      - Networking:            docker_k8/k8/networking.md
-      - Storage:               docker_k8/k8/storage.md
-      - App Lifecycle Mgmt:    docker_k8/k8/applifecyclemgmt.md
-      - Cluster Maintenance:   docker_k8/k8/clustermaintenance.md
-      - Security:              docker_k8/k8/security.md
-      - Kubernetes Projects:   docker_k8/k8/k8projects.md
+      - Architecture: docker_k8/k8/architecture.md
+      - Command Reference: docker_k8/k8/cmdref.md
+      - Core Concepts: docker_k8/k8/core.md
+      - Scheduling: docker_k8/k8/scheduling.md
+      - Networking: docker_k8/k8/networking.md
+      - Storage: docker_k8/k8/storage.md
+      - App Lifecycle Mgmt: docker_k8/k8/applifecyclemgmt.md
+      - Cluster Maintenance: docker_k8/k8/clustermaintenance.md
+      - Security: docker_k8/k8/security.md
+      - Kubernetes Projects: docker_k8/k8/k8projects.md
       - Troubleshooting:
-        - Overview:            docker_k8/k8/troubleshooting/overview.md
-        - Issues:              docker_k8/k8/troubleshooting/issues.md
-      - Minikube:              docker_k8/k8/minikube.md
+        - Overview: docker_k8/k8/troubleshooting/overview.md
+        - Issues: docker_k8/k8/troubleshooting/issues.md
+      - Minikube: docker_k8/k8/minikube.md
     - Istio:
-      - Overview:              docker_k8/istio/istio_overview.md
-      - Traffic Management:    docker_k8/istio/traffic_mgmt.md
+      - Overview: docker_k8/istio/istio_overview.md
+      - Traffic Management: docker_k8/istio/traffic_mgmt.md
 
   - CI/CD:
-    - Overview:                cicd/overview.md
+    - Overview: cicd/overview.md
     - GitHub Actions:
-      - Overview:              cicd/github_actions/overview.md
-      - Introduction:          cicd/github_actions/intro.md
-      - Triggers:              cicd/github_actions/workflow_triggers.md
-      - Variables:             cicd/github_actions/variables.md
-      - Matrix Strategy:       cicd/github_actions/matrix_strategy.md
-      - CI/CD Pipeline:        cicd/github_actions/cicd.md
+      - Overview: cicd/github_actions/overview.md
+      - Introduction: cicd/github_actions/intro.md
+      - Triggers: cicd/github_actions/workflow_triggers.md
+      - Variables: cicd/github_actions/variables.md
+      - Matrix Strategy: cicd/github_actions/matrix_strategy.md
+      - CI/CD Pipeline: cicd/github_actions/cicd.md
     - Jenkins:
-      - Overview:              cicd/jenkins/overview.md
-      - Deploy:                cicd/jenkins/deploy.md
+      - Overview: cicd/jenkins/overview.md
+      - Deploy: cicd/jenkins/deploy.md
     - Tekton:
-      - Overview:              cicd/tekton/overview.md
-      - Concepts:              cicd/tekton/concepts.md
-      - Pipelines:             cicd/tekton/tasks_pipelines.md
+      - Overview: cicd/tekton/overview.md
+      - Concepts: cicd/tekton/concepts.md
+      - Pipelines: cicd/tekton/tasks_pipelines.md
     - ArgoCD:
-      - Overview:              cicd/argocd/overview.md
-      - Install:               cicd/argocd/install.md
-      - Applications:          cicd/argocd/applications.md
-      - Sync:                  cicd/argocd/sync.md
-      - FAQ:                   cicd/argocd/faq.md
+      - Overview: cicd/argocd/overview.md
+      - Install: cicd/argocd/install.md
+      - Applications: cicd/argocd/applications.md
+      - Sync: cicd/argocd/sync.md
+      - FAQ: cicd/argocd/faq.md
 
   - Version Control:
     - Git:
-      - Overview:              vcontroller/git/overview.md
-      - FAQ:                   vcontroller/git/faq.md
+      - Overview: vcontroller/git/overview.md
+      - FAQ: vcontroller/git/faq.md
 
   - Monitoring:
     - ELK Stack:
       - Elasticsearch:
-        - Setup & Install:     monitoring/elk/elasticsearch/01_install.md
-        - Managing Documents:  monitoring/elk/elasticsearch/02_managing_docs.md
-        - Mapping & Analysis:  monitoring/elk/elasticsearch/03_mapping_analysis.md
+        - Setup & Install: monitoring/elk/elasticsearch/01_install.md
+        - Managing Documents: monitoring/elk/elasticsearch/02_managing_docs.md
+        - Mapping & Analysis: monitoring/elk/elasticsearch/03_mapping_analysis.md
       - Logstash:
-        - Overview:            monitoring/elk/logstash/overview.md
+        - Overview: monitoring/elk/logstash/overview.md
       - Kibana:
-        - Overview:            monitoring/elk/kibana/overview.md
+        - Overview: monitoring/elk/kibana/overview.md
 
   - Linux:
     - Administration:
-      - Basics:                linux/admin/basics.md
-      - Networking:            linux/admin/networking.md
-      - Storage:               linux/admin/storage.md
-      - Security:              linux/admin/security.md
-      - Troubleshooting:       linux/admin/troubleshooting.md
+      - Basics: linux/admin/basics.md
+      - Networking: linux/admin/networking.md
+      - Storage: linux/admin/storage.md
+      - Security: linux/admin/security.md
+      - Troubleshooting: linux/admin/troubleshooting.md
     - Scripting:
-      - Overview:              linux/scripting/overview.md
-      - FAQ:                   linux/scripting/faq.md
-      - HackerRank:            linux/scripting/hackerrank.md
+      - Overview: linux/scripting/overview.md
+      - FAQ: linux/scripting/faq.md
+      - HackerRank: linux/scripting/hackerrank.md
     - Ansible:
-      - Install:               linux/ansible/install.md
-      - Overview:              linux/ansible/overview.md
+      - Install: linux/ansible/install.md
+      - Overview: linux/ansible/overview.md
 
   - System Design:
-    - System Components:       sysdesign/components.md
-    - Overview:                sysdesign/framework.md
+    - System Components: sysdesign/components.md
+    - Overview: sysdesign/framework.md
     - Case Studies:
-      - URL Shortener:         sysdesign/app/url_shortner.md
+      - URL Shortener: sysdesign/app/url_shortner.md
+    - Daily Architecture Lab:
+      - Overview: sysdesign/daily-architecture-lab/index.md
+      - Learning Progress: sysdesign/daily-architecture-lab/learning.md
+      - 'Lesson 01 — System Design Thinking': sysdesign/daily-architecture-lab/lesson-01-system-design-thinking.md
+      - 'Lesson 02 — Reliable Notification System': sysdesign/daily-architecture-lab/lesson-02-reliable-notification-system.md
 
   - Cloud:
     - IBM:
       - Cloud Developer Overview: cloud/ibm/ibm_professional_cloud_developer.md
-      - Automation Tools:         cloud/ibm/automated_dev_tools.md
-      - Application Deployment:   cloud/ibm/application_deployment.md
-      - Cloud Schematics:         cloud/ibm/cloud_schematics.md
+      - Automation Tools: cloud/ibm/automated_dev_tools.md
+      - Application Deployment: cloud/ibm/application_deployment.md
+      - Cloud Schematics: cloud/ibm/cloud_schematics.md
     - AWS:
       - Practitioner:
-        - Summary:             cloud/aws/practitioner/summary.md
+        - Summary: cloud/aws/practitioner/summary.md
       - Projects:
-        - TOC:                 cloud/aws/projects/toc.md
-        - CI/CD Use Case:      cloud/aws/projects/cicd.md
+        - TOC: cloud/aws/projects/toc.md
+        - CI/CD Use Case: cloud/aws/projects/cicd.md
     - Terraform:
-      - Overview:              cloud/terraform/overview.md
-      - FAQ:                   cloud/terraform/faq.md
+      - Overview: cloud/terraform/overview.md
+      - FAQ: cloud/terraform/faq.md
 
   - Secret Management:
     - Vault:
-      - Introduction:          secretmgmt/vault/vault_overview.md
-      - Architecture:          secretmgmt/vault/vault_architecture.md
-      - Auth Methods:          secretmgmt/vault/auth_methods.md
-      - Policies:              secretmgmt/vault/policies.md
-      - Access Tokens:         secretmgmt/vault/access_vault_token.md
-      - Secret Engines:        secretmgmt/vault/secret_engine.md
-      - Agent:                 secretmgmt/vault/vault_agent.md
-      - Replication:           secretmgmt/vault/vault_replication.md
+      - Introduction: secretmgmt/vault/vault_overview.md
+      - Architecture: secretmgmt/vault/vault_architecture.md
+      - Auth Methods: secretmgmt/vault/auth_methods.md
+      - Policies: secretmgmt/vault/policies.md
+      - Access Tokens: secretmgmt/vault/access_vault_token.md
+      - Secret Engines: secretmgmt/vault/secret_engine.md
+      - Agent: secretmgmt/vault/vault_agent.md
+      - Replication: secretmgmt/vault/replication.md
 
   - AI Concepts:
     - AI:
-      - Overview:              ai_concepts/ai/overview.md
-      - Text Summarization:    ai_concepts/ai/text_summariztion.md
-      - Movie Poster:          ai_concepts/ai/movie_poster.md
-      - Chatbot:               ai_concepts/ai/chatbot.md
-      - AI Agent:              ai_concepts/ai/ai_agent.md
+      - Overview: ai_concepts/ai/overview.md
+      - Text Summarization: ai_concepts/ai/text_summariztion.md
+      - Movie Poster: ai_concepts/ai/movie_poster.md
+      - Chatbot: ai_concepts/ai/chatbot.md
+      - AI Agent: ai_concepts/ai/ai_agent.md
     - MCP:
-      - Overview:              ai_concepts/mcp/Overview.md
+      - Overview: ai_concepts/mcp/Overview.md
 
   - Nginx:
-    - Web Server:              nginx/webserver_overview.md
-    - HTTP Protocol:           nginx/http_protocol.md
-    - Nginx Overview:          nginx/nginx_overview.md
-    - Load Balancer:           nginx/load_balancer.md
-    - Caching:                 nginx/caching.md
-    - Static Assets:           nginx/static_assets.md
-    - Logging:                 nginx/logging.md
-    - HTTP Compression:        nginx/http_compression.md
-    - Access Control:          nginx/access_control.md
-    - Cryptography:            nginx/cryptography.md
-    - Reverse Proxy:           nginx/reverse_proxy.md
+    - Web Server: nginx/webserver_overview.md
+    - HTTP Protocol: nginx/http_protocol.md
+    - Nginx Overview: nginx/nginx_overview.md
+    - Load Balancer: nginx/load_balancer.md
+    - Caching: nginx/caching.md
+    - Static Assets: nginx/static_assets.md
+    - Logging: nginx/logging.md
+    - HTTP Compression: nginx/http_compression.md
+    - Access Control: nginx/access_control.md
+    - Cryptography: nginx/cryptography.md
+    - Reverse Proxy: nginx/reverse_proxy.md
 
   - SRE:
-    - Overview:                sre/overview.md
-    - Measurements:            sre/sre_measure.md
-    - Managing Complexity:     sre/manage_complexity.md
-    - Incident Management:     sre/incident_management.md
-    - Release Engineering:     sre/release_engineering.md
-    - Chaos Engineering:       sre/chaos_engineering.md
-    - Observability:           sre/observability.md
+    - Overview: sre/overview.md
+    - Measurements: sre/sre_measure.md
+    - Managing Complexity: sre/manage_complexity.md
+    - Incident Management: sre/incident_management.md
+    - Release Engineering: sre/release_engineering.md
+    - Chaos Engineering: sre/chaos_engineering.md
+    - Observability: sre/observability.md
 
   - Kafka:
-    - Overview:                kafka/overview.md
+    - Overview: kafka/overview.md
 
   - Soft Skills:
-    - Communication:           softskills/communication.md
+    - Communication: softskills/communication.md
 
   - About: about.md
   - Interviews: tech-interview-cheatsheet.md
 
-# -----------------------------------------------------------------------------
-# Theme
-# -----------------------------------------------------------------------------
 theme:
   name: material
   language: en
   font:
-    text: Roboto Mono
-    code: Roboto Mono
+    text: Inter
+    code: JetBrains Mono
   icon:
     repo: fontawesome/brands/github
     edit: material/pencil
@@ -244,60 +241,47 @@ theme:
         icon: material/weather-sunny
         name: Switch to light mode
   features:
-    # Navigation
-    - navigation.instant          # Single-page app feel — no full page reloads
-    - navigation.instant.progress # Show a progress bar on slow page loads
-    - navigation.tracking         # URL updates as you scroll through a page
-    - navigation.sections         # Top-level nav items rendered as sections
-    - navigation.path             # Breadcrumb trail above the page title
-    - navigation.top              # Back-to-top button when scrolling up
-    - navigation.indexes          # Allow section index pages (e.g. section/index.md)
-    # Table of contents
-    - toc.follow                  # Sidebar TOC scrolls to follow reading position
-    # Search
-    - search.suggest              # Autocomplete suggestions while typing
-    - search.highlight            # Highlight search terms on the result page
-    - search.share                # Share button for search queries
-    # Content
-    - content.tabs.link           # Linked content tabs (same tab selected across pages)
-    - content.code.copy           # Copy button on all code blocks
-    - content.code.annotate       # Inline code annotations
-    - content.tooltips            # Improved tooltips on abbreviations and links
-    # Header
-    - header.autohide             # Hide header when scrolling down, show on scroll up
+    - navigation.instant
+    - navigation.instant.progress
+    - navigation.tracking
+    - navigation.sections
+    - navigation.path
+    - navigation.top
+    - navigation.indexes
+    - toc.follow
+    - search.suggest
+    - search.highlight
+    - search.share
+    - content.tabs.link
+    - content.code.copy
+    - content.code.annotate
+    - content.tooltips
+    - header.autohide
 
-# -----------------------------------------------------------------------------
-# Plugins
-# -----------------------------------------------------------------------------
 plugins:
   - search:
       lang: en
   - minify:
       minify_html: true
 
-# -----------------------------------------------------------------------------
-# Markdown extensions
-# -----------------------------------------------------------------------------
 markdown_extensions:
-  # Built-in
-  - admonition          # !!! note / warning / tip blocks
-  - footnotes           # [^1] footnote syntax
-  - attr_list           # Add HTML attributes to elements { .class #id }
-  - md_in_html          # Write Markdown inside raw HTML blocks
-  - tables              # GitHub-flavoured tables
+  - admonition
+  - footnotes
+  - attr_list
+  - md_in_html
+  - tables
   - toc:
-      permalink: true         # Anchor link on every heading
+      permalink: true
       permalink_title: Link to this section
-      toc_depth: 3            # Show h2 and h3 in the right-hand TOC
-  # PyMdown extensions
-  - pymdownx.details          # Collapsible ??? blocks (extends admonition)
-  - pymdownx.mark             # ==highlight== syntax
-  - pymdownx.snippets         # --8<-- file inclusion
-  - pymdownx.inlinehilite     # `#!python inline code` syntax highlighting
-  - pymdownx.keys             # ++ctrl+c++ keyboard key rendering
-  - pymdownx.tasklist:        # - [x] checkbox lists
+      toc_depth: 3
+  - pymdownx.details
+  - pymdownx.mark
+  - pymdownx.snippets
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.tasklist:
       custom_checkbox: true
-  - pymdownx.tabbed:          # === "Tab" content tabs
+  - pymdownx.tabbed:
       alternate_style: true
   - pymdownx.highlight:
       anchor_linenums: true
@@ -314,9 +298,6 @@ markdown_extensions:
       emoji_index: !!python/name:material.extensions.emoji.twemoji
       emoji_generator: !!python/name:material.extensions.emoji.to_svg
 
-# -----------------------------------------------------------------------------
-# Extra
-# -----------------------------------------------------------------------------
 extra:
   social:
     - icon: fontawesome/brands/github
@@ -330,6 +311,7 @@ extra:
     property: !ENV GOOGLE_ANALYTICS_ID
 
 extra_css:
+  - stylesheets/extra.css
   - https://unpkg.com/katex@0/dist/katex.min.css
 
 extra_javascript:
