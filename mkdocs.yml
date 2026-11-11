@@ -148,6 +148,7 @@ nav:
       - Learning Progress: sysdesign/daily-architecture-lab/learning.md
       - 'Lesson 01 — System Design Thinking': sysdesign/daily-architecture-lab/lesson-01-system-design-thinking.md
       - 'Lesson 02 — Reliable Notification System': sysdesign/daily-architecture-lab/lesson-02-reliable-notification-system.md
+      - 'Lesson 06 — Service Discovery, DNS Caching & Partial Outages': sysdesign/daily-architecture-lab/lesson-06-service-discovery-dns-failures.md
 
   - Cloud:
     - IBM:
