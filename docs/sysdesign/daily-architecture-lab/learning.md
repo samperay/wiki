@@ -1,44 +1,60 @@
 # Daily Architecture Lab — Learning Progress
 
-> Update statuses based on evidence, not simply because a document was uploaded.
+> **Progress is evidence-based.** Publication means the lesson exists in GitHub; it does **not** mean it has been read, its challenges answered, or its hands-on lab verified.
+
+[Browse all lessons](index.md)
 
 ## Lesson tracker
 
-| Lesson | Topic | Read | Challenges answered | Mentor review | Lab / evidence |
-|---|---|---|---|---|---|
-| 01 | System Design Thinking & URL Shortener | Not started | Not started | Pending | — |
-| 02 | Reliable Notification System | Not started | Not started | Pending | — |
+| Lesson | Topic | Published | Read / understood | Challenges answered | Mentor review | Lab / evidence |
+|---|---|---|---|---|---|---|
+| [01](lesson-01-system-design-thinking.md) | System Design Thinking & URL Shortener Reliability | Yes | Not confirmed | Not confirmed | Pending | Not confirmed |
+| [02](lesson-02-reliable-notification-system.md) | Reliable Notification System — Sync vs Async, Queues, Retries & Duplicates | Yes | Not confirmed | Not confirmed | Pending | Not confirmed |
+| [03](lesson-03-delivery-guarantees-idempotency-outbox.md) | Delivery Guarantees, Idempotency & Transactional Outbox | Yes | Not confirmed | Not confirmed | Pending | Not confirmed |
+| [04](lesson-04-queue-backpressure-retry-storm.md) | Queue Backpressure, Retry Storms & Recovery Capacity | Yes | Not confirmed | Not confirmed | Pending | Not confirmed |
+| [05](lesson-05-api-gateway-cascading-failures-circuit-breakers.md) | API Gateway Cascading Failures & Circuit Breakers | Yes | Not confirmed | Not confirmed | Pending | Not confirmed |
+| [06](lesson-06-service-discovery-dns-failures.md) | Service Discovery, DNS Caching & Partial Outages | Yes | Not confirmed | Not confirmed | Pending | Not confirmed |
+
+**Status note (11 November 2026):** All six Markdown files were verified on the `master` branch. Completion and review statuses remain unconfirmed until you record evidence. “Not confirmed” does not mean you have not done the work.
 
 ## Progress criteria
 
-- **Read:** Can summarize the problem, architecture, and important trade-offs in your own words.
-- **Challenges answered:** All three questions answered with assumptions and reasoning in the lesson's review section.
-- **Mentor reviewed:** Reasoning reviewed; feedback added under `### 7. Mentor Review`.
-- **Lab verified:** Commands, observations, tests, and relevant PR/commit links recorded. Optional labs may remain **Not attempted**.
+- **Published:** The full Markdown lesson is committed and linked in `mkdocs.yml`.
+- **Read / understood:** You can explain the problem, architecture, capacity assumptions, and tradeoffs in your own words.
+- **Challenges answered:** All three architect challenges have answers **and reasoning** under the lesson's review section.
+- **Mentor reviewed:** Feedback and corrections are recorded in `### 7. Mentor Review`.
+- **Lab verified:** Commands, observed outputs, tests, and relevant commit or PR links are recorded. Labs are optional.
 
-## Current focus
+## Current learning focus
 
-- **Now:** Lesson 01 and Lesson 02 — requirements, capacity, queues, and reliability fundamentals.
-- **Next:** Progress toward distributed systems and production failure analysis.
+- **Latest published:** [Lesson 06 — Service Discovery, DNS Caching & Partial Outages](lesson-06-service-discovery-dns-failures.md).
+- **Suggested next step:** Work through Lesson 06's stale-DNS versus stale-connection diagnosis and document your hypotheses and evidence.
+- **Upcoming:** New production architecture scenarios will extend the progression without repeating prior lessons.
 
 ## Review log
 
+Add a row when you complete or review a lesson; do not fill in outcomes without evidence.
+
 | Date | Lesson | Main insight | Doubt / gap | Next action | Evidence link |
 |---|---|---|---|---|---|
-| YYYY-MM-DD | 01 | _Fill in_ | _Fill in_ | _Fill in_ | _Commit or PR_ |
+| YYYY-MM-DD | [Lesson NN](index.md) | _Your finding_ | _Your question_ | _Your next step_ | _GitHub commit / lab evidence_ |
 
-## Links
+## My learning goals
+
+- [ ] Explain architecture choices using measurable requirements and failure domains.
+- [ ] Calculate throughput, storage, latency, concurrency, and backlog-recovery budgets.
+- [ ] Investigate failures using logs, metrics, traces, and falsifiable hypotheses.
+- [ ] Distinguish an incident trigger, technical root cause, and systemic design weakness.
+- [ ] Justify resilience mechanisms with explicit operational costs and tradeoffs.
+- [ ] Communicate architecture decisions clearly using diagrams and concise design reviews.
+
+## Reference links
 
 - [Daily Architecture Lab overview](index.md)
-- [Lesson 01](lesson-01-system-design-thinking.md)
-- [Lesson 02](lesson-02-reliable-notification-system.md)
-- [Implementation labs](https://github.com/samperay/sre-devops-architecture-labs)
-
-## Personal learning goals
-
-- [ ] Explain design choices using measurable requirements.
-- [ ] Calculate throughput, storage, latency, and concurrency budgets.
-- [ ] Diagnose failures with logs, metrics, traces, and hypothesis testing.
-- [ ] Explain immediate causes versus systemic design weaknesses.
-- [ ] Justify resilience mechanisms and their costs.
-- [ ] Communicate architecture clearly in diagrams and design reviews.
+- [Lesson 01 — System Design Thinking & URL Shortener Reliability](lesson-01-system-design-thinking.md)
+- [Lesson 02 — Reliable Notification System — Sync vs Async, Queues, Retries & Duplicates](lesson-02-reliable-notification-system.md)
+- [Lesson 03 — Delivery Guarantees, Idempotency & Transactional Outbox](lesson-03-delivery-guarantees-idempotency-outbox.md)
+- [Lesson 04 — Queue Backpressure, Retry Storms & Recovery Capacity](lesson-04-queue-backpressure-retry-storm.md)
+- [Lesson 05 — API Gateway Cascading Failures & Circuit Breakers](lesson-05-api-gateway-cascading-failures-circuit-breakers.md)
+- [Lesson 06 — Service Discovery, DNS Caching & Partial Outages](lesson-06-service-discovery-dns-failures.md)
+- [Hands-on architecture labs](https://github.com/samperay/sre-devops-architecture-labs)
