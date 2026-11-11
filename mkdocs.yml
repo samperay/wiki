@@ -148,6 +148,9 @@ nav:
       - Learning Progress: sysdesign/daily-architecture-lab/learning.md
       - 'Lesson 01 — System Design Thinking': sysdesign/daily-architecture-lab/lesson-01-system-design-thinking.md
       - 'Lesson 02 — Reliable Notification System': sysdesign/daily-architecture-lab/lesson-02-reliable-notification-system.md
+      - 'Lesson 03 — Delivery Guarantees, Idempotency & Transactional Outbox': sysdesign/daily-architecture-lab/lesson-03-delivery-guarantees-idempotency-outbox.md
+      - 'Lesson 04 — Queue Backpressure, Retry Storms & Recovery Capacity': sysdesign/daily-architecture-lab/lesson-04-queue-backpressure-retry-storm.md
+      - 'Lesson 05 — API Gateway Cascading Failures & Circuit Breakers': sysdesign/daily-architecture-lab/lesson-05-api-gateway-cascading-failures-circuit-breakers.md
       - 'Lesson 06 — Service Discovery, DNS Caching & Partial Outages': sysdesign/daily-architecture-lab/lesson-06-service-discovery-dns-failures.md
 
   - Cloud:
