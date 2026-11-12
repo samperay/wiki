@@ -14,8 +14,9 @@
 | [04](lesson-04-queue-backpressure-retry-storm.md) | Queue Backpressure, Retry Storms & Recovery Capacity | Yes | Not confirmed | Not confirmed | Pending | Not confirmed |
 | [05](lesson-05-api-gateway-cascading-failures-circuit-breakers.md) | API Gateway Cascading Failures & Circuit Breakers | Yes | Not confirmed | Not confirmed | Pending | Not confirmed |
 | [06](lesson-06-service-discovery-dns-failures.md) | Service Discovery, DNS Caching & Partial Outages | Yes | Not confirmed | Not confirmed | Pending | Not confirmed |
+| [07](lesson-07-database-connection-pool-exhaustion.md) | Database Connection Pool Exhaustion & Admission Control | Yes | Not confirmed | Not confirmed | Pending | Not confirmed |
 
-**Status note (11 November 2026):** All six Markdown files were verified on the `master` branch. Completion and review statuses remain unconfirmed until you record evidence. “Not confirmed” does not mean you have not done the work.
+**Status note (12 November 2026):** All seven Markdown files were verified on the `master` branch. Completion and review statuses remain unconfirmed until you record evidence. “Not confirmed” does not mean you have not done the work.
 
 ## Progress criteria
 
@@ -27,8 +28,8 @@
 
 ## Current learning focus
 
-- **Latest published:** [Lesson 06 — Service Discovery, DNS Caching & Partial Outages](lesson-06-service-discovery-dns-failures.md).
-- **Suggested next step:** Work through Lesson 06's stale-DNS versus stale-connection diagnosis and document your hypotheses and evidence.
+- **Latest published:** [Lesson 07 — Database Connection Pool Exhaustion & Admission Control](lesson-07-database-connection-pool-exhaustion.md).
+- **Suggested next step:** Work through Lesson 07's global connection-budget calculation and distinguish pool checkout wait from SQL execution and lock wait.
 - **Upcoming:** New production architecture scenarios will extend the progression without repeating prior lessons.
 
 ## Review log
@@ -57,4 +58,5 @@ Add a row when you complete or review a lesson; do not fill in outcomes without 
 - [Lesson 04 — Queue Backpressure, Retry Storms & Recovery Capacity](lesson-04-queue-backpressure-retry-storm.md)
 - [Lesson 05 — API Gateway Cascading Failures & Circuit Breakers](lesson-05-api-gateway-cascading-failures-circuit-breakers.md)
 - [Lesson 06 — Service Discovery, DNS Caching & Partial Outages](lesson-06-service-discovery-dns-failures.md)
+- [Lesson 07 — Database Connection Pool Exhaustion & Admission Control](lesson-07-database-connection-pool-exhaustion.md)
 - [Hands-on architecture labs](https://github.com/samperay/sre-devops-architecture-labs)
