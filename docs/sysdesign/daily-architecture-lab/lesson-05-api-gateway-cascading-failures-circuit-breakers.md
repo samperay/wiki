@@ -467,90 +467,57 @@ Gateway 504s rise to 20%. Summary CPU is 25%, Incident API is healthy, Ownership
 
 **LEARN → DESIGN → BUILD → BREAK → INVESTIGATE → FIX → VALIDATE**
 
-> This is an ADDITION to the complete architecture lesson above, not a replacement. Reading/design: 20–25 minutes; hands-on: 35–60 minutes. **Environment:** Mac Docker Desktop is preferred for this multi-container lab; Ubuntu VM with Docker Engine and Compose plugin also works if resources permit. Use only a disposable lab project and loopback ports.
+This practical lab implements the **exact architecture described in Sections 1–7 above**: NGINX gateway, Summary API, mandatory Incident API, optional Ownership API and optional Deployment API. The earlier simplified two-service proxy example did not reproduce the lesson's partial-response design; this replaces it.
 
-### LEARN — The experiment
+**Environment:** Mac Docker Desktop preferred (or Ubuntu VM with Docker Engine + Compose and sufficient RAM). Reading: 20–25 minutes; optional guided hands-on: 60–90 minutes. All commands run on the Docker host in a disposable project. Never inject these failures into production.
 
-**Scenario:** Slow upstream service and gateway timeout. Explain why retries can amplify a slow dependency; add concurrency limits, circuit breakers and a per-hop deadline in a production design.
+### LEARN — Map concepts to code
 
-### DESIGN — Reproduce the architecture locally
+| Architecture requirement | Local implementation | Proof |
+|---|---|---|
+| NGINX gateway | gateway container, port 18005 | Access logs and HTTP status |
+| Mandatory incident status | incident FastAPI service | Core status/severity retained |
+| Optional ownership | ownership FastAPI service | Delay without losing core response |
+| Optional deployments | deployment FastAPI service | Remains present during owner failure |
+| Summary aggregator | summary FastAPI service | Full versus partial response |
+| Timeout / retries | naive mode versus protected mode | 504 becomes 200 degraded |
+| Bulkhead / circuit breaker | semaphore limit 2, 3-failure breaker | Metrics endpoint |
+
+The architecture's 1,000 RPS and fleet-wide concurrency 120 are **hypothetical production design numbers**. This local exercise uses a limit of 2 per Summary process to reproduce overload safely; it is not a fleet-wide limiter.
+
+### DESIGN — Actual lab topology
 
 ```mermaid
 flowchart LR
-  C["Terminal / curl"] --> A["FastAPI :8000"]
-  A --> B["Upstream FastAPI container"]
-  A --> L["Application logs"]
+  U["curl operator"] --> G["NGINX gateway"]
+  G --> S["Summary FastAPI"]
+  S --> I["Incident API mandatory"]
+  S --> B["Ownership bulkhead and breaker"]
+  B --> O["Ownership API optional"]
+  S --> D["Deployment API optional"]
 ```
 
-Create and enter a dedicated folder in the **Mac terminal or Ubuntu VM shell where Docker runs**:
+### BUILD — Create complete application
 
 ```bash
-mkdir -p architecture-lab-05/app architecture-lab-05/tests
-cd architecture-lab-05
+mkdir -p lesson05-api-gateway-lab/app lesson05-api-gateway-lab/nginx lesson05-api-gateway-lab/tests
+cd lesson05-api-gateway-lab
 touch app/__init__.py
 docker compose version
 ```
 
-### BUILD — End-to-end runnable application
+**File layout:** requirements.txt, Dockerfile, compose.yaml, app/__init__.py, app/summary.py, app/incident.py, app/ownership.py, app/deployment.py, nginx/default.conf and tests/test_contract.py.
 
-```text
-architecture-lab-05/
-├── app/
-│   ├── __init__.py
-│   ├── main.py
-│   └── upstream.py
-├── tests/
-│   └── test_health.py
-├── requirements.txt
-├── Dockerfile
-└── compose.yaml
-```
-
-**File: `app/main.py`**
-
-```python
-import os,time
-import httpx
-from fastapi import FastAPI,HTTPException
-app=FastAPI()
-@app.get("/health")
-def health():return {"status":"ok"}
-@app.get("/proxy")
-def proxy():
-    try:
-        with httpx.Client(timeout=float(os.getenv("UPSTREAM_TIMEOUT","0.4"))) as c:
-            r=c.get("http://upstream:8000/work")
-            r.raise_for_status()
-            return r.json()
-    except httpx.TimeoutException:
-        raise HTTPException(504,"upstream timed out")
-    except httpx.HTTPError:
-        raise HTTPException(502,"upstream unavailable")
-```
-
-**File: `app/upstream.py`**
-
-```python
-import os,time
-from fastapi import FastAPI
-app=FastAPI()
-@app.get("/work")
-def work():
-    time.sleep(float(os.getenv("UPSTREAM_DELAY","0.05")))
-    return {"upstream":"ok"}
-```
-
-**File: `requirements.txt`**
+**File: requirements.txt**
 
 ```text
 fastapi==0.115.12
 uvicorn==0.34.2
 httpx==0.28.1
 pytest==8.3.5
-httpx==0.28.1
 ```
 
-**File: `Dockerfile`**
+**File: Dockerfile**
 
 ```dockerfile
 FROM python:3.11-slim
@@ -559,94 +526,243 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 COPY app ./app
 COPY tests ./tests
-CMD ["uvicorn","app.main:app","--host","0.0.0.0","--port","8000"]
+CMD ["uvicorn","app.summary:app","--host","0.0.0.0","--port","8000"]
 ```
 
-**File: `compose.yaml`**
+**File: app/incident.py**
+
+```python
+from fastapi import FastAPI, HTTPException
+app=FastAPI()
+@app.get("/incidents/{id}")
+async def incident(id:str):
+    if id!="INC-2048": raise HTTPException(404,"not found")
+    return {"incident_id":id,"severity":2,"status":"investigating"}
+```
+
+**File: app/ownership.py**
+
+```python
+import asyncio,os
+from fastapi import FastAPI
+app=FastAPI()
+@app.get("/owners/{id}")
+async def owner(id:str):
+    await asyncio.sleep(float(os.getenv("OWNERSHIP_DELAY","0.04")))
+    return {"owner":"team-sre"}
+```
+
+**File: app/deployment.py**
+
+```python
+from fastapi import FastAPI
+app=FastAPI()
+@app.get("/deployments/{id}")
+async def deployments(id:str):
+    return {"recent_deployments":["deploy-731"]}
+```
+
+**File: app/summary.py**
+
+```python
+import asyncio,os,time,logging
+import httpx
+from fastapi import FastAPI,HTTPException
+app=FastAPI()
+log=logging.getLogger("summary")
+slots=asyncio.Semaphore(2)
+failures=0
+open_until=0.
+stats={"ownership_timeouts":0,"breaker_open":0,"bulkhead_rejected":0}
+async def get(client,url):
+    r=await client.get(url)
+    r.raise_for_status()
+    return r.json()
+async def protected_owner(client,id):
+    global failures,open_until
+    if time.monotonic()<open_until:
+        stats["breaker_open"]+=1
+        return None
+    if slots.locked():
+        stats["bulkhead_rejected"]+=1
+        return None
+    await slots.acquire()
+    try:
+        try:
+            data=await get(client,f"http://ownership:8000/owners/{id}")
+            failures=0
+            return data
+        except httpx.HTTPError as exc:
+            failures+=1
+            stats["ownership_timeouts"]+=1
+            log.warning("ownership_failure=%s count=%s",type(exc).__name__,failures)
+            if failures>=3: open_until=time.monotonic()+5
+            return None
+    finally:
+        slots.release()
+@app.get("/health")
+async def health(): return {"status":"ok"}
+@app.get("/metrics")
+async def metrics(): return stats
+@app.get("/api/incidents/{id}/summary")
+async def summary(id:str):
+    protected=os.getenv("PROTECTED_MODE","0")=="1"
+    async with httpx.AsyncClient(timeout=0.09 if protected else 2.0) as client:
+        try:
+            incident=await get(client,f"http://incident:8000/incidents/{id}")
+        except httpx.HTTPStatusError as exc:
+            raise HTTPException(404 if exc.response.status_code==404 else 503,"incident unavailable")
+        except httpx.HTTPError:
+            raise HTTPException(503,"mandatory incident API unavailable")
+        if protected:
+            owner,deployment=await asyncio.gather(
+                protected_owner(client,id),
+                get(client,f"http://deployment:8000/deployments/{id}"),
+                return_exceptions=True)
+            if isinstance(deployment,Exception): deployment=None
+        else:
+            owner=None
+            for attempt in range(2):
+                try:
+                    owner=await get(client,f"http://ownership:8000/owners/{id}")
+                    break
+                except httpx.HTTPError:
+                    log.warning("naive_retry attempt=%s",attempt+1)
+            try:
+                deployment=await get(client,f"http://deployment:8000/deployments/{id}")
+            except httpx.HTTPError: deployment=None
+    missing=[]
+    if owner is None: missing.append("ownership")
+    if deployment is None: missing.append("deployment")
+    return {**incident,"owner":owner["owner"] if owner else None,
+            "recent_deployments":deployment["recent_deployments"] if deployment else [],
+            "degraded":bool(missing),"unavailable_components":missing}
+```
+
+**File: nginx/default.conf**
+
+```nginx
+log_format lab '$time_iso8601 status=$status request_time=$request_time upstream_time=$upstream_response_time';
+server {
+  listen 80;
+  access_log /var/log/nginx/access.log lab;
+  location / {
+    proxy_pass http://summary:8000;
+    proxy_read_timeout 800ms;
+    proxy_connect_timeout 1s;
+  }
+}
+```
+
+**File: compose.yaml**
 
 ```yaml
 services:
-  api:
+  gateway:
+    image: nginx:1.27-alpine
+    ports: ["127.0.0.1:18005:80"]
+    volumes: ["./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro"]
+    depends_on: [summary]
+  summary:
     build: .
-    ports: ["127.0.0.1:18005:8000"]
     environment:
-      UPSTREAM_TIMEOUT: "0.4"
-    depends_on: [upstream]
-  upstream:
+      PROTECTED_MODE: "${PROTECTED_MODE:-0}"
+    depends_on: [incident,ownership,deployment]
+  incident:
     build: .
-    command: ["uvicorn","app.upstream:app","--host","0.0.0.0","--port","8000"]
+    command: ["uvicorn","app.incident:app","--host","0.0.0.0","--port","8000"]
+  ownership:
+    build: .
+    command: ["uvicorn","app.ownership:app","--host","0.0.0.0","--port","8000"]
     environment:
-      UPSTREAM_DELAY: "${UPSTREAM_DELAY:-0.05}"
+      OWNERSHIP_DELAY: "${OWNERSHIP_DELAY:-0.04}"
+  deployment:
+    build: .
+    command: ["uvicorn","app.deployment:app","--host","0.0.0.0","--port","8000"]
 ```
 
-**File: `tests/test_health.py`**
+**File: tests/test_contract.py**
 
 ```python
 from fastapi.testclient import TestClient
-from app.main import app
-def test_health():
-    assert TestClient(app).get("/health").status_code == 200
+from app.incident import app as incident
+from app.deployment import app as deployment
+def test_incident():
+    assert TestClient(incident).get("/incidents/INC-2048").json()["severity"]==2
+def test_deployment():
+    assert TestClient(deployment).get("/deployments/INC-2048").json()["recent_deployments"]==["deploy-731"]
 ```
 
-Start containers and establish a baseline:
+Start everything and confirm the contract tests:
 
 ```bash
 docker compose -p archlab05 up -d --build
 docker compose -p archlab05 ps
-curl -fsS http://127.0.0.1:18005/health
-docker compose -p archlab05 exec api python -m pytest -q tests
+docker compose -p archlab05 exec summary python -m pytest -q tests
+curl -i http://127.0.0.1:18005/health
 ```
 
-**Expected:** API health is 200, and `1 passed`. If a service needs time to initialize, wait and retry; inspect logs before troubleshooting.
+**Expected:** 2 tests pass; health HTTP 200. If services are still starting, wait a few seconds and retry. The tests verify service contracts, not the full incident behavior.
 
-### VALIDATE baseline — Healthy behavior
+### VALIDATE baseline — Healthy incident dashboard
 
 ```bash
-curl -i http://127.0.0.1:18005/proxy
+curl -i http://127.0.0.1:18005/api/incidents/INC-2048/summary
 ```
 
-### BREAK — Controlled fault injection
+**Expected:** HTTP 200 with incident_id INC-2048, severity 2, status investigating, owner team-sre, recent_deployments containing deploy-731, and degraded false. This is the response contract from Section 3.
 
-Run only against `archlab05`, never an existing database or unrelated container.
+### BREAK — Reproduce the hypothetical 504 cascade
+
+Slow **only** the optional Ownership service; do not stop Incident or Deployment.
 
 ```bash
-UPSTREAM_DELAY=2 docker compose -p archlab05 up -d --force-recreate upstream
-curl -i http://127.0.0.1:18005/proxy
+OWNERSHIP_DELAY=1.2 docker compose -p archlab05 up -d --force-recreate ownership
+curl -i -w 'total=%{time_total}s\n' http://127.0.0.1:18005/api/incidents/INC-2048/summary
 ```
 
-### INVESTIGATE — Gather evidence and reject alternative hypotheses
+**Expected:** NGINX 504 after approximately 0.8 seconds because naive Summary waits for Ownership longer than the gateway deadline. This is the same architectural weakness described in the incident timeline.
+
+### INVESTIGATE — Follow the exact request path
 
 ```bash
 docker compose -p archlab05 ps
-docker compose -p archlab05 logs --tail=30 api upstream
+docker compose -p archlab05 logs --tail=30 gateway
+docker compose -p archlab05 logs --tail=30 summary
+docker compose -p archlab05 logs --tail=30 ownership
+docker compose -p archlab05 exec summary python -c 'import socket; print(socket.getaddrinfo("ownership",8000)[0][4])'
 ```
 
-**Expected behavior:** Fast upstream returns 200; a 2-second upstream delay exceeds the 0.4-second client timeout and produces HTTP 504. Recovery restores 200.
+Look for gateway upstream timeout, Summary waiting for optional Ownership, and a healthy mandatory Incident API. DNS resolving does not prove Ownership is responsive. Distinguish **trigger** (slow Ownership), **root cause of 504** (blocking Summary) and **design weakness** (no optional dependency isolation).
 
-Record response codes, exact error messages, timing, container state, and relevant DB/network evidence. Which evidence supports your hypothesis? What would falsify it? Distinguish the incident trigger, root cause, and systemic design weakness.
+### FIX — Implement the actual architecture redesign
 
-### FIX — Restore service and propose durable architecture
+Enable protected Summary mode: 90 ms optional timeout, a two-slot Ownership bulkhead, no synchronous retries, and a simple circuit breaker. The optional dependency now returns a partial response rather than blocking core incident status.
 
 ```bash
-UPSTREAM_DELAY=0.05 docker compose -p archlab05 up -d --force-recreate upstream
-curl -i http://127.0.0.1:18005/proxy
+PROTECTED_MODE=1 docker compose -p archlab05 up -d --force-recreate summary
+curl -i http://127.0.0.1:18005/api/incidents/INC-2048/summary
+for i in 1 2 3 4 5; do curl -s -o /dev/null http://127.0.0.1:18005/api/incidents/INC-2048/summary; done
+docker compose -p archlab05 exec summary python -c 'import httpx; print(httpx.get("http://127.0.0.1:8000/metrics").json())'
 ```
 
-**Architect decision:** Explain why retries can amplify a slow dependency; add concurrency limits, circuit breakers and a per-hop deadline in a production design.
+**Expected:** HTTP 200, owner null, degraded true, unavailable_components includes ownership, while status, severity and deployment remain present. Ownership timeout and breaker counters should rise. The educational breaker is per-process and has a 5-second cooldown, not a production-grade half-open state machine.
 
-### VALIDATE — Prove recovery and clean up safely
+### VALIDATE — Restore, prove recovery and clean up
 
 ```bash
-curl -fsS http://127.0.0.1:18005/health
-docker compose -p archlab05 exec api python -m pytest -q tests
+OWNERSHIP_DELAY=0.04 docker compose -p archlab05 up -d --force-recreate ownership
+sleep 6
+curl -i http://127.0.0.1:18005/api/incidents/INC-2048/summary
+docker compose -p archlab05 exec summary python -m pytest -q tests
 docker compose -p archlab05 down
-# OPTIONAL, destructive to this lab's data ONLY:
-# docker compose -p archlab05 down -v
 ```
 
-The health test is a smoke test, not a full integration suite; also verify the scenario-specific endpoint after repair. `down` leaves named volumes intact. Only use `down -v` if you deliberately want to remove this project's data.
+**Expected:** HTTP 200 with owner restored, degraded false and 2 passing contract tests. The final down command stops only the isolated archlab05 Compose project.
 
-**Lab evidence to fill:** baseline _..._; fault and response _..._; investigation commands and findings _..._; root cause _..._; durable improvement _..._; verified recovery _..._.
+**Architecture reflection:** Why is a process-local semaphore insufficient for a fleet-wide 120-call budget? What happens if mandatory Incident API fails? Why can an open circuit delay recovery detection? How should NGINX, Summary and optional-service deadlines fit within 800 ms?
+
+**Record your lab evidence:** Healthy response _..._; observed 504 and timing _..._; investigation logs _..._; protected response _..._; metrics _..._; recovered response _..._; architectural improvements _..._.
 
 ## My Architecture Review — Solutions & Doubts
 
