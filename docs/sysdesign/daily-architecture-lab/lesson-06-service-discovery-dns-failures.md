@@ -416,6 +416,21 @@ Do not look for an answer key; write assumptions, evidence, tradeoffs, and what 
 
 ## Practical Labs
 
+### Architecture-to-code walkthrough — read before running the lab
+
+**Architecture being practiced:** DNS resolution versus service availability.
+
+**Trace one request through the exact local components:** Client → FastAPI → Docker service name upstream → backend FastAPI.
+
+**Design requirement to test:** A resolvable service name does not guarantee a reachable or healthy backend.
+
+**Run in this order, stopping to inspect actual output after each step:** Resolve upstream, call it, stop upstream, compare DNS output with HTTP failure, restart and verify.
+
+**What this small lab models—and what it does not:** This basic lab demonstrates discovery versus availability, not the original lesson's stale DNS cache incident. Treat stale DNS caching and connection reuse as follow-up experiments requiring endpoint recreation and a persistent client.
+
+**Learning checkpoint:** Before reading the next step, predict the HTTP response, which component will fail, which evidence will identify it, and whether the proposed fix addresses the symptom or the underlying architectural weakness. Write your prediction and actual observation in the lab evidence section.
+
+
 **LEARN → DESIGN → BUILD → BREAK → INVESTIGATE → FIX → VALIDATE**
 
 > This is an ADDITION to the complete architecture lesson above, not a replacement. Reading/design: 20–25 minutes; hands-on: 35–60 minutes. **Environment:** Mac Docker Desktop is preferred for this multi-container lab; Ubuntu VM with Docker Engine and Compose plugin also works if resources permit. Use only a disposable lab project and loopback ports.
