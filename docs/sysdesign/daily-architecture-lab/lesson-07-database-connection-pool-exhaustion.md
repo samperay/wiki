@@ -353,6 +353,21 @@ HTTP 5xx is 9%, DB CPU 40%, session utilization 95%, and lock waits 800 ms. One 
 
 ## Practical Labs
 
+### Architecture-to-code walkthrough — read before running the lab
+
+**Architecture being practiced:** Connection pool exhaustion.
+
+**Trace one request through the exact local components:** Client → FastAPI → SQLAlchemy pool of 2 → PostgreSQL.
+
+**Design requirement to test:** Pool checkout can time out while database CPU is low; replicas multiply connection demand.
+
+**Run in this order, stopping to inspect actual output after each step:** Query /db, run four simultaneous /hold requests, inspect 503 and pool timeout logs, wait for release and verify recovery.
+
+**What this small lab models—and what it does not:** The local 2-connection SQLAlchemy pool models application pool exhaustion. The lesson's fleet-wide PostgreSQL max_connections incident additionally requires aggregate replica budgeting and database-side session checks.
+
+**Learning checkpoint:** Before reading the next step, predict the HTTP response, which component will fail, which evidence will identify it, and whether the proposed fix addresses the symptom or the underlying architectural weakness. Write your prediction and actual observation in the lab evidence section.
+
+
 **LEARN → DESIGN → BUILD → BREAK → INVESTIGATE → FIX → VALIDATE**
 
 > This is an ADDITION to the complete architecture lesson above, not a replacement. Reading/design: 20–25 minutes; hands-on: 35–60 minutes. **Environment:** Mac Docker Desktop is preferred for this multi-container lab; Ubuntu VM with Docker Engine and Compose plugin also works if resources permit. Use only a disposable lab project and loopback ports.
