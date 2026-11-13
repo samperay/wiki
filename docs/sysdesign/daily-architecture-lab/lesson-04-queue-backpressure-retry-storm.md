@@ -439,6 +439,21 @@ A worker calls Slack, times out at 5 seconds, and receives no provider message I
 
 ## Practical Labs
 
+### Architecture-to-code walkthrough — read before running the lab
+
+**Architecture being practiced:** Backpressure and worker capacity.
+
+**Trace one request through the exact local components:** Client → FastAPI job intake → Redis backlog → worker/once.
+
+**Design requirement to test:** When arrival rate exceeds processing rate, queue depth grows and recovery needs spare capacity.
+
+**Run in this order, stopping to inspect actual output after each step:** Queue jobs, increase worker processing delay, observe backlog and response duration, restore fast worker and drain.
+
+**What this small lab models—and what it does not:** The worker is manually triggered to make service-rate math visible. The lesson's production queue needs autonomous consumers, bounded admission and a retry/dead-letter policy.
+
+**Learning checkpoint:** Before reading the next step, predict the HTTP response, which component will fail, which evidence will identify it, and whether the proposed fix addresses the symptom or the underlying architectural weakness. Write your prediction and actual observation in the lab evidence section.
+
+
 **LEARN → DESIGN → BUILD → BREAK → INVESTIGATE → FIX → VALIDATE**
 
 > **Scope:** An additional runnable local exercise; the complete architecture lesson and original optional exercise above remain intact. Estimated hands-on time: 35–60 minutes. Run on **Mac Docker Desktop** (preferred for multi-container workloads) or **Ubuntu VM** with Docker Engine + Compose plugin installed. All services bind to loopback and use a dedicated Compose project. This is a disposable lab, never production.
