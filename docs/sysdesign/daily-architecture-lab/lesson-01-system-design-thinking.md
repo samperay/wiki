@@ -353,6 +353,21 @@ Reuse your Ubuntu/Nginx/Python environment if convenient; **do not alter existin
 
 ## Practical Labs
 
+### Architecture-to-code walkthrough — read before running the lab
+
+**Architecture being practiced:** URL shortener request path.
+
+**Trace one request through the exact local components:** Client → FastAPI redirect lookup → Redis cache → SQLite durable mapping.
+
+**Design requirement to test:** A cache outage should be distinguishable from a database outage; Redis is optional, SQLite is the source of truth.
+
+**Run in this order, stopping to inspect actual output after each step:** Create /links, read /r/{code} twice, then stop Redis. Observe database fallback, recover Redis and verify cache hits.
+
+**What this small lab models—and what it does not:** The lesson discusses large-scale URL-shortener architecture; the local app deliberately reduces the database to SQLite and uses one API process. Compare the real architecture's sharding, cache invalidation and hot-key concerns with this single-node experiment.
+
+**Learning checkpoint:** Before reading the next step, predict the HTTP response, which component will fail, which evidence will identify it, and whether the proposed fix addresses the symptom or the underlying architectural weakness. Write your prediction and actual observation in the lab evidence section.
+
+
 **LEARN → DESIGN → BUILD → BREAK → INVESTIGATE → FIX → VALIDATE**
 
 > **Scope:** An additional runnable local exercise; the complete architecture lesson and original optional exercise above remain intact. Estimated hands-on time: 35–60 minutes. Run on **Mac Docker Desktop** (preferred for multi-container workloads) or **Ubuntu VM** with Docker Engine + Compose plugin installed. All services bind to loopback and use a dedicated Compose project. This is a disposable lab, never production.
