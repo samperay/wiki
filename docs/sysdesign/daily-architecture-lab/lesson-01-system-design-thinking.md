@@ -351,6 +351,212 @@ Reuse your Ubuntu/Nginx/Python environment if convenient; **do not alter existin
 
 ---
 
+## Practical Labs
+
+**LEARN → DESIGN → BUILD → BREAK → INVESTIGATE → FIX → VALIDATE**
+
+> **Scope:** An additional runnable local exercise; the complete architecture lesson and original optional exercise above remain intact. Estimated hands-on time: 35–60 minutes. Run on **Mac Docker Desktop** (preferred for multi-container workloads) or **Ubuntu VM** with Docker Engine + Compose plugin installed. All services bind to loopback and use a dedicated Compose project. This is a disposable lab, never production.
+
+### LEARN — Experiment and expected failure
+
+**Scenario:** URL shortener hot-key and cache failure. Architect decision: fail open for redirects or fail closed? Explain impact of cache misses, database load, and hot keys.
+
+### DESIGN — Local topology
+
+```mermaid
+flowchart LR
+  T["Terminal / curl"] --> A["FastAPI :8000"]
+  A --> D["Redis container"]
+  A --> O["Container logs and metrics"]
+```
+
+Create a dedicated directory `architecture-lab-01`. Run all commands below from it on the **Mac terminal** or **Ubuntu VM shell**, whichever runs Docker. Do not run them inside another existing application container.
+
+```bash
+mkdir -p architecture-lab-01/app architecture-lab-01/tests
+cd architecture-lab-01
+touch app/__init__.py
+docker compose version
+```
+
+### BUILD — Complete minimal application
+
+Directory layout:
+
+```text
+architecture-lab-01/
+├── app/
+│   ├── __init__.py
+│   └── main.py
+├── tests/
+│   └── test_health.py
+├── requirements.txt
+├── Dockerfile
+└── compose.yaml
+```
+
+**File: `app/main.py`**
+
+```python
+import os, sqlite3, time
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
+from redis import Redis
+app = FastAPI()
+db_path = "/data/urls.db"
+cache = Redis(host="redis", port=6379, socket_connect_timeout=1, socket_timeout=1, decode_responses=True)
+class Link(BaseModel):
+    code: str
+    target: str
+@app.on_event("startup")
+def init():
+    with sqlite3.connect(db_path) as db:
+        db.execute("CREATE TABLE IF NOT EXISTS urls(code TEXT PRIMARY KEY, target TEXT)")
+@app.post("/links", status_code=201)
+def create(link: Link):
+    with sqlite3.connect(db_path) as db:
+        db.execute("INSERT OR REPLACE INTO urls VALUES (?,?)", (link.code,link.target))
+    try: cache.delete(link.code)
+    except Exception: pass
+    return link
+@app.get("/r/{code}")
+def resolve(code: str):
+    try:
+        cached=cache.get(code)
+        if cached: return {"target":cached,"source":"cache"}
+    except Exception: pass
+    with sqlite3.connect(db_path) as db:
+        row=db.execute("SELECT target FROM urls WHERE code=?", (code,)).fetchone()
+    if not row: raise HTTPException(404,"unknown code")
+    try: cache.setex(code,60,row[0])
+    except Exception: pass
+    return {"target":row[0],"source":"database"}
+@app.get("/health")
+def health(): return {"status":"ok"}
+```
+
+**File: `requirements.txt`**
+
+```text
+fastapi==0.115.12
+uvicorn==0.34.2
+redis==5.2.1
+httpx==0.28.1
+pytest==8.3.5
+```
+
+**File: `Dockerfile`**
+
+```dockerfile
+FROM python:3.11-slim
+WORKDIR /code
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+COPY app ./app
+CMD ["uvicorn","app.main:app","--host","0.0.0.0","--port","8000"]
+```
+
+**File: `compose.yaml`**
+
+```yaml
+services:
+  api:
+    build: .
+    ports: ["127.0.0.1:18001:8000"]
+    volumes: ["url_data:/data"]
+    depends_on: [redis]
+  redis:
+    image: redis:7-alpine
+volumes:
+  url_data: {}
+```
+
+**File: `tests/test_health.py`**
+
+```python
+def test_health():
+    from fastapi.testclient import TestClient
+    from app.main import app
+    assert TestClient(app).get("/health").status_code == 200
+```
+
+Start the lab and wait for the API:
+
+```bash
+docker compose -p archlab01 up -d --build
+docker compose -p archlab01 ps
+curl -fsS http://127.0.0.1:18001/health
+```
+
+**Expected:** the API reports `{"status":"ok"}`. On the first startup, the image build may take a few minutes. If a dependency is not ready, wait a few seconds and retry; inspect `docker compose ... logs` rather than assuming a design fault.
+
+### VALIDATE baseline — Prove healthy operation before injecting faults
+
+```bash
+curl -s -X POST http://127.0.0.1:18001/links -H 'Content-Type: application/json' -d '{"code":"sre","target":"https://example.org"}'
+curl -s http://127.0.0.1:18001/r/sre
+curl -s http://127.0.0.1:18001/r/sre
+```
+
+**Expected observations:** First lookup uses database; next uses cache. When Redis stops, requests still succeed via SQLite fallback (degraded latency); restart restores caching. Compare cold versus warm response timings.
+
+### BREAK — Introduce ONE controlled failure
+
+Only use the dedicated `archlab01` Compose project; do not target existing databases or application containers.
+
+```bash
+docker compose -p archlab01 stop redis
+curl -s http://127.0.0.1:18001/r/sre
+```
+
+### INVESTIGATE — Collect evidence before fixing
+
+```bash
+docker compose -p archlab01 ps
+docker compose -p archlab01 logs --tail=30 api redis
+```
+
+**Reasoning checklist:** Which component is unavailable or slow? Is the error a connection refusal, timeout, invalid schema, queue backlog, or application exception? Which log or metric proves your hypothesis? What observation would disprove it? Separate trigger, root cause, and design weakness.
+
+### FIX — Restore service and improve the design
+
+```bash
+docker compose -p archlab01 start redis
+curl -s http://127.0.0.1:18001/r/sre
+```
+
+**Design discussion:** Architect decision: fail open for redirects or fail closed? Explain impact of cache misses, database load, and hot keys.
+
+### VALIDATE — Automated checks and safe cleanup
+
+To run the included lightweight API health test **inside the disposable API container**:
+
+```bash
+docker compose -p archlab01 exec api python -m pytest -q tests || true
+```
+
+**Note:** the Dockerfile above intentionally copies only `app/` into the image; to execute the test, run it on the host in a Python virtual environment instead, or copy the test directory into your local Dockerfile before rebuilding. The `|| true` command is a demonstration only; do not interpret it as a passing test. Recommended host test:
+
+```bash
+python3 -m venv .venv
+. .venv/bin/activate
+pip install -r requirements.txt
+pytest -q tests
+deactivate
+```
+
+Expected: `1 passed` (the test checks only the API health endpoint; the manual failure and recovery commands are the scenario-specific integration validation). Record actual output, not an assumed result.
+
+Cleanup **only this lesson's project**. Use `down` to keep named data volumes; use `down -v` only if you intentionally want to delete this disposable lab's database state.
+
+```bash
+docker compose -p archlab01 down
+# OPTIONAL destructive cleanup of ONLY this lab's named volumes:
+# docker compose -p archlab01 down -v
+```
+
+**Your lab evidence:** baseline response: _..._; injected failure: _..._; commands and findings: _..._; root cause versus systemic weakness: _..._; recovery verification: _..._; improvement proposal: _..._.
+
 ## My Architecture Review — Solutions & Doubts
 
 > Complete these sections after reading. Keep your original reasoning, even when you later revise it, so your learning remains visible in Git history.
