@@ -466,6 +466,234 @@ Write a short architecture review: identify the exact boundary protected by the 
 - Hands-on implementation repository: [sre-devops-architecture-labs](https://github.com/samperay/sre-devops-architecture-labs). The async task processor project is conceptually related to queue workers; **this lesson does not claim that project already implements a transactional outbox**.
 - Suggested Wiki path: `docs/sysdesign/daily-architecture-lab/lesson-03-delivery-guarantees-idempotency-outbox.md`.
 
+## Practical Labs
+
+**LEARN → DESIGN → BUILD → BREAK → INVESTIGATE → FIX → VALIDATE**
+
+> **Scope:** An additional runnable local exercise; the complete architecture lesson and original optional exercise above remain intact. Estimated hands-on time: 35–60 minutes. Run on **Mac Docker Desktop** (preferred for multi-container workloads) or **Ubuntu VM** with Docker Engine + Compose plugin installed. All services bind to loopback and use a dedicated Compose project. This is a disposable lab, never production.
+
+### LEARN — Experiment and expected failure
+
+**Scenario:** Transactional outbox and duplicate dispatch. Contrast the lab's single-DB atomic write with a real HTTP notification provider: the external side effect cannot be rolled back with PostgreSQL.
+
+### DESIGN — Local topology
+
+```mermaid
+flowchart LR
+  T["Terminal / curl"] --> A["FastAPI :8000"]
+  A --> D["PostgreSQL container"]
+  A --> O["Container logs and metrics"]
+```
+
+Create a dedicated directory `architecture-lab-03`. Run all commands below from it on the **Mac terminal** or **Ubuntu VM shell**, whichever runs Docker. Do not run them inside another existing application container.
+
+```bash
+mkdir -p architecture-lab-03/app architecture-lab-03/tests
+cd architecture-lab-03
+touch app/__init__.py
+docker compose version
+```
+
+### BUILD — Complete minimal application
+
+Directory layout:
+
+```text
+architecture-lab-03/
+├── app/
+│   ├── __init__.py
+│   └── main.py
+├── tests/
+│   └── test_health.py
+├── requirements.txt
+├── Dockerfile
+└── compose.yaml
+```
+
+**File: `app/main.py`**
+
+```python
+import os
+import psycopg
+from fastapi import FastAPI
+from pydantic import BaseModel
+app=FastAPI()
+dsn=os.environ["DATABASE_URL"]
+class Event(BaseModel):
+    id: str
+    payload: str
+def connect(): return psycopg.connect(dsn)
+@app.on_event("startup")
+def init():
+    with connect() as db:
+        db.execute("CREATE TABLE IF NOT EXISTS events(id TEXT PRIMARY KEY,payload TEXT NOT NULL)")
+        db.execute("CREATE TABLE IF NOT EXISTS outbox(id TEXT PRIMARY KEY,payload TEXT NOT NULL, sent BOOLEAN NOT NULL DEFAULT FALSE)")
+        db.execute("CREATE TABLE IF NOT EXISTS deliveries(id TEXT PRIMARY KEY,payload TEXT NOT NULL)")
+@app.post("/events",status_code=202)
+def submit(e:Event):
+    with connect() as db:
+        with db.transaction():
+            db.execute("INSERT INTO events VALUES (%s,%s) ON CONFLICT DO NOTHING",(e.id,e.payload))
+            db.execute("INSERT INTO outbox(id,payload) VALUES (%s,%s) ON CONFLICT DO NOTHING",(e.id,e.payload))
+    return {"accepted":e.id}
+@app.post("/dispatch")
+def dispatch():
+    with connect() as db:
+        with db.transaction():
+            rows=db.execute("SELECT id,payload FROM outbox WHERE sent=FALSE ORDER BY id FOR UPDATE SKIP LOCKED").fetchall()
+            for eid,payload in rows:
+                db.execute("INSERT INTO deliveries VALUES (%s,%s) ON CONFLICT DO NOTHING",(eid,payload))
+                if os.getenv("FAIL_AFTER_DELIVERY")=="1":
+                    raise RuntimeError("simulated crash before transaction commit")
+                db.execute("UPDATE outbox SET sent=TRUE WHERE id=%s",(eid,))
+    return {"dispatched":len(rows)}
+@app.get("/stats")
+def stats():
+    with connect() as db:
+        return {"pending":db.execute("SELECT count(*) FROM outbox WHERE NOT sent").fetchone()[0],
+                "delivered":db.execute("SELECT count(*) FROM deliveries").fetchone()[0]}
+@app.get("/health")
+def health(): return {"status":"ok"}
+```
+
+**File: `requirements.txt`**
+
+```text
+fastapi==0.115.12
+uvicorn==0.34.2
+psycopg[binary]==3.2.6
+httpx==0.28.1
+pytest==8.3.5
+```
+
+**File: `Dockerfile`**
+
+```dockerfile
+FROM python:3.11-slim
+WORKDIR /code
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+COPY app ./app
+CMD ["uvicorn","app.main:app","--host","0.0.0.0","--port","8000"]
+```
+
+**File: `compose.yaml`**
+
+```yaml
+services:
+  api:
+    build: .
+    ports: ["127.0.0.1:18003:8000"]
+    environment:
+      DATABASE_URL: postgresql://lab:lab@db:5432/lab
+      FAIL_AFTER_DELIVERY: "${FAIL_AFTER_DELIVERY:-0}"
+    depends_on:
+      db: {condition: service_healthy}
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: lab
+      POSTGRES_PASSWORD: lab
+      POSTGRES_DB: lab
+    healthcheck:
+      test: ["CMD-SHELL","pg_isready -U lab -d lab"]
+      interval: 2s
+      retries: 20
+    volumes: ["pgdata:/var/lib/postgresql/data"]
+volumes:
+  pgdata: {}
+```
+
+**File: `tests/test_health.py`**
+
+```python
+def test_health():
+    from fastapi.testclient import TestClient
+    from app.main import app
+    assert TestClient(app).get("/health").status_code == 200
+```
+
+Start the lab and wait for the API:
+
+```bash
+docker compose -p archlab03 up -d --build
+docker compose -p archlab03 ps
+curl -fsS http://127.0.0.1:18003/health
+```
+
+**Expected:** the API reports `{"status":"ok"}`. On the first startup, the image build may take a few minutes. If a dependency is not ready, wait a few seconds and retry; inspect `docker compose ... logs` rather than assuming a design fault.
+
+### VALIDATE baseline — Prove healthy operation before injecting faults
+
+```bash
+curl -s -X POST http://127.0.0.1:18003/events -H 'Content-Type: application/json' -d '{"id":"evt1","payload":"incident opened"}'
+curl -s -X POST http://127.0.0.1:18003/dispatch
+curl -s http://127.0.0.1:18003/stats
+```
+
+**Expected observations:** Failure causes HTTP 500 and a rolled-back database transaction; evt2 stays pending. Restoring dispatch produces exactly one database delivery row. Real external delivery cannot share this DB transaction, so duplicate-safe consumer logic remains essential.
+
+### BREAK — Introduce ONE controlled failure
+
+Only use the dedicated `archlab03` Compose project; do not target existing databases or application containers.
+
+```bash
+FAIL_AFTER_DELIVERY=1 docker compose -p archlab03 up -d --force-recreate api
+curl -s -X POST http://127.0.0.1:18003/events -H 'Content-Type: application/json' -d '{"id":"evt2","payload":"incident updated"}'
+curl -i -X POST http://127.0.0.1:18003/dispatch
+```
+
+### INVESTIGATE — Collect evidence before fixing
+
+```bash
+docker compose -p archlab03 logs --tail=35 api
+docker compose -p archlab03 exec db psql -U lab -d lab -c 'SELECT id,sent FROM outbox ORDER BY id'
+curl -s http://127.0.0.1:18003/stats
+```
+
+**Reasoning checklist:** Which component is unavailable or slow? Is the error a connection refusal, timeout, invalid schema, queue backlog, or application exception? Which log or metric proves your hypothesis? What observation would disprove it? Separate trigger, root cause, and design weakness.
+
+### FIX — Restore service and improve the design
+
+```bash
+FAIL_AFTER_DELIVERY=0 docker compose -p archlab03 up -d --force-recreate api
+curl -s -X POST http://127.0.0.1:18003/dispatch
+curl -s -X POST http://127.0.0.1:18003/dispatch
+curl -s http://127.0.0.1:18003/stats
+```
+
+**Design discussion:** Contrast the lab's single-DB atomic write with a real HTTP notification provider: the external side effect cannot be rolled back with PostgreSQL.
+
+### VALIDATE — Automated checks and safe cleanup
+
+To run the included lightweight API health test **inside the disposable API container**:
+
+```bash
+docker compose -p archlab03 exec api python -m pytest -q tests || true
+```
+
+**Note:** the Dockerfile above intentionally copies only `app/` into the image; to execute the test, run it on the host in a Python virtual environment instead, or copy the test directory into your local Dockerfile before rebuilding. The `|| true` command is a demonstration only; do not interpret it as a passing test. Recommended host test:
+
+```bash
+python3 -m venv .venv
+. .venv/bin/activate
+pip install -r requirements.txt
+pytest -q tests
+deactivate
+```
+
+Expected: `1 passed` (the test checks only the API health endpoint; the manual failure and recovery commands are the scenario-specific integration validation). Record actual output, not an assumed result.
+
+Cleanup **only this lesson's project**. Use `down` to keep named data volumes; use `down -v` only if you intentionally want to delete this disposable lab's database state.
+
+```bash
+docker compose -p archlab03 down
+# OPTIONAL destructive cleanup of ONLY this lab's named volumes:
+# docker compose -p archlab03 down -v
+```
+
+**Your lab evidence:** baseline response: _..._; injected failure: _..._; commands and findings: _..._; root cause versus systemic weakness: _..._; recovery verification: _..._; improvement proposal: _..._.
+
 ## My Architecture Review — Solutions & Doubts
 
 ### 1. My Understanding
