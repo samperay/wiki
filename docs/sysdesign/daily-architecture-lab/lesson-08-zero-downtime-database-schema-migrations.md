@@ -386,6 +386,21 @@ These are optional background references, not prerequisites or claims of complet
 
 ## Practical Labs
 
+### Architecture-to-code walkthrough — read before running the lab
+
+**Architecture being practiced:** Rolling deployment schema compatibility.
+
+**Trace one request through the exact local components:** Client → FastAPI v1 → PostgreSQL incidents(owner).
+
+**Design requirement to test:** Destructive schema changes must not break still-running application versions.
+
+**Run in this order, stopping to inspect actual output after each step:** Create incident, read it, drop owner only in disposable DB, observe SQLSTATE 42703, restore compatible schema and read again.
+
+**What this small lab models—and what it does not:** The restore command adds a default owner value and cannot recover deleted values. Production requires backup, expand/migrate/contract, mixed-version tests and rollback-window validation.
+
+**Learning checkpoint:** Before reading the next step, predict the HTTP response, which component will fail, which evidence will identify it, and whether the proposed fix addresses the symptom or the underlying architectural weakness. Write your prediction and actual observation in the lab evidence section.
+
+
 **LEARN → DESIGN → BUILD → BREAK → INVESTIGATE → FIX → VALIDATE**
 
 > This is an ADDITION to the complete architecture lesson above, not a replacement. Reading/design: 20–25 minutes; hands-on: 35–60 minutes. **Environment:** Mac Docker Desktop is preferred for this multi-container lab; Ubuntu VM with Docker Engine and Compose plugin also works if resources permit. Use only a disposable lab project and loopback ports.
