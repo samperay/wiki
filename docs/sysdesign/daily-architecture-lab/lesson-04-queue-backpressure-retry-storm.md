@@ -437,6 +437,204 @@ A worker calls Slack, times out at 5 seconds, and receives no provider message I
 
 ---
 
+## Practical Labs
+
+**LEARN → DESIGN → BUILD → BREAK → INVESTIGATE → FIX → VALIDATE**
+
+> **Scope:** An additional runnable local exercise; the complete architecture lesson and original optional exercise above remain intact. Estimated hands-on time: 35–60 minutes. Run on **Mac Docker Desktop** (preferred for multi-container workloads) or **Ubuntu VM** with Docker Engine + Compose plugin installed. All services bind to loopback and use a dedicated Compose project. This is a disposable lab, never production.
+
+### LEARN — Experiment and expected failure
+
+**Scenario:** Queue backlog and worker capacity. Calculate arrival rate versus service rate and decide when to apply bounded queues, 429 admission control, and dead-letter policies.
+
+### DESIGN — Local topology
+
+```mermaid
+flowchart LR
+  T["Terminal / curl"] --> A["FastAPI :8000"]
+  A --> D["Redis container"]
+  A --> O["Container logs and metrics"]
+```
+
+Create a dedicated directory `architecture-lab-04`. Run all commands below from it on the **Mac terminal** or **Ubuntu VM shell**, whichever runs Docker. Do not run them inside another existing application container.
+
+```bash
+mkdir -p architecture-lab-04/app architecture-lab-04/tests
+cd architecture-lab-04
+touch app/__init__.py
+docker compose version
+```
+
+### BUILD — Complete minimal application
+
+Directory layout:
+
+```text
+architecture-lab-04/
+├── app/
+│   ├── __init__.py
+│   └── main.py
+├── tests/
+│   └── test_health.py
+├── requirements.txt
+├── Dockerfile
+└── compose.yaml
+```
+
+**File: `app/main.py`**
+
+```python
+import os,time
+from fastapi import FastAPI,HTTPException
+from redis import Redis
+from pydantic import BaseModel
+app=FastAPI()
+r=Redis(host="redis",decode_responses=True)
+class Job(BaseModel):
+    id: str
+@app.post("/jobs",status_code=202)
+def submit(j:Job):
+    r.rpush("jobs",j.id)
+    return {"queued":j.id}
+@app.post("/worker/once")
+def work():
+    item=r.lpop("jobs")
+    if not item: return {"status":"empty"}
+    delay=float(os.getenv("WORK_DELAY","0.05"))
+    time.sleep(delay)
+    r.incr("completed")
+    return {"completed":item,"seconds":delay}
+@app.get("/stats")
+def stats():return {"backlog":r.llen("jobs"),"completed":int(r.get("completed") or 0)}
+@app.get("/health")
+def health():return {"status":"ok"}
+```
+
+**File: `requirements.txt`**
+
+```text
+fastapi==0.115.12
+uvicorn==0.34.2
+redis==5.2.1
+httpx==0.28.1
+pytest==8.3.5
+```
+
+**File: `Dockerfile`**
+
+```dockerfile
+FROM python:3.11-slim
+WORKDIR /code
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+COPY app ./app
+CMD ["uvicorn","app.main:app","--host","0.0.0.0","--port","8000"]
+```
+
+**File: `compose.yaml`**
+
+```yaml
+services:
+  api:
+    build: .
+    ports: ["127.0.0.1:18004:8000"]
+    environment:
+      WORK_DELAY: "${WORK_DELAY:-0.05}"
+    depends_on: [redis]
+  redis:
+    image: redis:7-alpine
+```
+
+**File: `tests/test_health.py`**
+
+```python
+def test_health():
+    from fastapi.testclient import TestClient
+    from app.main import app
+    assert TestClient(app).get("/health").status_code == 200
+```
+
+Start the lab and wait for the API:
+
+```bash
+docker compose -p archlab04 up -d --build
+docker compose -p archlab04 ps
+curl -fsS http://127.0.0.1:18004/health
+```
+
+**Expected:** the API reports `{"status":"ok"}`. On the first startup, the image build may take a few minutes. If a dependency is not ready, wait a few seconds and retry; inspect `docker compose ... logs` rather than assuming a design fault.
+
+### VALIDATE baseline — Prove healthy operation before injecting faults
+
+```bash
+for i in 1 2 3; do curl -s -X POST http://127.0.0.1:18004/jobs -H 'Content-Type: application/json' -d "{\"id\":\"job$i\"}"; done
+curl -s -X POST http://127.0.0.1:18004/worker/once
+curl -s http://127.0.0.1:18004/stats
+```
+
+**Expected observations:** Backlog increases while production exceeds service rate; slow worker call takes ~2 seconds. After reducing service time, backlog drains. This manual worker models capacity, not an autonomous production consumer.
+
+### BREAK — Introduce ONE controlled failure
+
+Only use the dedicated `archlab04` Compose project; do not target existing databases or application containers.
+
+```bash
+WORK_DELAY=2 docker compose -p archlab04 up -d --force-recreate api
+for i in $(seq 4 20); do curl -s -o /dev/null -X POST http://127.0.0.1:18004/jobs -H 'Content-Type: application/json' -d "{\"id\":\"job$i\"}"; done
+curl -s http://127.0.0.1:18004/stats
+time curl -s -X POST http://127.0.0.1:18004/worker/once
+```
+
+### INVESTIGATE — Collect evidence before fixing
+
+```bash
+docker compose -p archlab04 ps
+docker compose -p archlab04 logs --tail=25 api
+curl -s http://127.0.0.1:18004/stats
+```
+
+**Reasoning checklist:** Which component is unavailable or slow? Is the error a connection refusal, timeout, invalid schema, queue backlog, or application exception? Which log or metric proves your hypothesis? What observation would disprove it? Separate trigger, root cause, and design weakness.
+
+### FIX — Restore service and improve the design
+
+```bash
+WORK_DELAY=0.05 docker compose -p archlab04 up -d --force-recreate api
+for i in $(seq 1 25); do curl -s -o /dev/null -X POST http://127.0.0.1:18004/worker/once; done
+curl -s http://127.0.0.1:18004/stats
+```
+
+**Design discussion:** Calculate arrival rate versus service rate and decide when to apply bounded queues, 429 admission control, and dead-letter policies.
+
+### VALIDATE — Automated checks and safe cleanup
+
+To run the included lightweight API health test **inside the disposable API container**:
+
+```bash
+docker compose -p archlab04 exec api python -m pytest -q tests || true
+```
+
+**Note:** the Dockerfile above intentionally copies only `app/` into the image; to execute the test, run it on the host in a Python virtual environment instead, or copy the test directory into your local Dockerfile before rebuilding. The `|| true` command is a demonstration only; do not interpret it as a passing test. Recommended host test:
+
+```bash
+python3 -m venv .venv
+. .venv/bin/activate
+pip install -r requirements.txt
+pytest -q tests
+deactivate
+```
+
+Expected: `1 passed` (the test checks only the API health endpoint; the manual failure and recovery commands are the scenario-specific integration validation). Record actual output, not an assumed result.
+
+Cleanup **only this lesson's project**. Use `down` to keep named data volumes; use `down -v` only if you intentionally want to delete this disposable lab's database state.
+
+```bash
+docker compose -p archlab04 down
+# OPTIONAL destructive cleanup of ONLY this lab's named volumes:
+# docker compose -p archlab04 down -v
+```
+
+**Your lab evidence:** baseline response: _..._; injected failure: _..._; commands and findings: _..._; root cause versus systemic weakness: _..._; recovery verification: _..._; improvement proposal: _..._.
+
 ## My Architecture Review — Solutions & Doubts
 
 ### 1. My Understanding
