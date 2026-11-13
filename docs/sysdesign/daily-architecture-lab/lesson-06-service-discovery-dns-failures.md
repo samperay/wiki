@@ -414,6 +414,192 @@ Do not look for an answer key; write assumptions, evidence, tradeoffs, and what 
 
 ---
 
+## Practical Labs
+
+**LEARN → DESIGN → BUILD → BREAK → INVESTIGATE → FIX → VALIDATE**
+
+> This is an ADDITION to the complete architecture lesson above, not a replacement. Reading/design: 20–25 minutes; hands-on: 35–60 minutes. **Environment:** Mac Docker Desktop is preferred for this multi-container lab; Ubuntu VM with Docker Engine and Compose plugin also works if resources permit. Use only a disposable lab project and loopback ports.
+
+### LEARN — The experiment
+
+**Scenario:** Service discovery and unavailable backend. Compare DNS lookup, TCP connection, and HTTP application health; design a follow-on experiment with endpoint recreation and a client holding stale connections.
+
+### DESIGN — Reproduce the architecture locally
+
+```mermaid
+flowchart LR
+  C["Terminal / curl"] --> A["FastAPI :8000"]
+  A --> B["Upstream FastAPI container"]
+  A --> L["Application logs"]
+```
+
+Create and enter a dedicated folder in the **Mac terminal or Ubuntu VM shell where Docker runs**:
+
+```bash
+mkdir -p architecture-lab-06/app architecture-lab-06/tests
+cd architecture-lab-06
+touch app/__init__.py
+docker compose version
+```
+
+### BUILD — End-to-end runnable application
+
+```text
+architecture-lab-06/
+├── app/
+│   ├── __init__.py
+│   ├── main.py
+│   └── upstream.py
+├── tests/
+│   └── test_health.py
+├── requirements.txt
+├── Dockerfile
+└── compose.yaml
+```
+
+**File: `app/main.py`**
+
+```python
+import socket
+import httpx
+from fastapi import FastAPI,HTTPException
+app=FastAPI()
+@app.get("/health")
+def health():return {"status":"ok"}
+@app.get("/resolve")
+def resolve():
+    try:
+        addresses=socket.getaddrinfo("upstream",8000,type=socket.SOCK_STREAM)
+        return {"addresses":sorted(set(a[4][0] for a in addresses))}
+    except socket.gaierror as exc:
+        raise HTTPException(503,f"DNS lookup failed: {exc}")
+@app.get("/proxy")
+def proxy():
+    try:
+        with httpx.Client(timeout=1.0) as c:
+            response=c.get("http://upstream:8000/work")
+            response.raise_for_status()
+            return response.json()
+    except httpx.HTTPError as exc:
+        raise HTTPException(503,f"backend unreachable: {type(exc).__name__}")
+```
+
+**File: `app/upstream.py`**
+
+```python
+from fastapi import FastAPI
+app=FastAPI()
+@app.get("/work")
+def work():return {"upstream":"healthy"}
+```
+
+**File: `requirements.txt`**
+
+```text
+fastapi==0.115.12
+uvicorn==0.34.2
+httpx==0.28.1
+pytest==8.3.5
+httpx==0.28.1
+```
+
+**File: `Dockerfile`**
+
+```dockerfile
+FROM python:3.11-slim
+WORKDIR /code
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+COPY app ./app
+COPY tests ./tests
+CMD ["uvicorn","app.main:app","--host","0.0.0.0","--port","8000"]
+```
+
+**File: `compose.yaml`**
+
+```yaml
+services:
+  api:
+    build: .
+    ports: ["127.0.0.1:18006:8000"]
+    depends_on: [upstream]
+  upstream:
+    build: .
+    command: ["uvicorn","app.upstream:app","--host","0.0.0.0","--port","8000"]
+```
+
+**File: `tests/test_health.py`**
+
+```python
+from fastapi.testclient import TestClient
+from app.main import app
+def test_health():
+    assert TestClient(app).get("/health").status_code == 200
+```
+
+Start containers and establish a baseline:
+
+```bash
+docker compose -p archlab06 up -d --build
+docker compose -p archlab06 ps
+curl -fsS http://127.0.0.1:18006/health
+docker compose -p archlab06 exec api python -m pytest -q tests
+```
+
+**Expected:** API health is 200, and `1 passed`. If a service needs time to initialize, wait and retry; inspect logs before troubleshooting.
+
+### VALIDATE baseline — Healthy behavior
+
+```bash
+curl -s http://127.0.0.1:18006/resolve
+curl -i http://127.0.0.1:18006/proxy
+```
+
+### BREAK — Controlled fault injection
+
+Run only against `archlab06`, never an existing database or unrelated container.
+
+```bash
+docker compose -p archlab06 stop upstream
+curl -i http://127.0.0.1:18006/proxy
+curl -s http://127.0.0.1:18006/resolve
+```
+
+### INVESTIGATE — Gather evidence and reject alternative hypotheses
+
+```bash
+docker compose -p archlab06 ps
+docker compose -p archlab06 logs --tail=30 api upstream
+docker compose -p archlab06 exec api python -c 'import socket; print(socket.getaddrinfo("upstream",8000))'
+```
+
+**Expected behavior:** Service name resolution may still succeed while the backend is stopped; connectivity fails independently of DNS. This lab demonstrates discovery versus availability, NOT a real stale DNS-cache defect.
+
+Record response codes, exact error messages, timing, container state, and relevant DB/network evidence. Which evidence supports your hypothesis? What would falsify it? Distinguish the incident trigger, root cause, and systemic design weakness.
+
+### FIX — Restore service and propose durable architecture
+
+```bash
+docker compose -p archlab06 start upstream
+curl -i http://127.0.0.1:18006/proxy
+```
+
+**Architect decision:** Compare DNS lookup, TCP connection, and HTTP application health; design a follow-on experiment with endpoint recreation and a client holding stale connections.
+
+### VALIDATE — Prove recovery and clean up safely
+
+```bash
+curl -fsS http://127.0.0.1:18006/health
+docker compose -p archlab06 exec api python -m pytest -q tests
+docker compose -p archlab06 down
+# OPTIONAL, destructive to this lab's data ONLY:
+# docker compose -p archlab06 down -v
+```
+
+The health test is a smoke test, not a full integration suite; also verify the scenario-specific endpoint after repair. `down` leaves named volumes intact. Only use `down -v` if you deliberately want to remove this project's data.
+
+**Lab evidence to fill:** baseline _..._; fault and response _..._; investigation commands and findings _..._; root cause _..._; durable improvement _..._; verified recovery _..._.
+
 ## My Architecture Review — Solutions & Doubts
 
 ### 1. My Understanding
