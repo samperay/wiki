@@ -499,6 +499,7 @@ WORKDIR /code
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 COPY app ./app
+COPY tests ./tests
 CMD ["uvicorn","app.main:app","--host","0.0.0.0","--port","8000"]
 ```
 
@@ -576,29 +577,19 @@ curl -s http://127.0.0.1:18002/stats
 
 ### VALIDATE — Automated checks and safe cleanup
 
-To run the included lightweight API health test **inside the disposable API container**:
+Run the included API smoke test in the dedicated container:
 
 ```bash
-docker compose -p archlab02 exec api python -m pytest -q tests || true
+docker compose -p archlab02 exec api python -m pytest -q tests
 ```
 
-**Note:** the Dockerfile above intentionally copies only `app/` into the image; to execute the test, run it on the host in a Python virtual environment instead, or copy the test directory into your local Dockerfile before rebuilding. The `|| true` command is a demonstration only; do not interpret it as a passing test. Recommended host test:
+**Expected:** `1 passed`. This tests only the health endpoint, not the full failure scenario; confirm the scenario-specific response and recovery above as well.
 
-```bash
-python3 -m venv .venv
-. .venv/bin/activate
-pip install -r requirements.txt
-pytest -q tests
-deactivate
-```
-
-Expected: `1 passed` (the test checks only the API health endpoint; the manual failure and recovery commands are the scenario-specific integration validation). Record actual output, not an assumed result.
-
-Cleanup **only this lesson's project**. Use `down` to keep named data volumes; use `down -v` only if you intentionally want to delete this disposable lab's database state.
+Cleanup **only this lesson's project**. `down` preserves named volumes. `down -v` is optional and permanently removes only this lab's data volumes.
 
 ```bash
 docker compose -p archlab02 down
-# OPTIONAL destructive cleanup of ONLY this lab's named volumes:
+# OPTIONAL destructive cleanup of this disposable lab's volumes:
 # docker compose -p archlab02 down -v
 ```
 
