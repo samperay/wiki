@@ -2,7 +2,7 @@
 
 A growing **20–25-minute guided system-design and production SRE troubleshooting journal** for an experienced Python/Linux DevOps/SRE engineer progressing toward system and platform architecture.
 
-> **Publication status:** Lessons 01–07 are available in this Wiki. A published lesson is not necessarily read, practiced, or mentor-reviewed.
+> **Publication status:** Lessons 01–08 are available in this Wiki. A published lesson is not necessarily read, practiced, or mentor-reviewed.
 
 ## Learning method
 
@@ -21,6 +21,7 @@ Each lesson starts with design first principles and includes a realistic problem
 | 05 | API Gateway Cascading Failures & Circuit Breakers | [Read Lesson 05](lesson-05-api-gateway-cascading-failures-circuit-breakers.md) |
 | 06 | Service Discovery, DNS Caching & Partial Outages | [Read Lesson 06](lesson-06-service-discovery-dns-failures.md) |
 | 07 | Database Connection Pool Exhaustion & Admission Control | [Read Lesson 07](lesson-07-database-connection-pool-exhaustion.md) |
+| 08 | Zero-Downtime Database Schema Migrations & Deployment Compatibility | [Read Lesson 08](lesson-08-zero-downtime-database-schema-migrations.md) |
 
 [View the learning progress tracker](learning.md){ .md-button }
 
@@ -46,6 +47,7 @@ Each lesson starts with design first principles and includes a realistic problem
 - **03–04 — Messaging resilience:** Outbox, idempotency, delivery guarantees, backpressure, and recovery capacity.
 - **05–06 — Synchronous service reliability:** Timeouts, circuit breakers, dependency isolation, service discovery, and DNS caching.
 - **07 — Data-layer admission and capacity:** PostgreSQL connection budgets, pool checkout, locks, and safe scaling.
+- **08 — Safe schema evolution:** Expand–migrate–contract, mixed-version compatibility, backfill and rollback.
 - **Future lessons:** Progress to deeper distributed-system and platform design scenarios without repeating completed topics.
 
 ## Related knowledge and practical labs
