@@ -144,7 +144,7 @@ nav:
     - Case Studies:
       - URL Shortener: sysdesign/app/url_shortner.md
     - Daily Architecture Lab:
-      - Overview: sysdesign/daily-architecture-lab/index.md
+      - Overview & Practical Labs: sysdesign/daily-architecture-lab/index.md
       - Learning Progress: sysdesign/daily-architecture-lab/learning.md
       - 'Lesson 01 — System Design Thinking': sysdesign/daily-architecture-lab/lesson-01-system-design-thinking.md
       - 'Lesson 02 — Reliable Notification System': sysdesign/daily-architecture-lab/lesson-02-reliable-notification-system.md
