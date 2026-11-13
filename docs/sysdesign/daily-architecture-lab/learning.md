@@ -15,6 +15,7 @@
 | [05](lesson-05-api-gateway-cascading-failures-circuit-breakers.md) | API Gateway Cascading Failures & Circuit Breakers | Yes | Not confirmed | Not confirmed | Pending | Not confirmed |
 | [06](lesson-06-service-discovery-dns-failures.md) | Service Discovery, DNS Caching & Partial Outages | Yes | Not confirmed | Not confirmed | Pending | Not confirmed |
 | [07](lesson-07-database-connection-pool-exhaustion.md) | Database Connection Pool Exhaustion & Admission Control | Yes | Not confirmed | Not confirmed | Pending | Not confirmed |
+| [08](lesson-08-zero-downtime-database-schema-migrations.md) | Zero-Downtime Database Schema Migrations & Deployment Compatibility | Yes | Not confirmed | Not confirmed | Pending | Not confirmed |
 
 **Status note (12 November 2026):** All seven Markdown files were verified on the `master` branch. Completion and review statuses remain unconfirmed until you record evidence. “Not confirmed” does not mean you have not done the work.
 
@@ -28,7 +29,7 @@
 
 ## Current learning focus
 
-- **Latest published:** [Lesson 07 — Database Connection Pool Exhaustion & Admission Control](lesson-07-database-connection-pool-exhaustion.md).
+- **Latest published:** [Lesson 08 — Zero-Downtime Database Schema Migrations](lesson-08-zero-downtime-database-schema-migrations.md).
 - **Suggested next step:** Work through Lesson 07's global connection-budget calculation and distinguish pool checkout wait from SQL execution and lock wait.
 - **Upcoming:** New production architecture scenarios will extend the progression without repeating prior lessons.
 
