@@ -351,6 +351,194 @@ HTTP 5xx is 9%, DB CPU 40%, session utilization 95%, and lock waits 800 ms. One 
 
 ---
 
+## Practical Labs
+
+**LEARN → DESIGN → BUILD → BREAK → INVESTIGATE → FIX → VALIDATE**
+
+> This is an ADDITION to the complete architecture lesson above, not a replacement. Reading/design: 20–25 minutes; hands-on: 35–60 minutes. **Environment:** Mac Docker Desktop is preferred for this multi-container lab; Ubuntu VM with Docker Engine and Compose plugin also works if resources permit. Use only a disposable lab project and loopback ports.
+
+### LEARN — The experiment
+
+**Scenario:** PostgreSQL connection limit and pool checkout. Compute aggregate connection budgets across replicas; distinguish pool checkout timeout from database connection refusal and query execution latency.
+
+### DESIGN — Reproduce the architecture locally
+
+```mermaid
+flowchart LR
+  C["Terminal / curl"] --> A["FastAPI :8000"]
+  A --> B["PostgreSQL container"]
+  A --> L["Application logs"]
+```
+
+Create and enter a dedicated folder in the **Mac terminal or Ubuntu VM shell where Docker runs**:
+
+```bash
+mkdir -p architecture-lab-07/app architecture-lab-07/tests
+cd architecture-lab-07
+touch app/__init__.py
+docker compose version
+```
+
+### BUILD — End-to-end runnable application
+
+```text
+architecture-lab-07/
+├── app/
+│   ├── __init__.py
+│   ├── main.py
+├── tests/
+│   └── test_health.py
+├── requirements.txt
+├── Dockerfile
+└── compose.yaml
+```
+
+**File: `app/main.py`**
+
+```python
+import os,time
+from fastapi import FastAPI,HTTPException
+from sqlalchemy import create_engine,text
+from sqlalchemy.exc import SQLAlchemyError
+app=FastAPI()
+engine=create_engine(os.environ["DATABASE_URL"],pool_size=2,max_overflow=0,pool_timeout=1,pool_pre_ping=True)
+@app.get("/health")
+def health():return {"status":"ok"}
+@app.get("/db")
+def db():
+    try:
+        with engine.connect() as c:
+            return {"value":c.execute(text("SELECT 1")).scalar_one()}
+    except SQLAlchemyError as e:
+        raise HTTPException(503,type(e).__name__)
+@app.get("/hold")
+def hold(seconds:float=3):
+    if seconds<0 or seconds>10:raise HTTPException(400,"seconds must be 0..10")
+    try:
+        with engine.connect() as c:
+            time.sleep(seconds)
+            return {"held_seconds":seconds}
+    except SQLAlchemyError as e:
+        raise HTTPException(503,type(e).__name__)
+```
+
+**File: `requirements.txt`**
+
+```text
+fastapi==0.115.12
+uvicorn==0.34.2
+sqlalchemy==2.0.40
+psycopg[binary]==3.2.6
+pytest==8.3.5
+httpx==0.28.1
+```
+
+**File: `Dockerfile`**
+
+```dockerfile
+FROM python:3.11-slim
+WORKDIR /code
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+COPY app ./app
+COPY tests ./tests
+CMD ["uvicorn","app.main:app","--host","0.0.0.0","--port","8000"]
+```
+
+**File: `compose.yaml`**
+
+```yaml
+services:
+  api:
+    build: .
+    ports: ["127.0.0.1:18007:8000"]
+    environment:
+      DATABASE_URL: postgresql+psycopg://lab:lab@db:5432/lab
+    depends_on:
+      db: {condition: service_healthy}
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: lab
+      POSTGRES_PASSWORD: lab
+      POSTGRES_DB: lab
+    healthcheck:
+      test: ["CMD-SHELL","pg_isready -U lab -d lab"]
+      interval: 2s
+      retries: 20
+```
+
+**File: `tests/test_health.py`**
+
+```python
+from fastapi.testclient import TestClient
+from app.main import app
+def test_health():
+    assert TestClient(app).get("/health").status_code == 200
+```
+
+Start containers and establish a baseline:
+
+```bash
+docker compose -p archlab07 up -d --build
+docker compose -p archlab07 ps
+curl -fsS http://127.0.0.1:18007/health
+docker compose -p archlab07 exec api python -m pytest -q tests
+```
+
+**Expected:** API health is 200, and `1 passed`. If a service needs time to initialize, wait and retry; inspect logs before troubleshooting.
+
+### VALIDATE baseline — Healthy behavior
+
+```bash
+curl -i http://127.0.0.1:18007/db
+```
+
+### BREAK — Controlled fault injection
+
+Run only against `archlab07`, never an existing database or unrelated container.
+
+```bash
+for i in 1 2 3 4; do curl -s -o /tmp/archlab07-$i -w "request $i: %{http_code}\n" "http://127.0.0.1:18007/hold?seconds=4" & done
+wait
+cat /tmp/archlab07-{1,2,3,4}
+```
+
+### INVESTIGATE — Gather evidence and reject alternative hypotheses
+
+```bash
+docker compose -p archlab07 logs --tail=40 api
+docker compose -p archlab07 exec db psql -U lab -d lab -c 'SELECT state,count(*) FROM pg_stat_activity GROUP BY state'
+```
+
+**Expected behavior:** Two concurrent requests hold the two SQLAlchemy pool connections; other concurrent requests can return HTTP 503 with TimeoutError after 1 second. Database CPU can remain low. This models pool exhaustion, not necessarily PostgreSQL max_connections exhaustion.
+
+Record response codes, exact error messages, timing, container state, and relevant DB/network evidence. Which evidence supports your hypothesis? What would falsify it? Distinguish the incident trigger, root cause, and systemic design weakness.
+
+### FIX — Restore service and propose durable architecture
+
+```bash
+curl -i http://127.0.0.1:18007/db
+docker compose -p archlab07 restart api
+curl -i http://127.0.0.1:18007/db
+```
+
+**Architect decision:** Compute aggregate connection budgets across replicas; distinguish pool checkout timeout from database connection refusal and query execution latency.
+
+### VALIDATE — Prove recovery and clean up safely
+
+```bash
+curl -fsS http://127.0.0.1:18007/health
+docker compose -p archlab07 exec api python -m pytest -q tests
+docker compose -p archlab07 down
+# OPTIONAL, destructive to this lab's data ONLY:
+# docker compose -p archlab07 down -v
+```
+
+The health test is a smoke test, not a full integration suite; also verify the scenario-specific endpoint after repair. `down` leaves named volumes intact. Only use `down -v` if you deliberately want to remove this project's data.
+
+**Lab evidence to fill:** baseline _..._; fault and response _..._; investigation commands and findings _..._; root cause _..._; durable improvement _..._; verified recovery _..._.
+
 ## My Architecture Review — Solutions & Doubts
 
 > Editable learning journal. Preserve your reasoning, including hypotheses later disproved.
