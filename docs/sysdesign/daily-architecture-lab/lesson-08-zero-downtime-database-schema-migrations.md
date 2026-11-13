@@ -384,6 +384,201 @@ These are optional background references, not prerequisites or claims of complet
 - [Kubernetes: Deployments](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/) — rolling update behavior.
 - [Martin Fowler: Parallel Change](https://martinfowler.com/bliki/ParallelChange.html) — expand/contract principle.
 
+## Practical Labs
+
+**LEARN → DESIGN → BUILD → BREAK → INVESTIGATE → FIX → VALIDATE**
+
+> This is an ADDITION to the complete architecture lesson above, not a replacement. Reading/design: 20–25 minutes; hands-on: 35–60 minutes. **Environment:** Mac Docker Desktop is preferred for this multi-container lab; Ubuntu VM with Docker Engine and Compose plugin also works if resources permit. Use only a disposable lab project and loopback ports.
+
+### LEARN — The experiment
+
+**Scenario:** Breaking an old API with a destructive schema migration. Explain why the demonstration repair restores compatibility but not lost data, and why destructive migrations need backups and forward/backward compatible releases.
+
+### DESIGN — Reproduce the architecture locally
+
+```mermaid
+flowchart LR
+  C["Terminal / curl"] --> A["FastAPI :8000"]
+  A --> B["PostgreSQL container"]
+  A --> L["Application logs"]
+```
+
+Create and enter a dedicated folder in the **Mac terminal or Ubuntu VM shell where Docker runs**:
+
+```bash
+mkdir -p architecture-lab-08/app architecture-lab-08/tests
+cd architecture-lab-08
+touch app/__init__.py
+docker compose version
+```
+
+### BUILD — End-to-end runnable application
+
+```text
+architecture-lab-08/
+├── app/
+│   ├── __init__.py
+│   ├── main.py
+├── tests/
+│   └── test_health.py
+├── requirements.txt
+├── Dockerfile
+└── compose.yaml
+```
+
+**File: `app/main.py`**
+
+```python
+import os
+import psycopg
+from fastapi import FastAPI,HTTPException
+from pydantic import BaseModel
+app=FastAPI()
+class Incident(BaseModel):
+    title: str
+    owner: str
+def db():return psycopg.connect(os.environ["DATABASE_URL"])
+@app.on_event("startup")
+def init():
+    with db() as c:
+        c.execute("CREATE TABLE IF NOT EXISTS incidents(id SERIAL PRIMARY KEY,title TEXT NOT NULL,owner TEXT NOT NULL)")
+@app.get("/health")
+def health():return {"status":"ok"}
+@app.post("/incidents",status_code=201)
+def create(i:Incident):
+    with db() as c:
+        row=c.execute("INSERT INTO incidents(title,owner) VALUES (%s,%s) RETURNING id",(i.title,i.owner)).fetchone()
+    return {"id":row[0]}
+@app.get("/incidents/{incident_id}")
+def read(incident_id:int):
+    try:
+        with db() as c:
+            row=c.execute("SELECT id,title,owner FROM incidents WHERE id=%s",(incident_id,)).fetchone()
+    except psycopg.Error as exc:
+        raise HTTPException(503,{"sqlstate":exc.sqlstate,"error":"schema incompatible"})
+    if not row:raise HTTPException(404,"not found")
+    return {"id":row[0],"title":row[1],"owner":row[2]}
+```
+
+**File: `requirements.txt`**
+
+```text
+fastapi==0.115.12
+uvicorn==0.34.2
+psycopg[binary]==3.2.6
+pytest==8.3.5
+httpx==0.28.1
+```
+
+**File: `Dockerfile`**
+
+```dockerfile
+FROM python:3.11-slim
+WORKDIR /code
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+COPY app ./app
+COPY tests ./tests
+CMD ["uvicorn","app.main:app","--host","0.0.0.0","--port","8000"]
+```
+
+**File: `compose.yaml`**
+
+```yaml
+services:
+  api:
+    build: .
+    ports: ["127.0.0.1:18008:8000"]
+    environment:
+      DATABASE_URL: postgresql://lab:lab@db:5432/lab
+    depends_on:
+      db: {condition: service_healthy}
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: lab
+      POSTGRES_PASSWORD: lab
+      POSTGRES_DB: lab
+    healthcheck:
+      test: ["CMD-SHELL","pg_isready -U lab -d lab"]
+      interval: 2s
+      retries: 20
+    volumes: ["pgdata:/var/lib/postgresql/data"]
+volumes:
+  pgdata: {}
+```
+
+**File: `tests/test_health.py`**
+
+```python
+from fastapi.testclient import TestClient
+from app.main import app
+def test_health():
+    assert TestClient(app).get("/health").status_code == 200
+```
+
+Start containers and establish a baseline:
+
+```bash
+docker compose -p archlab08 up -d --build
+docker compose -p archlab08 ps
+curl -fsS http://127.0.0.1:18008/health
+docker compose -p archlab08 exec api python -m pytest -q tests
+```
+
+**Expected:** API health is 200, and `1 passed`. If a service needs time to initialize, wait and retry; inspect logs before troubleshooting.
+
+### VALIDATE baseline — Healthy behavior
+
+```bash
+curl -s -X POST http://127.0.0.1:18008/incidents -H 'Content-Type: application/json' -d '{"title":"API failure","owner":"sre"}'
+curl -i http://127.0.0.1:18008/incidents/1
+```
+
+### BREAK — Controlled fault injection
+
+Run only against `archlab08`, never an existing database or unrelated container.
+
+```bash
+docker compose -p archlab08 exec db psql -U lab -d lab -c 'ALTER TABLE incidents DROP COLUMN owner'
+curl -i http://127.0.0.1:18008/incidents/1
+```
+
+### INVESTIGATE — Gather evidence and reject alternative hypotheses
+
+```bash
+docker compose -p archlab08 logs --tail=30 api
+docker compose -p archlab08 exec db psql -U lab -d lab -c '\d incidents'
+docker compose -p archlab08 exec db psql -U lab -d lab -c 'SELECT pid,state,wait_event_type,wait_event FROM pg_stat_activity'
+```
+
+**Expected behavior:** Before migration GET returns 200; dropping owner causes HTTP 503 with SQLSTATE 42703. Adding the compatibility column restores reads (old owner values are not recovered). In real deployments, expand first, backfill, then contract after rollback window.
+
+Record response codes, exact error messages, timing, container state, and relevant DB/network evidence. Which evidence supports your hypothesis? What would falsify it? Distinguish the incident trigger, root cause, and systemic design weakness.
+
+### FIX — Restore service and propose durable architecture
+
+```bash
+docker compose -p archlab08 exec db psql -U lab -d lab -c "ALTER TABLE incidents ADD COLUMN owner TEXT NOT NULL DEFAULT 'unknown'"
+curl -i http://127.0.0.1:18008/incidents/1
+```
+
+**Architect decision:** Explain why the demonstration repair restores compatibility but not lost data, and why destructive migrations need backups and forward/backward compatible releases.
+
+### VALIDATE — Prove recovery and clean up safely
+
+```bash
+curl -fsS http://127.0.0.1:18008/health
+docker compose -p archlab08 exec api python -m pytest -q tests
+docker compose -p archlab08 down
+# OPTIONAL, destructive to this lab's data ONLY:
+# docker compose -p archlab08 down -v
+```
+
+The health test is a smoke test, not a full integration suite; also verify the scenario-specific endpoint after repair. `down` leaves named volumes intact. Only use `down -v` if you deliberately want to remove this project's data.
+
+**Lab evidence to fill:** baseline _..._; fault and response _..._; investigation commands and findings _..._; root cause _..._; durable improvement _..._; verified recovery _..._.
+
 ## My Architecture Review — Solutions & Doubts
 
 > **Editable learner journal:** Replace the placeholders with your own reasoning. Do not mark tasks complete merely because this file was published.
