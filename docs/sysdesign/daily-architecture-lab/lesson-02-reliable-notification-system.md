@@ -405,6 +405,21 @@ This lesson maps to common public system-design curriculum themes: synchronous v
 
 ## Practical Labs
 
+### Architecture-to-code walkthrough — read before running the lab
+
+**Architecture being practiced:** Reliable notification request and worker.
+
+**Trace one request through the exact local components:** Client → FastAPI submission → Redis queue → worker/once → simulated delivery ledger.
+
+**Design requirement to test:** Accepted notifications must not silently disappear, and repeated delivery attempts must be idempotent.
+
+**Run in this order, stopping to inspect actual output after each step:** Submit n1, dispatch, force n2 worker failure and requeue, inspect backlog, recover and verify delivery count.
+
+**What this small lab models—and what it does not:** The manual worker endpoint is a simulation, not a continuously running queue consumer. Discuss the crash window between LPOP and delivery and why Redis Streams or a transactional queue would be required for real durability.
+
+**Learning checkpoint:** Before reading the next step, predict the HTTP response, which component will fail, which evidence will identify it, and whether the proposed fix addresses the symptom or the underlying architectural weakness. Write your prediction and actual observation in the lab evidence section.
+
+
 **LEARN → DESIGN → BUILD → BREAK → INVESTIGATE → FIX → VALIDATE**
 
 > **Scope:** An additional runnable local exercise; the complete architecture lesson and original optional exercise above remain intact. Estimated hands-on time: 35–60 minutes. Run on **Mac Docker Desktop** (preferred for multi-container workloads) or **Ubuntu VM** with Docker Engine + Compose plugin installed. All services bind to loopback and use a dedicated Compose project. This is a disposable lab, never production.
