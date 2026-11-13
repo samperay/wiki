@@ -468,6 +468,21 @@ Write a short architecture review: identify the exact boundary protected by the 
 
 ## Practical Labs
 
+### Architecture-to-code walkthrough — read before running the lab
+
+**Architecture being practiced:** Transactional outbox.
+
+**Trace one request through the exact local components:** Client → FastAPI → PostgreSQL events + outbox transaction → dispatch → delivery ledger.
+
+**Design requirement to test:** A business event and its outbox record must commit atomically; retries must not create duplicate logical deliveries.
+
+**Run in this order, stopping to inspect actual output after each step:** Submit evt1, dispatch, enable simulated failure after delivery write, inspect rollback, restore and retry.
+
+**What this small lab models—and what it does not:** The lab simulates the delivery ledger inside the same PostgreSQL transaction; a real external HTTP provider is outside that transaction. Distinguish DB atomicity from end-to-end exactly-once effects.
+
+**Learning checkpoint:** Before reading the next step, predict the HTTP response, which component will fail, which evidence will identify it, and whether the proposed fix addresses the symptom or the underlying architectural weakness. Write your prediction and actual observation in the lab evidence section.
+
+
 **LEARN → DESIGN → BUILD → BREAK → INVESTIGATE → FIX → VALIDATE**
 
 > **Scope:** An additional runnable local exercise; the complete architecture lesson and original optional exercise above remain intact. Estimated hands-on time: 35–60 minutes. Run on **Mac Docker Desktop** (preferred for multi-container workloads) or **Ubuntu VM** with Docker Engine + Compose plugin installed. All services bind to loopback and use a dedicated Compose project. This is a disposable lab, never production.
