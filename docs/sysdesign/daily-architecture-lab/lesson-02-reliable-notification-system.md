@@ -403,6 +403,207 @@ This lesson maps to common public system-design curriculum themes: synchronous v
 
 ---
 
+## Practical Labs
+
+**LEARN → DESIGN → BUILD → BREAK → INVESTIGATE → FIX → VALIDATE**
+
+> **Scope:** An additional runnable local exercise; the complete architecture lesson and original optional exercise above remain intact. Estimated hands-on time: 35–60 minutes. Run on **Mac Docker Desktop** (preferred for multi-container workloads) or **Ubuntu VM** with Docker Engine + Compose plugin installed. All services bind to loopback and use a dedicated Compose project. This is a disposable lab, never production.
+
+### LEARN — Experiment and expected failure
+
+**Scenario:** Notification worker crash and retry. A Redis LPOP followed by a process crash can lose an item. Propose Streams consumer groups, a pending-entry recovery policy, and a durable idempotency ledger.
+
+### DESIGN — Local topology
+
+```mermaid
+flowchart LR
+  T["Terminal / curl"] --> A["FastAPI :8000"]
+  A --> D["Redis container"]
+  A --> O["Container logs and metrics"]
+```
+
+Create a dedicated directory `architecture-lab-02`. Run all commands below from it on the **Mac terminal** or **Ubuntu VM shell**, whichever runs Docker. Do not run them inside another existing application container.
+
+```bash
+mkdir -p architecture-lab-02/app architecture-lab-02/tests
+cd architecture-lab-02
+touch app/__init__.py
+docker compose version
+```
+
+### BUILD — Complete minimal application
+
+Directory layout:
+
+```text
+architecture-lab-02/
+├── app/
+│   ├── __init__.py
+│   └── main.py
+├── tests/
+│   └── test_health.py
+├── requirements.txt
+├── Dockerfile
+└── compose.yaml
+```
+
+**File: `app/main.py`**
+
+```python
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
+from redis import Redis
+import os
+app=FastAPI()
+r=Redis(host="redis",decode_responses=True)
+class Notification(BaseModel):
+    id: str
+    message: str
+@app.post("/notifications",status_code=202)
+def submit(n:Notification):
+    if r.set("accepted:"+n.id,"1",nx=True):
+        r.rpush("queue",n.model_dump_json())
+    return {"id":n.id,"status":"accepted"}
+@app.post("/worker/once")
+def consume():
+    item=r.lpop("queue")
+    if not item: return {"status":"empty"}
+    n=Notification.model_validate_json(item)
+    if os.getenv("FAIL_BEFORE_SEND")=="1":
+        r.lpush("queue",item)
+        raise HTTPException(503,"simulated downstream failure; requeued")
+    if r.set("delivered:"+n.id,n.message,nx=True):
+        r.incr("delivery_count")
+    return {"status":"delivered","id":n.id}
+@app.get("/stats")
+def stats(): return {"queued":r.llen("queue"),"delivered":int(r.get("delivery_count") or 0)}
+@app.get("/health")
+def health(): return {"status":"ok"}
+```
+
+**File: `requirements.txt`**
+
+```text
+fastapi==0.115.12
+uvicorn==0.34.2
+redis==5.2.1
+httpx==0.28.1
+pytest==8.3.5
+```
+
+**File: `Dockerfile`**
+
+```dockerfile
+FROM python:3.11-slim
+WORKDIR /code
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+COPY app ./app
+CMD ["uvicorn","app.main:app","--host","0.0.0.0","--port","8000"]
+```
+
+**File: `compose.yaml`**
+
+```yaml
+services:
+  api:
+    build: .
+    ports: ["127.0.0.1:18002:8000"]
+    environment:
+      FAIL_BEFORE_SEND: "${FAIL_BEFORE_SEND:-0}"
+    depends_on: [redis]
+  redis:
+    image: redis:7-alpine
+```
+
+**File: `tests/test_health.py`**
+
+```python
+def test_health():
+    from fastapi.testclient import TestClient
+    from app.main import app
+    assert TestClient(app).get("/health").status_code == 200
+```
+
+Start the lab and wait for the API:
+
+```bash
+docker compose -p archlab02 up -d --build
+docker compose -p archlab02 ps
+curl -fsS http://127.0.0.1:18002/health
+```
+
+**Expected:** the API reports `{"status":"ok"}`. On the first startup, the image build may take a few minutes. If a dependency is not ready, wait a few seconds and retry; inspect `docker compose ... logs` rather than assuming a design fault.
+
+### VALIDATE baseline — Prove healthy operation before injecting faults
+
+```bash
+curl -s -X POST http://127.0.0.1:18002/notifications -H 'Content-Type: application/json' -d '{"id":"n1","message":"page oncall"}'
+curl -s -X POST http://127.0.0.1:18002/worker/once
+curl -s http://127.0.0.1:18002/stats
+```
+
+**Expected observations:** Simulated 503 requeues n2; after restoring the worker, queue reaches zero and delivered count increments. This is a teaching simulation, not a crash-atomic production queue.
+
+### BREAK — Introduce ONE controlled failure
+
+Only use the dedicated `archlab02` Compose project; do not target existing databases or application containers.
+
+```bash
+FAIL_BEFORE_SEND=1 docker compose -p archlab02 up -d --build --force-recreate api
+curl -s -X POST http://127.0.0.1:18002/notifications -H 'Content-Type: application/json' -d '{"id":"n2","message":"alert"}'
+curl -i -X POST http://127.0.0.1:18002/worker/once
+```
+
+### INVESTIGATE — Collect evidence before fixing
+
+```bash
+docker compose -p archlab02 logs --tail=40 api
+curl -s http://127.0.0.1:18002/stats
+```
+
+**Reasoning checklist:** Which component is unavailable or slow? Is the error a connection refusal, timeout, invalid schema, queue backlog, or application exception? Which log or metric proves your hypothesis? What observation would disprove it? Separate trigger, root cause, and design weakness.
+
+### FIX — Restore service and improve the design
+
+```bash
+FAIL_BEFORE_SEND=0 docker compose -p archlab02 up -d --force-recreate api
+curl -s -X POST http://127.0.0.1:18002/worker/once
+curl -s http://127.0.0.1:18002/stats
+```
+
+**Design discussion:** A Redis LPOP followed by a process crash can lose an item. Propose Streams consumer groups, a pending-entry recovery policy, and a durable idempotency ledger.
+
+### VALIDATE — Automated checks and safe cleanup
+
+To run the included lightweight API health test **inside the disposable API container**:
+
+```bash
+docker compose -p archlab02 exec api python -m pytest -q tests || true
+```
+
+**Note:** the Dockerfile above intentionally copies only `app/` into the image; to execute the test, run it on the host in a Python virtual environment instead, or copy the test directory into your local Dockerfile before rebuilding. The `|| true` command is a demonstration only; do not interpret it as a passing test. Recommended host test:
+
+```bash
+python3 -m venv .venv
+. .venv/bin/activate
+pip install -r requirements.txt
+pytest -q tests
+deactivate
+```
+
+Expected: `1 passed` (the test checks only the API health endpoint; the manual failure and recovery commands are the scenario-specific integration validation). Record actual output, not an assumed result.
+
+Cleanup **only this lesson's project**. Use `down` to keep named data volumes; use `down -v` only if you intentionally want to delete this disposable lab's database state.
+
+```bash
+docker compose -p archlab02 down
+# OPTIONAL destructive cleanup of ONLY this lab's named volumes:
+# docker compose -p archlab02 down -v
+```
+
+**Your lab evidence:** baseline response: _..._; injected failure: _..._; commands and findings: _..._; root cause versus systemic weakness: _..._; recovery verification: _..._; improvement proposal: _..._.
+
 ## My Architecture Review — Solutions & Doubts
 
 > **Learner instructions:** Fill in these sections after reading. Keep your initial reasoning, even if uncertain. Share the updated Markdown or GitHub link for mentor feedback. Do not delete the original questions; your reasoning history matters.
