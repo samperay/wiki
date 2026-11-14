@@ -16,8 +16,9 @@
 | [06](lesson-06-service-discovery-dns-failures.md) | Service Discovery, DNS Caching & Partial Outages | Yes | Not confirmed | Not confirmed | Pending | Not confirmed |
 | [07](lesson-07-database-connection-pool-exhaustion.md) | Database Connection Pool Exhaustion & Admission Control | Yes | Not confirmed | Not confirmed | Pending | Not confirmed |
 | [08](lesson-08-zero-downtime-database-schema-migrations.md) | Zero-Downtime Database Schema Migrations & Deployment Compatibility | Yes | Not confirmed | Not confirmed | Pending | Not confirmed |
+| [09](lesson-09-leader-election-fencing-scheduled-jobs.md) | Leader Election, Split-Brain Schedulers & Fencing Tokens | Yes | Not confirmed | Not confirmed | Pending | Not confirmed |
 
-**Status note (13 November 2026):** All eight Markdown lesson files and their Practical Labs sections were verified on the `master` branch. Completion and review statuses remain unconfirmed until you record evidence. “Not confirmed” does not mean you have not done the work.
+**Status note (14 November 2026):** Nine Markdown lessons are published on the `master` branch; publication does not verify local execution. Completion and review statuses remain unconfirmed until you record evidence. “Not confirmed” does not mean you have not done the work.
 
 ## Progress criteria
 
@@ -31,13 +32,13 @@
 
 **LEARN → DESIGN → BUILD → BREAK → INVESTIGATE → FIX → VALIDATE**
 
-Lessons 01–08 include complete local FastAPI-based experiments embedded in their Markdown files. These are **published instructions, not verified local executions**. Use Mac Docker Desktop or Ubuntu VM according to each lesson. Track evidence in the existing **Lab / evidence** column and the review log; do not mark labs complete merely because code was published.
+Lessons 01–09 include complete local FastAPI-based experiments embedded in their Markdown files. These are **published instructions, not verified local executions**. Use Mac Docker Desktop or Ubuntu VM according to each lesson. Track evidence in the existing **Lab / evidence** column and the review log; do not mark labs complete merely because code was published.
 
 Suggested order: start with [Lesson 01](lesson-01-system-design-thinking.md) to practice the seven-stage workflow, then progress to service failures (05–06) and database failures (07–08).
 
 ## Current learning focus
 
-- **Latest published:** [Lesson 08 — Zero-Downtime Database Schema Migrations](lesson-08-zero-downtime-database-schema-migrations.md).
+- **Latest published:** [Lesson 09 — Leader Election, Leases & Fencing Tokens](lesson-09-leader-election-fencing-scheduled-jobs.md).
 - **Suggested next step:** Work through Lesson 07's global connection-budget calculation and distinguish pool checkout wait from SQL execution and lock wait.
 - **Upcoming:** New production architecture scenarios will extend the progression without repeating prior lessons.
 
@@ -69,4 +70,5 @@ Add a row when you complete or review a lesson; do not fill in outcomes without 
 - [Lesson 06 — Service Discovery, DNS Caching & Partial Outages](lesson-06-service-discovery-dns-failures.md)
 - [Lesson 07 — Database Connection Pool Exhaustion & Admission Control](lesson-07-database-connection-pool-exhaustion.md)
 - [Lesson 08 — Zero-Downtime Database Schema Migrations & Deployment Compatibility](lesson-08-zero-downtime-database-schema-migrations.md)
+- [Lesson 09 — Leader Election, Leases & Fencing Tokens](lesson-09-leader-election-fencing-scheduled-jobs.md)
 - [Hands-on architecture labs](https://github.com/samperay/sre-devops-architecture-labs)
