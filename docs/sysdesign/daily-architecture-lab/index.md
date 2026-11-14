@@ -2,7 +2,7 @@
 
 A growing **20–25-minute guided system-design and production SRE troubleshooting journal** for an experienced Python/Linux DevOps/SRE engineer progressing toward system and platform architecture.
 
-> **Publication status:** Lessons 01–08 are available in this Wiki. A published lesson is not necessarily read, practiced, or mentor-reviewed.
+> **Publication status:** Lessons 01–09 are available in this Wiki. A published lesson is not necessarily read, practiced, or mentor-reviewed.
 
 ## Learning method
 
@@ -22,12 +22,13 @@ Each lesson starts with design first principles and includes a realistic problem
 | 06 | Service Discovery, DNS Caching & Partial Outages | [Read Lesson 06](lesson-06-service-discovery-dns-failures.md) |
 | 07 | Database Connection Pool Exhaustion & Admission Control | [Read Lesson 07](lesson-07-database-connection-pool-exhaustion.md) |
 | 08 | Zero-Downtime Database Schema Migrations & Deployment Compatibility | [Read Lesson 08](lesson-08-zero-downtime-database-schema-migrations.md) |
+| 09 | Leader Election, Split-Brain Schedulers & Fencing Tokens | [Read Lesson 09](lesson-09-leader-election-fencing-scheduled-jobs.md) |
 
 [View the learning progress tracker](learning.md){ .md-button }
 
 ## Practical Labs — runnable local exercises
 
-Every lesson 01–08 now includes a separate **Practical Labs** section. Choose **Mac Docker Desktop** for multi-container experiments, or an **Ubuntu virtual machine** when resources permit. The lesson itself contains every small source file and command as a labeled Markdown code block: no ZIP archive is required.
+Every lesson 01–09 now includes a separate **Practical Labs** section. Choose **Mac Docker Desktop** for multi-container experiments, or an **Ubuntu virtual machine** when resources permit. The lesson itself contains every small source file and command as a labeled Markdown code block: no ZIP archive is required.
 
 1. **LEARN / DESIGN:** Read the architecture, incident analysis, and Mermaid diagrams.
 2. **BUILD:** Create the lesson-specific FastAPI application and open-source dependencies from the code blocks.
@@ -60,6 +61,7 @@ The 20–25-minute reading lesson is separate from the optional 35–60-minute h
 - **05–06 — Synchronous service reliability:** Timeouts, circuit breakers, dependency isolation, service discovery, and DNS caching.
 - **07 — Data-layer admission and capacity:** PostgreSQL connection budgets, pool checkout, locks, and safe scaling.
 - **08 — Safe schema evolution:** Expand–migrate–contract, mixed-version compatibility, backfill and rollback.
+- **09 — Scheduler coordination:** Leader election, leases, fencing tokens and idempotent effects.
 - **Future lessons:** Progress to deeper distributed-system and platform design scenarios without repeating completed topics.
 
 ## Related knowledge and practical labs
