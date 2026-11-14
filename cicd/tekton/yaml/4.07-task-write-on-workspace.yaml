@@ -1,0 +1,23 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: 4-07-task-write-on-workspace
+spec:
+  description: A simple example Tekton Task that writes on a workspace
+  steps:
+    - name: write-step
+      image: alpine:3.14
+      script: |
+        #!/bin/sh
+        if [ "$(workspaces.messages.bound)" == "true" ] ; then
+          echo "Writing to $(workspaces.messages.path)/message"
+          echo "Message: Hello, Tekton!" > $(workspaces.messages.path)/message
+        fi     
+  workspaces:
+    - name: messages
+      description: |
+        The folder where we write the message to. If no workspace
+        is provided then the message will not be written.
+      optional: false
+      mountPath: /custom/path/relative/to/root
+

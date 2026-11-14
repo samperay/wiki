@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: private-repo-https
+  namespace: argocd
+  labels:
+    argocd.argoproj.io/secret-type: repository
+stringData:
+  type: git
+  url: https://github.com/mabusaa/argocd-example-apps-private.git
+  password: # password goes here, NOTE: dont push secrets into git, use sealed secrets as a solution for secrets in gitops.
+  username: my-token
