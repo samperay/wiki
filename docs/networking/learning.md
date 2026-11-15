@@ -17,6 +17,17 @@
 | [Docker bridge DNS and port publishing](labs/docker-bridge-dns-port-publishing.md) | Published in Phase 2 branch | Not yet verified | |
 | [Kubernetes Service, DNS and NetworkPolicy](labs/kubernetes-service-dns-networkpolicy.md) | Published in Phase 2 branch | Not yet verified | |
 
+## Phase 3 — Backend performance (documentation published, labs unverified)
+
+| Topic | Documentation | Practice |
+| --- | --- | --- |
+| [Keepalive, pooling and timeouts](performance/keepalive-pooling-timeouts.md) | Published in Phase 3 branch | Not yet verified |
+| [TCP flow and congestion control](performance/flow-congestion-control.md) | Published in Phase 3 branch | Not yet verified |
+| [Packet loss and tail latency](performance/packet-loss-tail-latency.md) | Published in Phase 3 branch | Not yet verified |
+| [Bandwidth–delay product](performance/latency-bandwidth-bdp.md) | Published in Phase 3 branch | Not yet verified |
+| [Connection limits and capacity](performance/connection-capacity.md) | Published in Phase 3 branch | Not yet verified |
+| [Backend timeout and p99 lab](labs/backend-timeouts-p99-capacity.md) | Published in Phase 3 branch | Not yet verified |
+
 ## My lab record template
 
 Copy this block under the lesson you actually practiced.
