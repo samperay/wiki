@@ -172,3 +172,8 @@ TLS is both cryptography and operations. Nginx must serve the right certificate 
 Asymmetric cryptography proves identity and helps establish secrets; symmetric cryptography protects the actual data stream efficiently. Certificate lifecycle, validation, and revocation behavior are just as important as the handshake itself.
 
 See also: [HTTP protocol](http_protocol.md), [Nginx overview](nginx_overview.md), [Reverse proxy](reverse_proxy.md), [Access control](access_control.md), [HTTP compression](http_compression.md), and [Logging](logging.md).
+
+
+## Service-to-service mTLS and certificate rotation
+
+This page remains the reference for Nginx HTTPS and certificate mechanics. For **two-way** service identity, CA trust overlap, expiry monitoring and zero-downtime rotation, follow [mTLS and certificate rotation](../networking/security/mtls-certificate-rotation.md). Validate the concepts using the [disposable localhost mTLS lab](../networking/labs/mtls-local-service-identity.md) before changing any deployed certificates. TLS client authentication does not replace application authorization.
