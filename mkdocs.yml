@@ -92,6 +92,13 @@ nav:
       - Latency, Bandwidth and BDP: networking/performance/latency-bandwidth-bdp.md
       - Connection Limits and Capacity: networking/performance/connection-capacity.md
       - Backend Saturation and p99 Lab: networking/labs/backend-timeouts-p99-capacity.md
+    - Security & Advanced Protocols:
+      - mTLS and Certificate Rotation: networking/security/mtls-certificate-rotation.md
+      - NAT, Proxies and Client Identity: networking/security/nat-proxies-source-addresses.md
+      - gRPC and Protocol Buffers: networking/backend-protocols/grpc-protobuf.md
+      - QUIC and HTTP3: networking/backend-protocols/quic-http3.md
+      - WebSockets, SSE and Long Polling: networking/backend-protocols/realtime-communication.md
+      - Local mTLS Identity Lab: networking/labs/mtls-local-service-identity.md
 
   - Docker & Kubernetes:
     - Docker:
