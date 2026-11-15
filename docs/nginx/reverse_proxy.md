@@ -244,3 +244,8 @@ See also: [Nginx overview](nginx_overview.md), [Webserver overview](webserver_ov
 ## Backend reliability — connection reuse and timeout budgets
 
 For the distinction between connect timeout, pool acquisition, idle keepalive, request deadline and retry amplification, use the canonical [backend connection-management guide](../networking/performance/keepalive-pooling-timeouts.md). This Nginx page remains the implementation reference for proxy headers and upstream configuration. Avoid changing upstream timeouts without measuring the dependency latency budget and observing the proxy's upstream error logs.
+
+
+## Trusted proxy boundaries and client addresses
+
+Do not assume a forwarded IP header is authenticated. A direct caller can forge `X-Forwarded-For` unless the trusted edge normalizes headers and the application trusts only configured proxy hops. See [NAT, proxies and source-address identity](../networking/security/nat-proxies-source-addresses.md) for a safe header-spoofing demonstration and a diagnostic workflow. Use authenticated user/service identity for authorization rather than an unvalidated IP header.
