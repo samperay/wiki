@@ -11,6 +11,7 @@ I use this space to turn experience into practical understanding: design a syste
 | Grow into a higher technical role | [Career & Professional Growth](career/index.md) |
 | Work through a real production-style failure | [Daily Architecture Lab](sysdesign/daily-architecture-lab/index.md) |
 | See architecture lessons and progress | [Architecture Learning Progress](sysdesign/daily-architecture-lab/learning.md) |
+| Troubleshoot DNS, TCP and backend connectivity | [Networking & Backend Engineering](networking/index.md) |
 | Refresh Kubernetes architecture | [Kubernetes Architecture](docker_k8/k8/architecture.md) |
 | Strengthen production reliability knowledge | [SRE Overview](sre/overview.md) |
 | Explore practical automation and pipelines | [CI/CD Overview](cicd/overview.md) |
