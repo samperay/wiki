@@ -28,6 +28,17 @@
 | [Connection limits and capacity](performance/connection-capacity.md) | Published in Phase 3 branch | Not yet verified |
 | [Backend timeout and p99 lab](labs/backend-timeouts-p99-capacity.md) | Published in Phase 3 branch | Not yet verified |
 
+## Phase 4 — Security and advanced protocols (documentation published, practice pending)
+
+| Topic | Documentation | Hands-on status |
+| --- | --- | --- |
+| [mTLS and certificate rotation](security/mtls-certificate-rotation.md) | Published in Phase 4 branch | Not yet verified |
+| [NAT and proxy identity](security/nat-proxies-source-addresses.md) | Published in Phase 4 branch | Not yet verified |
+| [gRPC and Protobuf](backend-protocols/grpc-protobuf.md) | Published in Phase 4 branch | Not yet verified |
+| [QUIC and HTTP/3](backend-protocols/quic-http3.md) | Published in Phase 4 branch | Not yet verified |
+| [WebSockets, SSE and long polling](backend-protocols/realtime-communication.md) | Published in Phase 4 branch | Not yet verified |
+| [Local mTLS lab](labs/mtls-local-service-identity.md) | Published in Phase 4 branch | Not yet verified |
+
 ## My lab record template
 
 Copy this block under the lesson you actually practiced.
