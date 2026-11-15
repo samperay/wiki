@@ -262,3 +262,8 @@ Nginx load balancing is built around upstream groups and proxying. The simplest 
 Load balancers improve reliability only when they are observable and tuned. Log upstream details, validate health check behavior, set appropriate timeouts, and test failure scenarios before an incident.
 
 See also: [Nginx overview](nginx_overview.md), [Reverse proxy](reverse_proxy.md), [Webserver overview](webserver_overview.md), [HTTP protocol](http_protocol.md), [Logging](logging.md), [Caching](caching.md), and [Access control](access_control.md).
+
+
+## Backend capacity and tail latency
+
+A healthy load balancer does not guarantee healthy backend capacity. For file descriptors, accept queues, worker limits, connection tracking and saturation evidence, see [connection limits and capacity](../networking/performance/connection-capacity.md). For slow requests and transport retransmissions, see [packet loss and tail latency](../networking/performance/packet-loss-tail-latency.md). Keep load-balancing algorithms and Nginx-specific health checks in this page.
