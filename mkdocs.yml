@@ -12,6 +12,17 @@ edit_uri: edit/main/docs/
 nav:
   - Home: index.md
 
+  - Start Here:
+    - Learning Dashboard: index.md
+    - Career & Growth: career/index.md
+    - Architecture Practice: sysdesign/daily-architecture-lab/index.md
+    - Lab Progress: sysdesign/daily-architecture-lab/learning.md
+
+  - Career & Professional Growth:
+    - Overview & Roadmap: career/index.md
+    - Career Transition Reflection (2026): career/career_transition_reflection_2026.md
+    - Communication & Technical Storytelling: softskills/communication.md
+
   - Programming:
     - Python:
       - Design Patterns:
@@ -183,6 +194,7 @@ nav:
       - Secret Engines: secretmgmt/vault/secret_engine.md
       - Agent: secretmgmt/vault/vault_agent.md
       - Replication: secretmgmt/vault/replication.md
+      - Replication Notes: secretmgmt/vault/vault_replication.md
 
   - AI Concepts:
     - AI:
@@ -219,9 +231,6 @@ nav:
   - Kafka:
     - Overview: kafka/overview.md
 
-  - Soft Skills:
-    - Communication: softskills/communication.md
-
   - About: about.md
   - Interviews: tech-interview-cheatsheet.md
 
@@ -253,6 +262,7 @@ theme:
     - navigation.instant.progress
     - navigation.tracking
     - navigation.sections
+    - navigation.expand
     - navigation.path
     - navigation.top
     - navigation.indexes
