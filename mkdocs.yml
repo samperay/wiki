@@ -85,6 +85,13 @@ nav:
       - Linux Namespaces and Routing: networking/labs/linux-routing-namespaces.md
       - Docker Bridge DNS and Port Publishing: networking/labs/docker-bridge-dns-port-publishing.md
       - Kubernetes Service DNS and NetworkPolicy: networking/labs/kubernetes-service-dns-networkpolicy.md
+    - Backend Performance & Reliability:
+      - Keepalive, Pooling and Timeouts: networking/performance/keepalive-pooling-timeouts.md
+      - TCP Flow and Congestion Control: networking/performance/flow-congestion-control.md
+      - Packet Loss and Tail Latency: networking/performance/packet-loss-tail-latency.md
+      - Latency, Bandwidth and BDP: networking/performance/latency-bandwidth-bdp.md
+      - Connection Limits and Capacity: networking/performance/connection-capacity.md
+      - Backend Saturation and p99 Lab: networking/labs/backend-timeouts-p99-capacity.md
 
   - Docker & Kubernetes:
     - Docker:
