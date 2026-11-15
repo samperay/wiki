@@ -279,3 +279,8 @@ HTTP troubleshooting is about reading the request and response precisely: method
 GET, HEAD, range requests, and conditional requests are especially important for static assets and caching. POST, OPTIONS, and status codes are especially important for APIs, authentication flows, and browser behavior.
 
 See also: [Webserver overview](webserver_overview.md), [Nginx overview](nginx_overview.md), [Reverse proxy](reverse_proxy.md), [Caching](caching.md), [HTTP compression](http_compression.md), [Logging](logging.md), and [Cryptography](cryptography.md).
+
+
+## Advanced backend protocol choices
+
+For the transport and operational differences beyond HTTP request methods and status codes, see [gRPC and Protocol Buffers](../networking/backend-protocols/grpc-protobuf.md), [QUIC and HTTP/3](../networking/backend-protocols/quic-http3.md), and [WebSockets, SSE and long polling](../networking/backend-protocols/realtime-communication.md). The existing HTTP protocol examples remain here; the new pages focus on backend architecture and troubleshooting.
