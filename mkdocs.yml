@@ -155,6 +155,7 @@ nav:
       - 'Lesson 07 — Database Connection Pool Exhaustion & Admission Control': sysdesign/daily-architecture-lab/lesson-07-database-connection-pool-exhaustion.md
       - 'Lesson 08 — Zero-Downtime Database Schema Migrations': sysdesign/daily-architecture-lab/lesson-08-zero-downtime-database-schema-migrations.md
       - 'Lesson 09 — Leader Election, Leases & Fencing Tokens': sysdesign/daily-architecture-lab/lesson-09-leader-election-fencing-scheduled-jobs.md
+      - 'Lesson 10 — Multi-Tenant Rate Limiting & Noisy Neighbors': sysdesign/daily-architecture-lab/lesson-10-multitenant-rate-limiting-noisy-neighbor.md
 
   - Cloud:
     - IBM:
