@@ -1,5 +1,44 @@
-# Sunil's SRE & Engineering Wiki
+# Learn. Build. Break. Understand. Improve.
 
-This is a personal knowledge base built over 14+ years of hands-on work in SRE, DevOps, and platform engineering. It covers the full stack of topics that come up in day-to-day engineering and system design: **SRE principles** (SLOs, error budgets, incident management, chaos engineering, observability), **infrastructure** (Kubernetes, Docker, Istio, Ansible, Terraform), **CI/CD pipelines** (GitHub Actions, ArgoCD, Jenkins, Tekton), **cloud platforms** (AWS, IBM Cloud), **monitoring** (ELK stack), **secret management** (Vault), **messaging** (Kafka), **Nginx**, and **programming** (Python, Go). Each section is structured as a practical reference — concepts explained with prose, architecture diagrams, annotated code blocks, common pitfalls, and interview questions — so it works equally well as a study guide before an interview and as a runbook lookup during an incident.
+Welcome to my **SRE, DevOps & Architecture Learning Wiki** — a working engineering notebook, not just a collection of theory.
 
-The system design section deserves a special mention: it covers the core distributed systems components (load balancing, caching, CDN, sharding, CAP theorem, messaging patterns) alongside 15 case studies of real-world systems (Uber, WhatsApp, YouTube, Airbnb, and more), using the same structured approach of trade-off analysis, component diagrams, and decision frameworks. If you are preparing for a senior SRE or staff engineer role, start there and work outward into the SRE and CI/CD sections.
+I use this space to turn experience into practical understanding: design a system, run it locally, introduce a failure, investigate it, and record what actually happened.
+
+## Where should I start?
+
+| My goal today | Start here |
+| --- | --- |
+| Grow into a higher technical role | [Career & Professional Growth](career/index.md) |
+| Work through a real production-style failure | [Daily Architecture Lab](sysdesign/daily-architecture-lab/index.md) |
+| See architecture lessons and progress | [Architecture Learning Progress](sysdesign/daily-architecture-lab/learning.md) |
+| Refresh Kubernetes architecture | [Kubernetes Architecture](docker_k8/k8/architecture.md) |
+| Strengthen production reliability knowledge | [SRE Overview](sre/overview.md) |
+| Explore practical automation and pipelines | [CI/CD Overview](cicd/overview.md) |
+| Practice explaining engineering work | [Technical Communication](softskills/communication.md) |
+
+## My learning method
+
+```mermaid
+flowchart LR
+    A[Learn the concept] --> B[Design a small system]
+    B --> C[Build a local lab]
+    C --> D[Break something safely]
+    D --> E[Investigate and recover]
+    E --> F[Document trade-offs]
+    F --> A
+```
+
+!!! tip "Make each session count"
+    Choose **one** lesson or failure scenario. Before running commands, predict what should happen. Afterward, write down what surprised you and what you would change in production.
+
+## Technical reference library
+
+Browse the navigation for Python, Linux, Docker, Kubernetes, Nginx, cloud, CI/CD, monitoring, system design, security, databases, AI, and more. Use the search bar to find a command, explanation, or troubleshooting pattern quickly.
+
+## Beyond the technical work
+
+My [career roadmap](career/index.md) connects hands-on learning with role progression, communication, and sustainable working preferences. The goal is not to study everything; it is to develop **demonstrable technical judgment** and keep engineering enjoyable.
+
+---
+
+*This wiki is a living record. Practical findings, lessons learned, and updated decisions belong here.*
