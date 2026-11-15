@@ -239,3 +239,8 @@ Nginx reverse proxying is fundamentally request routing plus metadata preservati
 A reverse proxy is an operational choke point. Configure it carefully, validate changes with `nginx -t`, observe both proxy and backend logs, and treat forwarded headers as security-sensitive data.
 
 See also: [Nginx overview](nginx_overview.md), [Webserver overview](webserver_overview.md), [HTTP protocol](http_protocol.md), [Load balancer](load_balancer.md), [Caching](caching.md), [Access control](access_control.md), [Logging](logging.md), and [Cryptography](cryptography.md).
+
+
+## Backend reliability — connection reuse and timeout budgets
+
+For the distinction between connect timeout, pool acquisition, idle keepalive, request deadline and retry amplification, use the canonical [backend connection-management guide](../networking/performance/keepalive-pooling-timeouts.md). This Nginx page remains the implementation reference for proxy headers and upstream configuration. Avoid changing upstream timeouts without measuring the dependency latency budget and observing the proxy's upstream error logs.

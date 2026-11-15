@@ -64,11 +64,24 @@ Phase 1 is a new synthesis informed by the uploaded Codemia *Networking for Back
 
 The labs are **not marked completed** until run and verified. The Kubernetes NetworkPolicy step depends on the local CNI's enforcement capability.
 
+## Phase 3 — Backend performance and reliability
+
+| Topic | Why it matters |
+| --- | --- |
+| [Keepalive, pooling and timeouts](performance/keepalive-pooling-timeouts.md) | Diagnose stale sockets, pool waits and timeout budgets |
+| [TCP flow vs congestion control](performance/flow-congestion-control.md) | Separate receiver backpressure from path congestion |
+| [Packet loss and tail latency](performance/packet-loss-tail-latency.md) | Understand retransmission and p99 symptoms |
+| [Latency, bandwidth and BDP](performance/latency-bandwidth-bdp.md) | Calculate data-in-flight and distinguish RTT from throughput |
+| [Connection limits and capacity](performance/connection-capacity.md) | Find the first saturated boundary |
+| [Practical lab: backend timeouts and p99](labs/backend-timeouts-p99-capacity.md) | Build, overload, investigate, fix and validate |
+
+These are protocol and reliability references; [Nginx load balancing](../nginx/load_balancer.md) and [SRE observability](../sre/observability.md) remain the implementation-specific guides.
+
 ## Roadmap
 
 - **Phase 1 — Foundations & diagnosis:** the four pages above.
 - **Phase 2 — Linux/Docker/Kubernetes networking:** enhanced existing references and added three safe, disposable practical labs.
-- **Phase 3 — Backend performance:** connection reuse, timeouts, congestion, loss, latency, and capacity.
+- **Phase 3 — Backend performance:** documented connection reuse, timeouts, congestion, loss, latency and capacity with a reproducible saturation lab.
 - **Phase 4 — Security and advanced protocols:** TLS/mTLS, NAT, HTTP/2–3, gRPC, and real-time protocols.
 
 **Documentation is not evidence of practice.** Update [learning.md](learning.md) only after you personally execute and verify a lab.
