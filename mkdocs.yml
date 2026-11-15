@@ -72,6 +72,16 @@ nav:
     - PostgreSQL:
       - Setup & Install: db/postgresql/install.md
 
+  - Networking & Backend Engineering:
+    - Learning Hub: networking/index.md
+    - Learning Progress: networking/learning.md
+    - Fundamentals:
+      - DNS Resolution End to End: networking/fundamentals/dns-resolution.md
+      - TCP Connection Lifecycle: networking/fundamentals/tcp-connection-lifecycle.md
+    - Production Troubleshooting:
+      - Diagnosing Connection Failures: networking/troubleshooting/connection-failure-diagnosis.md
+      - Reading a Packet Capture: networking/troubleshooting/packet-capture-analysis.md
+
   - Docker & Kubernetes:
     - Docker:
       - Overview: docker_k8/docker/overview.md
