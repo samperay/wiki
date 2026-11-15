@@ -9,6 +9,14 @@
 | Connection failure diagnosis | Published in Phase 1 branch | Not yet verified | |
 | Packet capture analysis | Published in Phase 1 branch | Not yet verified | |
 
+## Phase 2 — Documentation published, practice pending
+
+| Lab | Documentation | Hands-on status | Evidence |
+| --- | --- | --- | --- |
+| [Linux namespaces and routing](labs/linux-routing-namespaces.md) | Published in Phase 2 branch | Not yet verified | |
+| [Docker bridge DNS and port publishing](labs/docker-bridge-dns-port-publishing.md) | Published in Phase 2 branch | Not yet verified | |
+| [Kubernetes Service, DNS and NetworkPolicy](labs/kubernetes-service-dns-networkpolicy.md) | Published in Phase 2 branch | Not yet verified | |
+
 ## My lab record template
 
 Copy this block under the lesson you actually practiced.

@@ -54,10 +54,20 @@ This section explains protocol behavior and diagnosis. Existing technology-speci
 
 Phase 1 is a new synthesis informed by the uploaded Codemia *Networking for Backend Engineers* chapters **DNS Resolution End to End**, **The TCP Connection Lifecycle**, **Diagnosing Connection Failures**, and **Reading a Packet Capture**. The lab commands, examples, diagrams, and wording here are independently authored; do not publish the original course PDFs.
 
+## Phase 2 — Linux, Docker and Kubernetes practical labs
+
+| Existing canonical reference | Practical lab |
+| --- | --- |
+| [Linux interfaces, routing and neighbors](../linux/admin/networking.md) | [Network namespaces, veth and routing](labs/linux-routing-namespaces.md) |
+| [Docker networking](../docker_k8/docker/overview.md) | [Bridge DNS, isolation and published ports](labs/docker-bridge-dns-port-publishing.md) |
+| [Kubernetes networking](../docker_k8/k8/networking.md) | [Pod → Service → CoreDNS → NetworkPolicy](labs/kubernetes-service-dns-networkpolicy.md) |
+
+The labs are **not marked completed** until run and verified. The Kubernetes NetworkPolicy step depends on the local CNI's enforcement capability.
+
 ## Roadmap
 
 - **Phase 1 — Foundations & diagnosis:** the four pages above.
-- **Phase 2 — Linux/Kubernetes networking:** expand existing Linux and Kubernetes pages rather than duplicate them.
+- **Phase 2 — Linux/Docker/Kubernetes networking:** enhanced existing references and added three safe, disposable practical labs.
 - **Phase 3 — Backend performance:** connection reuse, timeouts, congestion, loss, latency, and capacity.
 - **Phase 4 — Security and advanced protocols:** TLS/mTLS, NAT, HTTP/2–3, gRPC, and real-time protocols.
 

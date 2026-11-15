@@ -81,6 +81,10 @@ nav:
     - Production Troubleshooting:
       - Diagnosing Connection Failures: networking/troubleshooting/connection-failure-diagnosis.md
       - Reading a Packet Capture: networking/troubleshooting/packet-capture-analysis.md
+    - Practical Labs:
+      - Linux Namespaces and Routing: networking/labs/linux-routing-namespaces.md
+      - Docker Bridge DNS and Port Publishing: networking/labs/docker-bridge-dns-port-publishing.md
+      - Kubernetes Service DNS and NetworkPolicy: networking/labs/kubernetes-service-dns-networkpolicy.md
 
   - Docker & Kubernetes:
     - Docker:

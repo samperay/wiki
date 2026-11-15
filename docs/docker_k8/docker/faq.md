@@ -324,3 +324,8 @@ Docker FAQ answers should always include the operational angle. Containers need 
 In interviews, explain not only the Docker command but also why you would use it, what it proves, and what failure mode it helps prevent or debug.
 
 See also: [Docker overview](overview.md), [Linux networking](../../linux/admin/networking.md), [Linux storage](../../linux/admin/storage.md), and [Linux security](../../linux/admin/security.md).
+
+
+## Practical Docker networking investigation (Phase 2)
+
+For a reproducible exercise covering user-defined bridge DNS, isolated networks, published ports, a stopped backend and recovery, follow the [Docker networking troubleshooting lab](../../networking/labs/docker-bridge-dns-port-publishing.md). Keep this FAQ for Docker-specific commands; use [connection failure diagnosis](../../networking/troubleshooting/connection-failure-diagnosis.md) for the protocol-level evidence workflow.
