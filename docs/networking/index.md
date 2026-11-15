@@ -77,11 +77,24 @@ The labs are **not marked completed** until run and verified. The Kubernetes Net
 
 These are protocol and reliability references; [Nginx load balancing](../nginx/load_balancer.md) and [SRE observability](../sre/observability.md) remain the implementation-specific guides.
 
+## Phase 4 — Security and advanced backend protocols
+
+| Topic | What you will learn |
+| --- | --- |
+| [mTLS and certificate rotation](security/mtls-certificate-rotation.md) | Service identity, CA trust, rotation overlap |
+| [NAT, proxies and source addresses](security/nat-proxies-source-addresses.md) | SNAT/DNAT, trusted forwarding headers, egress boundaries |
+| [gRPC and Protocol Buffers](backend-protocols/grpc-protobuf.md) | HTTP/2 RPC, schemas, streaming, deadlines |
+| [QUIC and HTTP/3](backend-protocols/quic-http3.md) | UDP transport, TLS 1.3, multiplexing and fallback |
+| [WebSockets, SSE and long polling](backend-protocols/realtime-communication.md) | Choosing realtime communication patterns |
+| [Local mTLS identity lab](labs/mtls-local-service-identity.md) | Build, break, investigate and restore certificate verification |
+
+These extend—not replace—the existing [Nginx cryptography](../nginx/cryptography.md), [HTTP protocol](../nginx/http_protocol.md), and [system-design components](../sysdesign/components.md) pages.
+
 ## Roadmap
 
 - **Phase 1 — Foundations & diagnosis:** the four pages above.
 - **Phase 2 — Linux/Docker/Kubernetes networking:** enhanced existing references and added three safe, disposable practical labs.
 - **Phase 3 — Backend performance:** documented connection reuse, timeouts, congestion, loss, latency and capacity with a reproducible saturation lab.
-- **Phase 4 — Security and advanced protocols:** TLS/mTLS, NAT, HTTP/2–3, gRPC, and real-time protocols.
+- **Phase 4 — Security and advanced protocols:** documented mTLS, NAT/proxies, gRPC, QUIC/HTTP3 and realtime patterns with a disposable mTLS lab.
 
 **Documentation is not evidence of practice.** Update [learning.md](learning.md) only after you personally execute and verify a lab.
