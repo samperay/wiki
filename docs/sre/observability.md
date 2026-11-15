@@ -280,3 +280,7 @@ Executive dashboards are optimised for monthly/quarterly review cycles. They sho
 - **Choose chart types deliberately.** Line charts for trends; stat panels for status; heatmaps for distributions; bar charts for comparisons. The wrong chart type hides the signal you need.
 - **Alert on symptoms, not causes.** Symptom alerts are actionable; cause alerts are noisy. Burn rate alerting on error budgets is the most mature form of symptom-based alerting.
 - **Different audiences need different dashboards.** Engineer dashboards are optimised for incident speed; executive dashboards are optimised for business comprehension. A single dashboard that tries to serve both serves neither.
+
+## Network-specific performance signals
+
+When p99 latency rises, compare end-to-end request histograms with pool-acquire wait, DNS/connect/TLS milestones, upstream duration, TCP RTT, retransmissions, interface drops and saturation. **Correlation is not proof of cause**: a slow database or worker queue can create similar symptoms. Use [flow and congestion control](../networking/performance/flow-congestion-control.md), [packet loss and tail latency](../networking/performance/packet-loss-tail-latency.md), and [connection capacity](../networking/performance/connection-capacity.md) for protocol-level evidence and controlled experiments.
