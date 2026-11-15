@@ -957,3 +957,12 @@ Linux network troubleshooting works best as a layered workflow: validate link st
 DNS and proxies are frequent hidden dependencies. Always confirm which resolver answered, whether cache or TTL is involved, whether UDP and TCP port `53` behave differently, and whether proxy ACLs or CONNECT handling are blocking traffic.
 
 See also: [Linux basics](basics.md), [Linux security](security.md), [Linux troubleshooting](troubleshooting.md), and [Linux storage](storage.md).
+
+
+## Guided practical lab — Linux network namespaces and routing (Phase 2)
+
+This page remains the **canonical Linux networking command reference**. For a controlled experiment that explains the relationship between interfaces, directly connected routes, ARP/neighbor discovery and failed reachability, follow the [Linux namespaces and routing lab](../../networking/labs/linux-routing-namespaces.md).
+
+The lab creates two isolated namespaces joined by a veth pair, proves connectivity, disables one interface, inspects route and neighbor evidence, restores the interface, and removes only lab resources. It is intended for an Ubuntu VM; do not run namespace commands on macOS or modify production host routes.
+
+For application-level diagnosis after basic Linux routing is verified, use [connection failure diagnosis](../../networking/troubleshooting/connection-failure-diagnosis.md) and [packet capture analysis](../../networking/troubleshooting/packet-capture-analysis.md).
