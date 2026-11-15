@@ -378,3 +378,10 @@ Docker gives a repeatable packaging and runtime model, but it does not remove op
 For SRE work, think of a container as an isolated process with a filesystem, network, and runtime configuration. If you can reason about those pieces, Docker behavior becomes much easier to troubleshoot.
 
 See also: [Docker FAQ](faq.md), [Linux admin basics](../../linux/admin/basics.md), [Linux networking](../../linux/admin/networking.md), and [Linux storage](../../linux/admin/storage.md).
+
+
+## Guided networking lab — bridge DNS, isolation and port publishing (Phase 2)
+
+The Docker network concepts above remain the primary reference. Practice them in the [Docker bridge DNS and port publishing lab](../../networking/labs/docker-bridge-dns-port-publishing.md), which creates only prefixed disposable networks and an Nginx container, compares container-to-container DNS with localhost-published access, injects isolation and stopped-backend failures, and cleans up safely.
+
+On Docker Desktop for macOS, containers run inside a Linux VM; do not assume container bridge IPs are directly routable from the Mac host. For deeper DNS and TCP behavior, use the [networking learning hub](../../networking/index.md).
