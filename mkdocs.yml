@@ -195,6 +195,7 @@ nav:
       - 'Lesson 08 — Zero-Downtime Database Schema Migrations': sysdesign/daily-architecture-lab/lesson-08-zero-downtime-database-schema-migrations.md
       - 'Lesson 09 — Leader Election, Leases & Fencing Tokens': sysdesign/daily-architecture-lab/lesson-09-leader-election-fencing-scheduled-jobs.md
       - 'Lesson 10 — Multi-Tenant Rate Limiting & Noisy Neighbors': sysdesign/daily-architecture-lab/lesson-10-multitenant-rate-limiting-noisy-neighbor.md
+      - 'Lesson 11 — Graceful Shutdown, Connection Draining & Zero-Downtime Deployments': sysdesign/daily-architecture-lab/lesson-11-graceful-shutdown-connection-draining.md
 
   - Cloud:
     - IBM:
