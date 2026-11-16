@@ -24,12 +24,13 @@ Each lesson starts with design first principles and includes a realistic problem
 | 08 | Zero-Downtime Database Schema Migrations & Deployment Compatibility | [Read Lesson 08](lesson-08-zero-downtime-database-schema-migrations.md) |
 | 09 | Leader Election, Split-Brain Schedulers & Fencing Tokens | [Read Lesson 09](lesson-09-leader-election-fencing-scheduled-jobs.md) |
 | 10 | Multi-Tenant Rate Limiting & Noisy Neighbors | [Read Lesson 10](lesson-10-multitenant-rate-limiting-noisy-neighbor.md) |
+| 11 | Graceful Shutdown, Connection Draining & Zero-Downtime Deployments | [Read Lesson 11](lesson-11-graceful-shutdown-connection-draining.md) |
 
 [View the learning progress tracker](learning.md){ .md-button }
 
 ## Practical Labs — runnable local exercises
 
-Every lesson 01–10 now includes a separate **Practical Labs** section. Choose **Mac Docker Desktop** for multi-container experiments, or an **Ubuntu virtual machine** when resources permit. The lesson itself contains every small source file and command as a labeled Markdown code block: no ZIP archive is required.
+Every lesson 01–11 now includes a separate **Practical Labs** section. Choose **Mac Docker Desktop** for multi-container experiments, or an **Ubuntu virtual machine** when resources permit. The lesson itself contains every small source file and command as a labeled Markdown code block: no ZIP archive is required.
 
 1. **LEARN / DESIGN:** Read the architecture, incident analysis, and Mermaid diagrams.
 2. **BUILD:** Create the lesson-specific FastAPI application and open-source dependencies from the code blocks.
@@ -64,6 +65,7 @@ The 20–25-minute reading lesson is separate from the optional 35–60-minute h
 - **08 — Safe schema evolution:** Expand–migrate–contract, mixed-version compatibility, backfill and rollback.
 - **09 — Scheduler coordination:** Leader election, leases, fencing tokens and idempotent effects.
 - **10 — Tenant fairness:** Distributed rate limiting, noisy-neighbor isolation and limiter failure policies.
+- **11 — Deployment lifecycle reliability:** Graceful shutdown, readiness, endpoint draining, in-flight completion and rollout safety.
 - **Future lessons:** Progress to deeper distributed-system and platform design scenarios without repeating completed topics.
 
 ## Related knowledge and practical labs
