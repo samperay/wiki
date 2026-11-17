@@ -19,8 +19,9 @@
 | [09](lesson-09-leader-election-fencing-scheduled-jobs.md) | Leader Election, Split-Brain Schedulers & Fencing Tokens | Yes | Not confirmed | Not confirmed | Pending | Not confirmed |
 | [10](lesson-10-multitenant-rate-limiting-noisy-neighbor.md) | Multi-Tenant Rate Limiting & Noisy Neighbors | Yes | Not confirmed | Not confirmed | Pending | Not confirmed |
 | [11](lesson-11-graceful-shutdown-connection-draining.md) | Graceful Shutdown, Connection Draining & Zero-Downtime Deployments | Yes | Not confirmed | Not confirmed | Pending | Not confirmed |
+| [12](lesson-12-cache-stampede-singleflight-stale-while-revalidate.md) | Cache Stampedes, Singleflight & Origin Protection | Yes | Not confirmed | Not confirmed | Pending | Not confirmed |
 
-**Status note (16 November 2026):** Eleven Markdown lessons are published on the `master` branch; publication does not verify local execution. Completion and review statuses remain unconfirmed until you record evidence. “Not confirmed” does not mean you have not done the work.
+**Status note (17 November 2026):** Twelve Markdown lessons are published on the `master` branch; publication does not verify local execution. Completion and review statuses remain unconfirmed until you record evidence. “Not confirmed” does not mean you have not done the work.
 
 ## Progress criteria
 
@@ -34,13 +35,13 @@
 
 **LEARN → DESIGN → BUILD → BREAK → INVESTIGATE → FIX → VALIDATE**
 
-Lessons 01–11 include complete local FastAPI-based experiments embedded in their Markdown files. These are **published instructions, not verified local executions**. Use Mac Docker Desktop or Ubuntu VM according to each lesson. Track evidence in the existing **Lab / evidence** column and the review log; do not mark labs complete merely because code was published.
+Lessons 01–12 include complete local FastAPI-based experiments embedded in their Markdown files. These are **published instructions, not verified local executions**. Use Mac Docker Desktop or Ubuntu VM according to each lesson. Track evidence in the existing **Lab / evidence** column and the review log; do not mark labs complete merely because code was published.
 
 Suggested order: start with [Lesson 01](lesson-01-system-design-thinking.md) to practice the seven-stage workflow, then progress to service failures (05–06) and database failures (07–08).
 
 ## Current learning focus
 
-- **Latest published:** [Lesson 11 — Graceful Shutdown, Connection Draining & Zero-Downtime Deployments](lesson-11-graceful-shutdown-connection-draining.md).
+- **Latest published:** [Lesson 12 — Cache Stampedes, Singleflight & Origin Protection](lesson-12-cache-stampede-singleflight-stale-while-revalidate.md).
 - **Suggested next step:** Work through Lesson 07's global connection-budget calculation and distinguish pool checkout wait from SQL execution and lock wait.
 - **Upcoming:** New production architecture scenarios will extend the progression without repeating prior lessons.
 
@@ -75,4 +76,5 @@ Add a row when you complete or review a lesson; do not fill in outcomes without 
 - [Lesson 09 — Leader Election, Leases & Fencing Tokens](lesson-09-leader-election-fencing-scheduled-jobs.md)
 - [Lesson 10 — Multi-Tenant Rate Limiting & Noisy Neighbors](lesson-10-multitenant-rate-limiting-noisy-neighbor.md)
 - [Lesson 11 — Graceful Shutdown, Connection Draining & Zero-Downtime Deployments](lesson-11-graceful-shutdown-connection-draining.md)
+- [Lesson 12 — Cache Stampedes, Singleflight & Origin Protection](lesson-12-cache-stampede-singleflight-stale-while-revalidate.md)
 - [Hands-on architecture labs](https://github.com/samperay/sre-devops-architecture-labs)
