@@ -18,6 +18,32 @@ I use this space to turn experience into practical understanding: design a syste
 | Explore practical automation and pipelines | [CI/CD Overview](cicd/overview.md) |
 | Practice explaining engineering work | [Technical Communication](career/communication.md) |
 
+## Learning dashboard
+
+This is a **navigation dashboard**, not an automatically calculated completion score. Documentation may be published while hands-on work remains unverified.
+
+| Track | Start / browse | Progress and next action |
+| --- | --- | --- |
+| Daily Architecture Incident Lab | [Published architecture lessons](sysdesign/daily-architecture-lab/index.md) | [Evidence-based lesson tracker](sysdesign/daily-architecture-lab/learning.md) |
+| Networking & Backend Engineering | [Networking learning path](networking/index.md) | [Networking practice tracker](networking/learning.md) |
+| Practical labs and projects | [Skill-based lab catalog](labs/index.md) | Choose one fault and record actual validation output |
+| Kubernetes | [Architecture reference](docker_k8/k8/architecture.md) | [Service/DNS/NetworkPolicy lab](networking/labs/kubernetes-service-dns-networkpolicy.md) |
+| Career development | [Career roadmap](career/index.md) | Capture one design decision and one explanation you can present |
+
+### How the tracks connect
+
+```mermaid
+flowchart LR
+    N[Networking & backend concepts] --> L[Hands-on labs]
+    K[Kubernetes architecture] --> L
+    A[Architecture incident lessons] --> L
+    L --> E[Observed evidence & trade-offs]
+    E --> C[Career stories and design judgment]
+    E --> A
+```
+
+**Progress labels:** *Published* = documentation exists; *Practiced* = exercise attempted with notes; *Verified* = observed outputs and repair validated; *Planned* = not yet published or attempted. Do not infer completion from publication.
+
 ## My learning method
 
 ```mermaid
