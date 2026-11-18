@@ -16,7 +16,7 @@ I use this space to turn experience into practical understanding: design a syste
 | Refresh Kubernetes architecture | [Kubernetes Architecture](docker_k8/k8/architecture.md) |
 | Strengthen production reliability knowledge | [SRE Overview](sre/overview.md) |
 | Explore practical automation and pipelines | [CI/CD Overview](cicd/overview.md) |
-| Practice explaining engineering work | [Technical Communication](softskills/communication.md) |
+| Practice explaining engineering work | [Technical Communication](career/communication.md) |
 
 ## My learning method
 

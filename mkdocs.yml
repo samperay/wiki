@@ -241,13 +241,13 @@ nav:
         - AI Agent: ai_concepts/ai/ai_agent.md
       - MCP:
         - Overview: ai_concepts/mcp/Overview.md
-    - Technical Interview Cheatsheet: tech-interview-cheatsheet.md
 
   - Career & About:
     - Career & Professional Growth:
       - Overview & Roadmap: career/index.md
       - Career Transition Reflection (2026): career/career_transition_reflection_2026.md
-      - Communication & Technical Storytelling: softskills/communication.md
+      - Communication & Technical Storytelling: career/communication.md
+      - Technical Interview Cheat Sheet: career/tech-interview-cheatsheet.md
     - About: about.md
 
 theme:

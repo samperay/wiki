@@ -10,7 +10,8 @@
 | I want to… | Open |
 | --- | --- |
 | Review my strengths, constraints, and role options | [Career transition reflection](career_transition_reflection_2026.md) |
-| Explain technical work with confidence | [Communication & technical storytelling](../softskills/communication.md) |
+| Explain technical work with confidence | [Communication & technical storytelling](communication.md) |
+| Prepare for a technical interview | [Technical interview cheat sheet](tech-interview-cheatsheet.md) |
 | Practice real architecture decisions | [Daily Architecture Lab](../sysdesign/daily-architecture-lab/index.md) |
 | Track architecture lessons and progress | [Architecture learning progress](../sysdesign/daily-architecture-lab/learning.md) |
 | Review Kubernetes concepts | [Kubernetes architecture](../docker_k8/k8/architecture.md) |
@@ -26,7 +27,7 @@
 For every meaningful project, capture **problem → architecture → implementation → failure test → outcome → trade-offs**. Link to code and a reproducible lab. A small, complete lab is more valuable than many unfinished tutorials.
 
 ### 3. Improve communication through technical work
-Practice a three-minute explanation of a system you actually built. Describe context, the problem, your decision, and measurable impact. Use the [communication guide](../softskills/communication.md) as a reusable template.
+Practice a three-minute explanation of a system you actually built. Describe context, the problem, your decision, and measurable impact. Use the [communication guide](communication.md) as a reusable template.
 
 ### 4. Evaluate higher roles sustainably
 Explore senior automation, developer productivity, infrastructure engineering, and architecture-focused positions. Check hands-on scope, on-call expectations, stakeholder load, schedule, and compensation before treating a title as a good fit.
@@ -40,6 +41,6 @@ Explore senior automation, developer productivity, infrastructure engineering, a
 - **One thing to try next week:**
 
 !!! note "Where new material belongs"
-    Keep personal career decisions, interview preparation, and professional communication together under **Career & Professional Growth**. Keep technical reference material in its subject folder; keep hands-on incident exercises in **System Design → Daily Architecture Lab**. Avoid duplicating full lessons across sections.
+    Keep personal career decisions, interview preparation, and professional communication together under **Career & Professional Growth**. Keep technical reference material in its subject folder. Add hands-on incident exercises to the [Daily Architecture Lab](../sysdesign/daily-architecture-lab/index.md) under **Learning Paths**. Link to existing lessons where relevant.
 
 [Explore the technical learning dashboard](../index.md)
