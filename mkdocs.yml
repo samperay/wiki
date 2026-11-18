@@ -10,180 +10,32 @@ repo_url: https://github.com/samperay/wiki
 edit_uri: edit/main/docs/
 
 nav:
-  - Home: index.md
+  - Start Here: index.md
 
-  - Start Here:
-    - Learning Dashboard: index.md
-    - Career & Growth: career/index.md
-    - Architecture Practice: sysdesign/daily-architecture-lab/index.md
-    - Lab Progress: sysdesign/daily-architecture-lab/learning.md
-
-  - Career & Professional Growth:
-    - Overview & Roadmap: career/index.md
-    - Career Transition Reflection (2026): career/career_transition_reflection_2026.md
-    - Communication & Technical Storytelling: softskills/communication.md
-
-  - Programming:
-    - Python:
-      - Design Patterns:
-        - Solid Principles: programming/python/design_patterns/solid_principles.md
-        - Adapter: programming/python/design_patterns/adapter.md
-        - Bridge: programming/python/design_patterns/bridge.md
-        - Builder: programming/python/design_patterns/builder.md
-        - Builder Facet: programming/python/design_patterns/builder-facet.md
-        - Composite: programming/python/design_patterns/composite.md
-        - Decorator: programming/python/design_patterns/decorators.md
-        - Factory Methods: programming/python/design_patterns/factory-method.md
-        - Prototype: programming/python/design_patterns/prototype.md
-        - Singleton: programming/python/design_patterns/singleton.md
-        - Observer: programming/python/design_patterns/observer.md
-      - Data Structures:
-        - Overview: programming/python/data_structures/overview.md
-        - Linked List: programming/python/data_structures/linked_list.md
-        - Sorting: programming/python/data_structures/sorting.md
-        - Stacks: programming/python/data_structures/stacks.md
-        - Queues: programming/python/data_structures/queues.md
-        - Recursions: programming/python/data_structures/recursions.md
-        - Trees: programming/python/data_structures/trees.md
-        - Hashing: programming/python/data_structures/hashing.md
-      - Web App Framework:
-        - FastAPI: programming/python/webapp_framework/fastapi/fastapi.md
-        - Flask: programming/python/webapp_framework/flask/flask.md
-      - Advanced Concepts:
-        - OOP: programming/python/oops.md
-        - Concepts: programming/python/concepts.md
-      - Interviews:
-        - Q&A: programming/python/qa.md
-    - Clean Code:
-      - Overview: programming/clean_code/overview.md
-      - Naming: programming/clean_code/naming.md
-      - Structure: programming/clean_code/structure.md
-      - Functions & Methods: programming/clean_code/methods.md
-      - Control Structures: programming/clean_code/control_structure.md
-      - OOP Principles: programming/clean_code/ooo.md
-    - Pandas:
-      - Overview: programming/pandas/overview.md
-    - Go:
-      - Overview: programming/go/overview.md
-      - Basics: programming/go/basics.md
-      - Interviews FAQ: programming/go/interviews.md
-
-  - Database:
-    - PostgreSQL:
-      - Setup & Install: db/postgresql/install.md
-
-  - Networking & Backend Engineering:
-    - Learning Hub: networking/index.md
-    - Learning Progress: networking/learning.md
-    - Fundamentals:
-      - DNS Resolution End to End: networking/fundamentals/dns-resolution.md
-      - TCP Connection Lifecycle: networking/fundamentals/tcp-connection-lifecycle.md
-    - Production Troubleshooting:
-      - Diagnosing Connection Failures: networking/troubleshooting/connection-failure-diagnosis.md
-      - Reading a Packet Capture: networking/troubleshooting/packet-capture-analysis.md
-    - Practical Labs:
-      - Linux Namespaces and Routing: networking/labs/linux-routing-namespaces.md
-      - Docker Bridge DNS and Port Publishing: networking/labs/docker-bridge-dns-port-publishing.md
-      - Kubernetes Service DNS and NetworkPolicy: networking/labs/kubernetes-service-dns-networkpolicy.md
-    - Backend Performance & Reliability:
-      - Keepalive, Pooling and Timeouts: networking/performance/keepalive-pooling-timeouts.md
-      - TCP Flow and Congestion Control: networking/performance/flow-congestion-control.md
-      - Packet Loss and Tail Latency: networking/performance/packet-loss-tail-latency.md
-      - Latency, Bandwidth and BDP: networking/performance/latency-bandwidth-bdp.md
-      - Connection Limits and Capacity: networking/performance/connection-capacity.md
-      - Backend Saturation and p99 Lab: networking/labs/backend-timeouts-p99-capacity.md
-    - Security & Advanced Protocols:
-      - mTLS and Certificate Rotation: networking/security/mtls-certificate-rotation.md
-      - NAT, Proxies and Client Identity: networking/security/nat-proxies-source-addresses.md
-      - gRPC and Protocol Buffers: networking/backend-protocols/grpc-protobuf.md
-      - QUIC and HTTP3: networking/backend-protocols/quic-http3.md
-      - WebSockets, SSE and Long Polling: networking/backend-protocols/realtime-communication.md
-      - Local mTLS Identity Lab: networking/labs/mtls-local-service-identity.md
-
-  - Docker & Kubernetes:
-    - Docker:
-      - Overview: docker_k8/docker/overview.md
-      - FAQ: docker_k8/docker/faq.md
-    - Kubernetes:
-      - Architecture: docker_k8/k8/architecture.md
-      - Command Reference: docker_k8/k8/cmdref.md
-      - Core Concepts: docker_k8/k8/core.md
-      - Scheduling: docker_k8/k8/scheduling.md
-      - Networking: docker_k8/k8/networking.md
-      - Storage: docker_k8/k8/storage.md
-      - App Lifecycle Mgmt: docker_k8/k8/applifecyclemgmt.md
-      - Cluster Maintenance: docker_k8/k8/clustermaintenance.md
-      - Security: docker_k8/k8/security.md
-      - Kubernetes Projects: docker_k8/k8/k8projects.md
-      - Troubleshooting:
-        - Overview: docker_k8/k8/troubleshooting/overview.md
-        - Issues: docker_k8/k8/troubleshooting/issues.md
-      - Minikube: docker_k8/k8/minikube.md
-    - Istio:
-      - Overview: docker_k8/istio/istio_overview.md
-      - Traffic Management: docker_k8/istio/traffic_mgmt.md
-
-  - CI/CD:
-    - Overview: cicd/overview.md
-    - GitHub Actions:
-      - Overview: cicd/github_actions/overview.md
-      - Introduction: cicd/github_actions/intro.md
-      - Triggers: cicd/github_actions/workflow_triggers.md
-      - Variables: cicd/github_actions/variables.md
-      - Matrix Strategy: cicd/github_actions/matrix_strategy.md
-      - CI/CD Pipeline: cicd/github_actions/cicd.md
-    - Jenkins:
-      - Overview: cicd/jenkins/overview.md
-      - Deploy: cicd/jenkins/deploy.md
-    - Tekton:
-      - Overview: cicd/tekton/overview.md
-      - Concepts: cicd/tekton/concepts.md
-      - Pipelines: cicd/tekton/tasks_pipelines.md
-    - ArgoCD:
-      - Overview: cicd/argocd/overview.md
-      - Install: cicd/argocd/install.md
-      - Applications: cicd/argocd/applications.md
-      - Sync: cicd/argocd/sync.md
-      - FAQ: cicd/argocd/faq.md
-
-  - Version Control:
-    - Git:
-      - Overview: vcontroller/git/overview.md
-      - FAQ: vcontroller/git/faq.md
-
-  - Monitoring:
-    - ELK Stack:
-      - Elasticsearch:
-        - Setup & Install: monitoring/elk/elasticsearch/01_install.md
-        - Managing Documents: monitoring/elk/elasticsearch/02_managing_docs.md
-        - Mapping & Analysis: monitoring/elk/elasticsearch/03_mapping_analysis.md
-      - Logstash:
-        - Overview: monitoring/elk/logstash/overview.md
-      - Kibana:
-        - Overview: monitoring/elk/kibana/overview.md
-
-  - Linux:
-    - Administration:
-      - Basics: linux/admin/basics.md
-      - Networking: linux/admin/networking.md
-      - Storage: linux/admin/storage.md
-      - Security: linux/admin/security.md
-      - Troubleshooting: linux/admin/troubleshooting.md
-    - Scripting:
-      - Overview: linux/scripting/overview.md
-      - FAQ: linux/scripting/faq.md
-      - HackerRank: linux/scripting/hackerrank.md
-    - Ansible:
-      - Install: linux/ansible/install.md
-      - Overview: linux/ansible/overview.md
-
-  - System Design:
-    - System Components: sysdesign/components.md
-    - Overview: sysdesign/framework.md
-    - Case Studies:
-      - URL Shortener: sysdesign/app/url_shortner.md
+  - Learning Paths:
+    - Networking & Backend Engineering:
+      - Overview & Learning Path: networking/index.md
+      - Learning Progress: networking/learning.md
+      - Fundamentals:
+        - DNS Resolution End to End: networking/fundamentals/dns-resolution.md
+        - TCP Connection Lifecycle: networking/fundamentals/tcp-connection-lifecycle.md
+      - Production Troubleshooting:
+        - Diagnosing Connection Failures: networking/troubleshooting/connection-failure-diagnosis.md
+        - Reading a Packet Capture: networking/troubleshooting/packet-capture-analysis.md
+      - Backend Performance & Reliability:
+        - Keepalive, Pooling and Timeouts: networking/performance/keepalive-pooling-timeouts.md
+        - TCP Flow and Congestion Control: networking/performance/flow-congestion-control.md
+        - Packet Loss and Tail Latency: networking/performance/packet-loss-tail-latency.md
+        - Latency, Bandwidth and BDP: networking/performance/latency-bandwidth-bdp.md
+        - Connection Limits and Capacity: networking/performance/connection-capacity.md
+      - Security & Advanced Protocols:
+        - mTLS and Certificate Rotation: networking/security/mtls-certificate-rotation.md
+        - NAT, Proxies and Client Identity: networking/security/nat-proxies-source-addresses.md
+        - gRPC and Protocol Buffers: networking/backend-protocols/grpc-protobuf.md
+        - QUIC and HTTP3: networking/backend-protocols/quic-http3.md
+        - WebSockets, SSE and Long Polling: networking/backend-protocols/realtime-communication.md
     - Daily Architecture Lab:
-      - Overview & Practical Labs: sysdesign/daily-architecture-lab/index.md
+      - Overview & Lab Guide: sysdesign/daily-architecture-lab/index.md
       - Learning Progress: sysdesign/daily-architecture-lab/learning.md
       - 'Lesson 01 — System Design Thinking': sysdesign/daily-architecture-lab/lesson-01-system-design-thinking.md
       - 'Lesson 02 — Reliable Notification System': sysdesign/daily-architecture-lab/lesson-02-reliable-notification-system.md
@@ -199,71 +51,204 @@ nav:
       - 'Lesson 12 — Cache Stampedes, Singleflight & Origin Protection': sysdesign/daily-architecture-lab/lesson-12-cache-stampede-singleflight-stale-while-revalidate.md
       - 'Lesson 13 — HTTP Connection Pool Saturation & Cascading Timeouts': sysdesign/daily-architecture-lab/lesson-13-http-connection-pool-head-of-line-blocking.md
 
-  - Cloud:
-    - IBM:
-      - Cloud Developer Overview: cloud/ibm/ibm_professional_cloud_developer.md
-      - Automation Tools: cloud/ibm/automated_dev_tools.md
-      - Application Deployment: cloud/ibm/application_deployment.md
-      - Cloud Schematics: cloud/ibm/cloud_schematics.md
-    - AWS:
-      - Practitioner:
-        - Summary: cloud/aws/practitioner/summary.md
-      - Projects:
-        - TOC: cloud/aws/projects/toc.md
-        - CI/CD Use Case: cloud/aws/projects/cicd.md
-    - Terraform:
-      - Overview: cloud/terraform/overview.md
-      - FAQ: cloud/terraform/faq.md
+  - Labs & Projects:
+    - Browse Labs & Projects: labs/index.md
+    - Networking Labs:
+      - Linux Namespaces and Routing: networking/labs/linux-routing-namespaces.md
+      - Docker Bridge DNS and Port Publishing: networking/labs/docker-bridge-dns-port-publishing.md
+      - Kubernetes Service DNS and NetworkPolicy: networking/labs/kubernetes-service-dns-networkpolicy.md
+      - Backend Saturation and p99: networking/labs/backend-timeouts-p99-capacity.md
+      - Local mTLS Identity: networking/labs/mtls-local-service-identity.md
+    - Kubernetes Projects: docker_k8/k8/k8projects.md
+    - AWS Projects:
+      - Project Catalog: cloud/aws/projects/toc.md
+      - CI/CD Pipeline Case Study: cloud/aws/projects/cicd.md
 
-  - Secret Management:
-    - Vault:
-      - Introduction: secretmgmt/vault/vault_overview.md
-      - Architecture: secretmgmt/vault/vault_architecture.md
-      - Auth Methods: secretmgmt/vault/auth_methods.md
-      - Policies: secretmgmt/vault/policies.md
-      - Access Tokens: secretmgmt/vault/access_vault_token.md
-      - Secret Engines: secretmgmt/vault/secret_engine.md
-      - Agent: secretmgmt/vault/vault_agent.md
-      - Replication: secretmgmt/vault/replication.md
-      - Replication Notes: secretmgmt/vault/vault_replication.md
+  - Reference:
+    - System Design:
+      - System Components: sysdesign/components.md
+      - Overview: sysdesign/framework.md
+      - Case Studies:
+        - URL Shortener: sysdesign/app/url_shortner.md
+    - SRE:
+      - Overview: sre/overview.md
+      - Measurements: sre/sre_measure.md
+      - Managing Complexity: sre/manage_complexity.md
+      - Incident Management: sre/incident_management.md
+      - Release Engineering: sre/release_engineering.md
+      - Chaos Engineering: sre/chaos_engineering.md
+      - Observability: sre/observability.md
+    - Containers & Kubernetes:
+      - Docker:
+        - Overview: docker_k8/docker/overview.md
+        - FAQ: docker_k8/docker/faq.md
+      - Kubernetes:
+        - Architecture: docker_k8/k8/architecture.md
+        - Command Reference: docker_k8/k8/cmdref.md
+        - Core Concepts: docker_k8/k8/core.md
+        - Scheduling: docker_k8/k8/scheduling.md
+        - Networking: docker_k8/k8/networking.md
+        - Storage: docker_k8/k8/storage.md
+        - Application Lifecycle Management: docker_k8/k8/applifecyclemgmt.md
+        - Cluster Maintenance: docker_k8/k8/clustermaintenance.md
+        - Security: docker_k8/k8/security.md
+        - Troubleshooting:
+          - Overview: docker_k8/k8/troubleshooting/overview.md
+          - Issues: docker_k8/k8/troubleshooting/issues.md
+        - Minikube: docker_k8/k8/minikube.md
+      - Istio:
+        - Overview: docker_k8/istio/istio_overview.md
+        - Traffic Management: docker_k8/istio/traffic_mgmt.md
+    - Linux:
+      - Administration:
+        - Basics: linux/admin/basics.md
+        - Networking: linux/admin/networking.md
+        - Storage: linux/admin/storage.md
+        - Security: linux/admin/security.md
+        - Troubleshooting: linux/admin/troubleshooting.md
+      - Scripting:
+        - Overview: linux/scripting/overview.md
+        - FAQ: linux/scripting/faq.md
+        - HackerRank: linux/scripting/hackerrank.md
+      - Ansible:
+        - Install: linux/ansible/install.md
+        - Overview: linux/ansible/overview.md
+    - CI/CD:
+      - Overview: cicd/overview.md
+      - GitHub Actions:
+        - Overview: cicd/github_actions/overview.md
+        - Introduction: cicd/github_actions/intro.md
+        - Triggers: cicd/github_actions/workflow_triggers.md
+        - Variables: cicd/github_actions/variables.md
+        - Matrix Strategy: cicd/github_actions/matrix_strategy.md
+        - CI/CD Pipeline: cicd/github_actions/cicd.md
+      - Jenkins:
+        - Overview: cicd/jenkins/overview.md
+        - Deploy: cicd/jenkins/deploy.md
+      - Tekton:
+        - Overview: cicd/tekton/overview.md
+        - Concepts: cicd/tekton/concepts.md
+        - Pipelines: cicd/tekton/tasks_pipelines.md
+      - Argo CD:
+        - Overview: cicd/argocd/overview.md
+        - Install: cicd/argocd/install.md
+        - Applications: cicd/argocd/applications.md
+        - Sync: cicd/argocd/sync.md
+        - FAQ: cicd/argocd/faq.md
+    - Cloud:
+      - IBM:
+        - Cloud Developer Overview: cloud/ibm/ibm_professional_cloud_developer.md
+        - Automation Tools: cloud/ibm/automated_dev_tools.md
+        - Application Deployment: cloud/ibm/application_deployment.md
+        - Cloud Schematics: cloud/ibm/cloud_schematics.md
+      - AWS:
+        - Practitioner:
+          - Summary: cloud/aws/practitioner/summary.md
+      - Terraform:
+        - Overview: cloud/terraform/overview.md
+        - FAQ: cloud/terraform/faq.md
+    - Monitoring:
+      - ELK Stack:
+        - Elasticsearch:
+          - Setup & Install: monitoring/elk/elasticsearch/01_install.md
+          - Managing Documents: monitoring/elk/elasticsearch/02_managing_docs.md
+          - Mapping & Analysis: monitoring/elk/elasticsearch/03_mapping_analysis.md
+        - Logstash:
+          - Overview: monitoring/elk/logstash/overview.md
+        - Kibana:
+          - Overview: monitoring/elk/kibana/overview.md
+    - Nginx:
+      - Web Server: nginx/webserver_overview.md
+      - HTTP Protocol: nginx/http_protocol.md
+      - Nginx Overview: nginx/nginx_overview.md
+      - Load Balancer: nginx/load_balancer.md
+      - Caching: nginx/caching.md
+      - Static Assets: nginx/static_assets.md
+      - Logging: nginx/logging.md
+      - HTTP Compression: nginx/http_compression.md
+      - Access Control: nginx/access_control.md
+      - Cryptography: nginx/cryptography.md
+      - Reverse Proxy: nginx/reverse_proxy.md
+    - Secret Management:
+      - Vault:
+        - Introduction: secretmgmt/vault/vault_overview.md
+        - Architecture: secretmgmt/vault/vault_architecture.md
+        - Auth Methods: secretmgmt/vault/auth_methods.md
+        - Policies: secretmgmt/vault/policies.md
+        - Access Tokens: secretmgmt/vault/access_vault_token.md
+        - Secret Engines: secretmgmt/vault/secret_engine.md
+        - Agent: secretmgmt/vault/vault_agent.md
+        - Vault Replication: secretmgmt/vault/vault_replication.md
+    - Databases:
+      - PostgreSQL:
+        - Setup & Install: db/postgresql/install.md
+    - Kafka:
+      - Overview: kafka/overview.md
+    - Programming:
+      - Python:
+        - Design Patterns:
+          - Solid Principles: programming/python/design_patterns/solid_principles.md
+          - Adapter: programming/python/design_patterns/adapter.md
+          - Bridge: programming/python/design_patterns/bridge.md
+          - Builder: programming/python/design_patterns/builder.md
+          - Builder Facet: programming/python/design_patterns/builder-facet.md
+          - Composite: programming/python/design_patterns/composite.md
+          - Decorator: programming/python/design_patterns/decorators.md
+          - Factory Methods: programming/python/design_patterns/factory-method.md
+          - Prototype: programming/python/design_patterns/prototype.md
+          - Singleton: programming/python/design_patterns/singleton.md
+          - Observer: programming/python/design_patterns/observer.md
+        - Data Structures:
+          - Overview: programming/python/data_structures/overview.md
+          - Linked List: programming/python/data_structures/linked_list.md
+          - Sorting: programming/python/data_structures/sorting.md
+          - Stacks: programming/python/data_structures/stacks.md
+          - Queues: programming/python/data_structures/queues.md
+          - Recursions: programming/python/data_structures/recursions.md
+          - Trees: programming/python/data_structures/trees.md
+          - Hashing: programming/python/data_structures/hashing.md
+        - Web App Framework:
+          - FastAPI: programming/python/webapp_framework/fastapi/fastapi.md
+          - Flask: programming/python/webapp_framework/flask/flask.md
+        - Advanced Concepts:
+          - OOP: programming/python/oops.md
+          - Concepts: programming/python/concepts.md
+        - Interviews:
+          - Q&A: programming/python/qa.md
+      - Clean Code:
+        - Overview: programming/clean_code/overview.md
+        - Naming: programming/clean_code/naming.md
+        - Structure: programming/clean_code/structure.md
+        - Functions & Methods: programming/clean_code/methods.md
+        - Control Structures: programming/clean_code/control_structure.md
+        - OOP Principles: programming/clean_code/ooo.md
+      - Pandas:
+        - Overview: programming/pandas/overview.md
+      - Go:
+        - Overview: programming/go/overview.md
+        - Basics: programming/go/basics.md
+        - Interviews FAQ: programming/go/interviews.md
+    - Version Control:
+      - Git:
+        - Overview: vcontroller/git/overview.md
+        - FAQ: vcontroller/git/faq.md
+    - AI Concepts:
+      - AI:
+        - Overview: ai_concepts/ai/overview.md
+        - Text Summarization: ai_concepts/ai/text_summariztion.md
+        - Movie Poster: ai_concepts/ai/movie_poster.md
+        - Chatbot: ai_concepts/ai/chatbot.md
+        - AI Agent: ai_concepts/ai/ai_agent.md
+      - MCP:
+        - Overview: ai_concepts/mcp/Overview.md
+    - Technical Interview Cheatsheet: tech-interview-cheatsheet.md
 
-  - AI Concepts:
-    - AI:
-      - Overview: ai_concepts/ai/overview.md
-      - Text Summarization: ai_concepts/ai/text_summariztion.md
-      - Movie Poster: ai_concepts/ai/movie_poster.md
-      - Chatbot: ai_concepts/ai/chatbot.md
-      - AI Agent: ai_concepts/ai/ai_agent.md
-    - MCP:
-      - Overview: ai_concepts/mcp/Overview.md
-
-  - Nginx:
-    - Web Server: nginx/webserver_overview.md
-    - HTTP Protocol: nginx/http_protocol.md
-    - Nginx Overview: nginx/nginx_overview.md
-    - Load Balancer: nginx/load_balancer.md
-    - Caching: nginx/caching.md
-    - Static Assets: nginx/static_assets.md
-    - Logging: nginx/logging.md
-    - HTTP Compression: nginx/http_compression.md
-    - Access Control: nginx/access_control.md
-    - Cryptography: nginx/cryptography.md
-    - Reverse Proxy: nginx/reverse_proxy.md
-
-  - SRE:
-    - Overview: sre/overview.md
-    - Measurements: sre/sre_measure.md
-    - Managing Complexity: sre/manage_complexity.md
-    - Incident Management: sre/incident_management.md
-    - Release Engineering: sre/release_engineering.md
-    - Chaos Engineering: sre/chaos_engineering.md
-    - Observability: sre/observability.md
-
-  - Kafka:
-    - Overview: kafka/overview.md
-
-  - About: about.md
-  - Interviews: tech-interview-cheatsheet.md
+  - Career & About:
+    - Career & Professional Growth:
+      - Overview & Roadmap: career/index.md
+      - Career Transition Reflection (2026): career/career_transition_reflection_2026.md
+      - Communication & Technical Storytelling: softskills/communication.md
+    - About: about.md
 
 theme:
   name: material
@@ -293,7 +278,6 @@ theme:
     - navigation.instant.progress
     - navigation.tracking
     - navigation.sections
-    - navigation.expand
     - navigation.path
     - navigation.top
     - navigation.indexes

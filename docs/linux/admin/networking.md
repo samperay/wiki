@@ -144,15 +144,7 @@ Similarly, `nmap` can help determine whether remote ports are open, closed, or f
 
 ## How example.com works
 
-This flow explains what happens when a user types `www.example.com` into a browser. It combines local name resolution, recursive DNS, authoritative DNS, TCP/TLS connection setup, and HTTP. During incidents, knowing this sequence helps you isolate whether the failure is client-side, DNS-side, network-side, or application-side.
-
-- The client types `www.example.com` in the browser.
-- The operating system checks `/etc/hosts` first for a static IP address mapping, depending on the order configured in `/etc/nsswitch.conf`.
-- If no local hosts entry exists, the resolver checks `/etc/resolv.conf` or the local resolver manager to determine which DNS server to query.
-- The DNS server searches its cache and local data. If it does not have the answer, a recursive resolver queries the root server (`.`) for a referral.
-- The root server returns a referral to the `.com` TLD name servers. These TLD name servers know which authoritative name servers are responsible for domains under `.com`.
-- One of the `.com` TLD servers returns a referral to the authoritative DNS server responsible for `example.com`.
-- The authoritative DNS server for `example.com` returns the IP address for the `www` host record.
+When an application connects to `www.example.com`, Linux follows its configured host lookup order. Check `/etc/nsswitch.conf` for when it consults `/etc/hosts`, and check `/etc/resolv.conf` or the local resolver manager for DNS configuration. See [DNS Resolution End to End](../../networking/fundamentals/dns-resolution.md) for how recursive and authoritative servers resolve the name.
 
 Use `dig +trace` to see the delegated DNS path.
 

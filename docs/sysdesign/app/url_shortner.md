@@ -4,6 +4,8 @@
 
 A URL shortener maps a long URL to a compact code such as `sho.rt/aB7x91k`, stores that mapping durably, and serves redirects at very low latency. The write path creates and validates links. The read path is the business-critical hot path: resolve `code -> long_url`, return a redirect, and record analytics without slowing the user down.
 
+To practice diagnosing a traffic spike in a local URL shortener, follow [Daily Architecture Lab 01](../daily-architecture-lab/lesson-01-system-design-thinking.md#practical-labs).
+
 The hardest parts are:
 
 - generating globally unique short codes across many service instances;

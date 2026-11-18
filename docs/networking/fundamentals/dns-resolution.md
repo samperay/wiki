@@ -2,6 +2,8 @@
 
 **Goal:** Explain how a hostname becomes an address used by an application, and diagnose why two clients may receive different answers.
 
+For platform-specific checks, see [Linux DNS client troubleshooting](../../linux/admin/networking.md#linux-dns-client-troubleshooting) or practice with the [Kubernetes service DNS lab](../labs/kubernetes-service-dns-networkpolicy.md).
+
 **Source scope:** Synthesized from the uploaded Codemia chapter *DNS Resolution End to End*: resolution path, record types, TTL/negative caching, split-horizon DNS, multiple addresses, and service discovery. Lab examples are original.
 
 ## LEARN — The restaurant directory analogy

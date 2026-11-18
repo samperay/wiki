@@ -1,5 +1,7 @@
 # Kubernetes Overview
 
+For hands-on practice, try the [Kubernetes networking lab](../../networking/labs/kubernetes-service-dns-networkpolicy.md) or browse the [Kubernetes projects](k8projects.md).
+
 ## k8 Architecture components
 Kubernetes consists of nodes which are physcial or cloud which hosts applications on the nodes in form of containers.
 
