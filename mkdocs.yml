@@ -197,6 +197,7 @@ nav:
       - 'Lesson 10 — Multi-Tenant Rate Limiting & Noisy Neighbors': sysdesign/daily-architecture-lab/lesson-10-multitenant-rate-limiting-noisy-neighbor.md
       - 'Lesson 11 — Graceful Shutdown, Connection Draining & Zero-Downtime Deployments': sysdesign/daily-architecture-lab/lesson-11-graceful-shutdown-connection-draining.md
       - 'Lesson 12 — Cache Stampedes, Singleflight & Origin Protection': sysdesign/daily-architecture-lab/lesson-12-cache-stampede-singleflight-stale-while-revalidate.md
+      - 'Lesson 13 — HTTP Connection Pool Saturation & Cascading Timeouts': sysdesign/daily-architecture-lab/lesson-13-http-connection-pool-head-of-line-blocking.md
 
   - Cloud:
     - IBM:
