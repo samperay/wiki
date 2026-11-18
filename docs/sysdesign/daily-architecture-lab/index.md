@@ -2,7 +2,7 @@
 
 A growing **20–25-minute guided system-design and production SRE troubleshooting journal** for an experienced Python/Linux DevOps/SRE engineer progressing toward system and platform architecture.
 
-> **Publication status:** Lessons 01–12 are available in this Wiki. A published lesson is not necessarily read, practiced, or mentor-reviewed.
+> **Publication status:** Lessons 01–13 are available in this Wiki. A published lesson is not necessarily read, practiced, or mentor-reviewed.
 
 ## Learning method
 
@@ -26,12 +26,13 @@ Each lesson starts with design first principles and includes a realistic problem
 | 10 | Multi-Tenant Rate Limiting & Noisy Neighbors | [Read Lesson 10](lesson-10-multitenant-rate-limiting-noisy-neighbor.md) |
 | 11 | Graceful Shutdown, Connection Draining & Zero-Downtime Deployments | [Read Lesson 11](lesson-11-graceful-shutdown-connection-draining.md) |
 | 12 | Cache Stampedes, Singleflight & Origin Protection | [Read Lesson 12](lesson-12-cache-stampede-singleflight-stale-while-revalidate.md) |
+| 13 | HTTP Connection Pool Saturation & Cascading Timeouts — networking revision | [Read Lesson 13](lesson-13-http-connection-pool-head-of-line-blocking.md) |
 
 [View the learning progress tracker](learning.md){ .md-button }
 
 ## Practical Labs — runnable local exercises
 
-Every lesson 01–12 now includes a separate **Practical Labs** section. Choose **Mac Docker Desktop** for multi-container experiments, or an **Ubuntu virtual machine** when resources permit. The lesson itself contains every small source file and command as a labeled Markdown code block: no ZIP archive is required.
+Every lesson 01–13 now includes a separate **Practical Labs** section. Choose **Mac Docker Desktop** for multi-container experiments, or an **Ubuntu virtual machine** when resources permit. The lesson itself contains every small source file and command as a labeled Markdown code block: no ZIP archive is required.
 
 1. **LEARN / DESIGN:** Read the architecture, incident analysis, and Mermaid diagrams.
 2. **BUILD:** Create the lesson-specific FastAPI application and open-source dependencies from the code blocks.
@@ -68,6 +69,7 @@ The 20–25-minute reading lesson is separate from the optional 35–60-minute h
 - **10 — Tenant fairness:** Distributed rate limiting, noisy-neighbor isolation and limiter failure policies.
 - **11 — Deployment lifecycle reliability:** Graceful shutdown, readiness, endpoint draining, in-flight completion and rollout safety.
 - **12 — Cache resilience:** Hot-key stampedes, singleflight, origin protection and freshness policy.
+- **13 — Backend networking revision:** HTTP client connection pools, bounded admission, and partial-result semantics. Reference: [Keepalive, Pooling and Timeouts](../../networking/performance/keepalive-pooling-timeouts.md).
 - **Future lessons:** Progress to deeper distributed-system and platform design scenarios without repeating completed topics.
 
 ## Related knowledge and practical labs
