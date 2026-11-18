@@ -35,4 +35,16 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Deploy to GitHub Pages
-        run: mkdocs gh-deploy --force
+        run: |
+          # Retry if gh-pages changes between fetch and push (e.g. another publisher).
+          for attempt in 1 2 3; do
+            if mkdocs gh-deploy --force; then
+              exit 0
+            fi
+            if [ "$attempt" -eq 3 ]; then
+              echo "::error::GitHub Pages deployment failed after 3 attempts"
+              exit 1
+            fi
+            echo "::warning::Deployment attempt $attempt failed; retrying in $((attempt * 10)) seconds"
+            sleep $((attempt * 10))
+          done
