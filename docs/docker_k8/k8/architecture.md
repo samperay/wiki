@@ -1,74 +1,103 @@
 # Kubernetes Overview
 
-For hands-on practice, try the [Kubernetes networking lab](../../networking/labs/kubernetes-service-dns-networkpolicy.md) or browse the [Kubernetes projects](k8projects.md).
+Kubernetes is a **declarative orchestration system**: you submit a desired state through the API; controllers and node agents continuously reconcile observed state toward it. A cluster comprises a **control plane** and one or more **worker nodes**. A node may be a physical or virtual machine.
 
-## k8 Architecture components
-Kubernetes consists of nodes which are physcial or cloud which hosts applications on the nodes in form of containers.
+For practical revision, see the [Kubernetes networking lab](../../networking/labs/kubernetes-service-dns-networkpolicy.md), [Kubernetes projects](k8projects.md), and [troubleshooting reference](troubleshooting/overview.md).
 
-The master node in the Kubernetes cluster is responsible for managing the Kubernetes cluster storing information regarding the different nodes planning which containers cause where monitoring the notes and containers on them etc.
+## Architecture at a glance
 
-The Master node does all of these using a set of components together known as the *control plane components.*
+```mermaid
+flowchart TB
+    U[kubectl / CI / controllers] --> API[kube-apiserver]
+    API <--> ETCD[(etcd: cluster state)]
+    CM[kube-controller-manager] --> API
+    SCH[kube-scheduler] --> API
+    subgraph Node["Worker node"]
+      K[kubelet] --> CR[Container runtime]
+      CR --> P[Pods]
+      NET[CNI networking / service proxy] --> P
+    end
+    K <--> API
+```
+
+**Important boundary:** Most components use the Kubernetes API to read or update cluster objects; **etcd is accessed through the API server**, not directly by kubelets, controllers, or schedulers. The API server is the control-plane entry point, not the packet-forwarding path for ordinary application traffic.
+
+## Control-plane components
 
 ### etcd
-details about the container informations like when it was loaded, which container is placed on which nodes etc. These are stored as DB in key/value format.
 
-- The ETCD Datastore stores information regarding the cluster such as Nodes, PODS, Configs, Secrets, Accounts, Roles, Bindings and Others.
-- Every information you see when you run the kubectl get command is from the ETCD Server.
+etcd is the distributed key-value store backing the Kubernetes API's persistent cluster state: workloads, node objects, configuration, policies, and other API resources. It is **not** a store of running container processes or application data. Back up etcd and test restoration in self-managed clusters; managed services may provide their own control-plane backup mechanism.
 
-### kube-api
-The kube-apiserver is the primary management component of kubernetes. The kube-api server is responsible for
-orchestrating all operations within the cluster. it exposes kubernetes API which is used by external users to perform mgmt operations on the cluster as well as the various controllers to monitor the state of the cluster and make the necessary changes as required and by the worker nodes to communicate with the server.
+### kube-apiserver
 
-Kube-apiserver is responsible for authenticating, validating requests, retrieving and Updating data in ETCD key-value store. In fact kube-apiserver is the only component that interacts directly to the etcd datastore. The other components such as kube-scheduler, kube-controller-manager and kubelet uses the API-Server to update in the cluster in thier respective areas.
+The API server authenticates and authorizes requests, applies admission controls, validates API objects, and reads or persists state through etcd. `kubectl`, controllers, and node agents communicate through this API.
 
-# Kubernetes Components Overview
+### kube-controller-manager
 
-| **Component**      | **Role**                                                                 | **Command/Action Example**                        |
-|--------------------|--------------------------------------------------------------------------|---------------------------------------------------|
-| **kubectl**        | CLI tool to send API requests                                            | `kubectl get nodes`                               |
-| **Kube API Server**| Central component for processing, authenticating, and validating requests| Processes API requests and interacts with etcd    |
-| **Scheduler**      | Monitors API Server for unassigned pods and assigns them to worker nodes | Automatically assigns node to newly created pods  |
-| **Kubelet**        | Runs on worker nodes to manage pod lifecycle and report status           | Interacts with container runtime to deploy images |
-| **etcd**           | Distributed key-value store used for saving cluster configuration        | Stores all cluster state data                     |
-
-
-### Control Managers
-Kube Controller Manager manages various controllers in kubernetes.
-
-In kubernetes terms, a controller is a process that continously monitors the state of the components within the system and works towards bringing the whole system to the desired functioning state.
-
-  - *Node-controller* : The node-controller takes care of nodes. They're responsible for onboarding new nodes to
-the cluster handling situations where nodes become unavailable or get gets destroyed.
-    - Monitoring Nodes
-      - Node Monitor Period 5s
-      - Node Monitoring Grace Period Status 40s
-      - POD Eviction timeout 5m
-
-  - *Replication-Controller* : Ensures that the desired number of containers are running at all times in your replication group.
-
+Controllers watch current state and reconcile it with desired state. Examples include Deployment/ReplicaSet reconciliation and node lifecycle monitoring. **Reconciliation is continuous**, so a failed Pod can be replaced without a human reissuing the deployment command.
 
 ### kube-scheduler
-kube-scheduler is responsible for scheduling pods on nodes.The kube-scheduler is only responsible for deciding which pod goes on which node. It doesn't actually place the pod on the nodes, thats the job of the kubelet.
-- Decision factors
-  - Resource requirements and Limits
-  - Taints and Tolerations
-  - Node Selectors and Affinity
+
+The scheduler selects a suitable node for a **pending, unscheduled Pod** and records that binding through the API. It considers resource requests, affinity, topology constraints, taints/tolerations, and scheduling policy. The scheduler does **not** launch containers; kubelet and the container runtime handle execution on the selected node.
+
+## Worker-node components
 
 ### kubelet
-Kubelet is the sole point of contact for the kubernetes cluster
 
-A kubelet is an agent that runs on each node in a cluster. It listens for instructions from the kube-api server and deploys or destroys containers on the nodes as required. The kube-api server periodically fetches status reports from the kubelet to monitor the state of nodes and containers on them.
+The kubelet watches Pods assigned to its node, ensures their containers are started and monitored through the container runtime, and reports status to the API server. It is **not** the sole point of contact for all Kubernetes networking or management traffic.
 
-### kube proxy
-Within Kubernetes Cluster, every pod can reach every other pod, this is accomplish by deploying a pod networking cluster to the cluster.
-Kube-Proxy is a process that runs on each node in the kubernetes cluster.
+### Container runtime
 
-The Kube-proxy service ensures that the necessary rules are in place on the worker nodes to allow the containers running on them to reach each other.
+A CRI-compatible runtime (for example, containerd) creates and manages containers as directed by kubelet.
 
-### Communication on kubernetes mgmt plane
-when user types *kubectl get nodes*, kube-api server authenticates the requests, validates it and gets information by *etcd* which stores all the dats using key/value pair. when new pod is created, kubeapi server authenticates first, and then validated. it then creates a pod without assigning it to a node, updates information in *etcd* and *etcd* reverts back to kube-api that information has been updated.
+### CNI and service networking
 
-Now, you have a container which is not assigned to any node, this is being seen by *kube-scheduler*  which verifies the requirements of container and would assign to right nodes and it would update the *kube-api* as to which nodes this container has to be scheduled, then *kube-api* would be send this request to *etcd* to update the inforamtion as to which nodes this container needs to be scheduuled, after which *kube-api* would pass this information to *kubelet* to start the container in appropriate worker node. kubelet then creates pod on the node and instructs the container runtime engine to deploy the image. Once done *kubelet* updates back inforamtion to *kube-api* which then sends back information to *etcd*
+A CNI plugin provides Pod network connectivity; a Service provides a stable virtual destination for changing backend Pods. Depending on cluster implementation, Service forwarding may use kube-proxy or an alternative data plane such as eBPF. **kube-proxy does not itself provide the Pod network.** NetworkPolicy enforcement depends on the CNI.
+
+## Follow one Pod from request to running state
+
+```mermaid
+sequenceDiagram
+    participant User as kubectl
+    participant API as API server
+    participant DB as etcd
+    participant C as Controller
+    participant S as Scheduler
+    participant K as Node kubelet
+    User->>API: Apply Deployment
+    API->>DB: Persist desired state
+    C->>API: Observe Deployment / create ReplicaSet and Pods
+    API->>DB: Persist Pod objects
+    S->>API: Observe unscheduled Pod / bind node
+    API->>DB: Persist binding
+    K->>API: Watch assigned Pod
+    K->>K: Ask runtime to start containers
+    K->>API: Report Pod status
+```
+
+### Verify the architecture in a real cluster
+
+```bash
+kubectl get nodes -o wide
+kubectl get pods -A -o wide
+kubectl get deployments,replicasets,pods -A
+kubectl describe pod <pod-name> -n <namespace>
+kubectl get events -A --sort-by=.lastTimestamp
+```
+
+Expected interpretation: a Deployment expresses desired replicas, its ReplicaSet owns matching Pods, the scheduler binds pending Pods to nodes, and kubelet reports running/readiness status. An event such as `FailedScheduling` points toward scheduling constraints, whereas `ImagePullBackOff` points toward image retrieval or credentials.
+
+## Components quick reference
+
+| Component | Primary responsibility | Example evidence |
+| --- | --- | --- |
+| API server | Request processing and API state | `kubectl get --raw /readyz` (subject to RBAC) |
+| etcd | Durable control-plane state | Control-plane health/metrics (access depends on cluster) |
+| Controller manager | Reconcile desired state | Deployment/ReplicaSet events |
+| Scheduler | Bind Pods to nodes | `FailedScheduling` events |
+| Kubelet | Reconcile assigned Pods on each node | Pod status and node conditions |
+| CNI | Pod networking and optional policy enforcement | Pod-to-Pod connectivity tests |
+| Service data plane | Forward Service traffic to endpoints | `kubectl get endpointslices` |
 
 ## Brief summary components
 
