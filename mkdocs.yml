@@ -54,6 +54,7 @@ nav:
 
   - Labs & Projects:
     - Browse Labs & Projects: labs/index.md
+    - Enterprise-Style PKI on Ubuntu: linux/admin/enterprise-pki-ubuntu-lab.md
     - Networking Labs:
       - Linux Namespaces and Routing: networking/labs/linux-routing-namespaces.md
       - Docker Bridge DNS and Port Publishing: networking/labs/docker-bridge-dns-port-publishing.md

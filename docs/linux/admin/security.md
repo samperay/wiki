@@ -229,7 +229,7 @@ EC2-2 is the private internal API. Its security group, `sg-2`, should allow:
 
 ### Create Enterprise-Style PKI
 
-Enterprise-style PKI separates the root CA from day-to-day issuing operations. The root CA should be offline or heavily restricted, while the intermediate CA signs workload certificates. This makes it possible to rotate or revoke an intermediate without replacing every root trust store.
+Enterprise-style PKI separates the root CA from day-to-day issuing operations. The root CA should be offline or heavily restricted, while the intermediate CA signs workload certificates. A replacement intermediate can chain to the same trusted root. If an intermediate is compromised, clients must also enforce revocation or explicit distrust of the affected issuer.
 
 ```text
 # Enterprise PKI signing hierarchy.
@@ -241,6 +241,10 @@ Server Certificates
 ```
 
 For production use, also plan certificate lifetime, SAN naming conventions, key sizes, revocation strategy, audit logs, renewal automation, and secret storage. Manual certificate handling is acceptable for a lab, but production PKI should be automated and observable.
+
+Think of a village council that keeps its master seal locked away. The council authorizes a registrar who issues the clinic's signboard certificate and the inspector's ID card. A guard who trusts the council can check both signatures in the chain. In PKI, the council is the root CA, the registrar is the intermediate CA, and the clinic and inspector use server and client certificates.
+
+Follow the [hands-on Ubuntu PKI tutorial](enterprise-pki-ubuntu-lab.md) on one local VM or across three VMs with a disconnected root. You'll issue both kinds of certificate, serve HTTPS and mTLS with Nginx, diagnose a broken chain, and rotate and revoke a client certificate.
 
 ## Common Pitfalls
 
