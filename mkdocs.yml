@@ -50,6 +50,7 @@ nav:
       - 'Lesson 11 — Graceful Shutdown, Connection Draining & Zero-Downtime Deployments': sysdesign/daily-architecture-lab/lesson-11-graceful-shutdown-connection-draining.md
       - 'Lesson 12 — Cache Stampedes, Singleflight & Origin Protection': sysdesign/daily-architecture-lab/lesson-12-cache-stampede-singleflight-stale-while-revalidate.md
       - 'Lesson 13 — HTTP Connection Pool Saturation & Cascading Timeouts': sysdesign/daily-architecture-lab/lesson-13-http-connection-pool-head-of-line-blocking.md
+      - 'Lesson 14 — Configuration Rollouts, Stale Replicas & Split-Brain Behavior': sysdesign/daily-architecture-lab/lesson-14-configuration-rollout-stale-replicas.md
 
   - Labs & Projects:
     - Browse Labs & Projects: labs/index.md
