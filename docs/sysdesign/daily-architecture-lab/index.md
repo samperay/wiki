@@ -2,7 +2,7 @@
 
 A growing **20–25-minute guided system-design and production SRE troubleshooting journal** for an experienced Python/Linux DevOps/SRE engineer progressing toward system and platform architecture.
 
-> **Publication status:** Lessons 01–14 are available in this Wiki. A published lesson is not necessarily read, practiced, or mentor-reviewed.
+> **Publication status:** Lessons 01–15 are available in this Wiki. A published lesson is not necessarily read, practiced, or mentor-reviewed.
 
 ## Learning method
 
@@ -28,6 +28,7 @@ Each lesson starts with design first principles and includes a realistic problem
 | 12 | Cache Stampedes, Singleflight & Origin Protection | [Read Lesson 12](lesson-12-cache-stampede-singleflight-stale-while-revalidate.md) |
 | 13 | HTTP Connection Pool Saturation & Cascading Timeouts — networking revision | [Read Lesson 13](lesson-13-http-connection-pool-head-of-line-blocking.md) |
 | 14 | Configuration Rollouts, Stale Replicas & Split-Brain Behavior | [Read Lesson 14](lesson-14-configuration-rollout-stale-replicas.md) |
+| 15 | Proxy Header Spoofing & Authorization Trust Boundaries — networking revision | [Read Lesson 15](lesson-15-proxy-header-spoofing-trust-boundaries.md) |
 
 [View the learning progress tracker](learning.md){ .md-button }
 
@@ -72,6 +73,7 @@ The 20–25-minute reading lesson is separate from the optional 35–60-minute h
 - **12 — Cache resilience:** Hot-key stampedes, singleflight, origin protection and freshness policy.
 - **13 — Backend networking revision:** HTTP client connection pools, bounded admission, and partial-result semantics. Reference: [Keepalive, Pooling and Timeouts](../../networking/performance/keepalive-pooling-timeouts.md).
 - **14 — Configuration consistency:** Atomic policy snapshots, stale replica detection, fail-closed enforcement and safe rollback.
+- **15 — Networking security revision:** Reverse proxy trust boundaries, spoofed forwarding headers, and authenticated authorization. Reference: [NAT, Proxies and Client Identity](../../networking/security/nat-proxies-source-addresses.md).
 - **Future lessons:** Progress to deeper distributed-system and platform design scenarios without repeating completed topics.
 
 ## Related knowledge and practical labs
