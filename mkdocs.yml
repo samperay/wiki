@@ -51,6 +51,7 @@ nav:
       - 'Lesson 12 — Cache Stampedes, Singleflight & Origin Protection': sysdesign/daily-architecture-lab/lesson-12-cache-stampede-singleflight-stale-while-revalidate.md
       - 'Lesson 13 — HTTP Connection Pool Saturation & Cascading Timeouts': sysdesign/daily-architecture-lab/lesson-13-http-connection-pool-head-of-line-blocking.md
       - 'Lesson 14 — Configuration Rollouts, Stale Replicas & Split-Brain Behavior': sysdesign/daily-architecture-lab/lesson-14-configuration-rollout-stale-replicas.md
+      - 'Lesson 15 — Proxy Header Spoofing & Authorization Trust Boundaries': sysdesign/daily-architecture-lab/lesson-15-proxy-header-spoofing-trust-boundaries.md
 
   - Labs & Projects:
     - Browse Labs & Projects: labs/index.md
