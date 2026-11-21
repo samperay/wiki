@@ -1,0 +1,21 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: 4-06-uppercase-task-with-input-and-result
+spec:
+  description: Tekton Task that processes input string to uppercase and persists it's output
+  params:
+    - name: input-message
+      description: Message to be processed
+      default: "Hello, Tekton!"
+      type: string
+  results:
+    - name: output-message
+      description: The result of the task
+  steps:
+    - name: echo-step
+      image: alpine:3.14
+      script: |
+        #!/bin/sh
+        uppercase_message=$(echo "$(params.input-message)" | tr '[:lower:]' '[:upper:]')
+        echo "$uppercase_message" | tee $(results.output-message.path)

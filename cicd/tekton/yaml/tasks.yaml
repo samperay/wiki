@@ -1,0 +1,12 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: 4-01-echo-task
+spec:
+  description: A simple example Tekton Task
+  steps:
+    - name: echo-step
+      image: alpine:3.14
+      script: |
+        #!/bin/sh
+        echo "Message: Hello, Tekton!"
