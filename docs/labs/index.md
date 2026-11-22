@@ -10,6 +10,7 @@
 
 | Lab | Skill / failure to investigate | Environment | Level | Optional hands-on estimate | Status |
 | --- | --- | --- | --- | --- | --- |
+| [FastAPI OAuth & token rotation](fastapi-oauth-token-rotation.md) | Bearer auth, JWT expiry, refresh rotation, concurrency | Local FastAPI | Intermediate | 2–3 sessions | Lessons 01–03 verified; Lesson 04 pending |
 | [Linux namespaces and routing](../networking/labs/linux-routing-namespaces.md) | veth, routes, reachability | Ubuntu VM | Intermediate | 45–75 min | Published; unverified |
 | [Docker bridge DNS and published ports](../networking/labs/docker-bridge-dns-port-publishing.md) | Container DNS, isolation, host binding | Mac Docker Desktop | Intermediate | 35–60 min | Published; unverified |
 | [Kubernetes Service, DNS and NetworkPolicy](../networking/labs/kubernetes-service-dns-networkpolicy.md) | Pod-to-Service path, DNS, policy | Local Kubernetes | Intermediate–advanced | 60–90 min | Published; unverified |
