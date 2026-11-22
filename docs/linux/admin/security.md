@@ -244,7 +244,7 @@ For production use, also plan certificate lifetime, SAN naming conventions, key 
 
 Think of a village council that keeps its master seal locked away. The council authorizes a registrar who issues the clinic's signboard certificate and the inspector's ID card. A guard who trusts the council can check both signatures in the chain. In PKI, the council is the root CA, the registrar is the intermediate CA, and the clinic and inspector use server and client certificates.
 
-Follow the [hands-on Ubuntu PKI tutorial](enterprise-pki-ubuntu-lab.md) on one local VM or across three VMs with a disconnected root. You'll issue both kinds of certificate, serve HTTPS and mTLS with Nginx, diagnose a broken chain, and rotate and revoke a client certificate.
+Follow the [hands-on Ubuntu PKI tutorial](pki.md) on one local VM or across three VMs with a disconnected root. You'll issue both kinds of certificate, serve HTTPS and mTLS with Nginx, diagnose a broken chain, and rotate and revoke a client certificate.
 
 ## Common Pitfalls
 
