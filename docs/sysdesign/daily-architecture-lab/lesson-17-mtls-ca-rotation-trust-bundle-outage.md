@@ -26,14 +26,14 @@ A 99.95% success objective permits **0.05% failures**: at 200 RPS, 17.28 million
 
 ### Initial architecture
 
-\`\`\`mermaid
+```mermaid
 flowchart LR
     C["Automation clients (500)"] -->|mTLS| G["Regional NGINX gateways"]
     G -->|Verified identity| A["FastAPI deployment control"]
     A --> DB[("Audit database")]
     PKI["Certificate issuer / distribution"] -.-> C
     PKI -.-> G
-\`\`\`
+```
 
 **Trust boundaries:** TLS client authentication terminates at the gateway. The gateway must overwrite any incoming identity header, not forward a user-supplied value. In production, secure the gateway-to-app hop with network policy and ideally a second authenticated transport; the lab uses a private Compose network only to illustrate the mechanism. A valid CA chain proves an issuer relationship, **not** that a client may approve any deployment.
 
@@ -41,7 +41,7 @@ flowchart LR
 
 ### Stage 1: Distribute trust before new identity
 
-\`\`\`mermaid
+```mermaid
 flowchart LR
     A["Old CA trusted; old leaves"] --> B["Trust old + new CA"]
     B --> C["Verify all gateways loaded bundle"]
@@ -49,13 +49,13 @@ flowchart LR
     D --> E["Measure adoption + authorization"]
     E --> F["Retire old leaves"]
     F --> G["Remove old CA after safety gate"]
-\`\`\`
+```
 
 The ordering is an invariant: **every serving gateway must trust the new CA before any client is required to present a new-CA certificate**. If the old CA is compromised, this overlap may be prohibited; choose controlled denial and explicit recovery rather than insecure rollback.
 
 ### Stage 2: Add a rollout controller and guardrails
 
-\`\`\`mermaid
+```mermaid
 flowchart TB
     O["Rotation orchestrator"] --> P{"Preflight: inventory + expiry + ownership?"}
     P -->|No| H["Block rollout and escalate"]
@@ -67,7 +67,7 @@ flowchart TB
     M -->|No| R["Pause; restore safe trust state"]
     M -->|Yes| W["Expand waves; verify adoption"]
     W --> X["Remove old CA only after zero dependent clients"]
-\`\`\`
+```
 
 ### Alternatives and tradeoffs
 
@@ -101,62 +101,62 @@ At 09:00 UTC a release controller deploys **new-CA-only** trust to 40% of gatewa
 
 **1. Establish scope and timeline.** Compare regional successful request rate, handshake failures, affected identities and rollout timestamps. Ask whether the failure correlates with *gateway instance* or *client certificate*. Preserve UTC timestamps, request/job IDs, gateway instance ID and certificate issuer fingerprints (not private keys).
 
-\`\`\`bash
+```bash
 date -u
 journalctl -u nginx --since "2026-11-23 09:00:00 UTC" --no-pager | tail -100
 # On Kubernetes/OpenShift:
 kubectl -n gateway get pods -o wide
 kubectl -n gateway logs deploy/mtls-gateway --since=30m --all-containers=true
-\`\`\`
+```
 
-Expected illustrative gateway error: \`client SSL certificate verify error: (20:unable to get local issuer certificate)\`. The actual OpenSSL error may differ by chain, expiration or configuration.
+Expected illustrative gateway error: `client SSL certificate verify error: (20:unable to get local issuer certificate)`. The actual OpenSSL error may differ by chain, expiration or configuration.
 
 **2. Eliminate DNS, routing and TCP.** From a failing client, inspect resolution, route and socket establishment before interpreting TLS. Use the *actual* hostname and port.
 
-\`\`\`bash
+```bash
 getent ahosts gateway.internal.example  # Linux; on macOS use dig or dscacheutil
 ip route get 192.0.2.20                 # Linux; example documentation IP
 ss -tan '( dport = :443 )'             # Linux; check SYN-SENT / ESTAB
 nc -vz gateway.internal.example 443
-\`\`\`
+```
 
-If TCP succeeds but mTLS fails, DNS/routing is not the immediate cause. On macOS, use \`route -n get 192.0.2.20\` and \`netstat -an -p tcp\` instead of Linux-specific \`ip\` and \`ss\`. Replace example IP/host with real environment values.
+If TCP succeeds but mTLS fails, DNS/routing is not the immediate cause. On macOS, use `route -n get 192.0.2.20` and `netstat -an -p tcp` instead of Linux-specific `ip` and `ss`. Replace example IP/host with real environment values.
 
 **3. Inspect both sides of the handshake without disabling verification.**
 
-\`\`\`bash
+```bash
 openssl x509 -in client.crt -noout -subject -issuer -dates -ext subjectAltName
 openssl verify -CAfile trusted-client-ca.pem client.crt
 openssl s_client -connect gateway.internal.example:443 \
   -servername gateway.internal.example \
   -cert client.crt -key client.key \
   -CAfile server-ca.pem -verify_return_error </dev/null
-\`\`\`
+```
 
-A successful TCP connect followed by a TLS alert or HTTP 400 from NGINX can indicate certificate rejection. \`openssl s_client\` output requires care: server-certificate verification and server acceptance of the *client* certificate are separate checks. Check gateway logs for the latter. Never use \`curl -k\` as a production repair.
+A successful TCP connect followed by a TLS alert or HTTP 400 from NGINX can indicate certificate rejection. `openssl s_client` output requires care: server-certificate verification and server acceptance of the *client* certificate are separate checks. Check gateway logs for the latter. Never use `curl -k` as a production repair.
 
 **4. Check loaded configuration, not just the desired file.**
 
-\`\`\`bash
+```bash
 nginx -T 2>&1 | grep -E 'ssl_client_certificate|ssl_verify_client'
 openssl crl -in issuer.crl -noout -text  # only if CRL is configured
 stat /etc/nginx/certs/trust.pem
 ps -ef | grep '[n]ginx'
-\`\`\`
+```
 
 File modification time does not prove workers loaded it. Use a controlled probe of each gateway instance and an explicit reload/rollout acknowledgment. In Kubernetes, compare Secret checksum annotation and running Pod revision. An old worker and a new worker may temporarily coexist during reload.
 
 **5. Compare application and database evidence.** Query application logs for the request ID: if the TLS handshake failed, the request will be absent. Inspect database audit rows only for requests that reached the application; missing rows do not prove DB outage.
 
-\`\`\`bash
+```bash
 grep 'deployment_id=demo-42' /var/log/deploy-api/app.log
 # Example PostgreSQL query, if audit storage exists:
 psql "$DATABASE_URL" -c "SELECT created_at, identity, decision FROM approval_audit WHERE deployment_id='demo-42' ORDER BY created_at DESC LIMIT 20;"
-\`\`\`
+```
 
 The database query is **illustrative production investigation**, not a prerequisite of the minimal lab. The lab intentionally does not include PostgreSQL because its failure mode is gateway trust, not persistence.
 
-**6. Trace and metric interpretation.** Expected metrics: \`tls_client_verify_failures_total{gateway,reason}\`, \`mtls_handshake_attempts_total{gateway,result}\`, \`gateway_loaded_trust_version{gateway}\`, \`client_ca_adoption_ratio{region}\`, \`api_requests_total{result}\`, and \`job_completion_latency_seconds\`. A trace is often absent for rejected TLS sessions; correlate connection-level gateway logs with job IDs rather than assuming application traces cover handshake failures. Avoid certificate serial numbers as high-cardinality metric labels.
+**6. Trace and metric interpretation.** Expected metrics: `tls_client_verify_failures_total{gateway,reason}`, `mtls_handshake_attempts_total{gateway,result}`, `gateway_loaded_trust_version{gateway}`, `client_ca_adoption_ratio{region}`, `api_requests_total{result}`, and `job_completion_latency_seconds`. A trace is often absent for rejected TLS sessions; correlate connection-level gateway logs with job IDs rather than assuming application traces cover handshake failures. Avoid certificate serial numbers as high-cardinality metric labels.
 
 ### Root cause, immediate mitigation and systemic weakness
 
@@ -191,17 +191,17 @@ Validate four cases in each region: old client + dual trust succeeds; new client
 
 ### BUILD — Prerequisites and project tree
 
-On macOS: Docker Desktop, \`docker compose\`, \`openssl\` and \`curl\`. On Ubuntu: Docker Engine with Compose plugin, \`openssl\`, \`curl\`; add your account to Docker permissions only if appropriate for your security model (or prefix Docker commands with \`sudo\`). Docker Desktop's Compose networking is identical for this lab. Check host port 8443 is free.
+On macOS: Docker Desktop, `docker compose`, `openssl` and `curl`. On Ubuntu: Docker Engine with Compose plugin, `openssl`, `curl`; add your account to Docker permissions only if appropriate for your security model (or prefix Docker commands with `sudo`). Docker Desktop's Compose networking is identical for this lab. Check host port 8443 is free.
 
-\`\`\`bash
+```bash
 docker version
 docker compose version
 openssl version
 mkdir -p "$HOME/architecture-lab17"/{app,nginx,certs}
 cd "$HOME/architecture-lab17"
-\`\`\`
+```
 
-\`\`\`text
+```text
 architecture-lab17/
 ├── app/
 │   └── main.py
@@ -213,20 +213,20 @@ architecture-lab17/
 ├── compose.yaml
 ├── generate-certs.sh
 └── validate.sh
-\`\`\`
+```
 
-Create each file using \`cat > filename <<'EOF'\`, paste the corresponding complete code block, then enter \`EOF\`. Keep all files inside this directory. **Fences below are normal Markdown, not escaped backticks.**
+Create each file using `cat > filename <<'EOF'`, paste the corresponding complete code block, then enter `EOF`. Keep all files inside this directory. **Fences below are normal Markdown, not escaped backticks.**
 
-**File: \`requirements.txt\`**
+**File: `requirements.txt`**
 
-\`\`\`text
+```text
 fastapi==0.115.12
 uvicorn==0.34.2
-\`\`\`
+```
 
-**File: \`Dockerfile\`**
+**File: `Dockerfile`**
 
-\`\`\`dockerfile
+```dockerfile
 FROM python:3.12-slim
 WORKDIR /app
 COPY requirements.txt .
@@ -235,11 +235,11 @@ COPY app/ /app/
 USER 65534
 EXPOSE 8000
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
-\`\`\`
+```
 
-**File: \`app/main.py\`**
+**File: `app/main.py`**
 
-\`\`\`python
+```python
 import logging
 from fastapi import FastAPI, Header, HTTPException
 
@@ -261,11 +261,11 @@ def approve(x_verified_client: str | None = Header(default=None)):
         raise HTTPException(status_code=403, detail="identity not authorized")
     log.info("approval_granted identity=%s", x_verified_client)
     return {"approved": True, "identity": x_verified_client}
-\`\`\`
+```
 
-**File: \`nginx/default.conf\`**
+**File: `nginx/default.conf`**
 
-\`\`\`nginx
+```nginx
 server {
     listen 8443 ssl;
     server_name localhost;
@@ -286,11 +286,11 @@ server {
         proxy_pass http://api:8000;
     }
 }
-\`\`\`
+```
 
-**File: \`compose.yaml\`**
+**File: `compose.yaml`**
 
-\`\`\`yaml
+```yaml
 name: architecture-lab17
 services:
   api:
@@ -310,11 +310,11 @@ services:
 networks:
   internal:
     driver: bridge
-\`\`\`
+```
 
-**File: \`generate-certs.sh\`**
+**File: `generate-certs.sh`**
 
-\`\`\`bash
+```bash
 #!/usr/bin/env bash
 set -euo pipefail
 mkdir -p certs
@@ -339,28 +339,28 @@ openssl x509 -req -in server.csr -CA old-ca.crt -CAkey old-ca.key \
 cp old-ca.crt trust.pem
 chmod 600 *.key
 echo "Generated disposable old/new client CAs and localhost server certificate."
-\`\`\`
+```
 
-**File: \`validate.sh\`**
+**File: `validate.sh`**
 
-\`\`\`bash
+```bash
 #!/usr/bin/env bash
 set -euo pipefail
-expected="\${1:-200}"
-client="\${2:-old}"
+expected="${1:-200}"
+client="${2:-old}"
 status=$(curl -sS -o /tmp/lab17-response-$$ -w '%{http_code}' \
   --cacert certs/old-ca.crt \
-  --cert "certs/\${client}-client.crt" --key "certs/\${client}-client.key" \
+  --cert "certs/${client}-client.crt" --key "certs/${client}-client.key" \
   -X POST https://localhost:8443/approve)
 cat /tmp/lab17-response-$$
 rm -f /tmp/lab17-response-$$
 printf '\nclient=%s expected=%s actual=%s\n' "$client" "$expected" "$status"
 test "$status" = "$expected"
-\`\`\`
+```
 
 Run:
 
-\`\`\`bash
+```bash
 chmod +x generate-certs.sh validate.sh
 ./generate-certs.sh
 docker compose up -d --build
@@ -368,85 +368,85 @@ docker compose ps
 docker compose logs --tail=30 gateway api
 # A fresh startup may need a few seconds for the API to be ready.
 ./validate.sh 200 old
-\`\`\`
+```
 
-**Expected baseline:** old client gets HTTP 200 with \`{"approved":true,"identity":"CN=service-client"}\`. Server certificate verification remains enabled via \`--cacert\`. If the gateway reports 502, check \`docker compose logs api gateway\` and retry only after API startup; if TLS fails, inspect certificate issuer, SAN, and NGINX config.
+**Expected baseline:** old client gets HTTP 200 with `{"approved":true,"identity":"CN=service-client"}`. Server certificate verification remains enabled via `--cacert`. If the gateway reports 502, check `docker compose logs api gateway` and retry only after API startup; if TLS fails, inspect certificate issuer, SAN, and NGINX config.
 
 ### BREAK — One controlled failure: premature CA removal
 
 **Do not change the client certificate yet.** Simulate a gateway that switches to new-only trust while the old client is still active:
 
-\`\`\`bash
+```bash
 cp certs/new-ca.crt certs/trust.pem
 docker compose exec gateway nginx -t
 docker compose exec gateway nginx -s reload
 ./validate.sh 400 old
-\`\`\`
+```
 
-**Expected:** NGINX rejects the old client certificate during TLS verification and returns HTTP **400** with an SSL certificate error page (NGINX's default 495 client-certificate verification handling). Some TLS stacks can instead surface an alert before a response; in that case capture the curl error and gateway log rather than assuming a precise status. \`validate.sh\` expects an HTTP response; if curl exits before HTTP, the script exits nonzero, which is also valid evidence of rejection.
+**Expected:** NGINX rejects the old client certificate during TLS verification and returns HTTP **400** with an SSL certificate error page (NGINX's default 495 client-certificate verification handling). Some TLS stacks can instead surface an alert before a response; in that case capture the curl error and gateway log rather than assuming a precise status. `validate.sh` expects an HTTP response; if curl exits before HTTP, the script exits nonzero, which is also valid evidence of rejection.
 
 ### INVESTIGATE — Capture evidence before changing anything else
 
-\`\`\`bash
+```bash
 docker compose logs --tail=60 gateway
 docker compose logs --tail=30 api
 openssl x509 -in certs/old-client.crt -noout -issuer -subject -dates
 openssl verify -CAfile certs/trust.pem certs/old-client.crt || true
 openssl verify -CAfile certs/trust.pem certs/new-client.crt
 docker compose exec gateway nginx -T 2>&1 | grep -E 'ssl_client_certificate|ssl_verify_client'
-\`\`\`
+```
 
-**Interpretation:** the old client certificate chains to old CA; the gateway now trusts only new CA. The FastAPI log has no new \`approval_granted\` for the rejected request, proving the request did not reach application authorization. A healthy API and open TCP port do not imply a successful mTLS handshake. If testing packet-level symptoms, capture on the host using Wireshark or \`tcpdump\` (Linux) with permission; TLS payloads are encrypted, so packet captures alone cannot prove which issuer failed verification.
+**Interpretation:** the old client certificate chains to old CA; the gateway now trusts only new CA. The FastAPI log has no new `approval_granted` for the rejected request, proving the request did not reach application authorization. A healthy API and open TCP port do not imply a successful mTLS handshake. If testing packet-level symptoms, capture on the host using Wireshark or `tcpdump` (Linux) with permission; TLS payloads are encrypted, so packet captures alone cannot prove which issuer failed verification.
 
 ### FIX — Restore safe overlap, then migrate client
 
-\`\`\`bash
+```bash
 cat certs/old-ca.crt certs/new-ca.crt > certs/trust.pem
 docker compose exec gateway nginx -t
 docker compose exec gateway nginx -s reload
 ./validate.sh 200 old
 ./validate.sh 200 new
-\`\`\`
+```
 
 **Expected:** both clients succeed. This is an intentional overlap only for **uncompromised** old CA. A real rollout must inventory and authorize each identity, verify gateway trust deployment, and monitor new-issuer adoption before removing the old CA.
 
 ### VALIDATE — Complete the migration, then negative-test
 
-\`\`\`bash
+```bash
 # Simulate that all real clients have migrated to new CA.
 cp certs/new-ca.crt certs/trust.pem
 docker compose exec gateway nginx -t
 docker compose exec gateway nginx -s reload
 ./validate.sh 200 new
 ./validate.sh 400 old
-\`\`\`
+```
 
-For the final negative test, \`400\` is the expected NGINX HTTP response; if your TLS stack ends the connection first, record the nonzero curl result and matching gateway verification log. The application should never log a new approval for a rejected old client.
+For the final negative test, `400` is the expected NGINX HTTP response; if your TLS stack ends the connection first, record the nonzero curl result and matching gateway verification log. The application should never log a new approval for a rejected old client.
 
 **Automated local check (after restoring dual trust):**
 
-\`\`\`bash
+```bash
 cat certs/old-ca.crt certs/new-ca.crt > certs/trust.pem
 docker compose exec gateway nginx -t
 docker compose exec gateway nginx -s reload
 ./validate.sh 200 old
 ./validate.sh 200 new
 docker compose exec gateway nginx -t
-\`\`\`
+```
 
 This validates positive paths and configuration syntax; negative behavior must also be observed during the controlled fault. Do not infer production readiness from a local Compose test.
 
 ### Cleanup — Preserve unrelated volumes and files
 
-\`\`\`bash
+```bash
 docker compose down
 # Optional: remove ONLY this disposable lab's locally generated certs,
 # after confirming you are in $HOME/architecture-lab17:
 pwd
 # rm -rf certs  # uncomment only when you intentionally discard lab keys
-\`\`\`
+```
 
-This Compose project declares **no named volumes**. Do **not** run \`docker compose down -v\`, \`docker volume prune\`, or \`docker system prune\`; unrelated data must remain untouched. Keep the source directory for repeat practice and add \`certs/\` to any future Git ignore rules.
+This Compose project declares **no named volumes**. Do **not** run `docker compose down -v`, `docker volume prune`, or `docker system prune`; unrelated data must remain untouched. Keep the source directory for repeat practice and add `certs/` to any future Git ignore rules.
 
 **Mentor cadence:** Execute **one step**, share the actual output (redact keys, hostnames, tokens), explain what it proves, and only then move to the next fault. This document remains a complete self-contained reference.
 
