@@ -53,6 +53,7 @@ nav:
       - 'Lesson 14 — Configuration Rollouts, Stale Replicas & Split-Brain Behavior': sysdesign/daily-architecture-lab/lesson-14-configuration-rollout-stale-replicas.md
       - 'Lesson 15 — Proxy Header Spoofing & Authorization Trust Boundaries': sysdesign/daily-architecture-lab/lesson-15-proxy-header-spoofing-trust-boundaries.md
       - 'Lesson 16 — Read Replica Lag & Consistency Contracts': sysdesign/daily-architecture-lab/lesson-16-read-replica-lag-consistency-contracts.md
+      - 'Lesson 17 — mTLS CA Rotation, Trust-Bundle Drift & Partial Outages': docs/sysdesign/daily-architecture-lab/lesson-17-mtls-ca-rotation-trust-bundle-outage.md
 
   - Labs & Projects:
     - Browse Labs & Projects: labs/index.md
