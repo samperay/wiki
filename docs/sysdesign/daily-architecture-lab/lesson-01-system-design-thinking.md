@@ -1,615 +1,677 @@
-# Lesson 01 — System Design Thinking and URL Shortener Reliability
+# Lesson 01 — System Design Thinking
 
-> **Daily Architecture Incident Lab** · 20–25 minutes · Foundation · 2026-11-06  
-> **Scenario:** All production incidents, metrics and log entries in this lesson are **simulated**.  
-> **Goal:** Move from operational troubleshooting to defensible architectural decisions.
+> **Daily Architecture Incident Lab** · one sitting · Mac · Docker Desktop
+> **About 45 minutes** the first time. The image build is the slow part. The break itself is a few commands and a careful look at the output.
 
-## Learning objectives
+A short link is a promise. After this service accepts `lab`, that code means `https://example.org/architecture`. This sitting puts that promise in three boxes on your laptop, proves each box while they are healthy, then stops the copy on purpose. The click still returns the original target. You will be able to point at the line that made that true, and at the requirement you gave up while the copy was dead.
 
-By the end, you should be able to:
+The traffic numbers below are planning assumptions. The HTTP bodies, the log line, and the SQLite rows are produced by the containers you start.
 
-1. Translate a product request into functional and nonfunctional requirements.
-2. Estimate traffic and storage before selecting technologies.
-3. Design the smallest viable architecture and identify its failure modes.
-4. Investigate a simulated 503 incident using evidence rather than guesses.
-5. Explain the difference between a symptom, immediate cause, root cause, and architectural weakness.
+## Goals
 
-**Method:** Understand → Quantify → Design → Challenge → Observe → Diagnose → Improve → Validate.
+By the end you should be able to:
 
-## 1. Design problem: URL shortening service (3 minutes)
+1. Split one product sentence into jobs, and name a command that proves each job.
+2. Estimate the read/write split before you decide a copy deserves its own box.
+3. Point at the smallest design and say what each box is allowed to get wrong.
+4. Break one box, then separate the symptom, the dead box, and the promise that still holds.
+5. Write that down in your own words, including the requirement the break suspended.
 
-A company wants a URL shortener. A customer submits a long URL and receives a short link. Visiting the short link redirects the browser to the original destination.
+## Constraints and safety
 
-```text
-POST /shorten {"url":"https://example.com/products/123"}
-→ {"short_url":"https://sho.rt/aB92xK"}
-GET /aB92xK → HTTP 302 Location: https://example.com/products/123
-```
+Run this on Docker Desktop. Every box in the lab is a container, or a file inside a volume. Docker Desktop runs every step.
 
-The business expects **1 million new links/day** and **100 million redirects/day**. It wants to tolerate traffic spikes without losing created mappings.
+- Create the files under `$HOME/architecture-labs/lesson-01`. That directory sits outside this wiki, so the lab files stay out of the wiki git tree.
+- Every Docker command in this lesson carries `-p archlab01`. That is the Compose project name. `stop`, `start`, `logs`, and `down` then apply to this lab.
+- The API is published only on `127.0.0.1:18001`. Redis has no published port. You reach Redis through `docker compose exec`.
+- Use `https://example.org/...` as the only target. This lab stores whatever URL you send it.
+- Before you stop a container, `docker compose -p archlab01 ps -a` should show names that start with `archlab01-`.
+- Cleanup is at the end. `down` removes this project. `down -v` also removes its volume.
 
-### Functional requirements
+If `docker info` fails, open Docker Desktop and wait until the engine is running. Then run `docker info` again.
 
-- Create a short URL from a valid HTTP/HTTPS destination.
-- Resolve a short code to its destination.
-- Optionally expire links.
-- Reject unknown or expired codes appropriately.
-- Future scope: custom aliases, click analytics, abuse detection.
+## The product is two jobs
 
-### Nonfunctional requirements (initial illustrative targets)
+Someone asks the service to remember a long URL. Someone else, usually many someone elses, asks what a short code means.
 
-| Dimension | Target | Architectural implication |
+Those jobs fail differently. A lost row means the promise was a lie. A slow answer means the click waited. A second meaning for the same code means you no longer know which promise you made.
+
+| Job | Requirement | Healthy looks like |
 |---|---|---|
-| Availability | 99.9% monthly | Avoid avoidable single-instance outages |
-| Redirect latency | Server-side p95 < 100 ms | Keep redirect path short |
-| Durability | Mapping survives application restarts | Durable primary database |
-| Consistency | Newly committed link resolves immediately | Read from authoritative mapping if needed |
-| Scalability | 10× average traffic burst | Capacity testing and horizontal scaling |
-| Security | HTTP/HTTPS only; block abuse | Validation and rate limiting |
-| Operability | Logs, metrics, traces | Observable request and dependency paths |
+| Remember | The row exists before the caller hears success | `POST /links` returns 201, then the row is in the file |
+| One meaning | One code has one target | A second `POST` for `lab` returns 409, and the first target is still the row |
+| Answer | A click returns the committed target | `GET /r/lab` echoes that exact URL |
+| Refuse a guess | An unknown code is a miss | `GET /r/missing` returns 404 |
+| Refuse junk | A non-URL never becomes a row | `ftp://...` returns 400, and the file grows no row |
+| Answer again quickly | A repeated click may be served from a copy | The second `GET` says `"source":"cache"`, and the target string matches the row |
 
-**Architect's question:** Which requirement, if missed, would make the product unusable? Discuss how the answer changes if the company serves internal links versus public marketing campaigns.
-
-## 2. Back-of-the-envelope estimation (3 minutes)
-
-Assume traffic is evenly distributed on average, with **10× peak** bursts:
-
-| Operation | Daily | Average requests/sec | 10× peak requests/sec |
-|---|---:|---:|---:|
-| Create | 1,000,000 | 11.6 | 116 |
-| Redirect | 100,000,000 | 1,157 | 11,574 |
+The business sketch that justifies the copy:
 
 ```text
-Average writes = 1,000,000 / 86,400 ≈ 11.6/s
-Average reads  = 100,000,000 / 86,400 ≈ 1,157/s
-Read/write ratio ≈ 100:1
+1,000,000 creates / 86,400 s ≈ 12 writes/s
+100,000,000 redirects / 86,400 s ≈ 1,160 reads/s
+10× peak redirects ≈ 12,000 reads/s
+reads : writes ≈ 100 : 1
 ```
 
-Assume a mapping consumes **500 bytes** including rough metadata/index allowance:
+Call a stored mapping 500 bytes, index included. A million creates is about 500 MB that day, and about 180 GB in a year, before backups and the indexes you forgot to count. The memory has to keep that. A copy can carry the hot mappings, so the book's read rate stays far below 12,000 per second for as long as the copy's target equals the row.
 
-```text
-Daily logical data = 1,000,000 × 500 B ≈ 500 MB
-Annual logical data ≈ 182.5 GB
-Five-year logical data ≈ 912.5 GB
-```
+Today you run one click at a time, so you can see which box answered. SQLite is the memory for this sitting because you can print the row. The same role, at that yearly volume and with more than one API process, is a database those processes share. Redis earns its place only on the read path, and only while its value equals the row.
 
-These estimates exclude backups, WAL, replication, indexes beyond the allowance, and analytics. They are **planning assumptions**, not measured capacity.
-
-**Design insight:** This is read-heavy. First evaluate indexed PostgreSQL lookups and caching; do not jump straight to database sharding.
-
-## 3. Design incrementally (5 minutes)
-
-### Version 1: smallest viable architecture
-
-```mermaid
-flowchart TD
-    C[Client / Browser] --> N[NGINX Reverse Proxy]
-    N --> A[Python Flask API]
-    A --> D[(PostgreSQL URL mappings)]
-```
-
-**Write path:** validate URL → generate candidate short code → insert with unique constraint → commit → return HTTP 201.  
-**Read path:** lookup short code → check expiry → return HTTP 302 with `Location` header.
-
-```sql
-CREATE TABLE urls (
-  id BIGSERIAL PRIMARY KEY,
-  short_code VARCHAR(16) NOT NULL UNIQUE,
-  original_url TEXT NOT NULL,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  expires_at TIMESTAMPTZ
-);
-```
-
-A collision on `short_code` must be handled with a bounded retry. A database transaction must commit before a successful create response. A 302 is appropriate when destinations may change; permanent 301 caching can complicate updates.
-
-**Limitations:** one API instance, one database instance, every redirect hits the database.
-
-### Version 2: multiple stateless API instances
-
-```mermaid
-flowchart TD
-    C[Clients] --> LB[Load Balancer]
-    LB --> A1[API 1]
-    LB --> A2[API 2]
-    LB --> A3[API 3]
-    A1 --> DB[(PostgreSQL)]
-    A2 --> DB
-    A3 --> DB
-```
-
-**Benefit:** a failed API instance need not take down the whole service.  
-**New risk:** each API instance has a DB connection pool; scaling APIs may exhaust database connections.
-
-### Version 3: cache-aside for redirects
-
-```mermaid
-flowchart TD
-    C[Clients] --> LB[Load Balancer]
-    LB --> API[Stateless API replicas]
-    API --> R[(Redis cache)]
-    R -->|Hit| API
-    R -->|Miss| API
-    API -->|On miss: authoritative lookup| DB[(PostgreSQL)]
-    API -->|Populate cache after DB read| R
-```
-
-The diagram shows the logical flow; the API makes both Redis and PostgreSQL calls.
-
-With a **95% hit rate** at peak 11,574 redirects/sec:
-
-```text
-DB reads ≈ 11,574 × (1 - 0.95) ≈ 579 reads/sec
-```
-
-**Trade-offs:** Redis reduces database load but adds cache invalidation, cold-start misses, another dependency, and cache-stampede risk. A Redis outage should not automatically cause uncontrolled fallback traffic to PostgreSQL.
-
-### Decision record
-
-| Decision | Why now? | Risk / when to revisit |
-|---|---|---|
-| PostgreSQL | Simple durable source of truth and uniqueness | Revisit if measured throughput/availability insufficient |
-| Stateless API replicas | Independent scaling and instance failure tolerance | Database connections grow with replica count |
-| Redis cache-aside | High read/write ratio; hot-key reuse | Cache miss bursts and stale data |
-| No sharding yet | No measured need; high operational cost | Revisit with demonstrated storage/write limits |
-
-## 4. Simulated production incident: 503 during a traffic spike (5 minutes)
-
-> **Simulation only:** The following timeline and logs are fabricated to teach investigation. They are not a documented outage.
-
-| Time | Observation |
-|---|---|
-| 10:00 | ~1,200 redirect requests/sec; 95% cache hit ratio |
-| 10:02 | Traffic increases to ~8,000 requests/sec |
-| 10:03 | Cache hit ratio drops to 40% due to many recently expired/distinct keys |
-| 10:04 | Database query concurrency rises; latency increases |
-| 10:05 | Application pool acquisition timeouts |
-| 10:06 | HTTP 503 responses rise |
-
-**Important nuance:** A spike involving one already-cached hot key could **increase** hit ratio. The simulated drop requires the additional assumption of many missing/expired keys.
-
-### Hypotheses before touching infrastructure
-
-| Hypothesis | Evidence to inspect |
-|---|---|
-| NGINX saturation | Error log, active connections, upstream status |
-| Python worker saturation | CPU, worker count, queueing latency |
-| Redis outage or miss storm | Redis errors, hit/miss deltas, evictions |
-| PostgreSQL contention | Active queries, wait events, locks, query plans |
-| SQLAlchemy pool exhaustion | Checked-out connections, pool wait timeouts |
-| Network degradation | TCP errors, latency and retransmits |
-
-### Step 1 — confirm user-visible failure
-
-```bash
-curl -sS -o /dev/null \
-  -w 'HTTP=%{http_code} TIME=%{time_total}\n' \
-  https://short.example/aB92xK
-```
-
-**Simulated output:** `HTTP=503 TIME=5.012`. This confirms failure, not the failing component.
-
-Inspect access logs (your actual log format must include upstream timing fields):
-
-```bash
-sudo tail -n 100 /var/log/nginx/access.log
-sudo tail -n 100 /var/log/nginx/error.log
-```
-
-**Simulated access entry:**
-
-```text
-GET /aB92xK status=503 request_time=5.012 upstream_status=503 upstream_response_time=5.010
-```
-
-**Interpretation:** upstream returned 503. Investigate the application, while still checking whether NGINX itself has resource constraints.
-
-### Step 2 — inspect application logs
-
-```bash
-journalctl -u url-shortener-api --since '10 minutes ago' --no-pager
-```
-
-**Simulated output:**
-
-```text
-sqlalchemy.exc.TimeoutError:
-QueuePool limit of size 20 overflow 10 reached,
-connection timed out, timeout 5.00
-```
-
-**Interpretation:** application cannot acquire a pooled DB connection within five seconds. In this simulation the API maps this exception to HTTP 503. The error does not yet explain *why* connections are occupied.
-
-### Step 3 — inspect database connections and queries
-
-```bash
-psql -U appuser -d shortener
-```
-
-```sql
-SHOW max_connections;
-
-SELECT state, COUNT(*)
-FROM pg_stat_activity
-GROUP BY state;
-
-SELECT pid, state, wait_event_type, wait_event,
-       NOW() - query_start AS duration,
-       LEFT(query, 120) AS query
-FROM pg_stat_activity
-WHERE state = 'active'
-ORDER BY duration DESC
-LIMIT 10;
-
-EXPLAIN (ANALYZE, BUFFERS)
-SELECT original_url FROM urls WHERE short_code = 'aB92xK';
-```
-
-**Possible observations:** many active sessions; increased query latency; lock or I/O waits. The `UNIQUE` constraint should create an index, but verify the query plan. **Connection count alone does not prove overload**; idle sessions and reserved connections matter.
-
-### Step 4 — examine Redis counters
-
-```bash
-redis-cli INFO stats | grep -E 'keyspace_hits|keyspace_misses|evicted_keys'
-```
-
-Redis hit/miss counters are cumulative. Compare two snapshots over the same interval:
-
-```text
-Earlier: hits=950000  misses=50000
-Later:   hits=1010000 misses=140000
-Interval: hits=60000 misses=90000
-Hit ratio = 60000 / (60000 + 90000) = 40%
-```
-
-These counters include all Redis key lookups; application-level cache metrics are more precise.
-
-### Step 5 — correlate evidence
-
-```mermaid
-flowchart TD
-    T[Traffic burst with many missing keys] --> M[Cache misses increase]
-    M --> Q[More PostgreSQL reads]
-    Q --> L[Query latency / concurrency increases]
-    L --> P[Connections held longer]
-    P --> X[SQLAlchemy pool acquisition timeout]
-    X --> E[HTTP 503]
-```
-
-Validate the chain using aligned timelines of cache misses, query latency, checked-out pool connections, pool wait duration, and 503 rate. Check for connection leaks and locks before finalizing root cause.
-
-## 5. Symptom, cause and architectural weakness (2 minutes)
-
-| Layer | Finding in this simulation |
-|---|---|
-| Symptom | Clients see HTTP 503 |
-| Immediate cause | API cannot acquire DB connection |
-| Contributing condition | Cache misses increase DB lookups |
-| Root cause | Demand exceeds sustainable database/pool capacity during miss burst |
-| Design weakness | No effective protection against cache-miss surges |
-
-**Why not simply increase pool size?** More concurrent connections can worsen database contention. Size pools against the database's measured concurrency budget, accounting for all API replicas and other clients.
-
-## 6. Mitigation and redesign (3 minutes)
-
-**Immediate response:** identify failing dependency, protect DB with bounded concurrency, shed excess load, reduce abusive traffic, restore hot cache keys when safe, and avoid uncontrolled retries. Prefer reversible changes with clear rollback criteria.
-
-**Durable improvements:**
-
-1. **Admission control:** bound concurrent database lookups; fail quickly and predictably rather than collapse.
-2. **Single-flight coalescing:** combine concurrent lookups for the same key. Local coalescing is per process, not globally coordinated.
-3. **TTL jitter:** spread expirations, e.g. `300 + random.randint(0, 60)` seconds.
-4. **Cache failure strategy:** circuit breaker and *bounded* DB fallback; never unlimited fallback.
-5. **Observability:** HTTP error rate, p95/p99 latency, cache hit ratio, DB query latency, pool wait, checked-out connections, PostgreSQL waits, rejection rate.
-6. **Validation:** run controlled load tests with cold cache, warm cache, Redis failure, and database slowdowns; compare with SLOs and capacity budget.
-
-```mermaid
-flowchart TD
-    C[Clients] --> LB[Load Balancer / rate limiting]
-    LB --> API[Stateless API replicas]
-    API --> R[(Redis)]
-    API -->|Miss / bounded fallback| S[Per-key request coalescing]
-    S --> B[DB concurrency limit]
-    B --> DB[(PostgreSQL)]
-    B -->|Capacity exhausted| F[Controlled failure]
-```
-
-## 7. Architect challenges — answer independently (3 minutes)
-
-**Challenge 1 — Redis unavailable.** Would you fail all redirects or bypass Redis? Explain your choice using database capacity, circuit breakers, latency, and overload protection.
-
-**Challenge 2 — Connection math.** Three API replicas each have `pool_size=20` and `max_overflow=10`. How many simultaneous DB connections can they open? What changes with ten replicas if PostgreSQL allows 200 connections? Consider connections reserved for other clients.
-
-**Challenge 3 — Growth.** Traffic rises to 100,000 redirects/sec. Should you shard PostgreSQL immediately? State what measurements and experiments you would perform first, and what evidence would justify sharding.
-
-## 8. Optional practical lab
-
-Reuse your Ubuntu/Nginx/Python environment if convenient; **do not alter existing project configurations**. Create a separate local test service or port.
-
-1. Implement a minimal `/shorten` and `/<code>` Flask API with a PostgreSQL table and unique short-code constraint.
-2. Verify create, redirect, missing-code, and expiration behavior using `curl`.
-3. Run a baseline load test with [k6](https://grafana.com/docs/k6/latest/) or a small Python client. Record RPS, p95 latency, and errors.
-4. Add cache-aside Redis and measure hit ratio and DB query reduction.
-5. Repeat with cold cache and Redis intentionally unavailable. Protect PostgreSQL with bounded fallback.
-6. Record observations and your design decisions in the review section below.
-
-**Safety:** test only against local or authorized environments. Use sample domains, not production endpoints.
-
-## 9. Related knowledge and hands-on labs
-
-- [System Design Framework](../framework.md)
-- [System Design Components](../components.md)
-- [Existing URL Shortener Case Study](../app/url_shortner.md) — a more ambitious scale scenario; compare its assumptions with this lesson.
-- [SRE Observability](../../sre/observability.md)
-- [Architecture Labs — NGINX Project](https://github.com/samperay/sre-devops-architecture-labs) — reference the relevant project and PR after confirming their exact paths.
-
-## 10. Lesson recap
-
-**Architecture is the discipline of choosing and defending trade-offs under measurable constraints.** Start with requirements and capacity. Build the simplest design that works. Investigate failures by correlating evidence, then address the failure mode—not just the error message.
-
-**Next lesson:** Reliable notification systems: synchronous vs asynchronous delivery, durable queues, retries, duplicate notifications, and idempotency.
-
----
-
-## Practical Labs
-
-### Architecture-to-code walkthrough — read before running the lab
-
-**Architecture being practiced:** URL shortener request path.
-
-**Trace one request through the exact local components:** Client → FastAPI redirect lookup → Redis cache → SQLite durable mapping.
-
-**Design requirement to test:** A cache outage should be distinguishable from a database outage; Redis is optional, SQLite is the source of truth.
-
-**Run in this order, stopping to inspect actual output after each step:** Create /links, read /r/{code} twice, then stop Redis. Observe database fallback, recover Redis and verify cache hits.
-
-**What this small lab models—and what it does not:** The lesson discusses large-scale URL-shortener architecture; the local app deliberately reduces the database to SQLite and uses one API process. Compare the real architecture's sharding, cache invalidation and hot-key concerns with this single-node experiment.
-
-**Learning checkpoint:** Before reading the next step, predict the HTTP response, which component will fail, which evidence will identify it, and whether the proposed fix addresses the symptom or the underlying architectural weakness. Write your prediction and actual observation in the lab evidence section.
-
-
-**LEARN → DESIGN → BUILD → BREAK → INVESTIGATE → FIX → VALIDATE**
-
-> **Scope:** An additional runnable local exercise; the complete architecture lesson and original optional exercise above remain intact. Estimated hands-on time: 35–60 minutes. Run on **Mac Docker Desktop** (preferred for multi-container workloads) or **Ubuntu VM** with Docker Engine + Compose plugin installed. All services bind to loopback and use a dedicated Compose project. This is a disposable lab, never production.
-
-### LEARN — Experiment and expected failure
-
-**Scenario:** URL shortener hot-key and cache failure. Architect decision: fail open for redirects or fail closed? Explain impact of cache misses, database load, and hot keys.
-
-### DESIGN — Local topology
+## Three boxes
 
 ```mermaid
 flowchart LR
-  T["Terminal / curl"] --> A["FastAPI :8000"]
-  A --> D["Redis container"]
-  A --> O["Container logs and metrics"]
+  You["curl on the Mac"] --> API["API :18001"]
+  API --> Redis["Redis copy, 60s TTL"]
+  API --> DB["SQLite file in url_data"]
 ```
 
-Create a dedicated directory `architecture-lab-01`. Run all commands below from it on the **Mac terminal** or **Ubuntu VM shell**, whichever runs Docker. Do not run them inside another existing application container.
+| Box | What it is | Why it exists | What you should notice |
+|---|---|---|---|
+| API | One Python process. The only door. | It decides 201, 409, 400, 404, and 200, and it decides which store it asked. | The mappings live in the volume. Restart this process and the target is still right. |
+| SQLite | The file `/data/urls.db` on the named volume `url_data`. | The book. `code` is the primary key, so the file itself refuses a second meaning. | The 201 is returned after `commit`. The row survives an API restart and a Redis stop. |
+| Redis | The key `lab`, value equal to the target, life 60 seconds. | The photocopy. A repeated click can skip the book. | `TTL lab` is a countdown. The row has no countdown. |
+
+A real shortener answers a click with `302 Location`. This lab answers with JSON, and the JSON names the box that produced the target. `"source"` is a window cut into the service so you can see the path. Leave it in while you are learning the path.
+
+`/health` always uses HTTP 200 when the process is up. The body is the report: `api`, `database`, and `cache` each say `ok` or `down: ...`. A check that stored only the status code would miss the break you are about to make. Read the body.
+
+## Build the lab
+
+The API catches `RedisError`, writes a warning, and reads SQLite. Create never calls Redis. Those two facts are the whole design of the break. Read them in the file before you start the containers.
+
+`database()` opens `/data/urls.db`, hands it to the request, then commits. The commit is the moment the promise exists. The table is created when the process starts. The volume keeps the file after the process exits, so that `CREATE TABLE` is a first-time act on a later start.
+
+`create()` rejects a bad code or a non-HTTP target with 400, before either store is touched. The insert is one statement. A primary-key clash becomes 409 with the sentence `that code already has a target`. `from None` keeps that sentence as the whole response. The function returns 201 only after the commit. It does not call Redis.
+
+`resolve()` asks Redis first. `decode_responses=True` makes the copy a string, the same type as the column. A hit returns `"source":"cache"` and does not open the file. `RedisError` is logged on the `uvicorn.error` logger, which is the logger already attached to `docker compose logs`, and the function continues as if the copy were missing. A missing row is 404. A found row is stored with `SETEX` for 60 seconds. If that store fails, the warning is logged and the caller still receives the target, because the book already answered.
+
+The Redis client waits at most 0.3 seconds. That cap matters when the host exists and then stays silent. The failure in this lab is faster: the name is gone, and the lookup returns at once.
 
 ```bash
-mkdir -p architecture-lab-01/app architecture-lab-01/tests
-cd architecture-lab-01
+mkdir -p "$HOME/architecture-labs/lesson-01/app"
+cd "$HOME/architecture-labs/lesson-01"
 touch app/__init__.py
+docker info >/dev/null
 docker compose version
 ```
 
-### BUILD — Complete minimal application
+`app/__init__.py` can be empty. It makes `app` a package so `uvicorn app.main:app` has a module to import.
 
-Directory layout:
+**`requirements.txt`**
 
-```text
-architecture-lab-01/
-├── app/
-│   ├── __init__.py
-│   └── main.py
-├── tests/
-│   └── test_health.py
-├── requirements.txt
-├── Dockerfile
-└── compose.yaml
-```
-
-**File: `app/main.py`**
-
-```python
-import os, sqlite3, time
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
-from redis import Redis
-app = FastAPI()
-db_path = "/data/urls.db"
-cache = Redis(host="redis", port=6379, socket_connect_timeout=1, socket_timeout=1, decode_responses=True)
-class Link(BaseModel):
-    code: str
-    target: str
-@app.on_event("startup")
-def init():
-    with sqlite3.connect(db_path) as db:
-        db.execute("CREATE TABLE IF NOT EXISTS urls(code TEXT PRIMARY KEY, target TEXT)")
-@app.post("/links", status_code=201)
-def create(link: Link):
-    with sqlite3.connect(db_path) as db:
-        db.execute("INSERT OR REPLACE INTO urls VALUES (?,?)", (link.code,link.target))
-    try: cache.delete(link.code)
-    except Exception: pass
-    return link
-@app.get("/r/{code}")
-def resolve(code: str):
-    try:
-        cached=cache.get(code)
-        if cached: return {"target":cached,"source":"cache"}
-    except Exception: pass
-    with sqlite3.connect(db_path) as db:
-        row=db.execute("SELECT target FROM urls WHERE code=?", (code,)).fetchone()
-    if not row: raise HTTPException(404,"unknown code")
-    try: cache.setex(code,60,row[0])
-    except Exception: pass
-    return {"target":row[0],"source":"database"}
-@app.get("/health")
-def health(): return {"status":"ok"}
-```
-
-**File: `requirements.txt`**
-
-```text
+```bash
+cat > requirements.txt << 'EOF'
 fastapi==0.115.12
 uvicorn==0.34.2
 redis==5.2.1
-httpx==0.28.1
-pytest==8.3.5
+EOF
 ```
 
-**File: `Dockerfile`**
+**`Dockerfile`**
 
-```dockerfile
-FROM python:3.11-slim
+```bash
+cat > Dockerfile << 'EOF'
+FROM python:3.12-slim
 WORKDIR /code
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 COPY app ./app
-COPY tests ./tests
-CMD ["uvicorn","app.main:app","--host","0.0.0.0","--port","8000"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+EOF
 ```
 
-**File: `compose.yaml`**
+**`compose.yaml`**
 
-```yaml
+The API port is bound to loopback. Redis is only on the Compose network, under the DNS name `redis`. The volume `url_data` is where the promise file lives. With `-p archlab01` its full name is `archlab01_url_data`.
+
+```bash
+cat > compose.yaml << 'EOF'
 services:
   api:
     build: .
-    ports: ["127.0.0.1:18001:8000"]
-    volumes: ["url_data:/data"]
-    depends_on: [redis]
+    ports:
+      - "127.0.0.1:18001:8000"
+    volumes:
+      - url_data:/data
+    depends_on:
+      - redis
   redis:
     image: redis:7-alpine
 volumes:
   url_data: {}
+EOF
 ```
 
-**File: `tests/test_health.py`**
+`depends_on` waits until the Redis container has started. It does not wait until Redis accepts commands. If the first health check says the cache is down, wait a second and run it again.
 
-```python
-def test_health():
-    from fastapi.testclient import TestClient
-    from app.main import app
-    assert TestClient(app).get("/health").status_code == 200
+**`app/main.py`**
+
+```bash
+cat > app/main.py << 'EOF'
+import logging
+import sqlite3
+from contextlib import asynccontextmanager, contextmanager
+from urllib.parse import urlparse
+
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
+from redis import Redis
+from redis.exceptions import RedisError
+
+log = logging.getLogger("uvicorn.error")
+
+DB_PATH = "/data/urls.db"
+CACHE_TTL_SECONDS = 60
+
+cache = Redis(
+    host="redis",
+    port=6379,
+    socket_connect_timeout=0.3,
+    socket_timeout=0.3,
+    decode_responses=True,
+)
+
+
+@contextmanager
+def database():
+    connection = sqlite3.connect(DB_PATH, timeout=2)
+    try:
+        yield connection
+        connection.commit()
+    finally:
+        connection.close()
+
+
+@asynccontextmanager
+async def lifespan(_app: FastAPI):
+    with database() as db:
+        db.execute(
+            """
+            CREATE TABLE IF NOT EXISTS urls (
+                code TEXT PRIMARY KEY,
+                target TEXT NOT NULL
+            )
+            """
+        )
+    yield
+
+
+app = FastAPI(lifespan=lifespan)
+
+
+class Link(BaseModel):
+    code: str
+    target: str
+
+
+def reject_bad_link(link: Link) -> None:
+    if not link.code.isalnum() or not 1 <= len(link.code) <= 16:
+        raise HTTPException(status_code=400, detail="code must be 1-16 letters or digits")
+    parsed = urlparse(link.target)
+    if parsed.scheme not in {"http", "https"} or not parsed.netloc:
+        raise HTTPException(status_code=400, detail="target must be an http or https URL")
+
+
+@app.get("/health")
+def health():
+    database_status = "ok"
+    try:
+        with database() as db:
+            db.execute("SELECT 1")
+    except sqlite3.Error as exc:
+        database_status = f"down: {exc.__class__.__name__}"
+
+    cache_status = "ok"
+    try:
+        cache.ping()
+    except RedisError as exc:
+        cache_status = f"down: {exc}"
+
+    return {"api": "ok", "database": database_status, "cache": cache_status}
+
+
+@app.post("/links", status_code=201)
+def create(link: Link):
+    reject_bad_link(link)
+    try:
+        with database() as db:
+            db.execute(
+                "INSERT INTO urls (code, target) VALUES (?, ?)",
+                (link.code, link.target),
+            )
+    except sqlite3.IntegrityError:
+        raise HTTPException(
+            status_code=409,
+            detail="that code already has a target",
+        ) from None
+    return {"code": link.code, "target": link.target}
+
+
+@app.get("/r/{code}")
+def resolve(code: str):
+    try:
+        cached = cache.get(code)
+    except RedisError as exc:
+        log.warning("cache read failed code=%s error=%s", code, exc)
+        cached = None
+
+    if cached is not None:
+        return {"code": code, "target": cached, "source": "cache"}
+
+    with database() as db:
+        row = db.execute(
+            "SELECT target FROM urls WHERE code = ?",
+            (code,),
+        ).fetchone()
+    if row is None:
+        raise HTTPException(status_code=404, detail="unknown code")
+
+    target = row[0]
+    try:
+        cache.setex(code, CACHE_TTL_SECONDS, target)
+    except RedisError as exc:
+        log.warning("cache fill failed code=%s error=%s", code, exc)
+    return {"code": code, "target": target, "source": "database"}
+EOF
 ```
 
-Start the lab and wait for the API:
+Start it. The first build downloads the Python image and the three libraries. Pip may warn that it is running as root inside the image. That warning is about the disposable image. The lines that matter are `Started` for `archlab01-redis-1` and `archlab01-api-1`.
 
 ```bash
 docker compose -p archlab01 up -d --build
 docker compose -p archlab01 ps
-curl -fsS http://127.0.0.1:18001/health
 ```
 
-**Expected:** the API reports `{"status":"ok"}`. On the first startup, the image build may take a few minutes. If a dependency is not ready, wait a few seconds and retry; inspect `docker compose ... logs` rather than assuming a design fault.
-
-### VALIDATE baseline — Prove healthy operation before injecting faults
+If Compose says the port is already allocated, another process owns `127.0.0.1:18001`. See who:
 
 ```bash
-curl -s -X POST http://127.0.0.1:18001/links -H 'Content-Type: application/json' -d '{"code":"sre","target":"https://example.org"}'
-curl -s http://127.0.0.1:18001/r/sre
-curl -s http://127.0.0.1:18001/r/sre
+lsof -nP -iTCP:18001 -sTCP:LISTEN
 ```
 
-**Expected observations:** First lookup uses database; next uses cache. When Redis stops, requests still succeed via SQLite fallback (degraded latency); restart restores caching. Compare cold versus warm response timings.
+Stop that process if it is a previous copy of this lab, then run `up` again.
 
-### BREAK — Introduce ONE controlled failure
+## Learn — prove the promise while everything is up
 
-Only use the dedicated `archlab01` Compose project; do not target existing databases or application containers.
+Work from `$HOME/architecture-labs/lesson-01`. Stop after each command and read the body. A later step is meaningless if an earlier one lied.
+
+**Is the door up, and are both stores answering?**
+
+```bash
+curl -sS -w '\nHTTP %{http_code}\n' http://127.0.0.1:18001/health
+```
+
+```text
+{"api":"ok","database":"ok","cache":"ok"}
+HTTP 200
+```
+
+Three fields, three boxes. HTTP 200 means the process answered. The fields mean the book accepted `SELECT 1` and Redis answered `PING`.
+
+**Will it remember a code, and will it refuse a second meaning?**
+
+```bash
+curl -sS -w '\nHTTP %{http_code}\n' \
+  -X POST http://127.0.0.1:18001/links \
+  -H 'Content-Type: application/json' \
+  -d '{"code":"lab","target":"https://example.org/architecture"}'
+```
+
+```text
+{"code":"lab","target":"https://example.org/architecture"}
+HTTP 201
+```
+
+The body has no `source` field. Create never spoke to Redis, so it has nothing to report about the copy.
+
+Send the same code with a different target. The question is whether the promise can be overwritten by a second caller.
+
+```bash
+curl -sS -w '\nHTTP %{http_code}\n' \
+  -X POST http://127.0.0.1:18001/links \
+  -H 'Content-Type: application/json' \
+  -d '{"code":"lab","target":"https://example.org/other"}'
+```
+
+```text
+{"detail":"that code already has a target"}
+HTTP 409
+```
+
+The primary key did that. The API translated `sqlite3.IntegrityError` into 409. The second URL was refused before it could become the row.
+
+**Will junk stay out of the book?**
+
+```bash
+curl -sS -w '\nHTTP %{http_code}\n' \
+  -X POST http://127.0.0.1:18001/links \
+  -H 'Content-Type: application/json' \
+  -d '{"code":"bad","target":"ftp://example.org/x"}'
+```
+
+```text
+{"detail":"target must be an http or https URL"}
+HTTP 400
+```
+
+**What did the file actually keep?** This question is the one the HTTP status cannot answer alone.
+
+```bash
+docker compose -p archlab01 exec api \
+  python -c 'import sqlite3; print(sqlite3.connect("/data/urls.db").execute("select code, target from urls").fetchall())'
+```
+
+```text
+[('lab', 'https://example.org/architecture')]
+```
+
+One row. The 409 left it alone. The 400 added nothing. The target is the first one you sent.
+
+**Which box answers a click, the first time and the second time?**
+
+```bash
+curl -sS -w '\nHTTP %{http_code}\n' http://127.0.0.1:18001/r/lab
+curl -sS -w '\nHTTP %{http_code}\n' http://127.0.0.1:18001/r/lab
+```
+
+```text
+{"code":"lab","target":"https://example.org/architecture","source":"database"}
+HTTP 200
+{"code":"lab","target":"https://example.org/architecture","source":"cache"}
+HTTP 200
+```
+
+The target string is the row both times. The first call missed, read the book, and wrote the photocopy. The second call hit the photocopy and returned before opening the file. Same promise, two boxes.
+
+**What is an unknown code?**
+
+```bash
+curl -sS -w '\nHTTP %{http_code}\n' http://127.0.0.1:18001/r/missing
+```
+
+```text
+{"detail":"unknown code"}
+HTTP 404
+```
+
+A miss is a different outcome from a dead dependency. You want to have seen a real 404 before the break, so a later 200 is obviously the old row and a later 404 would mean something else.
+
+**Can you see the photocopy itself, and does it expire?**
+
+```bash
+docker compose -p archlab01 exec redis redis-cli GET lab
+docker compose -p archlab01 exec redis redis-cli TTL lab
+```
+
+```text
+https://example.org/architecture
+(integer) 57
+```
+
+Your integer will be somewhere from 1 to 60 if you run this within a minute of the second click. That countdown is the life of the copy. The SQLite row has no matching field. `GET` printing the same URL as the row is the healthy copy: same bytes, shorter life.
+
+If you paused and `GET` prints `(nil)` while `TTL` prints `(integer) -2`, the copy already expired. Run `GET /r/lab` twice. The first response says `"source":"database"`, the second says `"source":"cache"`, and `GET lab` prints the URL again. Same healthy state, rebuilt.
+
+**Does the promise live in the Python process?** Restart only the API. Redis keeps running. The volume stays mounted.
+
+```bash
+docker compose -p archlab01 restart api
+curl -sS -w '\nHTTP %{http_code}\n' http://127.0.0.1:18001/r/lab
+```
+
+If curl says connection refused, the process is still booting. Run the same curl again.
+
+The target is still `https://example.org/architecture`. `"source"` stays `"cache"` when the photocopy has seconds left, which it will if you do this immediately. The new process answered from Redis. The mappings live in the volume and, for these few seconds, in the copy. Print the row again if you want the book in front of you:
+
+```bash
+docker compose -p archlab01 exec api \
+  python -c 'import sqlite3; print(sqlite3.connect("/data/urls.db").execute("select code, target from urls").fetchall())'
+```
+
+The same single row. You have now seen healthy: one meaning, a copy that matches it, a process that can die without taking the meaning with it.
+
+## Predict
+
+Write four lines before you stop anything. Put them in [the review](#1-my-understanding) or on paper. Guessing after you have seen the body teaches nothing.
+
+1. HTTP status and body of `GET /health` after Redis is stopped.
+2. HTTP status, `target`, and `source` of `GET /r/lab`.
+3. HTTP status of a `POST` that creates a new code, `fresh`.
+4. Whether the API log is quiet, or what the warning says.
+
+You have the design in `resolve()` and in `create()`. The prediction is you, applying it.
+
+## Break the copy
+
+This is the only break. It stops the Redis container. It leaves the API running and leaves the volume in place.
 
 ```bash
 docker compose -p archlab01 stop redis
-curl -s http://127.0.0.1:18001/r/sre
 ```
 
-### INVESTIGATE — Collect evidence before fixing
+Compose prints `Stopped` for `archlab01-redis-1`.
+
+## Observe
+
+**Which boxes does the door still claim?**
 
 ```bash
-docker compose -p archlab01 ps
-docker compose -p archlab01 logs --tail=30 api redis
+curl -sS -w '\nHTTP %{http_code}\n' http://127.0.0.1:18001/health
 ```
 
-**Reasoning checklist:** Which component is unavailable or slow? Is the error a connection refusal, timeout, invalid schema, queue backlog, or application exception? Which log or metric proves your hypothesis? What observation would disprove it? Separate trigger, root cause, and design weakness.
+```text
+{"api":"ok","database":"ok","cache":"down: Error -2 connecting to redis:6379. Name or service not known."}
+HTTP 200
+```
 
-### FIX — Restore service and improve the design
+The status is 200. The process is up, which is what a load balancer would see if it stored only the status. The cache field is the symptom. `database` is still `ok`. Error `-2` is `EAI_NONAME` from the C library inside the API container: `getaddrinfo` could not find a host named `redis`. Docker's DNS drops the name when that container is stopped. The lookup fails before any TCP connection.
+
+**Did the old promise survive?**
+
+```bash
+curl -sS -w '\nHTTP %{http_code}\n' http://127.0.0.1:18001/r/lab
+curl -sS -w '\nHTTP %{http_code}\n' http://127.0.0.1:18001/r/lab
+```
+
+```text
+{"code":"lab","target":"https://example.org/architecture","source":"database"}
+HTTP 200
+{"code":"lab","target":"https://example.org/architecture","source":"database"}
+HTTP 200
+```
+
+Both clicks say `database`. The fill was attempted and could not store the copy, so the second click is another read of the book. The target is the original row, the one the 409 kept when the second POST offered `https://example.org/other`.
+
+**Can the service remember a new code while the photocopier is unplugged?**
+
+```bash
+curl -sS -w '\nHTTP %{http_code}\n' \
+  -X POST http://127.0.0.1:18001/links \
+  -H 'Content-Type: application/json' \
+  -d '{"code":"fresh","target":"https://example.org/fresh"}'
+```
+
+```text
+{"code":"fresh","target":"https://example.org/fresh"}
+HTTP 201
+```
+
+```bash
+curl -sS -w '\nHTTP %{http_code}\n' http://127.0.0.1:18001/r/fresh
+```
+
+```text
+{"code":"fresh","target":"https://example.org/fresh","source":"database"}
+HTTP 200
+```
+
+`fresh` was born during the outage. Its first read is the book, because a copy was never written.
+
+Compare these bodies to the four lines you wrote. Keep both. The interesting case is a prediction that diverged: that means the design and your model of it disagreed, and the next section is how you find which one is true.
+
+## Diagnose
+
+Three questions, three commands. Run them before you start Redis again.
+
+**Which container is actually down?** `ps` without `-a` hides stopped containers, and an empty Redis line would look like "Redis was never here."
+
+```bash
+docker compose -p archlab01 ps -a
+```
+
+```text
+archlab01-api-1     Up      127.0.0.1:18001->8000/tcp
+archlab01-redis-1   Exited (0)
+```
+
+`Exited (0)` is a clean shutdown. It matches `stop`. A non-zero exit code would be a different incident. The API process is up, which is why curl still gets a body.
+
+**What did the process believe happened?**
+
+```bash
+docker compose -p archlab01 logs --tail=40 api
+```
+
+The shape, trimmed to the `fresh` click:
+
+```text
+INFO:     172.22.0.1:... - "POST /links HTTP/1.1" 201 Created
+WARNING:  cache read failed code=fresh error=Error -2 connecting to redis:6379. Name or service not known.
+WARNING:  cache fill failed code=fresh error=Error -2 connecting to redis:6379. Name or service not known.
+INFO:     172.22.0.1:... - "GET /r/fresh HTTP/1.1" 200 OK
+```
+
+Read it in order. The `POST` has no warning around it. Create has no Redis call, so a missing photocopier cannot appear on that line. The `GET` warns twice, then returns 200. Once for `cache.get`, once for `cache.setex`. Those are two attempts to use the same dead box, from the two `except RedisError` blocks in `resolve()`. The sentence in the warning is the same sentence `/health` put in the cache field. One fault, two views.
+
+```mermaid
+flowchart TD
+  Click["GET /r/lab"] --> Copy["Look up the name redis"]
+  Copy --> Gone["EAI_NONAME, error -2"]
+  Gone --> Log["Log RedisError and continue"]
+  Log --> Row["SELECT the row from urls.db"]
+  Row --> Fill["SETEX fails the same way"]
+  Fill --> Answer["200, source database, original target"]
+```
+
+**Is the book intact, including the code born during the outage?**
+
+```bash
+docker compose -p archlab01 exec api \
+  python -c 'import sqlite3; print(sqlite3.connect("/data/urls.db").execute("select code, target from urls").fetchall())'
+```
+
+```text
+[('lab', 'https://example.org/architecture'), ('fresh', 'https://example.org/fresh')]
+```
+
+Two rows, both targets exactly what you committed. The DNS failure deleted nothing.
+
+Put the layers in one place:
+
+| Layer | What you just saw |
+|---|---|
+| Symptom | `/health` is HTTP 200 and its cache field says the name `redis` is unknown. `GET /r/lab` is HTTP 200, `"source":"database"`, original target. |
+| Dead box | `archlab01-redis-1` is `Exited (0)`. The lab network has no host named `redis`. |
+| Why the click still worked | `resolve()` logs `RedisError` and reads `/data/urls.db`. |
+| Promise that held | A code returns the target that was committed. `fresh` could be created too. |
+| Promise that was suspended | Repeated clicks are served from the copy. Every resolve read the book, and the log recorded the miss. |
+
+The decision is the `except RedisError` block. It records the fault and answers from the book. The cost is a warning plus a SQLite read on every click until Redis answers again. One curl is cheap. The read rate from the opening estimate is the reason that cost would matter at the sketched peak, and this sitting never generated that peak. Write the measurement question in the review. Leave the design at three boxes today.
+
+## Fix and confirm
+
+Undo the one change.
 
 ```bash
 docker compose -p archlab01 start redis
-curl -s http://127.0.0.1:18001/r/sre
+curl -sS -w '\nHTTP %{http_code}\n' http://127.0.0.1:18001/health
 ```
 
-**Design discussion:** Architect decision: fail open for redirects or fail closed? Explain impact of cache misses, database load, and hot keys.
+You want:
 
-### VALIDATE — Automated checks and safe cleanup
+```text
+{"api":"ok","database":"ok","cache":"ok"}
+HTTP 200
+```
 
-Run the included API smoke test in the dedicated container:
+If the cache field still starts with `down`, Redis is up and not ready. Run the health curl again.
+
+Then look at the photocopy and the click together:
 
 ```bash
-docker compose -p archlab01 exec api python -m pytest -q tests
+docker compose -p archlab01 exec redis redis-cli GET lab
+docker compose -p archlab01 exec redis redis-cli TTL lab
+curl -sS -w '\nHTTP %{http_code}\n' http://127.0.0.1:18001/r/lab
+curl -sS -w '\nHTTP %{http_code}\n' http://127.0.0.1:18001/r/lab
+curl -sS -w '\nHTTP %{http_code}\n' http://127.0.0.1:18001/r/fresh
+curl -sS -w '\nHTTP %{http_code}\n' http://127.0.0.1:18001/r/fresh
 ```
 
-**Expected:** `1 passed`. This tests only the health endpoint, not the full failure scenario; confirm the scenario-specific response and recovery above as well.
+`stop` keeps the container filesystem. `start` brings that same container back. Two healthy endings follow from that, and from the 60 second life you saw with `TTL`:
 
-Cleanup **only this lesson's project**. `down` preserves named volumes. `down -v` is optional and permanently removes only this lab's data volumes.
+- You moved quickly. `GET lab` prints `https://example.org/architecture` and `TTL` prints a positive integer. The copy survived inside the stopped container, clock still running. The first `GET /r/lab` says `"source":"cache"`.
+- A minute passed while you were reading logs. `GET lab` prints `(nil)` and `TTL` prints `(integer) -2`, which means the key is absent. Redis applies the deadline when it starts, and the deadline passed while it was stopped. The first `GET /r/lab` says `"source":"database"`. The second says `"source":"cache"`.
 
-```bash
-docker compose -p archlab01 down
-# OPTIONAL destructive cleanup of this disposable lab's volumes:
-# docker compose -p archlab01 down -v
-```
+`fresh` had no copy at all. Its first resolve after the start says `database`. The second says `cache`. The target is `https://example.org/fresh`.
 
-**Your lab evidence:** baseline response: _..._; injected failure: _..._; commands and findings: _..._; root cause versus systemic weakness: _..._; recovery verification: _..._; improvement proposal: _..._.
+The confirmation that matters is the same in both endings. Health says `cache` is `ok`. Every target matches the row you printed during diagnosis. The copy is allowed to be missing, stale-by-expiry, or freshly rewritten. The book stays the promise.
 
-## My Architecture Review — Solutions & Doubts
+## The architecture lesson
 
-> Complete these sections after reading. Keep your original reasoning, even when you later revise it, so your learning remains visible in Git history.
+System design thinking, on this evidence:
+
+You started from the promise, then gave each box one job. SQLite holds the only meaning of a code, enforced by the primary key and made visible by the 409. The API process can restart because it holds none of the mappings; the volume does. Redis holds a second copy of a target for 60 seconds so a repeated click can skip the book. Create ignores Redis, so a dead copy cannot block a new promise and cannot change an old one.
+
+You broke one box. The caller-visible status stayed 200. The body and the log carried the real fault: Docker had withdrawn the name `redis`, and the client reported error `-2`. The row was still in the file. `"source":"database"` told you which box had answered, which a bare 200 would have hidden.
+
+The requirement you kept is correctness of the committed target. The requirement you suspended is "repeated clicks skip the book." Both were in the goals table. The row and the 200 body still show the first. The `except RedisError` block turned the second off, on purpose, in code you can point to.
+
+## Write it down
+
+Fill this in after the lab. Keep the prediction you wrote before the stop, even if the bodies disagreed with it.
 
 ### 1. My Understanding
 
-**Explain the architecture in your own words:**
+**The three boxes, and the job of each:**
 
 <!-- Your answer -->
 
-**What assumptions did I make?**
+**What I predicted before `stop redis`, and what the bodies actually said:**
 
 <!-- Your answer -->
 
 ### 2. My Solutions to the Architect Challenges
 
-**Challenge 1 — Redis failure**
+**Challenge 1 — the copy is gone.** Symptom, dead box, requirement that held, requirement that was suspended.
 
-- My decision:
-- Why:
-- Trade-offs:
+- Symptom:
+- Dead box, with the log sentence:
+- Held:
+- Suspended:
 
-**Challenge 2 — Connection math**
+**Challenge 2 — where the promise lives.** What did the 409 protect, and what did the API restart prove?
 
-- Calculation:
-- Capacity implications:
-- Mitigation:
+- 409:
+- Restart:
 
-**Challenge 3 — 100k redirects/sec**
+**Challenge 3 — the 100:1 read ratio.** What would you measure on the book before you added another box in front of it? Name the number, and the result that would leave the design at three boxes.
 
-- My proposed approach:
-- Evidence I would collect:
-- Conditions for sharding:
+- Measurement:
+- Result that means "stop adding boxes":
 
 ### 3. My Troubleshooting Approach
 
-- Initial hypotheses:
-- Commands/tools I would run:
-- Evidence and interpretation:
-- What would falsify my hypothesis:
+- Command that showed which container was down:
+- Command that showed what the process believed:
+- Command that showed the rows were intact:
+- What would have falsified "the book is fine":
 
 ### 4. My Proposed Architecture Improvements
 
-- Changes I recommend:
-- Why these changes:
-- Trade-offs and risks:
-- How I would validate them:
+The `except RedisError` path answers from the book. If a dead copy should fail the click instead, which lines change, and which requirement does the caller lose?
+
+<!-- Your answer -->
 
 ### 5. My Doubts / Questions
 
@@ -620,9 +682,27 @@ docker compose -p archlab01 down
 ### 6. Lessons Learned
 
 - Key insight:
-- Mistake or assumption corrected:
-- How I would apply this in production:
+- Prediction I had wrong, or assumption the lab confirmed:
+- How I would use this when a dependency fails in a larger system:
 
 ### 7. Mentor Review
 
-<!-- Reserved for feedback after sharing your completed lesson for review. -->
+<!-- Reserved for feedback after you share the completed lesson. -->
+
+## Cleanup
+
+From the lab directory, remove this project. The first command deletes the containers and the network, and keeps the volume. The second also deletes `archlab01_url_data`, which deletes the SQLite file.
+
+```bash
+docker compose -p archlab01 down
+# optional: also delete this lab's volume
+# docker compose -p archlab01 down -v
+```
+
+`docker compose -p archlab01 ps -a` should then print no services. Leave every other container alone.
+
+## Related
+
+- [System Design Framework](../framework.md) — the longer checklist this sitting practiced on one product: jobs, numbers, a small diagram, then a trade-off you can point at.
+- [System Design Components](../components.md) — names for the boxes you just ran.
+- [URL Shortener case study](../app/url_shortner.md) — the same product at the sketched traffic. Read it after this sitting, and compare its memory box with the SQLite file you printed.
