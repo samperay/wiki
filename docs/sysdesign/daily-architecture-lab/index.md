@@ -2,7 +2,7 @@
 
 A growing **20–25-minute guided system-design and production SRE troubleshooting journal** for an experienced Python/Linux DevOps/SRE engineer progressing toward system and platform architecture.
 
-> **Publication status:** Lessons 01–16 are available in this Wiki. A published lesson is not necessarily read, practiced, or mentor-reviewed.
+> **Publication status:** Lessons 01–17 are available in this Wiki. A published lesson is not necessarily read, practiced, or mentor-reviewed.
 
 ## Learning method
 
@@ -30,12 +30,13 @@ Each lesson starts with design first principles and includes a realistic problem
 | 14 | Configuration Rollouts, Stale Replicas & Split-Brain Behavior | [Read Lesson 14](lesson-14-configuration-rollout-stale-replicas.md) |
 | 15 | Proxy Header Spoofing & Authorization Trust Boundaries — networking revision | [Read Lesson 15](lesson-15-proxy-header-spoofing-trust-boundaries.md) |
 | 16 | Read Replica Lag, Read-Your-Writes & Consistency Contracts | [Read Lesson 16](lesson-16-read-replica-lag-consistency-contracts.md) |
+| 17 | mTLS CA Rotation, Trust-Bundle Drift & Partial Outages — networking revision | [Read Lesson 17](lesson-17-mtls-ca-rotation-trust-bundle-outage.md) |
 
 [View the learning progress tracker](learning.md){ .md-button }
 
 ## Practical Labs — runnable local exercises
 
-Every lesson 01–16 now includes a separate **Practical Labs** section. Choose **Mac Docker Desktop** for multi-container experiments, or an **Ubuntu virtual machine** when resources permit. The lesson itself contains every small source file and command as a labeled Markdown code block: no ZIP archive is required.
+Every lesson 01–17 now includes a separate **Practical Labs** section. Choose **Mac Docker Desktop** for multi-container experiments, or an **Ubuntu virtual machine** when resources permit. The lesson itself contains every small source file and command as a labeled Markdown code block: no ZIP archive is required.
 
 1. **LEARN / DESIGN:** Read the architecture, incident analysis, and Mermaid diagrams.
 2. **BUILD:** Create the lesson-specific FastAPI application and open-source dependencies from the code blocks.
@@ -76,6 +77,7 @@ The 20–25-minute reading lesson is separate from the optional 35–60-minute h
 - **14 — Configuration consistency:** Atomic policy snapshots, stale replica detection, fail-closed enforcement and safe rollback.
 - **15 — Networking security revision:** Reverse proxy trust boundaries, spoofed forwarding headers, and authenticated authorization. Reference: [NAT, Proxies and Client Identity](../../networking/security/nat-proxies-source-addresses.md).
 - **16 — Data consistency contracts:** Replica lag, read-your-writes, bounded waiting, primary fallback, and failover-safe version tokens.
+- **17 — Networking security revision:** mTLS CA rotation, trust-bundle ordering, partial handshake outages and adoption gates. Reference: [mTLS and Certificate Rotation](../../networking/security/mtls-certificate-rotation.md).
 - **Future lessons:** Progress to deeper distributed-system and platform design scenarios without repeating completed topics.
 
 ## Related knowledge and practical labs
