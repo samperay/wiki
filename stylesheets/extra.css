@@ -1,0 +1,58 @@
+/* SRE & Engineering Wiki — readability-focused MkDocs Material theme */
+:root {
+  --md-text-font: "Inter";
+  --md-code-font: "JetBrains Mono";
+}
+
+/* Use more of the screen for architecture notes and long code examples. */
+.md-grid { max-width: 92rem; }
+.md-main__inner { gap: 1.25rem; }
+.md-content__inner { max-width: none; }
+.md-typeset { font-size: .84rem; line-height: 1.78; }
+.md-typeset h1 { font-weight: 750; letter-spacing: -.025em; }
+.md-typeset h2 { font-weight: 700; letter-spacing: -.018em; margin-top: 2em; }
+.md-typeset h3 { font-weight: 650; }
+.md-typeset p, .md-typeset li { line-height: 1.78; }
+
+/* Readable code without horizontal scrolling: wrap long commands and JSON. */
+.md-typeset pre { border-radius: .65rem; }
+.md-typeset pre > code,
+.md-typeset .highlight pre > code {
+  white-space: pre-wrap !important;
+  overflow-wrap: anywhere;
+  word-break: normal;
+  font-size: .76rem;
+  line-height: 1.65;
+  tab-size: 2;
+}
+.md-typeset .highlight { border-radius: .65rem; }
+.md-typeset code { font-variant-ligatures: none; }
+.md-typeset :not(pre) > code {
+  overflow-wrap: anywhere;
+  padding: .08em .3em;
+  border-radius: .25rem;
+}
+
+/* Code with line numbers: keep each numbered line visually associated. */
+.md-typeset .highlighttable { width: 100%; display: block; overflow-x: auto; }
+.md-typeset .highlighttable .linenos { user-select: none; }
+
+/* Tables should be usable on narrow screens without clipping the whole page. */
+.md-typeset__table { display: block; overflow-x: auto; }
+.md-typeset table:not([class]) { border-radius: .45rem; }
+
+/* Architecture diagrams scale within article width. */
+.md-typeset .mermaid { max-width: 100%; overflow-x: auto; text-align: center; }
+.md-typeset img { max-width: 100%; height: auto; }
+
+/* Keep navigation clean and links discoverable. */
+.md-typeset a { text-underline-offset: .15em; }
+.md-typeset blockquote { border-left-width: .2rem; }
+
+@media screen and (max-width: 76.25em) {
+  .md-typeset { font-size: .82rem; }
+}
+@media screen and (max-width: 44.9375em) {
+  .md-typeset pre > code,
+  .md-typeset .highlight pre > code { font-size: .71rem; }
+}
