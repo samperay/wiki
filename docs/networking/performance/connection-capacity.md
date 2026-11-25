@@ -87,7 +87,7 @@ with ThreadPoolExecutor(max_workers=6) as pool:
 
 Use bounded queues, load shedding, per-destination concurrency, and deliberate retry budgets. Reserve capacity for health and control traffic. Do not tune kernel settings blindly; test under controlled, representative load.
 
-Related: [keepalive and pooling](keepalive-pooling-timeouts.md), [SRE observability](../../sre/observability.md), [Architecture Lab 07: database pool exhaustion](../../sysdesign/daily-architecture-lab/lesson-07-database-connection-pool-exhaustion.md).
+Related: [keepalive and pooling](keepalive-pooling-timeouts.md), [SRE observability](../../sre/observability.md).
 
 ## My Architecture Review — Solutions & Doubts
 

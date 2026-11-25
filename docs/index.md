@@ -9,9 +9,7 @@ I use this space to turn experience into practical understanding: design a syste
 | My goal today | Start here |
 | --- | --- |
 | Grow into a higher technical role | [Career & Professional Growth](career/index.md) |
-| Work through a real production-style failure | [Daily Architecture Lab](sysdesign/daily-architecture-lab/index.md) |
 | Pick an exercise or a project to build | [Labs & Projects](labs/index.md) |
-| See architecture lessons and progress | [Architecture Learning Progress](sysdesign/daily-architecture-lab/learning.md) |
 | Troubleshoot DNS, TCP and backend connectivity | [Networking & Backend Engineering](networking/index.md) |
 | Refresh Kubernetes architecture | [Kubernetes Architecture](docker_k8/k8/architecture.md) |
 | Strengthen production reliability knowledge | [SRE Overview](sre/overview.md) |
@@ -24,7 +22,6 @@ This is a **navigation dashboard**, not an automatically calculated completion s
 
 | Track | Start / browse | Progress and next action |
 | --- | --- | --- |
-| Daily Architecture Incident Lab | [Published architecture lessons](sysdesign/daily-architecture-lab/index.md) | [Evidence-based lesson tracker](sysdesign/daily-architecture-lab/learning.md) |
 | Networking & Backend Engineering | [Networking learning path](networking/index.md) | [Networking practice tracker](networking/learning.md) |
 | Practical labs and projects | [Skill-based lab catalog](labs/index.md) | Choose one fault and record actual validation output |
 | Kubernetes | [Architecture reference](docker_k8/k8/architecture.md) | [Service/DNS/NetworkPolicy lab](networking/labs/kubernetes-service-dns-networkpolicy.md) |
@@ -36,10 +33,8 @@ This is a **navigation dashboard**, not an automatically calculated completion s
 flowchart LR
     N[Networking & backend concepts] --> L[Hands-on labs]
     K[Kubernetes architecture] --> L
-    A[Architecture incident lessons] --> L
     L --> E[Observed evidence & trade-offs]
     E --> C[Career stories and design judgment]
-    E --> A
 ```
 
 **Progress labels:** *Published* = documentation exists; *Practiced* = exercise attempted with notes; *Verified* = observed outputs and repair validated; *Planned* = not yet published or attempted. Do not infer completion from publication.

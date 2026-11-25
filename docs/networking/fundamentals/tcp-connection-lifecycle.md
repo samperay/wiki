@@ -94,7 +94,7 @@ A reset can be generated when no listener exists, when a process aborts a connec
 - Treat keepalive as liveness probing with a configured interval; do not assume OS defaults match application SLOs.
 - Avoid blind kernel tuning before proving the bottleneck.
 
-Related: [Nginx reverse proxy](../../nginx/reverse_proxy.md), [Linux networking](../../linux/admin/networking.md), [Architecture Lab 05](../../sysdesign/daily-architecture-lab/lesson-05-api-gateway-cascading-failures-circuit-breakers.md).
+Related: [Nginx reverse proxy](../../nginx/reverse_proxy.md), [Linux networking](../../linux/admin/networking.md).
 
 ## My Architecture Review — Solutions & Doubts
 

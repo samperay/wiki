@@ -15,7 +15,6 @@
 | [Kubernetes Service, DNS and NetworkPolicy](../networking/labs/kubernetes-service-dns-networkpolicy.md) | Pod-to-Service path, DNS, policy | Local Kubernetes | Intermediate–advanced | 60–90 min | Published; unverified |
 | [Backend timeouts and p99](../networking/labs/backend-timeouts-p99-capacity.md) | Saturation, tail latency, timeout budgets | Docker Desktop | Advanced | 45–75 min | Published; unverified |
 | [Local mTLS identity](../networking/labs/mtls-local-service-identity.md) | Certificate trust and service identity | Local environment per lab | Advanced | 45–90 min | Published; unverified |
-| [Daily Architecture Incident Labs](../sysdesign/daily-architecture-lab/index.md) | System design, controlled failures, evidence-led diagnosis | Per lesson | Intermediate–advanced | Per lesson; reading 20–25 min | Published lessons; execution unverified |
 | [Kubernetes projects](../docker_k8/k8/k8projects.md) | Larger Kubernetes builds | Local cluster | Varies | Project-dependent | Reference; not assessed |
 | [AWS project catalog](../cloud/aws/projects/toc.md) | Cloud and CI/CD builds | AWS | Varies | Project-dependent | Reference; not assessed |
 
@@ -23,7 +22,6 @@
 
 - **Troubleshoot a network path:** start with [connection failure diagnosis](../networking/troubleshooting/connection-failure-diagnosis.md), then practice the [Docker DNS lab](../networking/labs/docker-bridge-dns-port-publishing.md).
 - **Diagnose slow APIs:** review [keepalive, pooling and timeouts](../networking/performance/keepalive-pooling-timeouts.md), then run the [backend p99 lab](../networking/labs/backend-timeouts-p99-capacity.md).
-- **Practice architecture judgment:** choose a [Daily Architecture Lab](../sysdesign/daily-architecture-lab/index.md) and answer its three independent design challenges before reading your own troubleshooting evidence.
 - **Go deeper into Kubernetes:** review [Kubernetes architecture](../docker_k8/k8/architecture.md) and attempt the [Service/DNS/NetworkPolicy lab](../networking/labs/kubernetes-service-dns-networkpolicy.md).
 
 ## Progress and evidence
@@ -31,7 +29,6 @@
 | Track | Published content and existing progress log | What counts as verified |
 | --- | --- | --- |
 | Networking & backend | [Networking progress](../networking/learning.md) | Baseline, controlled failure, logs/captures, fix and retest |
-| Daily Architecture Lab | [Architecture lesson tracker](../sysdesign/daily-architecture-lab/learning.md) | Architecture answers and actual local test evidence |
 | Larger projects | [Kubernetes projects](../docker_k8/k8/k8projects.md) / [AWS projects](../cloud/aws/projects/toc.md) | Working implementation and reproducible validation |
 
 ### Copyable lab evidence template

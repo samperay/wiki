@@ -84,7 +84,7 @@ with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
 - Set timeout hierarchy deliberately: client deadline, proxy upstream timeout and backend execution limit must be coherent.
 - Do not conflate database pool exhaustion with TCP socket exhaustion.
 
-Related: [Nginx reverse proxy](../../nginx/reverse_proxy.md), [Nginx caching/HTTP keepalive](../../nginx/caching.md), [Architecture Lab 05](../../sysdesign/daily-architecture-lab/lesson-05-api-gateway-cascading-failures-circuit-breakers.md).
+Related: [Nginx reverse proxy](../../nginx/reverse_proxy.md), [Nginx caching/HTTP keepalive](../../nginx/caching.md).
 
 ## My Architecture Review — Solutions & Doubts
 

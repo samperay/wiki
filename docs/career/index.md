@@ -12,8 +12,6 @@
 | Review my strengths, constraints, and role options | [Career transition reflection](career_transition_reflection_2026.md) |
 | Explain technical work with confidence | [Communication & technical storytelling](communication.md) |
 | Prepare for a technical interview | [Technical interview cheat sheet](tech-interview-cheatsheet.md) |
-| Practice real architecture decisions | [Daily Architecture Lab](../sysdesign/daily-architecture-lab/index.md) |
-| Track architecture lessons and progress | [Architecture learning progress](../sysdesign/daily-architecture-lab/learning.md) |
 | Review Kubernetes concepts | [Kubernetes architecture](../docker_k8/k8/architecture.md) |
 
 ## Career roadmap — learn, demonstrate, apply
@@ -41,6 +39,6 @@ Explore senior automation, developer productivity, infrastructure engineering, a
 - **One thing to try next week:**
 
 !!! note "Where new material belongs"
-    Keep personal career decisions, interview preparation, and professional communication together under **Career & Professional Growth**. Keep technical reference material in its subject folder. Add hands-on incident exercises to the [Daily Architecture Lab](../sysdesign/daily-architecture-lab/index.md) under **Learning Paths**. Link to existing lessons where relevant.
+    Keep personal career decisions, interview preparation, and professional communication together under **Career & Professional Growth**. Keep technical reference material in its subject folder. Link to existing lessons where relevant.
 
 [Explore the technical learning dashboard](../index.md)

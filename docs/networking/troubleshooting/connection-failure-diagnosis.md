@@ -133,7 +133,7 @@ curl -v --max-time 5 --noproxy '*' http://backend.networking-lab.invalid:18082/h
 - Avoid treating ping/traceroute failure as proof of an unreachable service: ICMP may be filtered.
 - Validate from both sides of a proxy or NAT when possible; asymmetric routes and conntrack can hide faults.
 
-Related: [DNS](../fundamentals/dns-resolution.md), [TCP](../fundamentals/tcp-connection-lifecycle.md), [packet captures](packet-capture-analysis.md), [Architecture Lab 05](../../sysdesign/daily-architecture-lab/lesson-05-api-gateway-cascading-failures-circuit-breakers.md).
+Related: [DNS](../fundamentals/dns-resolution.md), [TCP](../fundamentals/tcp-connection-lifecycle.md), [packet captures](packet-capture-analysis.md).
 
 ## My Architecture Review — Solutions & Doubts
 

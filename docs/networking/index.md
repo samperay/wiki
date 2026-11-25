@@ -44,11 +44,9 @@ These existing pages remain authoritative for their respective implementations:
 - [Nginx reverse proxy](../nginx/reverse_proxy.md) and [load balancing](../nginx/load_balancer.md)
 - [Nginx TLS and cryptography](../nginx/cryptography.md)
 - [Kubernetes networking](../docker_k8/k8/networking.md)
-- [Architecture Lab 05: API gateway failures](../sysdesign/daily-architecture-lab/lesson-05-api-gateway-cascading-failures-circuit-breakers.md)
-- [Architecture Lab 06: DNS and service discovery failure](../sysdesign/daily-architecture-lab/lesson-06-service-discovery-dns-failures.md)
 - [SRE observability](../sre/observability.md)
 
-This section explains protocol behavior and diagnosis. Existing technology-specific pages explain their own configurations; incident lessons explain system-level failure and recovery.
+This section explains protocol behavior and diagnosis. Existing technology-specific pages explain their own configurations.
 
 ## Source and editorial approach
 

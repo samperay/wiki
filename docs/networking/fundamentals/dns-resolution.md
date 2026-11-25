@@ -102,7 +102,7 @@ sudo cp /tmp/hosts.networking-lab.backup /etc/hosts
 5. Test TCP/TLS independently before declaring DNS the root cause.
 6. Verify recovery from multiple clients and through the full application request path.
 
-For a rollout failure, work through [Architecture Lab 06](../../sysdesign/daily-architecture-lab/lesson-06-service-discovery-dns-failures.md). For interface and routing commands see [Linux networking](../../linux/admin/networking.md).
+For interface and routing commands see [Linux networking](../../linux/admin/networking.md).
 
 ## My Architecture Review — Solutions & Doubts
 
